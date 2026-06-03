@@ -1,0 +1,324 @@
+
+============================================================
+BREAKFAST | May 22, 2026
+
+serrato, ruben | prep cook/dishwasher | 04:59 - 12:01 | 5 hours 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.83% coverage | breaks: 31m, 10m, 10m | ELIGIBLE
+garcia, jeferson | breakfast line cook | 06:05 - 11:02 | 4 hours 47 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins79.72% coverage | breaks: 10m | ELIGIBLE
+sanchez, felipe | breakfast line cook | 06:17 - 13:27 | 4 hours 34 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins76.11% coverage | breaks: 10m, 34m | ELIGIBLE
+heck, benjamin | breakfast server | 07:08 - 11:34 | 4 hours 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins68.89% coverage | breaks: 14m | ELIGIBLE
+ramirez, tatianna | breakfast server | 09:01 - 11:09 | 1 hours 58 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins32.78% coverage | breaks: 10m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:40 | 1 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins27.78% coverage | breaks: 11m, 30m, 12m | ELIGIBLE
+ramirez, tatianna | server | 11:09 - 17:39 | 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.50% coverage | breaks: 16m, 30m | NOT ELIGIBLE
+reyes, brianna | server | 11:14 - 18:01 | 16 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.44% coverage | breaks: 14m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 22, 2026
+
+serrato, ruben | prep cook/dishwasher | 04:59 - 12:01 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 31m, 10m, 10m | NOT ELIGIBLE
+sanchez, felipe | breakfast line cook | 06:17 - 13:27 | 1 hours 52 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins31.11% coverage | breaks: 10m, 34m | ELIGIBLE
+heck, benjamin | breakfast server | 07:08 - 11:34 | 4 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.11% coverage | breaks: 14m | NOT ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:40 | 5 hours 7 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.28% coverage | breaks: 11m, 30m, 12m | ELIGIBLE
+ramirez, tatianna | server | 11:09 - 17:39 | 5 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins90.56% coverage | breaks: 16m, 30m | ELIGIBLE
+reyes, brianna | server | 11:14 - 18:01 | 5 hours 46 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins96.11% coverage | breaks: 14m | ELIGIBLE
+garcia, jeferson | line cook | 11:35 - 14:58 | 3 hours 13 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins53.61% coverage | breaks: 10m | ELIGIBLE
+hernandez, eduardo | line cook | 13:45 - 18:03 | 3 hours 35 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins59.72% coverage | breaks: 10m | ELIGIBLE
+chua, aldrich | line cook | 15:57 - 00:49 | 1 hours 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins25.83% coverage | breaks: 11m, 31m, 10m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:07 - 00:41 | 23 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.39% coverage | breaks: 10m, 31m, 11m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 17:24 - 00:40 | 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.67% coverage | breaks: 12m, 31m, 12m | NOT ELIGIBLE
+shimkus, jasmine | server | 17:25 - 00:22 | 5 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.39% coverage | breaks: 11m | NOT ELIGIBLE
+heck, ken | server | 17:26 - 23:00 | 4 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.11% coverage | breaks: 11m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 22, 2026
+
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:40 | 10 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.22% coverage | breaks: 11m, 30m, 12m | NOT ELIGIBLE
+ramirez, tatianna | server | 11:09 - 17:39 | 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.00% coverage | breaks: 16m, 30m | NOT ELIGIBLE
+reyes, brianna | server | 11:14 - 18:01 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.89% coverage | breaks: 14m | NOT ELIGIBLE
+hernandez, eduardo | line cook | 13:45 - 18:03 | 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.33% coverage | breaks: 10m | NOT ELIGIBLE
+chua, aldrich | line cook | 15:57 - 00:49 | 6 hours 27 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins86.00% coverage | breaks: 11m, 31m, 10m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:07 - 00:41 | 6 hours 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins84.22% coverage | breaks: 10m, 31m, 11m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 17:24 - 00:40 | 6 hours 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins83.33% coverage | breaks: 12m, 31m, 12m | ELIGIBLE
+shimkus, jasmine | server | 17:25 - 00:22 | 6 hours 41 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins89.11% coverage | breaks: 11m | ELIGIBLE
+heck, ken | server | 17:26 - 23:00 | 5 hours 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins70.89% coverage | breaks: 11m | ELIGIBLE
+bernhardt, quintin | line cook | 17:35 - 00:39 | 6 hours 0 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins80.00% coverage | breaks: 16m, 32m, 16m | ELIGIBLE
+candelaria, amelya | busser/runner | 17:41 - 00:23 | 6 hours 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins86.89% coverage | breaks: 11m | ELIGIBLE
+yazzolino, angela | host | 17:45 - 00:18 | 6 hours 22 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins84.89% coverage | breaks: 11m | ELIGIBLE
+hernandez, eduardo | line cook | 18:34 - 22:08 | 3 hours 24 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins45.33% coverage | breaks: 10m | ELIGIBLE
+heck, kitty | owner | 19:43 - 22:10 | 2 hours 27 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins32.67% coverage | breaks: 0m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 23, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:00 - 11:58 | 5 hours 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.56% coverage | breaks: 31m, 10m, 11m | ELIGIBLE
+garcia, jeferson | breakfast line cook | 06:01 - 11:05 | 4 hours 54 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins81.67% coverage | breaks: 10m | ELIGIBLE
+heck, benjamin | breakfast server | 06:03 - 11:32 | 5 hours 18 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins88.33% coverage | breaks: 9m | ELIGIBLE
+sanchez, felipe | breakfast line cook | 06:13 - 13:39 | 4 hours 42 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins78.33% coverage | breaks: 10m, 31m | ELIGIBLE
+kramer, michael | foh - trainee | 06:27 - 11:04 | 4 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins73.89% coverage | breaks: 11m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:31 | 1 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins27.78% coverage | breaks: 11m, 33m, 10m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 09:55 - 17:30 | 1 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins23.89% coverage | breaks: 10m, 10m, 30m | ELIGIBLE
+geerts, shiloh | breakfast host | 09:59 - 11:19 | 1 hours 20 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins22.22% coverage | breaks: 0m | ELIGIBLE
+ramirez, tatianna | breakfast server | 10:12 - 11:14 | 1 hours 2 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins17.22% coverage | breaks: 0m | ELIGIBLE
+reyes, brianna | server | 11:02 - 17:19 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.78% coverage | breaks: 10m | NOT ELIGIBLE
+ramirez, tatianna | server | 11:14 - 17:20 | 5 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.39% coverage | breaks: 11m, 13m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 23, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:00 - 11:58 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.78% coverage | breaks: 31m, 10m, 11m | NOT ELIGIBLE
+heck, benjamin | breakfast server | 06:03 - 11:32 | 2 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.56% coverage | breaks: 9m | NOT ELIGIBLE
+sanchez, felipe | breakfast line cook | 06:13 - 13:39 | 2 hours 3 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins34.17% coverage | breaks: 10m, 31m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:31 | 5 hours 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.00% coverage | breaks: 11m, 33m, 10m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 09:55 - 17:30 | 5 hours 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins88.61% coverage | breaks: 10m, 10m, 30m | ELIGIBLE
+reyes, brianna | server | 11:02 - 17:19 | 5 hours 39 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins94.17% coverage | breaks: 10m | ELIGIBLE
+ramirez, tatianna | server | 11:14 - 17:20 | 5 hours 37 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins93.61% coverage | breaks: 11m, 13m | ELIGIBLE
+kramer, michael | foh - trainee | 11:37 - 15:07 | 3 hours 17 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins54.72% coverage | breaks: 13m | ELIGIBLE
+garcia, jeferson | line cook | 11:41 - 15:02 | 3 hours 11 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins53.06% coverage | breaks: 10m | ELIGIBLE
+geerts, shiloh | host | 11:59 - 17:57 | 5 hours 11 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins86.39% coverage | breaks: 10m, 10m | ELIGIBLE
+hernandez, eduardo | line cook | 14:08 - 17:58 | 3 hours 12 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins53.33% coverage | breaks: 10m | ELIGIBLE
+bernhardt, quintin | line cook | 14:54 - 00:31 | 2 hours 36 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins43.33% coverage | breaks: 11m, 30m, 10m | ELIGIBLE
+candelaria, amelya | host | 16:57 - 01:24 | 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins9.17% coverage | breaks: 12m, 10m | NOT ELIGIBLE
+munoz, yanara | server | 16:59 - 23:52 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 11m | NOT ELIGIBLE
+yazzolino, angela | busser/runner | 17:01 - 23:58 | 29 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.06% coverage | breaks: 29m, 10m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 17:04 - 00:39 | 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.22% coverage | breaks: 31m, 11m, 12m | NOT ELIGIBLE
+chua, aldrich | line cook | 17:21 - 01:11 | 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.50% coverage | breaks: 10m, 31m, 10m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 23, 2026
+
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:31 | 1 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.22% coverage | breaks: 11m, 33m, 10m | NOT ELIGIBLE
+geerts, shiloh | host | 11:59 - 17:57 | 27 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.00% coverage | breaks: 10m, 10m | NOT ELIGIBLE
+hernandez, eduardo | line cook | 14:08 - 17:58 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.22% coverage | breaks: 10m | NOT ELIGIBLE
+bernhardt, quintin | line cook | 14:54 - 00:31 | 6 hours 10 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins82.22% coverage | breaks: 11m, 30m, 10m | ELIGIBLE
+candelaria, amelya | host | 16:57 - 01:24 | 7 hours 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins95.11% coverage | breaks: 12m, 10m | ELIGIBLE
+munoz, yanara | server | 16:59 - 23:52 | 6 hours 11 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins82.44% coverage | breaks: 11m | ELIGIBLE
+yazzolino, angela | busser/runner | 17:01 - 23:58 | 5 hours 49 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins77.56% coverage | breaks: 29m, 10m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 17:04 - 00:39 | 6 hours 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins83.33% coverage | breaks: 31m, 11m, 12m | ELIGIBLE
+chua, aldrich | line cook | 17:21 - 01:11 | 6 hours 39 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins88.67% coverage | breaks: 10m, 31m, 10m | ELIGIBLE
+cassella, kayla | server | 17:30 - 23:53 | 6 hours 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins82.00% coverage | breaks: 14m | ELIGIBLE
+shimkus, jasmine | server | 17:33 - 23:52 | 6 hours 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins81.78% coverage | breaks: 11m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 18:28 - 00:39 | 5 hours 51 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins78.00% coverage | breaks: 10m, 10m | ELIGIBLE
+hernandez, eduardo | line cook | 18:29 - 22:02 | 3 hours 23 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins45.11% coverage | breaks: 10m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 24, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:02 - 12:08 | 5 hours 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.83% coverage | breaks: 30m, 11m, 10m | ELIGIBLE
+fierro, krystina | breakfast server | 06:14 - 11:16 | 4 hours 52 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins81.11% coverage | breaks: 10m | ELIGIBLE
+garcia, jeferson | breakfast line cook | 06:19 - 11:18 | 4 hours 49 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins80.28% coverage | breaks: 10m | ELIGIBLE
+kaye, chayce | breakfast busser/runner | 07:01 - 11:00 | 3 hours 59 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins66.39% coverage | breaks: 0m | ELIGIBLE
+heck, ken | breakfast line cook | 08:24 - 11:00 | 2 hours 36 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins43.33% coverage | breaks: 0m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:18 | 1 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins27.78% coverage | breaks: 17m, 31m, 12m | ELIGIBLE
+geerts, shiloh | breakfast host | 09:58 - 11:16 | 1 hours 18 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins21.67% coverage | breaks: 0m | ELIGIBLE
+ramirez, tatianna | breakfast server | 10:28 - 11:35 | 1 hours 2 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins17.22% coverage | breaks: 0m | ELIGIBLE
+shimkus, jasmine | server | 11:27 - 16:37 | 3 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.83% coverage | breaks: 10m | NOT ELIGIBLE
+velez, josue | prep cook/dishwasher | 11:28 - 17:17 | 2 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.56% coverage | breaks: 10m, 30m, 9m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 24, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:02 - 12:08 | 38 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins10.56% coverage | breaks: 30m, 11m, 10m | NOT ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 09:50 - 17:18 | 4 hours 48 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins80.00% coverage | breaks: 17m, 31m, 12m | ELIGIBLE
+ramirez, tatianna | breakfast server | 10:28 - 11:35 | 5 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.39% coverage | breaks: 0m | NOT ELIGIBLE
+shimkus, jasmine | server | 11:27 - 16:37 | 4 hours 57 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins82.50% coverage | breaks: 10m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 11:28 - 17:17 | 4 hours 58 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins82.78% coverage | breaks: 10m, 30m, 9m | ELIGIBLE
+heck, ken | line cook | 11:30 - 14:20 | 2 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins44.44% coverage | breaks: 10m | ELIGIBLE
+kaye, chayce | busser/runner | 11:30 - 15:33 | 3 hours 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins61.94% coverage | breaks: 10m, 10m | ELIGIBLE
+ramirez, tatianna | server | 11:35 - 16:30 | 4 hours 41 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins78.06% coverage | breaks: 14m | ELIGIBLE
+fierro, krystina | server | 11:50 - 14:26 | 2 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins40.56% coverage | breaks: 10m | ELIGIBLE
+garcia, jeferson | line cook | 11:52 - 15:01 | 2 hours 59 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins49.72% coverage | breaks: 10m | ELIGIBLE
+geerts, shiloh | host | 12:01 - 18:04 | 4 hours 49 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins80.28% coverage | breaks: 10m, 30m | ELIGIBLE
+bernhardt, quintin | line cook | 14:58 - 23:07 | 2 hours 21 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins39.17% coverage | breaks: 11m, 32m, 10m | ELIGIBLE
+hernandez, eduardo | line cook | 15:27 - 23:49 | 1 hours 53 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins31.39% coverage | breaks: 10m, 31m, 10m | ELIGIBLE
+heck, kitty | owner | 15:39 - 18:02 | 1 hours 51 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins30.83% coverage | breaks: 0m | ELIGIBLE
+cassella, kayla | server | 16:00 - 17:18 | 1 hours 18 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins21.67% coverage | breaks: 0m | ELIGIBLE
+munoz, yanara | server | 16:24 - 21:11 | 1 hours 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins18.33% coverage | breaks: 11m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:59 - 23:05 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 31m, 10m | NOT ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:06 - 23:06 | 24 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.67% coverage | breaks: 16m, 36m | NOT ELIGIBLE
+candelaria, amelya | host | 17:15 - 23:14 | 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.17% coverage | breaks: 13m | NOT ELIGIBLE
+cassella, kayla | server | 17:18 - 23:27 | 12 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins3.33% coverage | breaks: 10m, 10m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 24, 2026
+
+geerts, shiloh | host | 12:01 - 18:04 | 34 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.56% coverage | breaks: 10m, 30m | NOT ELIGIBLE
+bernhardt, quintin | line cook | 14:58 - 23:07 | 4 hours 55 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins65.56% coverage | breaks: 11m, 32m, 10m | ELIGIBLE
+hernandez, eduardo | line cook | 15:27 - 23:49 | 5 hours 38 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins75.11% coverage | breaks: 10m, 31m, 10m | ELIGIBLE
+heck, kitty | owner | 15:39 - 18:02 | 32 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.11% coverage | breaks: 0m | NOT ELIGIBLE
+munoz, yanara | server | 16:24 - 21:11 | 3 hours 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins46.67% coverage | breaks: 11m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:59 - 23:05 | 4 hours 54 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins65.33% coverage | breaks: 31m, 10m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:06 - 23:06 | 4 hours 44 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins63.11% coverage | breaks: 16m, 36m | ELIGIBLE
+candelaria, amelya | host | 17:15 - 23:14 | 5 hours 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins73.56% coverage | breaks: 13m | ELIGIBLE
+cassella, kayla | server | 17:18 - 23:27 | 5 hours 37 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins74.89% coverage | breaks: 10m, 10m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 25, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:42 - 12:03 | 5 hours 7 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.28% coverage | breaks: 30m, 11m, 10m | ELIGIBLE
+heck, ken | breakfast line cook | 06:01 - 11:00 | 4 hours 39 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins77.50% coverage | breaks: 10m, 10m | ELIGIBLE
+heck, benjamin | breakfast server | 06:11 - 11:18 | 4 hours 54 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins81.67% coverage | breaks: 13m | ELIGIBLE
+kramer, michael | foh - trainee | 06:27 - 15:33 | 4 hours 42 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins78.33% coverage | breaks: 11m, 31m, 10m | ELIGIBLE
+geerts, shiloh | breakfast host | 10:01 - 11:16 | 1 hours 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins20.83% coverage | breaks: 0m | ELIGIBLE
+ramirez, tatianna | breakfast server | 10:02 - 11:08 | 1 hours 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins18.33% coverage | breaks: 0m | ELIGIBLE
+ramirez, tatianna | server | 11:08 - 17:31 | 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.50% coverage | breaks: 14m, 12m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 25, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:42 - 12:03 | 23 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.39% coverage | breaks: 30m, 11m, 10m | NOT ELIGIBLE
+kramer, michael | foh - trainee | 06:27 - 15:33 | 3 hours 32 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins58.89% coverage | breaks: 11m, 31m, 10m | ELIGIBLE
+ramirez, tatianna | server | 11:08 - 17:31 | 5 hours 47 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins96.39% coverage | breaks: 14m, 12m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 11:32 - 17:22 | 5 hours 27 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins90.83% coverage | breaks: 12m, 11m | ELIGIBLE
+heck, benjamin | server | 11:39 - 15:37 | 3 hours 48 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins63.33% coverage | breaks: 10m | ELIGIBLE
+hernandez, eduardo | line cook | 11:42 - 18:08 | 5 hours 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins88.61% coverage | breaks: 18m, 11m | ELIGIBLE
+geerts, shiloh | host | 11:57 - 17:39 | 5 hours 23 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins89.72% coverage | breaks: 10m | ELIGIBLE
+chua, aldrich | line cook | 13:45 - 23:23 | 3 hours 35 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins59.72% coverage | breaks: 10m, 31m, 10m | ELIGIBLE
+bernhardt, quintin | line cook | 15:59 - 23:13 | 1 hours 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins25.28% coverage | breaks: 19m, 10m, 31m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 15:59 - 23:44 | 1 hours 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins25.28% coverage | breaks: 10m, 30m, 10m | ELIGIBLE
+munoz, yanara | server | 16:16 - 22:59 | 1 hours 14 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins20.56% coverage | breaks: 12m | ELIGIBLE
+yazzolino, angela | busser/runner | 17:00 - 22:56 | 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.33% coverage | breaks: 10m | NOT ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:00 - 23:44 | 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.33% coverage | breaks: 11m, 30m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 25, 2026
+
+ramirez, tatianna | server | 11:08 - 17:31 | 1 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.22% coverage | breaks: 14m, 12m | NOT ELIGIBLE
+hernandez, eduardo | line cook | 11:42 - 18:08 | 38 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.44% coverage | breaks: 18m, 11m | NOT ELIGIBLE
+geerts, shiloh | host | 11:57 - 17:39 | 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.00% coverage | breaks: 10m | NOT ELIGIBLE
+chua, aldrich | line cook | 13:45 - 23:23 | 5 hours 12 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins69.33% coverage | breaks: 10m, 31m, 10m | ELIGIBLE
+bernhardt, quintin | line cook | 15:59 - 23:13 | 4 hours 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins62.89% coverage | breaks: 19m, 10m, 31m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 15:59 - 23:44 | 5 hours 24 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins72.00% coverage | breaks: 10m, 30m, 10m | ELIGIBLE
+munoz, yanara | server | 16:16 - 22:59 | 5 hours 17 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins70.44% coverage | breaks: 12m | ELIGIBLE
+yazzolino, angela | busser/runner | 17:00 - 22:56 | 5 hours 16 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins70.22% coverage | breaks: 10m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:00 - 23:44 | 5 hours 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins74.00% coverage | breaks: 11m, 30m | ELIGIBLE
+heck, kitty | owner | 17:43 - 20:57 | 3 hours 14 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins43.11% coverage | breaks: 0m | ELIGIBLE
+armenta, katrina | host | 18:08 - 23:01 | 4 hours 39 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins62.00% coverage | breaks: 14m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 26, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:00 - 12:00 | 5 hours 7 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.28% coverage | breaks: 31m, 11m, 11m | ELIGIBLE
+fierro, krystina | breakfast server | 06:04 - 11:18 | 4 hours 59 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins83.06% coverage | breaks: 15m | ELIGIBLE
+kaye, chayce | breakfast busser/runner | 07:05 - 11:00 | 3 hours 55 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins65.28% coverage | breaks: 0m | ELIGIBLE
+candelaria, amelya | breakfast host | 09:54 - 11:13 | 1 hours 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins21.94% coverage | breaks: 0m | ELIGIBLE
+ramirez, tatianna | breakfast server | 10:05 - 10:57 | 52 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins14.44% coverage | breaks: 0m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 10:59 - 17:10 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 14m, 31m | NOT ELIGIBLE
+candelaria, amelya | host | 11:13 - 17:02 | 17 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.72% coverage | breaks: 32m, 10m, 10m | NOT ELIGIBLE
+ramirez, tatianna | server | 11:14 - 17:36 | 16 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.44% coverage | breaks: 13m, 10m | NOT ELIGIBLE
+fierro, krystina | server | 11:18 - 15:06 | 12 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins3.33% coverage | breaks: 32m, 11m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 26, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:00 - 12:00 | 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.33% coverage | breaks: 31m, 11m, 11m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 10:59 - 17:10 | 4 hours 55 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins81.94% coverage | breaks: 14m, 31m | ELIGIBLE
+candelaria, amelya | host | 11:13 - 17:02 | 4 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins77.78% coverage | breaks: 32m, 10m, 10m | ELIGIBLE
+ramirez, tatianna | server | 11:14 - 17:36 | 5 hours 37 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins93.61% coverage | breaks: 13m, 10m | ELIGIBLE
+fierro, krystina | server | 11:18 - 15:06 | 2 hours 53 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins48.06% coverage | breaks: 32m, 11m | ELIGIBLE
+kaye, chayce | busser/runner | 11:30 - 15:30 | 3 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins61.11% coverage | breaks: 10m, 10m | ELIGIBLE
+chua, aldrich | line cook | 13:51 - 23:08 | 3 hours 29 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins58.06% coverage | breaks: 10m, 10m, 31m | ELIGIBLE
+bernhardt, quintin | line cook | 15:57 - 23:00 | 1 hours 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins25.83% coverage | breaks: 12m, 30m | ELIGIBLE
+kramer, michael | foh - trainee | 16:59 - 23:33 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 10m, 31m | NOT ELIGIBLE
+velez, josue | prep cook/dishwasher | 17:00 - 23:38 | 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.33% coverage | breaks: 10m, 30m, 10m | NOT ELIGIBLE
+candelaria, amelya | host | 17:02 - 17:49 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.78% coverage | breaks: 0m | NOT ELIGIBLE
+munoz, yanara | server | 17:02 - 22:51 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.78% coverage | breaks: 11m, 11m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 26, 2026
+
+ramirez, tatianna | server | 11:14 - 17:36 | 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.33% coverage | breaks: 13m, 10m | NOT ELIGIBLE
+chua, aldrich | line cook | 13:51 - 23:08 | 4 hours 57 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins66.00% coverage | breaks: 10m, 10m, 31m | ELIGIBLE
+bernhardt, quintin | line cook | 15:57 - 23:00 | 4 hours 48 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins64.00% coverage | breaks: 12m, 30m | ELIGIBLE
+kramer, michael | foh - trainee | 16:59 - 23:33 | 5 hours 22 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins71.56% coverage | breaks: 10m, 31m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 17:00 - 23:38 | 5 hours 18 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins70.67% coverage | breaks: 10m, 30m, 10m | ELIGIBLE
+candelaria, amelya | host | 17:02 - 17:49 | 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.22% coverage | breaks: 0m | NOT ELIGIBLE
+munoz, yanara | server | 17:02 - 22:51 | 4 hours 59 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins66.44% coverage | breaks: 11m, 11m | ELIGIBLE
+yazzolino, angela | host | 17:45 - 22:54 | 4 hours 59 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins66.44% coverage | breaks: 10m | ELIGIBLE
+brooks, vincent | prep cook/dishwasher | 17:51 - 23:39 | 5 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins72.44% coverage | breaks: 11m, 11m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 27, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:06 - 11:59 | 5 hours 9 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins85.83% coverage | breaks: 30m, 11m, 10m | ELIGIBLE
+shimkus, jasmine | breakfast server | 05:57 - 11:08 | 5 hours 0 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins83.33% coverage | breaks: 11m | ELIGIBLE
+gomez paque, saul | boh - trainee | 06:01 - 13:44 | 4 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins77.78% coverage | breaks: 10m, 10m, 32m | ELIGIBLE
+sanchez, felipe | breakfast line cook | 06:11 - 11:01 | 4 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins77.78% coverage | breaks: 10m | ELIGIBLE
+kaye, chayce | breakfast busser/runner | 07:02 - 11:00 | 3 hours 48 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins63.33% coverage | breaks: 10m | ELIGIBLE
+candelaria, amelya | breakfast host | 09:57 - 10:47 | 50 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins13.89% coverage | breaks: 0m | NOT ELIGIBLE
+candelaria, amelya | host | 10:47 - 17:10 | 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins11.94% coverage | breaks: 30m, 10m, 10m | NOT ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 11:00 - 17:24 | 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.33% coverage | breaks: 11m, 11m | NOT ELIGIBLE
+reyes, brianna | server | 11:08 - 17:23 | 22 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins6.11% coverage | breaks: 11m, 10m | NOT ELIGIBLE
+hernandez, eduardo | line cook | 11:22 - 16:02 | 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins2.22% coverage | breaks: 12m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 27, 2026
+
+serrato, ruben | prep cook/dishwasher | 05:06 - 11:59 | 29 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.06% coverage | breaks: 30m, 11m, 10m | NOT ELIGIBLE
+gomez paque, saul | boh - trainee | 06:01 - 13:44 | 2 hours 11 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins36.39% coverage | breaks: 10m, 10m, 32m | ELIGIBLE
+candelaria, amelya | host | 10:47 - 17:10 | 4 hours 50 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins80.56% coverage | breaks: 30m, 10m, 10m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 11:00 - 17:24 | 5 hours 32 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins92.22% coverage | breaks: 11m, 11m | ELIGIBLE
+reyes, brianna | server | 11:08 - 17:23 | 5 hours 32 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins92.22% coverage | breaks: 11m, 10m | ELIGIBLE
+hernandez, eduardo | line cook | 11:22 - 16:02 | 4 hours 20 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins72.22% coverage | breaks: 12m | ELIGIBLE
+kaye, chayce | busser/runner | 11:30 - 15:30 | 3 hours 50 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins63.89% coverage | breaks: 10m | ELIGIBLE
+sanchez, felipe | line cook | 11:34 - 13:44 | 2 hours 0 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins33.33% coverage | breaks: 10m | ELIGIBLE
+bernhardt, quintin | line cook | 16:00 - 23:03 | 1 hours 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins25.00% coverage | breaks: 10m, 32m | ELIGIBLE
+hernandez, eduardo | line cook | 16:02 - 17:55 | 1 hours 22 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins22.78% coverage | breaks: 11m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:57 - 23:07 | 33 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins9.17% coverage | breaks: 32m, 11m | NOT ELIGIBLE
+candelaria, amelya | host | 17:10 - 17:51 | 20 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins5.56% coverage | breaks: 0m | NOT ELIGIBLE
+munoz, yanara | server | 17:11 - 23:07 | 19 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins5.28% coverage | breaks: 11m | NOT ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:24 - 17:37 | 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.67% coverage | breaks: 0m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 27, 2026
+
+bernhardt, quintin | line cook | 16:00 - 23:03 | 4 hours 51 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins64.67% coverage | breaks: 10m, 32m | ELIGIBLE
+hernandez, eduardo | line cook | 16:02 - 17:55 | 20 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.44% coverage | breaks: 11m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:57 - 23:07 | 4 hours 54 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins65.33% coverage | breaks: 32m, 11m | ELIGIBLE
+candelaria, amelya | host | 17:10 - 17:51 | 21 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.67% coverage | breaks: 0m | NOT ELIGIBLE
+munoz, yanara | server | 17:11 - 23:07 | 5 hours 26 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins72.44% coverage | breaks: 11m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 17:24 - 17:37 | 7 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins1.56% coverage | breaks: 0m | NOT ELIGIBLE
+yazzolino, angela | host | 17:46 - 23:05 | 5 hours 8 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins68.44% coverage | breaks: 11m | ELIGIBLE
+chua, aldrich | line cook | 17:46 - 23:12 | 5 hours 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins70.00% coverage | breaks: 11m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 18:00 - 23:08 | 4 hours 50 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins64.44% coverage | breaks: 8m, 10m | ELIGIBLE
+
+============================================================
+BREAKFAST | May 28, 2026
+
+brooks, vincent | prep cook/dishwasher | 05:52 - 12:08 | 4 hours 46 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins79.44% coverage | breaks: 11m, 10m, 31m | ELIGIBLE
+gomez paque, saul | boh - trainee | 06:10 - 13:51 | 4 hours 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins78.61% coverage | breaks: 10m, 41m | ELIGIBLE
+fierro, krystina | breakfast server | 06:52 - 11:22 | 4 hours 18 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins71.67% coverage | breaks: 12m | ELIGIBLE
+sanchez, felipe | breakfast line cook | 07:12 - 11:02 | 3 hours 40 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins61.11% coverage | breaks: 10m | ELIGIBLE
+geerts, shiloh | breakfast host | 08:10 - 11:03 | 2 hours 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins45.28% coverage | breaks: 10m | ELIGIBLE
+loaiza, sebastian | it consultant | 09:00 - 16:30 | 2 hours 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins41.67% coverage | breaks: 30m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 10:59 - 17:31 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 20m, 11m | NOT ELIGIBLE
+reyes, brianna | server | 11:15 - 17:27 | 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins4.17% coverage | breaks: 6m | NOT ELIGIBLE
+geerts, shiloh | host | 11:29 - 16:06 | 1 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.28% coverage | breaks: 30m | NOT ELIGIBLE
+
+============================================================
+LUNCH | May 28, 2026
+
+brooks, vincent | prep cook/dishwasher | 05:52 - 12:08 | 38 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins10.56% coverage | breaks: 11m, 10m, 31m | NOT ELIGIBLE
+gomez paque, saul | boh - trainee | 06:10 - 13:51 | 2 hours 7 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins35.28% coverage | breaks: 10m, 41m | ELIGIBLE
+loaiza, sebastian | it consultant | 09:00 - 16:30 | 4 hours 30 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins75.00% coverage | breaks: 30m | ELIGIBLE
+mobley, tyler | prep cook/dishwasher | 10:59 - 17:31 | 5 hours 29 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins91.39% coverage | breaks: 20m, 11m | ELIGIBLE
+reyes, brianna | server | 11:15 - 17:27 | 5 hours 51 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins97.50% coverage | breaks: 6m | ELIGIBLE
+geerts, shiloh | host | 11:29 - 16:06 | 4 hours 6 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins68.33% coverage | breaks: 30m | ELIGIBLE
+sanchez, felipe | line cook | 11:33 - 13:50 | 2 hours 17 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins38.06% coverage | breaks: 0m | ELIGIBLE
+fierro, krystina | server | 11:50 - 14:05 | 2 hours 15 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins37.50% coverage | breaks: 0m | ELIGIBLE
+hernandez, eduardo | line cook | 14:30 - 23:18 | 2 hours 48 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins46.67% coverage | breaks: 12m, 33m, 10m | ELIGIBLE
+chua, aldrich | line cook | 16:52 - 23:24 | 38 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins10.56% coverage | breaks: 11m | NOT ELIGIBLE
+candelaria, amelya | busser/runner | 16:55 - 23:01 | 35 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins9.72% coverage | breaks: 10m | NOT ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:56 - 23:13 | 34 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins9.44% coverage | breaks: 11m, 30m, 12m | NOT ELIGIBLE
+heck, benjamin | server | 16:59 - 23:13 | 31 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins8.61% coverage | breaks: 11m | NOT ELIGIBLE
+velez, josue | prep cook/dishwasher | 17:02 - 23:13 | 28 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins7.78% coverage | breaks: 11m, 30m, 11m | NOT ELIGIBLE
+
+============================================================
+DINNER | May 28, 2026
+
+mobley, tyler | prep cook/dishwasher | 10:59 - 17:31 | 1 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins0.22% coverage | breaks: 20m, 11m | NOT ELIGIBLE
+hernandez, eduardo | line cook | 14:30 - 23:18 | 5 hours 5 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins67.78% coverage | breaks: 12m, 33m, 10m | ELIGIBLE
+chua, aldrich | line cook | 16:52 - 23:24 | 5 hours 43 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins76.22% coverage | breaks: 11m | ELIGIBLE
+candelaria, amelya | busser/runner | 16:55 - 23:01 | 5 hours 21 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins71.33% coverage | breaks: 10m | ELIGIBLE
+shaw, evan | prep cook/dishwasher | 16:56 - 23:13 | 4 hours 50 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins64.44% coverage | breaks: 11m, 30m, 12m | ELIGIBLE
+heck, benjamin | server | 16:59 - 23:13 | 5 hours 32 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins73.78% coverage | breaks: 11m | ELIGIBLE
+velez, josue | prep cook/dishwasher | 17:02 - 23:13 | 4 hours 51 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins64.67% coverage | breaks: 11m, 30m, 11m | ELIGIBLE
+armenta, katrina | host | 17:55 - 22:53 | 4 hours 36 mins | Breakfast: 0 mins | Lunch: 0 mins | Dinner: 4 hours 36 mins61.33% coverage | breaks: 22m | ELIGIBLE
