@@ -1,26 +1,21 @@
-#tester_csv_loader.py
-
 import csv
 
 
-def load_csv(file_path):
-    rows = []
-    with open(file_path, "r", encoding="utf-8", newline="") as f:
-        reader = csv.reader(f)
-
-        for row in reader:
-            if not row or all(cell.strip() == "" for cell in row):
-                continue
-            rows.append(row)
-
-    return rows
+def load_csv(path: str):
+    """
+    Loads raw CSV rows as dictionaries.
+    """
+    with open(path, "r", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        return list(reader)
 
 
-def safe_float(value):
-    try:
-        return float(value)
-    except:
-        return 0.0
-
-
-    
+def print_raw(rows):
+    """
+    Debug print of raw CSV rows.
+    """
+    for i, row in enumerate(rows):
+        print(f"\nROW {i}")
+        for k, v in row.items():
+            if v not in (None, "", " "):
+                print(f"  {k}: {v}")
