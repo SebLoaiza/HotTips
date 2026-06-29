@@ -1,27 +1,27 @@
-Ramirez, Tatianna         gross:$768.41   owned:$478.56   pool:$1.54   total:$480.10
-Munoz, Yanara             gross:$693.72   owned:$396.57   pool:$0.52   total:$397.09
-Heck, Benjamin            gross:$576.48   owned:$342.17   pool:$0.87   total:$343.04
-REYES, BRIANNA            gross:$461.32   owned:$284.71   pool:$0.00   total:$284.71
-Shimkus, Jasmine          gross:$536.32   owned:$273.80   pool:$0.00   total:$273.80
-Cassella, Kayla           gross:$268.78   owned:$147.56   pool:$0.00   total:$147.56
-Fierro, Krystina          gross:$202.33   owned:$115.67   pool:$0.99   total:$116.66
-Yazzolino, Angela         gross:$146.85   owned:$89.68   pool:$105.89   total:$195.57
-Candelaria, Amelya        gross:$86.49   owned:$50.13   pool:$108.79   total:$158.92
-Geerts, Shiloh            gross:$35.66   owned:$20.15   pool:$72.32   total:$92.47
-Armenta, Katrina          gross:$28.79   owned:$16.25   pool:$36.71   total:$52.96
-HECK, KITTY               gross:$13.75   owned:$7.35   pool:$27.58   total:$34.93
-Heck, Ken                 gross:$3.89   owned:$2.16   pool:$15.45   total:$17.61
-Serrato, Ruben            gross:$0.00   owned:$0.00   pool:$38.34   total:$38.34
-Garcia, Jeferson          gross:$0.00   owned:$0.00   pool:$46.00   total:$46.00
-Sanchez, Felipe           gross:$0.00   owned:$0.00   pool:$35.55   total:$35.55
-Brooks, Vincent           gross:$0.00   owned:$0.00   pool:$108.17   total:$108.17
-Hernandez, Eduardo        gross:$0.00   owned:$0.00   pool:$155.86   total:$155.86
-Chua, Aldrich             gross:$0.00   owned:$0.00   pool:$156.28   total:$156.28
-Mobley, Tyler             gross:$0.00   owned:$0.00   pool:$113.87   total:$113.87
-Shaw, Evan                gross:$0.00   owned:$0.00   pool:$107.26   total:$107.26
-Bernhardt, Quintin        gross:$0.00   owned:$0.00   pool:$124.92   total:$124.92
-Kramer, Michael           gross:$0.00   owned:$0.00   pool:$53.47   total:$53.47
-Velez, Josue              gross:$0.00   owned:$0.00   pool:$103.44   total:$103.44
-Kaye, Chayce              gross:$0.00   owned:$0.00   pool:$44.29   total:$44.29
-Gomez Paque, Saul         gross:$0.00   owned:$0.00   pool:$14.18   total:$14.18
-Loaiza, Sebastian         gross:$0.00   owned:$0.00   pool:$14.56   total:$14.56
+Mobley, Tyler
+Hernandez, Eduardo
+Ramirez, Tatianna
+Brooks, Vincent
+REYES, BRIANNA
+Chua, Aldrich
+Armenta, Katrina
+HECK, KITTY
+Garcia, Jeferson
+Geerts, Shiloh
+Serrato, Ruben
+Heck, Ken
+Kramer, Michael
+Sanchez, Felipe
+Shaw, Evan
+Yazzolino, Angela
+Candelaria, Amelya
+Cassella, Kayla
+Munoz, Yanara
+Kaye, Chayce
+Gomez Paque, Saul
+Loaiza, Sebastian
+Velez, Josue
+Fierro, Krystina
+Heck, Benjamin
+Shimkus, Jasmine
+Bernhardt, Quintin
