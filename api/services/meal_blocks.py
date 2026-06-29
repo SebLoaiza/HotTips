@@ -1,15 +1,41 @@
 from api.models import MealBlock, MealParticipation
 import datetime
+from typing import List, Dict, Tuple, Any
 
 # =====================================================
-# MEAL WINDOWS
+# GLOBAL STATE (editable + recompute-safe)
 # =====================================================
 
-MEAL_WINDOWS = {
+CACHED_ROWS: List[dict] = []
+
+CURRENT_MEAL_WINDOWS: Dict[str, Tuple[int, int]] = {
     "Breakfast": (330, 690),
     "Lunch": (691, 1050),
     "Dinner": (1051, 1560),
 }
+
+
+# =====================================================
+# CACHE HELPERS
+# =====================================================
+
+def cache_rows(rows: List[dict]):
+    global CACHED_ROWS
+    CACHED_ROWS = rows
+
+
+def get_cached_rows():
+    return CACHED_ROWS
+
+
+def update_meal_window(meal: str, start: int, end: int):
+    global CURRENT_MEAL_WINDOWS
+    CURRENT_MEAL_WINDOWS[meal] = (start, end)
+
+
+def get_meal_windows():
+    return CURRENT_MEAL_WINDOWS
+
 
 # =====================================================
 # TIME HELPERS
@@ -23,17 +49,9 @@ def time_to_min(time_str: str) -> int:
     return dt.hour * 60 + dt.minute
 
 
-def overlaps(a_start, a_end, b_start, b_end) -> bool:
-    return max(a_start, b_start) < min(a_end, b_end)
-
-
 def clip(a_start, a_end, b_start, b_end):
-    """
-    Returns intersection of two ranges or None
-    """
     s = max(a_start, b_start)
     e = min(a_end, b_end)
-
     if s < e:
         return s, e
     return None
@@ -43,21 +61,18 @@ def clip(a_start, a_end, b_start, b_end):
 # STEP 1: BUILD MEAL BLOCKS
 # =====================================================
 
-def build_meal_blocks(rows: list[dict]):
+def build_meal_blocks(rows: List[dict], meal_windows: Dict[str, Tuple[int, int]]):
     seen_dates = set()
-    meal_blocks = []
+    meal_blocks: List[MealBlock] = []
 
     for row in rows:
         date = row.get("Date")
-        if not date:
-            continue
-
-        if date in seen_dates:
+        if not date or date in seen_dates:
             continue
 
         seen_dates.add(date)
 
-        for meal_name, (start, end) in MEAL_WINDOWS.items():
+        for meal_name, (start, end) in meal_windows.items():
             meal_blocks.append(
                 MealBlock(
                     date=date,
@@ -73,17 +88,17 @@ def build_meal_blocks(rows: list[dict]):
 
 
 # =====================================================
-# STEP 2: LINK + SLICE EMPLOYEES INTO MEALS
+# STEP 2: LINK EMPLOYEES
 # =====================================================
 
-def link_employees(rows: list[dict], meal_blocks: list[MealBlock]):
+def link_employees(rows: List[dict], meal_blocks: List[MealBlock]):
 
     current_shift = None
     current_breaks = []
 
     def process_shift(shift_row, breaks):
 
-        if shift_row is None:
+        if not shift_row:
             return
 
         date = shift_row.get("Date")
@@ -91,7 +106,6 @@ def link_employees(rows: list[dict], meal_blocks: list[MealBlock]):
         start = time_to_min(shift_row.get("Time In"))
         end = time_to_min(shift_row.get("Time Out"))
 
-        # overnight shifts
         if end < start:
             end += 24 * 60
 
@@ -101,7 +115,6 @@ def link_employees(rows: list[dict], meal_blocks: list[MealBlock]):
                 continue
 
             clipped = clip(start, end, block.start, block.end)
-
             if clipped is None:
                 continue
 
@@ -115,19 +128,11 @@ def link_employees(rows: list[dict], meal_blocks: list[MealBlock]):
                 if b_end < b_start:
                     b_end += 24 * 60
 
-                b_clip = clip(
-                    b_start,
-                    b_end,
-                    meal_start,
-                    meal_end
-                )
+                b_clip = clip(b_start, b_end, meal_start, meal_end)
 
-                if b_clip is None:
-                    continue
-
-                bs, be = b_clip
-
-                meal_breaks.append((bs, be))
+                if b_clip:
+                    bs, be = b_clip
+                    meal_breaks.append((bs, be))
 
             block.employees.append(
                 MealParticipation(
@@ -141,49 +146,44 @@ def link_employees(rows: list[dict], meal_blocks: list[MealBlock]):
                 )
             )
 
-    # =====================================================
-    # Read CSV
-    # =====================================================
-
     for row in rows:
 
-        # New employee row
         if row.get("Employee"):
 
-            # Finish previous employee
             process_shift(current_shift, current_breaks)
 
             current_shift = row
             current_breaks = []
 
-            # First row can contain a break
             if row.get("Break Start") and row.get("Break End"):
+                current_breaks.append(
+                    (
+                        time_to_min(row["Break Start"]),
+                        time_to_min(row["Break End"])
+                    )
+                )
 
-                current_breaks.append((
-                    time_to_min(row["Break Start"]),
-                    time_to_min(row["Break End"])
-                ))
-
-        # Continuation row = another break
         else:
 
-            if current_shift is None:
+            if not current_shift:
                 continue
 
             if row.get("Break Start") and row.get("Break End"):
+                current_breaks.append(
+                    (
+                        time_to_min(row["Break Start"]),
+                        time_to_min(row["Break End"])
+                    )
+                )
 
-                current_breaks.append((
-                    time_to_min(row["Break Start"]),
-                    time_to_min(row["Break End"])
-                ))
-
-    # Don't forget the final employee
     process_shift(current_shift, current_breaks)
+
+
 # =====================================================
-# STEP 3: MERGE EMPLOYEE PARTICIPATIONS
+# STEP 3: MERGE PARTICIPATIONS
 # =====================================================
 
-def merge_employee_participations(meal_blocks: list[MealBlock]):
+def merge_employee_participations(meal_blocks: List[MealBlock]):
 
     for block in meal_blocks:
 
@@ -200,91 +200,59 @@ def merge_employee_participations(meal_blocks: list[MealBlock]):
                     "meal_end": p.meal_end,
                     "worked": p.worked_minutes,
                     "breaks": list(p.breaks),
-                    "roles": {
-                        p.role: p.worked_minutes
-                    }
+                    "roles": {p.role: p.worked_minutes}
                 }
                 continue
 
             m = merged[emp_id]
 
-            # Expand overall span
-            m["meal_start"] = min(
-                m["meal_start"],
-                p.meal_start
-            )
-
-            m["meal_end"] = max(
-                m["meal_end"],
-                p.meal_end
-            )
-
-            # Total worked minutes
+            m["meal_start"] = min(m["meal_start"], p.meal_start)
+            m["meal_end"] = max(m["meal_end"], p.meal_end)
             m["worked"] += p.worked_minutes
-
-            # Keep every break
             m["breaks"].extend(p.breaks)
+            m["roles"][p.role] = m["roles"].get(p.role, 0) + p.worked_minutes
 
-            # Track time in each role
-            m["roles"][p.role] = (
-                m["roles"].get(p.role, 0)
-                + p.worked_minutes
-            )
-
-        new_participations = []
+        final_list = []
 
         for emp_id, data in merged.items():
 
-            # Longest-held role wins
-            role = max(
-                data["roles"],
-                key=data["roles"].get
-            )
+            role = max(data["roles"], key=data["roles"].get)
 
             span = data["meal_end"] - data["meal_start"]
-
-            break_minutes = sum(
-                end - start
-                for start, end in data["breaks"]
-            )
-
-            gap_minutes = max(
-                0,
-                span - data["worked"]
-            )
+            break_minutes = sum(e - s for s, e in data["breaks"])
+            gap_minutes = max(0, span - data["worked"])
 
             lost = gap_minutes + break_minutes
 
-            new_participations.append(
+            final_list.append(
                 MealParticipation(
                     employee_id=emp_id,
                     name=data["name"],
                     role=role,
-
                     meal_start=data["meal_start"],
                     meal_end=data["meal_end"],
-
                     worked_minutes=data["worked"],
                     lost_mins=lost,
-
-                    breaks=sorted(
-                        data["breaks"],
-                        key=lambda b: b[0]
-                    )
+                    breaks=sorted(data["breaks"], key=lambda b: b[0])
                 )
             )
 
-        block.employees = sorted(
-            new_participations,
-            key=lambda p: p.meal_start
-        )
+        block.employees = sorted(final_list, key=lambda x: x.meal_start)
+
 
 # =====================================================
-# STEP 4: PIPELINE
+# STEP 4: PIPELINE (MAIN ENTRY)
 # =====================================================
 
-def build_meal_blocks_with_employees(rows: list[dict]):
-    blocks = build_meal_blocks(rows)
+def build_meal_blocks_with_employees(
+    rows: List[dict],
+    meal_windows: Dict[str, Tuple[int, int]] = None
+):
+
+    if meal_windows is None:
+        meal_windows = CURRENT_MEAL_WINDOWS
+
+    blocks = build_meal_blocks(rows, meal_windows)
 
     link_employees(rows, blocks)
 

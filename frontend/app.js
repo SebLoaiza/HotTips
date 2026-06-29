@@ -76,12 +76,10 @@ async function applyEdit(key) {
 // ============================
 // RENDER
 // ============================
-
 function renderBlocks(blocks) {
     const output = document.getElementById("output");
     output.innerHTML = "";
 
-    // group by date
     const grouped = {};
 
     blocks.forEach(b => {
@@ -91,91 +89,122 @@ function renderBlocks(blocks) {
 
     Object.keys(grouped).forEach(date => {
 
-        const dateBlock = document.createElement("div");
-        dateBlock.className = "meal-block";
+        const dayWrap = document.createElement("div");
+        dayWrap.className = "meal-block";
 
-        const header = document.createElement("div");
-        header.className = "meal-header";
-        header.textContent = date;
+        const dayTitle = document.createElement("div");
+        dayTitle.className = "meal-header";
+        dayTitle.textContent = date;
 
-        dateBlock.appendChild(header);
+        dayWrap.appendChild(dayTitle);
 
-        grouped[date].forEach(block => {
+        const table = document.createElement("table");
+        table.className = "meal-table";
+
+        const tbody = document.createElement("tbody");
+
+        const meals = grouped[date];
+
+        ["Breakfast", "Lunch", "Dinner"].forEach(mealName => {
+
+            const block = meals.find(m => m.meal === mealName);
+            if (!block) return;
 
             const key = `${block.date}-${block.meal}`;
 
-            const row = document.createElement("div");
-            row.className = "meal-row";
+            const mealId = `meal-${key}`;
 
-            // EMPLOYEE HTML
-            let employeeHTML = "";
+            // =========================
+            // MEAL HEADER ROW
+            // =========================
+            const headerRow = document.createElement("tr");
+            headerRow.className = "meal-group-header";
 
-            block.employees.forEach(emp => {
+            headerRow.innerHTML = `
+                <td colspan="7" style="background:#11141a; color:#7cc7ff; font-weight:bold;">
+                    <span style="cursor:pointer;" onclick="toggleMeal('${key}')">
+                        ${block.meal} ▼
+                    </span>
 
-                let breaksHTML = "";
-
-                if (emp.breaks && emp.breaks.length > 0) {
-                    breaksHTML = `
-                        <div class="break-title">Breaks:</div>
-                        ${emp.breaks.map(b => `
-                            <div class="break">
-                                ${b[0]} → ${b[1]} (${b[1] - b[0]} mins)
-                            </div>
-                        `).join("")}
-                    `;
-                }
-
-                employeeHTML += `
-                    <div class="employee">
-                        <div class="emp-name">
-                            ${emp.name}
-                            <span>${emp.role}</span>
-                        </div>
-
-                        <div class="emp-shift">
-                            ${emp.meal_start} → ${emp.meal_end}
-                        </div>
-
-                        <div class="emp-stats">
-                            Worked: ${emp.worked_minutes} mins |
-                            Lost: ${emp.lost_mins} mins
-                        </div>
-
-                        ${breaksHTML}
-                    </div>
-                `;
-            });
-
-            row.innerHTML = `
-                <div class="meal-header-row">
-                    <b>${block.meal}</b>
-
-                    <span id="range-${key}">
+                    <span id="range-${key}" style="margin-left:10px;">
                         ${block.start} → ${block.end}
                     </span>
 
-                    <button onclick="toggleEdit('${key}')">
-                        edit times
-                    </button>
-                </div>
+                    <button onclick="toggleEdit('${key}')">edit</button>
 
-                <div id="edit-${key}" style="display:none; margin-top:8px;">
-                    <input id="start-${key}" type="number" value="${block.start}" />
-                    <input id="end-${key}" type="number" value="${block.end}" />
-
-                    <button onclick="applyEdit('${key}')">
-                        apply
-                    </button>
-                </div>
-
-                <div class="employees">
-                    ${employeeHTML}
-                </div>
+                    <div id="edit-${key}" style="display:none; margin-top:6px;">
+                        <input id="start-${key}" type="number" value="${block.start}" />
+                        <input id="end-${key}" type="number" value="${block.end}" />
+                        <button onclick="applyEdit('${key}')">apply</button>
+                    </div>
+                </td>
             `;
 
-            dateBlock.appendChild(row);
+            headerRow.dataset.mealId = mealId;
+
+            tbody.appendChild(headerRow);
+
+            // =========================
+            // EMPLOYEE HEADER ROW
+            // =========================
+            const subHeader = document.createElement("tr");
+            subHeader.dataset.mealId = mealId;
+
+            subHeader.innerHTML = `
+                <th>Employee</th>
+                <th>Role</th>
+                <th>Shift</th>
+                <th>Worked</th>
+                <th>Lost</th>
+                <th>Breaks</th>
+            `;
+
+            tbody.appendChild(subHeader);
+
+            // =========================
+            // EMPLOYEE ROWS
+            // =========================
+            block.employees.forEach(emp => {
+
+                const breaksHTML = (emp.breaks || [])
+                    .map(b => `${b[0]}→${b[1]} (${b[1] - b[0]})`)
+                    .join("<br>");
+
+                const row = document.createElement("tr");
+                row.dataset.mealId = mealId;
+
+                row.innerHTML = `
+                    <td>${emp.name}</td>
+                    <td>${emp.role}</td>
+                    <td>${emp.meal_start} → ${emp.meal_end}</td>
+                    <td>${emp.worked_minutes}</td>
+                    <td>${emp.lost_mins}</td>
+                    <td>${breaksHTML || "-"}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            // spacer row
+            const spacer = document.createElement("tr");
+            spacer.dataset.mealId = mealId;
+            spacer.innerHTML = `<td colspan="7"><div style="height:10px;"></div></td>`;
+            tbody.appendChild(spacer);
         });
 
-        output.appendChild(dateBlock);
+        table.appendChild(tbody);
+        dayWrap.appendChild(table);
+        output.appendChild(dayWrap);
+    });
+}
+function toggleMeal(key) {
+    const rows = document.querySelectorAll(`[data-meal-id="meal-${key}"]`);
+    if (!rows.length) return;
+
+    // determine current state from first row
+    const isHidden = rows[1]?.style.display === "none";
+
+    rows.forEach(r => {
+        r.style.display = isHidden ? "" : "none";
     });
 }

@@ -1,67 +1,72 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import csv
 
 from api.services.meal_blocks import build_meal_blocks_with_employees
+from api.services.meal_state import (
+    cache_rows,
+    get_cached_rows,
+    get_meal_windows,
+    update_meal_window
+)
 
 router = APIRouter()
 
 
+# =========================
+# CSV LOADER
+# =========================
+
 def load_csv(file):
-    rows = []
     decoded = file.file.read().decode("utf-8").splitlines()
-    reader = csv.DictReader(decoded)
+    return list(csv.DictReader(decoded))
 
-    for row in reader:
-        rows.append(row)
 
-    return rows
-
+# =========================
+# INITIAL LOAD
+# =========================
 
 @router.post("/meal-blocks")
 async def meal_blocks(file: UploadFile = File(...)):
 
     rows = load_csv(file)
 
-    blocks = build_meal_blocks_with_employees(rows)
+    cache_rows(rows)
 
-    return [
-    {
-        "date": b.date,
-        "meal": b.meal,
-        "start": b.start,
-        "end": b.end,
-        "employees": [
-            {
-                "employee_id": e.employee_id,
-                "name": e.name,
-                "role": e.role,
-                "meal_start": e.meal_start,
-                "meal_end": e.meal_end,
-                "worked_minutes": e.worked_minutes,
-                "lost_mins": e.lost_mins,
-                "breaks": e.breaks,
-            }
-            for e in b.employees
-        ],
-    }
-    for b in blocks
-]
+    blocks = build_meal_blocks_with_employees(
+        rows,
+        get_meal_windows()
+    )
+
+    return blocks
+
+
+# =========================
+# RECOMPUTE AFTER EDIT
+# =========================
 
 @router.post("/meal-blocks-recompute")
 async def recompute(payload: dict):
-    key = payload["key"]
-    start = payload["start"]
-    end = payload["end"]
 
-    date, meal = key.split("-", 1)
+    try:
+        key = payload["key"]
+        start = int(payload["start"])
+        end = int(payload["end"])
 
-    # re-run your pipeline with modified windows
-    updated_windows = get_current_windows_somehow()
+        date, meal = key.split("-", 1)
 
-    updated_windows[date][meal] = (start, end)
+        # 1. update memory state
+        update_meal_window(meal, start, end)
 
-    rows = get_cached_rows_somehow()
+        # 2. rebuild from cached rows
+        rows = get_cached_rows()
 
-    blocks = build_meal_blocks_with_employees(rows, updated_windows)
+        blocks = build_meal_blocks_with_employees(
+            rows,
+            get_meal_windows()
+        )
 
-    return blocks
+        # 3. return
+        return blocks
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -116,3 +116,72 @@ input {
     margin-right: 6px;
     border-radius: 4px;
 }
+.meal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.meal-table th {
+    text-align: left;
+    background: #11141a;
+    color: #7cc7ff;
+    padding: 8px;
+    border-bottom: 1px solid #2a2f3a;
+}
+
+.meal-table td {
+    padding: 8px;
+    border-bottom: 1px solid #2a2f3a;
+    vertical-align: top;
+}
+
+.meal-table tr:hover {
+    background: #1f2430;
+}
+.meal-group-header td {
+    padding: 10px;
+    border-top: 2px solid #2a2f3a;
+}
+
+.meal-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.meal-table th,
+.meal-table td {
+    padding: 6px;
+    border-bottom: 1px solid #2a2f3a;
+}
+
+.meal-table th {
+    text-align: left;
+    color: #b5d8ff;
+    background: #0f1115;
+}
+details {
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+summary {
+    cursor: pointer;
+    padding: 8px;
+    user-select: none;
+}
+
+.day-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #7cc7ff;
+    background: #1a1d24;
+}
+
+.meal-header-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: #7cc7ff;
+}
