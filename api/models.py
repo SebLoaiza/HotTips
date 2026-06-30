@@ -1,6 +1,8 @@
 from api.db import Base
 from sqlalchemy import Column, Integer, String, Float
 from dataclasses import dataclass, field
+import datetime
+
 # -------------------------
 # DATABASE MODEL
 # -------------------------
@@ -18,17 +20,18 @@ class Employee(Base):
 
 @dataclass
 class MealBlock:
-    date: str
-    meal: str
+    date: str          # "May 22, 2026"
+    day_key: str       # "2026-05-22"
 
+    meal: str
 
     start: int = 0
     end: int = 0
 
     online_total: int = 0
 
-
     employees: list["MealParticipation"] = field(default_factory=list)
+    orders: list["Order"] = field(default_factory=list)
 
 @dataclass
 class MealParticipation:
@@ -47,3 +50,23 @@ class MealParticipation:
 
     # each break's duration (minutes)
     breaks: list[tuple[int, int]] = field(default_factory=list)
+    orders: list["Order"] = field(default_factory=list)
+
+
+@dataclass
+class Order:
+    order_id: str
+    order_number: str
+
+    # normalized time fields (used for all logic)
+    order_day: str              # YYYY-MM-DD
+    order_time_min: int        # minutes since midnight
+    order_timestamp: datetime   # full datetime object
+
+    server: str
+    service: str
+
+    amount: float
+    tip: float
+    gratuity: float
+    source: str

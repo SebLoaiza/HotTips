@@ -1,41 +1,6 @@
 from api.models import MealBlock, MealParticipation
 import datetime
-from typing import List, Dict, Tuple, Any
-
-# =====================================================
-# GLOBAL STATE (editable + recompute-safe)
-# =====================================================
-
-CACHED_ROWS: List[dict] = []
-
-CURRENT_MEAL_WINDOWS: Dict[str, Tuple[int, int]] = {
-    "Breakfast": (330, 690),
-    "Lunch": (691, 1050),
-    "Dinner": (1051, 1560),
-}
-
-
-# =====================================================
-# CACHE HELPERS
-# =====================================================
-
-def cache_rows(rows: List[dict]):
-    global CACHED_ROWS
-    CACHED_ROWS = rows
-
-
-def get_cached_rows():
-    return CACHED_ROWS
-
-
-def update_meal_window(meal: str, start: int, end: int):
-    global CURRENT_MEAL_WINDOWS
-    CURRENT_MEAL_WINDOWS[meal] = (start, end)
-
-
-def get_meal_windows():
-    return CURRENT_MEAL_WINDOWS
-
+from typing import List, Dict, Tuple
 
 # =====================================================
 # TIME HELPERS
@@ -61,26 +26,41 @@ def clip(a_start, a_end, b_start, b_end):
 # STEP 1: BUILD MEAL BLOCKS
 # =====================================================
 
-def build_meal_blocks(rows: List[dict], meal_windows: Dict[str, Tuple[int, int]]):
+def build_meal_blocks(
+    rows: List[dict],
+    meal_windows: Dict[str, Dict[str, Tuple[int, int]]]
+):
     seen_dates = set()
     meal_blocks: List[MealBlock] = []
 
     for row in rows:
         date = row.get("Date")
+
         if not date or date in seen_dates:
             continue
 
         seen_dates.add(date)
 
-        for meal_name, (start, end) in meal_windows.items():
+        day_key = datetime.datetime.strptime(
+            date,
+            "%B %d, %Y"
+        ).date().isoformat()
+
+        windows = meal_windows.get(date)
+        if not windows:
+            continue
+
+        for meal_name, (start, end) in windows.items():
             meal_blocks.append(
                 MealBlock(
                     date=date,
+                    day_key=day_key,
                     meal=meal_name,
                     start=start,
                     end=end,
                     online_total=0,
-                    employees=[]
+                    employees=[],
+                    orders=[]
                 )
             )
 
@@ -97,7 +77,6 @@ def link_employees(rows: List[dict], meal_blocks: List[MealBlock]):
     current_breaks = []
 
     def process_shift(shift_row, breaks):
-
         if not shift_row:
             return
 
@@ -110,7 +89,6 @@ def link_employees(rows: List[dict], meal_blocks: List[MealBlock]):
             end += 24 * 60
 
         for block in meal_blocks:
-
             if block.date != date:
                 continue
 
@@ -124,7 +102,6 @@ def link_employees(rows: List[dict], meal_blocks: List[MealBlock]):
             meal_breaks = []
 
             for b_start, b_end in breaks:
-
                 if b_end < b_start:
                     b_end += 24 * 60
 
@@ -241,21 +218,14 @@ def merge_employee_participations(meal_blocks: List[MealBlock]):
 
 
 # =====================================================
-# STEP 4: PIPELINE (MAIN ENTRY)
+# PIPELINE
 # =====================================================
 
 def build_meal_blocks_with_employees(
     rows: List[dict],
-    meal_windows: Dict[str, Tuple[int, int]] = None
+    meal_windows: Dict[str, Dict[str, Tuple[int, int]]]
 ):
-
-    if meal_windows is None:
-        meal_windows = CURRENT_MEAL_WINDOWS
-
     blocks = build_meal_blocks(rows, meal_windows)
-
     link_employees(rows, blocks)
-
     merge_employee_participations(blocks)
-
     return blocks

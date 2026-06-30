@@ -6,6 +6,7 @@ from api.services.meal_state import (
     cache_rows,
     get_cached_rows,
     get_meal_windows,
+    initialize_meal_windows,
     update_meal_window
 )
 
@@ -31,6 +32,7 @@ async def meal_blocks(file: UploadFile = File(...)):
     rows = load_csv(file)
 
     cache_rows(rows)
+    initialize_meal_windows(rows)
 
     blocks = build_meal_blocks_with_employees(
         rows,
@@ -55,7 +57,7 @@ async def recompute(payload: dict):
         date, meal = key.split("-", 1)
 
         # 1. update memory state
-        update_meal_window(meal, start, end)
+        update_meal_window(date, meal, start, end)
 
         # 2. rebuild from cached rows
         rows = get_cached_rows()
