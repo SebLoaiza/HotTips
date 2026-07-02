@@ -26,6 +26,9 @@ def load_csv(file):
 # INITIAL LOAD
 # =========================
 
+import json
+from dataclasses import asdict
+
 @router.post("/meal-blocks")
 async def meal_blocks(file: UploadFile = File(...)):
 
@@ -38,6 +41,10 @@ async def meal_blocks(file: UploadFile = File(...)):
         rows,
         get_meal_windows()
     )
+
+    print("\n========== MEAL BLOCKS ==========")
+    print(json.dumps([asdict(b) for b in blocks], indent=2))
+    print("=================================\n")
 
     return blocks
 
@@ -72,3 +79,7 @@ async def recompute(payload: dict):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+    

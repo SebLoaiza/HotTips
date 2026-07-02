@@ -11,11 +11,21 @@
     <input type="file" id="fileInput" />
     <button onclick="upload()">Upload</button>
 
+    <input type="file" id="orderFileInput" />
+    <button onclick="uploadOrders()">Upload Orders</button>
+
+
+    <button onclick="dumpMealBlocks()">Dump Meal Blocks</button>
+
+    <button onclick="goToDistribution()">Continue to Tip Distribution →</button>
     <hr/>
 
     <div id="output"></div>
 
-    <script src="/static/app.js"></script>
-
+    <script src="/static/js/time.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/render.js"></script>
+    
 </body>
 </html>
