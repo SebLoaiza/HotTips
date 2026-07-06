@@ -4,29 +4,54 @@
     <title>Meal Blocks Viewer</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
+
+    <div id="workflowBar"></div>
+
 
     <h1>Upload Shifts CSV</h1>
 
-    
     <input type="file" id="fileInput" />
-    <button onclick="upload()">Upload</button>
-
-    <input type="file" id="orderFileInput" />
-    <button onclick="uploadOrders()">Upload Orders</button>
+    <button onclick="upload()">Save Shifts</button>
 
 
-    <button onclick="dumpMealBlocks()">Dump Meal Blocks</button>
+    <div id="ordersStep" style="display:none;">
 
-    <button onclick="goToDistribution()">Continue to Tip Distribution →</button>
+        <h1>Upload Orders CSV</h1>
+
+        <input type="file" id="orderFileInput" />
+
+        <button onclick="uploadOrders()">
+            Save Orders
+        </button>
+
+    </div>
+
+
+
+<div id="continueStep" style="display:none;">
+    <button
+        id="continueBtn"
+        onclick="goToDistribution()">
+        Continue to Tip Distribution →
+    </button>
+</div>
+
     <hr/>
 
     <div id="output"></div>
 
+
     <script src="/static/js/time.js"></script>
+    <script src="/static/js/navbar.js"></script>
     <script src="/static/js/ui.js"></script>
     <script src="/static/js/api.js"></script>
     <script src="/static/js/render.js"></script>
-    
+
+    <script>
+        initWorkflowNavbar();
+    </script>
+
 </body>
 </html>

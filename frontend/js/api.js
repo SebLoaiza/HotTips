@@ -9,7 +9,6 @@ window.ALL_ORDERS = [];
 // ===============================
 // UPLOAD MEAL BLOCKS
 // ===============================
-
 async function upload() {
 
     const fileInput = document.getElementById("fileInput");
@@ -36,12 +35,28 @@ async function upload() {
 
     const data = await res.json();
 
+
+    // =========================
+    // STORE BLOCKS
+    // =========================
+
     window.LAST_BLOCKS = attachOrdersToBlocks(
         data,
         window.ALL_ORDERS
     );
+
     attachOrdersToEmployees(window.LAST_BLOCKS);
+
     renderBlocks(window.LAST_BLOCKS);
+
+
+    // =========================
+    // WORKFLOW UPDATE
+    // =========================
+
+    if (typeof markShiftsUploaded === "function") {
+        markShiftsUploaded();
+    }
 }
 
 
@@ -126,6 +141,18 @@ async function uploadOrders() {
         );
         attachOrdersToEmployees(window.LAST_BLOCKS);
         renderBlocks(window.LAST_BLOCKS);
+    
     }
+    
+    if (typeof markOrdersUploaded === "function") {
+        markOrdersUploaded();
+    }
+
+    // Allow the user to continue once they've reviewed/edited cash tips.
+    document.getElementById("continueBtn").disabled = false;
+
+
+
+
 }
 
