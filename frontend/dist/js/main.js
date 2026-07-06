@@ -96,6 +96,7 @@ function renderSessions(sessions) {
 
                 ${renderRoleTable(
                     "Servers",
+                    session,
                     session.servers,
                     session.server_pool_card,
                     session.server_pool_cash
@@ -103,6 +104,7 @@ function renderSessions(sessions) {
 
                 ${renderRoleTable(
                     "Bussers",
+                    session,
                     session.bussers,
                     session.busser_pool_card,
                     session.busser_pool_cash
@@ -110,6 +112,7 @@ function renderSessions(sessions) {
 
                 ${renderRoleTable(
                     "Hosts",
+                    session,
                     session.hosts,
                     session.host_pool_card,
                     session.host_pool_cash
@@ -117,6 +120,7 @@ function renderSessions(sessions) {
 
                 ${renderRoleTable(
                     "BOH",
+                    session,
                     session.boh,
                     session.boh_pool_card,
                     session.boh_pool_cash
@@ -131,4 +135,19 @@ function renderSessions(sessions) {
 
         container.appendChild(div);
     });
+
+    
 }
+
+document.getElementById("finalizeBtn").addEventListener("click", () => {
+
+    tipSessions.forEach(session => distributeTips(session));
+
+    sessionStorage.setItem(
+        "tipSessions",
+        JSON.stringify(tipSessions)
+    );
+
+    window.location.href = "results.html";
+
+});

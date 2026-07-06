@@ -120,7 +120,8 @@ function renderSimpleTable(title, list) {
 }
 
 
-function renderRoleTable(title, list, poolCard = 0, poolCash = 0) {
+function renderRoleTable(title, session, list, poolCard = 0, poolCash = 0) {
+
 
     if (!list || list.length === 0) {
         return `
@@ -150,12 +151,14 @@ function renderRoleTable(title, list, poolCard = 0, poolCash = 0) {
 
                 <!-- EDITABLE POINTS -->
                 <td>
-                    <input 
+                    <input
                         type="number"
                         step="0.1"
-                        value="${emp.point_weight ?? 1}"
-                        data-emp-id="${emp.employee_id}"
+                        min="0"
+                        value="${emp.point_weight}"
                         class="point-input"
+                        data-session-id="${session.session_id}"
+                        data-emp-id="${emp.employee_id}"
                     />
                 </td>
 
@@ -193,3 +196,62 @@ function renderRoleTable(title, list, poolCard = 0, poolCash = 0) {
         </div>
     `;
 }
+
+
+
+// =========================
+// POINT EDITING
+// =========================
+document.addEventListener("change", function (e) {
+
+    if (!e.target.classList.contains("point-input")) {
+        return;
+    }
+
+    const sessionId = Number(e.target.dataset.sessionId);
+    const employeeId = e.target.dataset.empId;
+
+    const session = tipSessions.find(s => s.session_id === sessionId);
+
+    if (!session) {
+        console.log("Session not found:", sessionId);
+        return;
+    }
+
+    const employee = session.employees.find(
+        emp => emp.employee_id === employeeId
+    );
+
+    if (!employee) {
+        console.log("Employee not found:", employeeId);
+        return;
+    }
+
+    const oldWeight = employee.point_weight;
+    const newWeight = Number(e.target.value) || 0;
+
+    console.group("Point Weight Update");
+
+    console.log("Employee:", employee.name);
+    console.log("Employee ID:", employee.employee_id);
+    console.log("Old Weight:", oldWeight);
+
+    employee.point_weight = newWeight;
+
+    console.log("New Weight:", employee.point_weight);
+
+    console.log("Employee Object:");
+    console.log(employee);
+
+    distributeTips(session);
+
+    console.log("Updated Session:");
+    console.log(session);
+
+    console.groupEnd();
+
+    renderSessions(tipSessions);
+
+});
+
+

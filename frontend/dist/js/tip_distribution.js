@@ -141,8 +141,21 @@ function splitPoolWeighted(poolAmount, employees, field) {
             (emp.meal_end - emp.meal_start) - (emp.lost_mins || 0)
         );
 
-        emp._weight =
-            emp.worked_minutes * (Number(emp.point_weight) || 1);
+        let points = Number(emp.point_weight);
+
+        // Only invalid values become 1
+        if (isNaN(points)) {
+            points = 1;
+            emp.point_weight = 1;
+        }
+
+        // Don't allow negative weights
+        if (points < 0) {
+            points = 0;
+            emp.point_weight = 0;
+        }
+
+        emp._weight = emp.worked_minutes * points;
 
         totalWeight += emp._weight;
     });

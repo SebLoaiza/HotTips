@@ -18,10 +18,11 @@ function roundRatio(value) {
 // =========================
 // TIP SESSION FACTORY
 // =========================
-
+let nextSessionId = 1;
 function createTipSession(block) {
 
     return {
+        session_id: nextSessionId++,
         date: block.date,
         meal: block.meal,
 
@@ -76,7 +77,7 @@ function buildTipSession(block) {
             employee_id: emp.employee_id,
             name: emp.name,
             role: emp.role,
-
+            orders: emp.orders,
             meal_start: emp.meal_start,
             meal_end: emp.meal_end,
             lost_mins: emp.lost_mins || 0,
