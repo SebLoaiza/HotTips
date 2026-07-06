@@ -9,8 +9,7 @@ const tipSessions = mealBlocks.map(block => {
 
     const session = buildTipSession(block);
 
-    distributeTips(session);   // 💥 THIS WAS MISSING
-
+    distributeTips(session);   
     return session;
 });
 
@@ -90,40 +89,44 @@ function renderSessions(sessions) {
 
             <!-- ROLE TABLES -->
 
+
             <div class="role-container">
 
-                <h3>
-                    Tip Owners
-                </h3>
                 ${renderSimpleTable("Tip Owners", session.tip_owners)}
 
-                <h3>
-                    Servers — Card: $${floorMoney(session.server_pool_card).toFixed(2)} |
-                    Cash: $${floorMoney(session.server_pool_cash).toFixed(2)}
-                </h3>
-                ${renderSimpleTable("Servers", session.servers)}
+                ${renderRoleTable(
+                    "Servers",
+                    session.servers,
+                    session.server_pool_card,
+                    session.server_pool_cash
+                )}
 
-                <h3>
-                    Bussers — Card: $${floorMoney(session.busser_pool_card).toFixed(2)} |
-                    Cash: $${floorMoney(session.busser_pool_cash).toFixed(2)}
-                </h3>
-                ${renderSimpleTable("Bussers", session.bussers)}
+                ${renderRoleTable(
+                    "Bussers",
+                    session.bussers,
+                    session.busser_pool_card,
+                    session.busser_pool_cash
+                )}
 
-                <h3>
-                    Hosts — Card: $${floorMoney(session.host_pool_card).toFixed(2)} |
-                    Cash: $${floorMoney(session.host_pool_cash).toFixed(2)}
-                </h3>
-                ${renderSimpleTable("Hosts", session.hosts)}
+                ${renderRoleTable(
+                    "Hosts",
+                    session.hosts,
+                    session.host_pool_card,
+                    session.host_pool_cash
+                )}
 
-                <h3>
-                    BOH — Card: $${floorMoney(session.boh_pool_card).toFixed(2)} |
-                    Cash: $${floorMoney(session.boh_pool_cash).toFixed(2)}
-                </h3>
-                ${renderSimpleTable("BOH", session.boh)}
+                ${renderRoleTable(
+                    "BOH",
+                    session.boh,
+                    session.boh_pool_card,
+                    session.boh_pool_cash
+                )}
 
             </div>
-            <h3>TipSession Object</h3>
-            <pre>${JSON.stringify(session, null, 2)}</pre>
+            <details class="debug-panel">
+                <summary>TipSession JSON (Debug)</summary>
+                <pre>${JSON.stringify(session, null, 2)}</pre>
+            </details>
         `;
 
         container.appendChild(div);

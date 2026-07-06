@@ -11,7 +11,7 @@ window.ALL_ORDERS = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("🔥 App initialized");
+    console.log("App initialized");
 
     // optional: if you ever want auto-render cached data
     if (window.LAST_BLOCKS.length > 0) {

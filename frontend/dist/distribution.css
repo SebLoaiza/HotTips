@@ -116,3 +116,66 @@ input[type="number"]:focus {
     background: #2b3244;
     color: #9ad1ff;
 }
+
+
+.debug-panel{
+    margin-top:20px;
+    background:#11151d;
+    border:1px solid #293142;
+    border-radius:8px;
+}
+
+.debug-panel summary{
+    cursor:pointer;
+    padding:12px;
+    font-weight:bold;
+    color:#7cc7ff;
+}
+
+.debug-panel pre{
+    padding:15px;
+    overflow:auto;
+    max-height:500px;
+}
+
+.money-card{
+    color:#70d6ff;
+    font-weight:bold;
+}
+
+.money-cash{
+    color:#78ff8a;
+    font-weight:bold;
+}
+
+.money-kept{
+    color:#ffd966;
+    font-weight:bold;
+}
+
+.session-header{
+    display:flex;
+    gap:18px;
+    margin:16px 0;
+}
+
+.summary-card{
+    flex:1;
+    background:#10141d;
+    border:1px solid #283040;
+    border-radius:8px;
+    padding:14px;
+}
+
+.summary-card h3{
+    margin-top:0;
+    color:#7cc7ff;
+    border-bottom:1px solid #283040;
+    padding-bottom:8px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+}

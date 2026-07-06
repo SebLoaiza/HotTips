@@ -1,25 +1,36 @@
 // =========================
-// SESSION BUILDER
+// MONEY UTILITIES
 // =========================
 
-function buildTipSession(block) {
+// Always floor to nearest cent.
+function floorMoney(amount) {
+    amount = Number(amount) || 0;
+    return Math.floor((amount + 1e-9) * 100) / 100;
+}
 
-    const session = {
+// Round percentages / ratios to two decimals.
+function roundRatio(value) {
+    value = Number(value) || 0;
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+
+// =========================
+// TIP SESSION FACTORY
+// =========================
+
+function createTipSession(block) {
+
+    return {
         date: block.date,
         meal: block.meal,
 
         start: block.start,
         end: block.end,
 
-        online_tips: block.online_total || 0,
+        online_tips: floorMoney(block.online_total || 0),
 
-        busser_coverage: 0,
-        host_coverage: 0,
-
-        boh_pool: 0,
-        busser_pool: 0,
-        host_pool: 0,
-        server_pool: 0,
+        employees: [],
 
         tip_owners: [],
         servers: [],
@@ -27,20 +38,41 @@ function buildTipSession(block) {
         hosts: [],
         boh: [],
 
-        employees: []
+        busser_coverage: 0,
+        host_coverage: 0,
+
+        boh_pool_card: 0,
+        boh_pool_cash: 0,
+
+        busser_pool_card: 0,
+        busser_pool_cash: 0,
+
+        host_pool_card: 0,
+        host_pool_cash: 0,
+
+        server_pool_card: 0,
+        server_pool_cash: 0
     };
+}
+
+
+// =========================
+// SESSION BUILDER
+// =========================
+
+function buildTipSession(block) {
+
+    const session = createTipSession(block);
 
     block.employees.forEach(emp => {
 
         const role = emp.role.toLowerCase();
 
-        const cardCollected = Number(emp.card_tips) || 0;
-        const cashCollected = Number(emp.cash_tips) || 0;
+        const cardCollected = floorMoney(Number(emp.card_tips) || 0);
+        const cashCollected = floorMoney(Number(emp.cash_tips) || 0);
 
-        // 3% card fee
-        const cardNet = floorMoney(cardCollected * 0.97);
+        const employee = {
 
-        const employeeObj = {
             employee_id: emp.employee_id,
             name: emp.name,
             role: emp.role,
@@ -59,41 +91,57 @@ function buildTipSession(block) {
                 !role.includes("host") &&
                 !role.includes("busser"),
 
+            // -----------------------------
+            // Tips collected
+            // -----------------------------
             card_collected: cardCollected,
             cash_collected: cashCollected,
-            card_collected_net: cardNet,
 
+            // 3% card fee
+            card_collected_net: floorMoney(cardCollected * 0.97),
+
+            // -----------------------------
+            // Money sent to pools
+            // -----------------------------
+            card_to_boh: 0,
+            cash_to_boh: 0,
+
+            card_to_busser: 0,
+            cash_to_busser: 0,
+
+            card_to_host: 0,
+            cash_to_host: 0,
+
+            // -----------------------------
+            // Money kept
+            // -----------------------------
             card_kept: 0,
             cash_kept: 0,
 
-            card_pool: 0,
-            cash_pool: 0,
+            // -----------------------------
+            // Money received from role pool
+            // -----------------------------
+            card_received: 0,
+            cash_received: 0,
 
-            server_received: 0,
-            busser_received: 0,
-            host_received: 0,
-            boh_received: 0,
-
-            final_card: 0,
-            final_cash: 0,
+            // -----------------------------
+            // Final payout
+            // -----------------------------
             final_total: 0
         };
 
-        session.employees.push(employeeObj);
-        session.tip_owners.push(employeeObj);
+        session.employees.push(employee);
 
-        if (employeeObj.is_server) session.servers.push(employeeObj);
-        if (employeeObj.is_busser) session.bussers.push(employeeObj);
-        if (employeeObj.is_host) session.hosts.push(employeeObj);
-        if (employeeObj.is_boh) session.boh.push(employeeObj);
+        if (employee.card_collected > 0 || employee.cash_collected > 0) {
+            session.tip_owners.push(employee);
+        }
+
+        if (employee.is_server) session.servers.push(employee);
+        if (employee.is_busser) session.bussers.push(employee);
+        if (employee.is_host) session.hosts.push(employee);
+        if (employee.is_boh) session.boh.push(employee);
     });
 
-    // remove zero tip people
-    session.tip_owners = session.tip_owners.filter(e =>
-        (e.card_collected + e.cash_collected) > 0
-    );
-
-    // coverage
     const busserCoverage = calculateCoverage(session, "is_busser");
     session.busser_coverage = busserCoverage.percent;
     session.busser_coverage_meta = busserCoverage;
@@ -112,13 +160,27 @@ function buildTipSession(block) {
 
 function calculateCoverage(session, property) {
 
+    if (session.employees.length === 0) {
+        return {
+            percent: 0,
+            covered: 0,
+            total: 0,
+            merged: []
+        };
+    }
+
     const start = Math.min(...session.employees.map(e => e.meal_start));
     const end = Math.max(...session.employees.map(e => e.meal_end));
 
     const totalMinutes = end - start;
 
     if (totalMinutes <= 0) {
-        return { percent: 0, covered: 0, total: 0, merged: [] };
+        return {
+            percent: 0,
+            covered: 0,
+            total: 0,
+            merged: []
+        };
     }
 
     const intervals = session.employees
@@ -126,33 +188,42 @@ function calculateCoverage(session, property) {
         .map(e => [e.meal_start, e.meal_end])
         .sort((a, b) => a[0] - b[0]);
 
-    if (!intervals.length) {
-        return { percent: 0, covered: 0, total: totalMinutes, merged: [] };
+    if (intervals.length === 0) {
+        return {
+            percent: 0,
+            covered: 0,
+            total: totalMinutes,
+            merged: []
+        };
     }
 
     const merged = [];
-    let [cs, ce] = intervals[0];
+
+    let [currentStart, currentEnd] = intervals[0];
 
     for (let i = 1; i < intervals.length; i++) {
-        const [s, e] = intervals[i];
 
-        if (s <= ce) ce = Math.max(ce, e);
-        else {
-            merged.push([cs, ce]);
-            cs = s;
-            ce = e;
+        const [start, end] = intervals[i];
+
+        if (start <= currentEnd) {
+            currentEnd = Math.max(currentEnd, end);
+        } else {
+            merged.push([currentStart, currentEnd]);
+            currentStart = start;
+            currentEnd = end;
         }
     }
 
-    merged.push([cs, ce]);
+    merged.push([currentStart, currentEnd]);
 
     let covered = 0;
-    for (const [s, e] of merged) {
-        covered += e - s;
-    }
+
+    merged.forEach(([start, end]) => {
+        covered += end - start;
+    });
 
     return {
-        percent: (covered / totalMinutes) * 100,
+        percent: roundRatio((covered / totalMinutes) * 100),
         covered,
         total: totalMinutes,
         merged
@@ -165,24 +236,25 @@ function calculateCoverage(session, property) {
 // =========================
 
 function minutesToTime(mins) {
-    if (mins === null || mins === undefined || isNaN(mins)) return "-";
+
+    if (mins === null || mins === undefined || isNaN(mins)) {
+        return "-";
+    }
 
     mins = Number(mins);
+
     mins = ((mins % 1440) + 1440) % 1440;
 
     let hours = Math.floor(mins / 60);
-    let minutes = mins % 60;
+    const minutes = mins % 60;
 
     const ampm = hours >= 12 ? "PM" : "AM";
 
     hours = hours % 12;
-    if (hours === 0) hours = 12;
+
+    if (hours === 0) {
+        hours = 12;
+    }
 
     return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 }
-
-
-// =========================
-// FLOOR MONEY (IMPORTANT FIX)
-// =========================
-

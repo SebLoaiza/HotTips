@@ -163,13 +163,15 @@ class TipEmployee:
     # -------------------------------
     # Final amounts
     # -------------------------------
+ 
 
+    #how much they got from keeping their tips
     card_kept: float = 0.0
     cash_kept: float = 0.0
 
-
-    card_recieved: float = 0.0
-    cash_recieved: float = 0.0
+    #how much they got form pools
+    card_received: float = 0.0
+    cash_received: float = 0.0
 
 
     final_total: float = 0.0
