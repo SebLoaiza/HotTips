@@ -138,8 +138,6 @@ function attachOrdersToEmployees(blocks) {
         }
     }
 }
-
-
 function renderBlocks(blocks) {
 
     const output = document.getElementById("output");
@@ -191,9 +189,6 @@ function renderBlocks(blocks) {
 
             const key = `${block.date}-${block.meal}`;
 
-            // ======================
-            // FIX SERVER NAMES (DEBUG ISSUE)
-            // ======================
             function formatServer(name) {
                 if (!name || name.toLowerCase() === "unknown") return "Unknown";
 
@@ -208,13 +203,35 @@ function renderBlocks(blocks) {
             }
 
             // ======================
+            // SORTING LOGIC
+            // ======================
+            function roleRank(role) {
+                role = (role || "").toLowerCase();
+
+                if (role.includes("server")) return 0;
+                if (role.includes("host")) return 1;
+                if (role.includes("busser")) return 2;
+                if (role.includes("foh")) return 3;
+
+                return 99; // BOH
+            }
+
+            const sortedEmployees = [...block.employees].sort((a, b) => {
+                const ra = roleRank(a.role);
+                const rb = roleRank(b.role);
+
+                if (ra !== rb) return ra - rb;
+                return (a.name || "").localeCompare(b.name || "");
+            });
+
+            // ======================
             // MEAL HEADER
             // ======================
             const header = document.createElement("tr");
             header.className = "meal-group-header";
 
             header.innerHTML = `
-                <td colspan="8"
+                <td colspan="6"
                     style="background:#11141a;color:#7cc7ff;font-weight:bold;">
 
                     <span onclick="toggleMeal('${key}')" style="cursor:pointer;">
@@ -241,7 +258,6 @@ function renderBlocks(blocks) {
 
             tbody.appendChild(header);
 
-
             // ======================
             // COLUMN HEADERS
             // ======================
@@ -252,8 +268,6 @@ function renderBlocks(blocks) {
                 <th>Employee</th>
                 <th>Role</th>
                 <th>Shift</th>
-                <th>Worked</th>
-                <th>Lost</th>
                 <th>Breaks</th>
                 <th>Cash</th>
                 <th>Card Tips</th>
@@ -264,41 +278,51 @@ function renderBlocks(blocks) {
             // ======================
             // EMPLOYEES
             // ======================
-            block.employees.forEach(emp => {
+            sortedEmployees.forEach(emp => {
 
                 const row = document.createElement("tr");
                 row.dataset.meal = key;
 
                 const serverName = formatServer(emp.name);
 
-                // initialize if missing
                 if (emp.card_tips === undefined) emp.card_tips = 0;
+
+                const role = (emp.role || "").toLowerCase();
+                const isBOH = !(
+                    role.includes("server") ||
+                    role.includes("host") ||
+                    role.includes("busser") ||
+                    role.includes("foh")
+                );
+
+                const cashInput = isBOH
+                    ? `<input type="number" value="${emp.cash_tips.toFixed(2)}"
+                        disabled
+                        style="width:70px;background:#222;color:#777;cursor:not-allowed;">`
+                    : `<input type="number"
+                        min="0"
+                        step="0.01"
+                        value="${emp.cash_tips.toFixed(2)}"
+                        style="width:70px"
+                        oninput="updateCashTips('${block.date}', '${block.meal}', '${emp.employee_id}', this.value)"
+                        onchange="this.value = Number(this.value || 0).toFixed(2)">`;
 
                 row.innerHTML = `
                     <td>${serverName}</td>
                     <td>${emp.role}</td>
                     <td>${minutesToTime(emp.meal_start)} → ${minutesToTime(emp.meal_end)}</td>
-                    <td>${emp.worked_minutes}</td>
-                    <td>${emp.lost_mins}</td>
-                    <td>${
-                        emp.breaks.length
-                            ? emp.breaks.map(b =>
-                                `${minutesToTime(b[0])} → ${minutesToTime(b[1])}`
-                            ).join("<br>")
-                            : "-"
-                    }</td>
 
                     <td>
-                        <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value="${emp.cash_tips.toFixed(2)}"
-                            style="width:70px"
-                            oninput="updateCashTips('${block.date}', '${block.meal}', '${emp.employee_id}', this.value)"
-                            onchange="this.value = Number(this.value || 0).toFixed(2)"
-                        >
+                        ${
+                            emp.breaks.length
+                                ? emp.breaks.map(b =>
+                                    `${minutesToTime(b[0])} → ${minutesToTime(b[1])}`
+                                ).join("<br>")
+                                : "-"
+                        }
                     </td>
+
+                    <td>${cashInput}</td>
 
                     <td id="card-${emp.employee_id}">
                         $${(emp.card_tips || 0).toFixed(2)}
@@ -308,70 +332,9 @@ function renderBlocks(blocks) {
                 tbody.appendChild(row);
             });
 
-            // ======================
-            // ORDERS + TIP TOTALS
-            // ======================
-            let totalTip = 0;
-            let totalGratuity = 0;
-
-            if (block.orders && block.orders.length) {
-                block.orders.forEach(o => {
-                    totalTip += (o.tip || 0);
-                    totalGratuity += (o.gratuity || 0);
-                });
-            }
-
-            const totalCombined = totalTip + totalGratuity;
-
-            const orderRow = document.createElement("tr");
-            orderRow.dataset.meal = key;
-
-            orderRow.innerHTML = `
-                <td colspan="8">
-                    <div style="margin-top:10px;padding:8px;background:#111;border-radius:6px;">
-
-                        <b>
-                            Orders (${block.orders ? block.orders.length : 0})
-                        </b>
-
-                        <div style="margin-top:5px;">
-                            ${
-                                block.orders && block.orders.length
-                                ? block.orders.map(o => `
-                                    <div>
-                                        #${o.order_number}
-                                        — ${minutesToTime(o.order_time_min)}
-                                        — $${o.amount}
-                                        — ${o.service}
-                                        — Tip: $${o.tip || 0}
-                                        — Gratuity: $${o.gratuity || 0}
-                                        — Server: ${formatServer(o.server)}
-                                    </div>
-                                `).join("")
-                                : "No orders"
-                            }
-                        </div>
-
-                        <hr style="margin:8px 0;border:0;border-top:1px solid #333;">
-
-                        <div style="font-weight:bold;">
-                            Tip Total: $${totalTip.toFixed(2)} <br>
-                            Gratuity Total: $${totalGratuity.toFixed(2)} <br>
-                            Combined Total: $${totalCombined.toFixed(2)} <br>
-                            Online Pool: $${block.online_total.toFixed(2)}
-                        </div>
-
-                    </div>
-                </td>
-            `;
-
-            tbody.appendChild(orderRow);
-
-            // spacing
             const spacer = document.createElement("tr");
             spacer.dataset.meal = key;
-            spacer.innerHTML = `<td colspan="8"><div style="height:10px;"></div></td>`;
-
+            spacer.innerHTML = `<td colspan="6"><div style="height:10px;"></div></td>`;
             tbody.appendChild(spacer);
         });
 

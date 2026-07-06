@@ -137,10 +137,24 @@ function buildTipSession(block) {
             session.tip_owners.push(employee);
         }
 
-        if (employee.is_server) session.servers.push(employee);
-        if (employee.is_busser) session.bussers.push(employee);
-        if (employee.is_host) session.hosts.push(employee);
-        if (employee.is_boh) session.boh.push(employee);
+
+        const workedMinutes =
+            employee.meal_end - employee.meal_start;
+
+        // Only employees who worked at least 90 minutes
+        // are eligible to RECEIVE pooled tips.
+        const eligibleForPool = workedMinutes >= 90;
+        
+        if (eligibleForPool) {
+
+            if (employee.is_server) session.servers.push(employee);
+
+            if (employee.is_busser) session.bussers.push(employee);
+
+            if (employee.is_host) session.hosts.push(employee);
+
+            if (employee.is_boh) session.boh.push(employee);
+        }
     });
 
     const busserCoverage = calculateCoverage(session, "is_busser");

@@ -31,7 +31,7 @@ function renderSessions(sessions) {
         session.employees.forEach(emp => {
 
             mainRows += `
-                <tr>
+                <tr class="${emp.is_boh ? "boh-row" : ""}">
                     <td>${emp.name}</td>
                     <td>${emp.role}</td>
                     <td>${minutesToTime(emp.meal_start)} → ${minutesToTime(emp.meal_end)}</td>
@@ -49,6 +49,7 @@ function renderSessions(sessions) {
         div.className = "session-card";
 
         div.innerHTML = `
+
             <h2>${session.date} — ${session.meal}</h2>
 
             <p>
@@ -66,79 +67,99 @@ function renderSessions(sessions) {
                 $${session.online_tips.toFixed(2)}
             </p>
 
-            <!-- MAIN TABLE -->
-            <h3>All Employees</h3>
-            <table class="employee-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Shift</th>
-                        <th>Server</th>
-                        <th>Busser</th>
-                        <th>Host</th>
-                        <th>BOH</th>
-                        <th>Card</th>
-                        <th>Cash</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${mainRows}
-                </tbody>
-            </table>
+            <!-- =========================
+                 EMPLOYEES (HIDDEN BY DEFAULT)
+            ========================== -->
+            <details>
+                <summary><b>Employees</b></summary>
 
-            <!-- ROLE TABLES -->
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Shift</th>
+                            <th>Server</th>
+                            <th>Busser</th>
+                            <th>Host</th>
+                            <th>BOH</th>
+                            <th>Card</th>
+                            <th>Cash</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${mainRows}
+                    </tbody>
+                </table>
+            </details>
 
-
+            <!-- =========================
+                 EVERYTHING ELSE OPEN
+            ========================== -->
             <div class="role-container">
 
-                ${renderSimpleTable("Tip Owners", session.tip_owners)}
+                <details open>
+                    <summary><b>Tip Owners</b></summary>
+                    ${renderSimpleTable("Tip Owners", session.tip_owners)}
+                </details>
 
-                ${renderRoleTable(
-                    "Servers",
-                    session,
-                    session.servers,
-                    session.server_pool_card,
-                    session.server_pool_cash
-                )}
+                <details open>
+                    <summary><b>Servers</b></summary>
+                    ${renderRoleTable(
+                        "Servers",
+                        session,
+                        session.servers,
+                        session.server_pool_card,
+                        session.server_pool_cash
+                    )}
+                </details>
 
-                ${renderRoleTable(
-                    "Bussers",
-                    session,
-                    session.bussers,
-                    session.busser_pool_card,
-                    session.busser_pool_cash
-                )}
+                <details open>
+                    <summary><b>Bussers</b></summary>
+                    ${renderRoleTable(
+                        "Bussers",
+                        session,
+                        session.bussers,
+                        session.busser_pool_card,
+                        session.busser_pool_cash
+                    )}
+                </details>
 
-                ${renderRoleTable(
-                    "Hosts",
-                    session,
-                    session.hosts,
-                    session.host_pool_card,
-                    session.host_pool_cash
-                )}
+                <details open>
+                    <summary><b>Hosts</b></summary>
+                    ${renderRoleTable(
+                        "Hosts",
+                        session,
+                        session.hosts,
+                        session.host_pool_card,
+                        session.host_pool_cash
+                    )}
+                </details>
 
-                ${renderRoleTable(
-                    "BOH",
-                    session,
-                    session.boh,
-                    session.boh_pool_card,
-                    session.boh_pool_cash
-                )}
+                <details open>
+                    <summary><b>BOH</b></summary>
+                    ${renderRoleTable(
+                        "BOH",
+                        session,
+                        session.boh,
+                        session.boh_pool_card,
+                        session.boh_pool_cash
+                    )}
+                </details>
 
             </div>
+
             <details class="debug-panel">
                 <summary>TipSession JSON (Debug)</summary>
                 <pre>${JSON.stringify(session, null, 2)}</pre>
             </details>
+
         `;
 
         container.appendChild(div);
     });
 
-    
 }
-
 document.getElementById("finalizeBtn").addEventListener("click", () => {
 
     tipSessions.forEach(session => distributeTips(session));

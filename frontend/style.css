@@ -226,3 +226,39 @@ summary {
     color: #888;
     font-size: 12px;
 }
+
+.workflow-bar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: #0f121a;
+    border-bottom: 1px solid #2b3244;
+}
+
+.step {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    background: #1a1f2b;
+    color: #777;
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1;
+    color: #9ad1ff;
+}
+
+.step.done {
+    opacity: 1;
+    color: #7cffb0;
+}
+
+.step.clickable {
+    cursor: pointer;
+}

@@ -40,13 +40,10 @@ function renderSimpleTable(title, list) {
     if (!list || list.length === 0) {
         return `
             <div class="role-block">
-                <h3>${title}</h3>
                 <p>No data</p>
             </div>
         `;
     }
-
-    const isTipOwners = title === "Tip Owners";
 
     let rows = "";
 
@@ -54,7 +51,9 @@ function renderSimpleTable(title, list) {
 
         const card = Number(emp.card_collected) || 0;
         const cash = Number(emp.cash_collected) || 0;
-        const netCard = emp.card_collected_net || 0;
+
+        const cardKept = Number(emp.card_kept) || 0;
+        const cashKept = Number(emp.cash_kept) || 0;
 
         rows += `
             <tr>
@@ -62,32 +61,26 @@ function renderSimpleTable(title, list) {
                 <td>${emp.role}</td>
                 <td>${minutesToTime(emp.meal_start)} → ${minutesToTime(emp.meal_end)}</td>
 
-                <!-- BASE INPUT -->
                 <td>$${floorMoney(card).toFixed(2)}</td>
-                ${isTipOwners ? `<td>$${floorMoney(netCard).toFixed(2)}</td>` : ``}
                 <td>$${floorMoney(cash).toFixed(2)}</td>
 
-                <!-- DISTRIBUTION BREAKDOWN -->
-                <td>$${floorMoney(emp.card_to_boh).toFixed(2)}</td>
-                <td>$${floorMoney(emp.cash_to_boh).toFixed(2)}</td>
+                <td>$${floorMoney(cardKept).toFixed(2)}</td>
+                <td>$${floorMoney(cashKept).toFixed(2)}</td>
 
-                <td>$${floorMoney(emp.card_to_busser).toFixed(2)}</td>
-                <td>$${floorMoney(emp.cash_to_busser).toFixed(2)}</td>
-
-                <td>$${floorMoney(emp.card_to_host).toFixed(2)}</td>
-                <td>$${floorMoney(emp.cash_to_host).toFixed(2)}</td>
-
-                <!-- KEPT -->
-                <td>$${floorMoney(emp.card_kept || 0).toFixed(2)}</td>
-                <td>$${floorMoney(emp.cash_kept || 0).toFixed(2)}</td>
+                <!-- BREAKDOWN (still visible but grouped) -->
+                <td>
+                    <div class="breakdown-cell">
+                        <div>BOH: $${floorMoney(emp.card_to_boh + emp.cash_to_boh).toFixed(2)}</div>
+                        <div>Busser: $${floorMoney(emp.card_to_busser + emp.cash_to_busser).toFixed(2)}</div>
+                        <div>Host: $${floorMoney(emp.card_to_host + emp.cash_to_host).toFixed(2)}</div>
+                    </div>
+                </td>
             </tr>
         `;
     });
 
     return `
         <div class="role-block">
-            <h3>${title}</h3>
-
             <table class="employee-table">
                 <thead>
                     <tr>
@@ -96,37 +89,28 @@ function renderSimpleTable(title, list) {
                         <th>Shift</th>
 
                         <th>Card</th>
-                        ${isTipOwners ? `<th>Net Card</th>` : ``}
                         <th>Cash</th>
-
-                        <th>BOH Card</th>
-                        <th>BOH Cash</th>
-
-                        <th>Busser Card</th>
-                        <th>Busser Cash</th>
-
-                        <th>Host Card</th>
-                        <th>Host Cash</th>
 
                         <th>Card Kept</th>
                         <th>Cash Kept</th>
+
+                        <th>Breakdown</th>
                     </tr>
                 </thead>
 
-                <tbody>${rows}</tbody>
+                <tbody>
+                    ${rows}
+                </tbody>
             </table>
         </div>
     `;
 }
-
-
 function renderRoleTable(title, session, list, poolCard = 0, poolCash = 0) {
 
 
     if (!list || list.length === 0) {
         return `
             <div class="role-block">
-                <h3>${title}</h3>
                 <p>No data</p>
             </div>
         `;
@@ -171,7 +155,6 @@ function renderRoleTable(title, session, list, poolCard = 0, poolCash = 0) {
 
     return `
         <div class="role-block">
-            <h3>${title}</h3>
 
             <div class="summary">
                 <div><b>Card Pool:</b> $${floorMoney(poolCard).toFixed(2)}</div>
