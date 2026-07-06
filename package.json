@@ -1,0 +1,12 @@
+{
+  "name": "hottips",
+  "version": "1.0.0",
+  "description": "Restaurant tip distribution software",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^43.0.0"
+  }
+}

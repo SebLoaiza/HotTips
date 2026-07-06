@@ -1,0 +1,16 @@
+# Node
+node_modules/
+
+# Electron builds
+dist/
+out/
+release/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Database (optional)
+# app.db
