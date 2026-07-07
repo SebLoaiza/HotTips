@@ -1,264 +1,27 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #0f1115;
-    color: #e6e6e6;
-    margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    margin-bottom: 20px;
-}
-
 .meal-block {
-    background: #1a1d24;
-    border: 1px solid #2a2f3a;
-    border-radius: 10px;
-    margin-bottom: 20px;
+
+    border: 1px solid black;
+
     padding: 15px;
-}
 
-.meal-header {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #7cc7ff;
-}
+    margin: 10px;
 
-.employees {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+    width: 350px;
 
-.employee {
-    background: #222733;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.emp-name {
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.emp-name span {
-    font-weight: normal;
-    color: #aaa;
-    margin-left: 6px;
-}
-
-.emp-shift {
-    color: #b5b5b5;
-    margin-bottom: 4px;
-}
-
-.emp-stats {
-    color: #d0d0d0;
-    margin-bottom: 6px;
-}
-
-.break-title {
-    margin-top: 6px;
-    font-size: 13px;
-    color: #ffcc66;
-}
-
-.break {
-    margin-left: 10px;
-    font-size: 13px;
-    color: #bdbdbd;
-}
-.emp-name {
-    font-weight: bold;
-    margin-bottom: 4px;
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-}
-
-.emp-name span {
-    font-weight: normal;
-    color: #aaa;
-}
-.meal-row {
-    margin-bottom: 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #2a2f3a;
-}
-
-.meal-header-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 10px;
-    color: #7cc7ff;
-}
-
-button {
-    background: #2a2f3a;
-    color: #e6e6e6;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #3a4150;
-}
-
-input {
-    background: #11141a;
-    border: 1px solid #2a2f3a;
-    color: white;
-    padding: 4px;
-    margin-right: 6px;
-    border-radius: 4px;
-}
-.meal-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 13px;
-}
-
-.meal-table th {
-    text-align: left;
-    background: #11141a;
-    color: #7cc7ff;
-    padding: 8px;
-    border-bottom: 1px solid #2a2f3a;
-}
-
-.meal-table td {
-    padding: 8px;
-    border-bottom: 1px solid #2a2f3a;
-    vertical-align: top;
-}
-
-.meal-table tr:hover {
-    background: #1f2430;
-}
-.meal-group-header td {
-    padding: 10px;
-    border-top: 2px solid #2a2f3a;
-}
-
-.meal-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.meal-table th,
-.meal-table td {
-    padding: 6px;
-    border-bottom: 1px solid #2a2f3a;
-}
-
-.meal-table th {
-    text-align: left;
-    color: #b5d8ff;
-    background: #0f1115;
-}
-details {
-    margin-bottom: 10px;
-    border-radius: 8px;
-}
-
-summary {
-    cursor: pointer;
-    padding: 8px;
-    user-select: none;
-}
-
-.day-header {
-    font-size: 18px;
-    font-weight: bold;
-    color: #7cc7ff;
-    background: #1a1d24;
-}
-
-.meal-header-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    color: #7cc7ff;
 }
 
 
-.viz-wrap {
-    margin-top: 12px;
-    padding: 10px;
-    background: #111;
-    border-radius: 10px;
+.meal-block h3 {
+
+    margin-top: 0;
+
 }
 
-.viz-title {
-    font-size: 14px;
-    color: #aaa;
-    margin-bottom: 8px;
-}
 
-.viz-bar {
-    position: relative;
-    width: 700px;
-    height: 18px;
-    background: #222;
-    border-radius: 6px;
-    overflow: hidden;
-}
+.meal-block label {
 
-.viz-block {
-    position: absolute;
-    height: 100%;
-    background: #3ddc84;
-    border-right: 1px solid rgba(0,0,0,0.4);
-}
+    display: block;
 
-.viz-label {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #ccc;
-}
+    margin: 5px;
 
-.viz-empty {
-    color: #888;
-    font-size: 12px;
-}
-
-.workflow-bar {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    background: #0f121a;
-    border-bottom: 1px solid #2b3244;
-}
-
-.step {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    background: #1a1f2b;
-    color: #777;
-    text-align: center;
-    font-size: 13px;
-    opacity: 0.5;
-}
-
-.step.active {
-    opacity: 1;
-    color: #9ad1ff;
-}
-
-.step.done {
-    opacity: 1;
-    color: #7cffb0;
-}
-
-.step.clickable {
-    cursor: pointer;
 }

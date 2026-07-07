@@ -1,57 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Meal Blocks Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tip Distribution Tool</title>
+
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
+
 <body>
 
-    <div id="workflowBar"></div>
+    <h1>Tip Distribution Tool</h1>
 
 
-    <h1>Upload Shifts CSV</h1>
+    <h2>Upload Shifts CSV</h2>
 
-    <input type="file" id="fileInput" />
-    <button onclick="upload()">Save Shifts</button>
+    <input
+        type="file"
+        id="shiftCsv"
+        accept=".csv"
+    >
 
-
-    <div id="ordersStep" style="display:none;">
-
-        <h1>Upload Orders CSV</h1>
-
-        <input type="file" id="orderFileInput" />
-
-        <button onclick="uploadOrders()">
-            Save Orders
-        </button>
-
-    </div>
-
-
-
-<div id="continueStep" style="display:none;">
-    <button
-        id="continueBtn"
-        onclick="goToDistribution()">
-        Continue to Tip Distribution →
-    </button>
-</div>
-
-    <hr/>
 
     <div id="output"></div>
+    
+    <hr>
 
+    <h1>Tip Tables</h1>
 
-    <script src="/static/js/time.js"></script>
-    <script src="/static/js/navbar.js"></script>
-    <script src="/static/js/ui.js"></script>
-    <script src="/static/js/api.js"></script>
-    <script src="/static/js/render.js"></script>
+    <div id="tipTables"></div>
 
-    <script>
-        initWorkflowNavbar();
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script type="module" src="/static/src/app.js"></script>
+
 
 </body>
+
 </html>
