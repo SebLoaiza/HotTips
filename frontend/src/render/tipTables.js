@@ -4,26 +4,21 @@ export function renderTipTables(mealBlocks) {
 
     container.innerHTML = "";
 
-
     const meals = [
         "Breakfast",
         "Lunch",
         "Dinner"
     ];
 
-
     for (const meal of meals) {
 
-
-        const blocks = mealBlocks.filter(block => {
-            return block.meal === meal;
-        });
-
+        const blocks = mealBlocks.filter(block =>
+            block.meal === meal
+        );
 
         if (blocks.length === 0) {
             continue;
         }
-
 
         const title = document.createElement("h2");
 
@@ -31,43 +26,29 @@ export function renderTipTables(mealBlocks) {
 
         container.appendChild(title);
 
-
-
         const table = document.createElement("table");
 
-
         const header = document.createElement("tr");
-
 
         header.innerHTML = `
             <th>Employee</th>
         `;
 
-
         for (const block of blocks) {
 
             header.innerHTML += `
-                <th>
-                    ${block.date}
-                </th>
+                <th>${block.date}</th>
             `;
 
         }
 
-
         table.appendChild(header);
 
-
-
-        /*
-            Temporary employees.
-            Later this comes from:
-            
-            block.employees
-        */
+        // -------------------------
+        // Build employee list
+        // -------------------------
 
         const employees = [];
-
 
         for (const block of blocks) {
 
@@ -81,39 +62,75 @@ export function renderTipTables(mealBlocks) {
 
         }
 
+        // -------------------------
+        // Employee rows
+        // -------------------------
 
-
-        for (const employee of employees) {
-
+        for (const employeeName of employees) {
 
             const row = document.createElement("tr");
 
-
             row.innerHTML = `
-                <td>
-                    ${employee}
-                </td>
+                <td>${employeeName}</td>
             `;
-
 
             for (const block of blocks) {
 
+                const employee =
+                    block.employees.find(
+                        e => e.name === employeeName
+                    );
+
+                const tips = employee
+                    ? employee.card_tips
+                    : 0;
+
                 row.innerHTML += `
-                    <td>
-                        $0.00
-                    </td>
+                    <td>${money(tips)}</td>
                 `;
 
             }
-
 
             table.appendChild(row);
 
         }
 
+        // -------------------------
+        // Totals row
+        // -------------------------
+
+        const totalRow = document.createElement("tr");
+
+        totalRow.innerHTML = `
+            <td><strong>Total</strong></td>
+        `;
+
+        for (const block of blocks) {
+
+            let total = 0;
+
+            for (const employee of block.employees) {
+
+                total += employee.card_tips;
+
+            }
+
+            totalRow.innerHTML += `
+                <td><strong>${money(total)}</strong></td>
+            `;
+
+        }
+
+        table.appendChild(totalRow);
 
         container.appendChild(table);
 
     }
+
+}
+
+function money(cents) {
+
+    return `$${(cents / 100).toFixed(2)}`;
 
 }

@@ -1,27 +1,119 @@
-.meal-block {
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 30px;
+    background: #f4f6f8;
+    color: #222;
+}
 
-    border: 1px solid black;
 
-    padding: 15px;
+h1 {
+    margin-bottom: 20px;
+}
 
-    margin: 10px;
 
-    width: 350px;
+#assignedMeals {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+/* Each meal block */
+
+.meal-block-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+
+    border-left: 6px solid #4a90e2;
 
 }
 
 
-.meal-block h3 {
+
+.meal-block-card h2 {
 
     margin-top: 0;
 
+    font-size: 22px;
+
+    color: #333;
+
 }
 
 
-.meal-block label {
 
-    display: block;
+.meal-block-card p {
 
-    margin: 5px;
+    margin: 8px 0;
 
+    color: #555;
+
+}
+
+
+
+/* Employee list */
+
+.employee-card {
+
+    background: #f8fafc;
+
+    border-radius: 8px;
+
+    padding: 12px 15px;
+
+    margin-top: 12px;
+
+    border: 1px solid #ddd;
+
+}
+
+
+
+.employee-card b {
+
+    font-size: 16px;
+
+    color: #222;
+
+}
+
+
+
+.employee-card:hover {
+
+    background: #eef6ff;
+
+    border-color: #4a90e2;
+
+}
+
+
+
+/* Divider */
+
+.meal-block-card hr {
+
+    border: none;
+
+    border-top: 1px solid #ddd;
+
+    margin: 15px 0;
+
+}
+.meal-orders {
+    margin-top: 10px;
+    padding-left: 12px;
+    border-left: 3px solid #ddd;
+}
+
+.meal-order {
+    font-size: 0.9rem;
+    padding: 2px 0;
 }
