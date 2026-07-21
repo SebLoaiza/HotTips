@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tip Distribution Tool - Inputs</title>
+
+    <link rel="stylesheet" href="./../style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Tip Distribution Tool</h1>
+
+</header>
+
+<!-- ====================================== -->
+<!-- TRAINEE ASSIGNMENTS -->
+<!-- ====================================== -->
+
+<section class="panel">
+
+    <h2>4. Trainee Tip Assignments</h2>
+
+    <p>
+        Choose which employee should receive each trainee's share
+        of the tip pool.
+    </p>
+
+    <div id="traineeAssignments"></div>
+
+</section>
+
+
+<!-- ====================================== -->
+<!-- CASH DROPS -->
+<!-- ====================================== -->
+
+<section class="panel">
+
+    <h2>5. Cash Drop Entry</h2>
+
+    <p>
+        Enter the amount of cash each employee turned in for each
+        meal block.
+    </p>
+
+    <div id="cashDropTables"></div>
+
+</section>
+
+
+<!-- ====================================== -->
+<!-- REVIEW -->
+<!-- ====================================== -->
+
+<section class="panel">
+
+    <h2>6. Review</h2>
+
+    <p>
+        Once trainee assignments and cash drops are complete,
+        continue to calculate the final tip distribution.
+    </p>
+
+</section>
+
+
+<!-- ====================================== -->
+<!-- NAVIGATION -->
+<!-- ====================================== -->
+
+<section class="panel navigation-panel">
+
+    <button id="backButton">
+        ← Back
+    </button>
+
+    <button id="continueButton">
+        Continue →
+    </button>
+
+</section>
+
+
+
+<section class="panel">
+
+    <h2>Cash Tip Summary</h2>
+
+    <div id="cashTipSummary"></div>
+
+</section>
+    <section class="panel">
+
+    <h2>Employee Tip Points</h2>
+
+    <p>
+        Set each employee's default weighting for tip distribution.
+    </p>
+
+    <div id="employeePoints"></div>
+
+</section>
+
+
+
+
+    <section class="panel">
+
+    <h2>Debug Objects</h2>
+
+    <button id="debugObjects">
+        Show Current Objects
+    </button>
+
+    <pre id="debugOutput"></pre>
+
+</section>
+
+<section class="panel">
+
+    <h2>Cash Tip Summary</h2>
+
+    <div id="cashTipSummary"></div>
+
+</section>
+
+
+
+
+
+
+</section>
+
+<script
+    type="module" src="./app.js">
+</script>
+
+</body>
+</html>

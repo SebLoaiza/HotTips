@@ -45,74 +45,95 @@ export function assignMealParticipations(
             }
 
 
-
             const employee = {
 
+                // --------------------
+                // Identity
+                // --------------------
 
                 employee_id:
                     participation.employee_id,
 
-
                 name:
                     participation.name,
-
 
                 normalized_name:
                     normalizeName(
                         participation.name
                     ),
 
-
-
                 role:
                     participation.role,
 
+                standard_role:
+                    participation.standard_role,
 
 
-                // clipped to this meal block
+                // --------------------
+                // Meal Block Time
+                // --------------------
+
                 meal_start:
                     clipped.start,
-
 
                 meal_end:
                     clipped.end,
 
-
-
                 worked_minutes:
                     clipped.end - clipped.start,
-
-
 
                 lost_minutes:
                     0,
 
-
-
                 breaks:
                     clipBreaks(
-
                         participation.breaks,
-
                         clipped.start,
-
                         clipped.end
-
                     ),
 
 
+                // --------------------
+                // Orders
+                // --------------------
 
                 orders: [],
 
 
+                // --------------------
+                // Card Side
+                // --------------------
 
-                cash_tips:
-                    0,
+                card_sales: 0,
+
+                card_tips: 0,
 
 
-                card_tips:
-                    0
+                // --------------------
+                // Cash Side
+                // --------------------
 
+                cash_sales: 0,
+
+                cash_drop: 0,
+
+                cash_tips: 0,
+
+
+                // --------------------
+                // Distribution
+                // --------------------
+
+                tip_points: 1,
+
+
+                // --------------------
+                // Manager Inputs
+                // --------------------
+
+                trainer_employee_id: null,
+
+                trainer_employee_name: ""
 
             };
 

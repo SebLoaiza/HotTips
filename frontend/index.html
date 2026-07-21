@@ -7,63 +7,131 @@
 
     <title>Tip Distribution Tool</title>
 
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
-
 
 <body>
 
-    <h1>Tip Distribution Tool</h1>
+    <header>
+        <h1>Tip Distribution Tool</h1>
+    </header>
+
+    <!-- ============================= -->
+    <!-- IMPORT -->
+    <!-- ============================= -->
+
+    <section class="panel"> 
+
+        <h2>1. Import Files</h2>
+
+        <div class="upload-grid">
+
+            <div class="upload-card">
+                <label for="shiftCsv">
+                    <strong>Shift CSV</strong>
+                </label>
+
+                <input
+                    type="file"
+                    id="shiftCsv"
+                    accept=".csv">
+            </div>
+
+            <div class="upload-card">
+                <label for="orderCsv">
+                    <strong>Orders CSV</strong>
+                </label>
+
+                <input
+                    type="file"
+                    id="orderCsv"
+                    accept=".csv">
+            </div>
+
+            <div class="upload-card">
+                <label for="paymentCsv">
+                    <strong>Payments CSV</strong>
+                </label>
+
+                <input
+                    type="file"
+                    id="paymentCsv"
+                    accept=".csv">
+            </div>
+
+        </div>
 
 
-    <h2>Upload Shifts CSV</h2>
 
-    <input
-        type="file"
-        id="shiftCsv"
-        accept=".csv"
-    >
-    <h2>Orders CSV</h2>
-
-    <input
-        type="file"
-        id="orderCsv"
-        accept=".csv"
-
-    />
+        <button id="nextPage">
+            Continue →
+        </button>
 
 
+    </section>
 
-    <h1>Tip Tables</h1>
+    <!-- ============================= -->
+    <!-- MEAL BLOCKS -->
+    <!-- ============================= -->
 
-    <div id="tipTables"></div>
+    <section class="panel">
 
-    <div id="output"></div>
+        <h2>2. Meal Blocks</h2>
+
+        <p class="section-description">
+            Verify meal windows. Editing these will rebuild employee assignments.
+        </p>
+
+        <div id="mealBlocks"></div>
+
+    </section>
+
+    <!-- ============================= -->
+    <!-- SALES SUMMARY -->
+    <!-- ============================= -->
+
+    <section class="panel">
+
+        <h2>3. Sales Summary</h2>
+
+        <div class="sales-grid">
+
+            <div>
+                <h2>Card Sales</h2>
+                <div id="cardSalesTables"></div>
+            </div>
+
+            <div>
+                <h2>Cash Sales</h2>
+                <div id="cashCollectedTables"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ============================= -->
+    <!-- DEBUG -->
+    <!-- ============================= -->
+
+    <section class="panel">
+
+        <button id="debugObjects">
+            Show Current Objects
+        </button>
+
+        <pre id="debugOutput"></pre>
+
+    </section>
+
+
+
+
     
-    <hr>
 
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-
-
-    <h1>Assigned Employees</h1>
-
-<div id="assignedMeals"></div>
-
-
-
-    <h2>Meal Participations</h2>
-
-<div id="participations"></div>
-
-
-<hr>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
-<script type="module" src="/static/src/app.js"></script>
-
+    <script type="module" src="./src/app.js"></script>
 
 </body>
 

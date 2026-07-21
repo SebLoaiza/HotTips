@@ -3,21 +3,25 @@ import { readCsv } from "./parsing/csv.js";
 import { createMealBlocks } from "./models/mealBlock.js";
 import { createMealParticipations } from "./models/mealParticipation.js";
 import { createOrders } from "./models/order.js";
+import { createPayments } from "./models/payment.js";
 
 import { assignMealParticipations } from "./logic/assignMealParticipations.js";
 import { assignOrdersToEmployees } from "./logic/assignOrdersToEmployees.js";
+import { assignOrders } from "./logic/assignOrders.js";
+import {enrichOrdersWithPayments} from "./logic/enrichOrdersWithPayments.js";
+import {calculateParticipationTotals} from "./logic/calculateParticipationTotals.js";
+
 
 import { renderMealBlocks } from "./render/mealBlocks.js";
 import { renderMealParticipations } from "./render/mealParticipations.js";
 import { renderAssignedMeals } from "./render/assignedMeals.js";
 import { renderTipTables } from "./render/tipTables.js";
-import { assignOrders } from "./logic/assignOrders.js";
-
+import { renderCashCollectedTables } from "./render/cashCollectedTables.js";
 
 let currentMealBlocks = [];
 let currentMealParticipations = [];
 let currentOrders = [];
-
+let currentPayments = [];
 
 // =========================
 // SHIFT CSV
@@ -68,9 +72,37 @@ orderInput.addEventListener("change", async (event) => {
 
 });
 
+
 // =========================
-// REBUILD
+// PAYMENT CSV
 // =========================
+
+const paymentInput =
+    document.getElementById("paymentCsv");
+
+paymentInput.addEventListener("change", async (event) => {
+
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const rows = await readCsv(file);
+
+    currentPayments =
+        createPayments(rows);
+
+    rebuildMealBlocks();
+
+});
+
+
+
+// =========================
+// REBUILD DATA
+// =========================
+
 function rebuildMealBlocks() {
 
     assignMealParticipations(
@@ -78,52 +110,53 @@ function rebuildMealBlocks() {
         currentMealParticipations
     );
 
+    enrichOrdersWithPayments(
+        currentOrders,
+        currentPayments
+    );
 
     assignOrders(
         currentMealBlocks,
         currentOrders
     );
 
-
     assignOrdersToEmployees(
         currentMealBlocks
     );
 
-    console.log(currentMealBlocks);
-
-
-    
-    renderMealBlocks(
-        currentMealBlocks,
-        updateMealBlockTime
+    calculateParticipationTotals(
+        currentMealBlocks
     );
 
-    renderAssignedMeals(currentMealBlocks);
+    saveState();
 
-    renderMealParticipations(currentMealParticipations);
-
-    renderTipTables(currentMealBlocks);
+    refreshUI();
 
 }
 
 
+
 // =========================
-// EDITING
+// REFRESH UI
 // =========================
 
-function updateMealBlockTime(id, field, value) {
+function refreshUI() {
 
-    const block = currentMealBlocks.find(
-        b => `${b.day_key}-${b.meal}` === id
+    renderTipTables(
+        
+        currentMealBlocks
     );
 
-    if (!block) {
-        return;
-    }
+    renderCashCollectedTables(
+        currentMealBlocks
+    );
 
-    block[field] = timeToMinutes(value);
 
-    rebuildMealBlocks();
+
+    renderMealBlocks(
+        currentMealBlocks,
+        rebuildMealBlocks
+    );
 
 }
 
@@ -151,5 +184,106 @@ function timeToMinutes(time) {
     }
 
     return hours * 60 + minutes;
+
+}
+
+
+
+const debugButton =
+    document.getElementById("debugObjects");
+
+
+debugButton.addEventListener("click", () => {
+
+    const debug = {
+
+        mealBlocks: currentMealBlocks,
+
+        participations: currentMealParticipations,
+
+        orders: currentOrders,
+
+        payments: currentPayments
+
+    };
+
+
+    document.getElementById("debugOutput").textContent =
+        JSON.stringify(
+            debug,
+            null,
+            2
+        );
+
+});
+
+function saveState() {
+
+    sessionStorage.setItem(
+        "mealBlocks",
+        JSON.stringify(currentMealBlocks)
+    );
+
+    sessionStorage.setItem(
+        "mealParticipations",
+        JSON.stringify(currentMealParticipations)
+    );
+
+    sessionStorage.setItem(
+        "orders",
+        JSON.stringify(currentOrders)
+    );
+
+    sessionStorage.setItem(
+        "payments",
+        JSON.stringify(currentPayments)
+    );
+
+}
+
+document
+    .getElementById("nextPage")
+    .addEventListener("click", () => {
+
+        saveState();
+
+        window.location.href = "../inputs/inputs.html";
+    });
+
+
+function loadState() {
+
+    const mealBlocks =
+        sessionStorage.getItem("mealBlocks");
+
+    if (!mealBlocks) {
+        return false;
+    }
+
+    currentMealBlocks =
+        JSON.parse(mealBlocks);
+
+    currentMealParticipations =
+        JSON.parse(
+            sessionStorage.getItem("mealParticipations")
+        ) || [];
+
+    currentOrders =
+        JSON.parse(
+            sessionStorage.getItem("orders")
+        ) || [];
+
+    currentPayments =
+        JSON.parse(
+            sessionStorage.getItem("payments")
+        ) || [];
+
+    return true;
+
+}
+
+if (loadState()) {
+
+    refreshUI();
 
 }

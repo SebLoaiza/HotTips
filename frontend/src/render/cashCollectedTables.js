@@ -1,6 +1,6 @@
-export function renderTipTables(mealBlocks) {
+export function renderCashCollectedTables(mealBlocks) {
 
-    const output = document.getElementById("cardSalesTables");
+    const output = document.getElementById("cashCollectedTables");
 
     if (!output) {
         return;
@@ -51,7 +51,7 @@ export function renderTipTables(mealBlocks) {
         // ------------------------
 
         let html = `
-            <caption>${meal} Tips &amp; Gratuity Earned</caption>
+            <caption>${meal} Cash Collected</caption>
 
             <thead>
 
@@ -98,15 +98,15 @@ export function renderTipTables(mealBlocks) {
                     e => e.employee_id === employeeId
                 );
 
-                const cardTips =
+                const cashCollected =
                     employee
-                        ? employee.card_tips
+                        ? employee.cash_sales
                         : 0;
 
-                employeeTotal += cardTips;
+                employeeTotal += cashCollected;
 
                 html += `
-                    <td>${money(cardTips)}</td>
+                    <td>${money(cashCollected)}</td>
                 `;
 
             }
@@ -137,7 +137,7 @@ export function renderTipTables(mealBlocks) {
 
             for (const employee of block.employees) {
 
-                dayTotal += employee.card_tips;
+                dayTotal += employee.cash_sales;
 
             }
 
@@ -166,8 +166,6 @@ export function renderTipTables(mealBlocks) {
 }
 
 function money(cents) {
-
-    cents = Number(cents) || 0;
 
     return `$${(cents / 100).toFixed(2)}`;
 

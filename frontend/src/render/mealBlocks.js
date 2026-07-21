@@ -1,6 +1,10 @@
-export function renderMealBlocks(mealBlocks, updateFunction) {
+export function renderMealBlocks(mealBlocks, rebuild) {
 
-    const output = document.getElementById("output");
+    const output = document.getElementById("mealBlocks");
+
+    if (!output) {
+        return;
+    }
 
     output.innerHTML = "";
 
@@ -13,184 +17,242 @@ export function renderMealBlocks(mealBlocks, updateFunction) {
             currentDate = block.date;
 
             const title = document.createElement("h2");
-
+            title.className = "date-title";
             title.textContent = block.date;
 
             output.appendChild(title);
-
         }
 
         const container = document.createElement("div");
-
         container.className = "meal-block";
 
         const id = `${block.day_key}-${block.meal}`;
 
+        let employeesHTML = "";
+
+        if (block.employees.length === 0) {
+
+            employeesHTML = "<p><i>No employees assigned.</i></p>";
+
+        } else {
+
+            for (const employee of block.employees) {
+
+                let totalSales = 0;
+                let totalTips = 0;
+                let totalGratuity = 0;
+
+                let ordersHTML = "";
+
+                if (employee.orders.length === 0) {
+
+                    ordersHTML = "<i>No Orders</i>";
+
+                } else {
+
+                    for (const order of employee.orders) {
+
+                        totalSales += order.amount;
+                        totalTips += order.tip;
+                        totalGratuity += order.gratuity;
+
+                        ordersHTML += `
+
+                        <details class="order-card">
+
+                            <summary>
+
+                                Order #${order.order_number}
+                                • ${minutesToTime(order.order_time_min)}
+                                • ${money(order.amount)}
+
+                            </summary>
+
+                            <div class="order-details">
+
+                                <div><strong>Sale:</strong> ${money(order.amount)}</div>
+
+                                <div><strong>Tip:</strong> ${money(order.tip)}</div>
+
+                                <div><strong>Gratuity:</strong> ${money(order.gratuity)}</div>
+
+                                <div><strong>Cash Payment:</strong> ${money(order.cash_payment)}</div>
+
+                                <div><strong>Card Payment:</strong> ${money(order.card_payment)}</div>
+
+                                <div><strong>Other Payment:</strong> ${money(order.other_payment)}</div>
+
+                                <div><strong>Source:</strong> ${order.source}</div>
+
+                            </div>
+
+                        </details>
+
+                        `;
+
+                    }
+
+                }
+
+                employeesHTML += `
+
+                
+                <details class="employee-card">
+
+                    <summary>
+
+                        <strong>${employee.name}</strong>
+
+                        (${employee.role})
+
+                        • ${employee.orders.length} Orders
+
+                    </summary>
+
+                    <div class="employee-details">
+
+                        <div>
+                            <strong>Shift:</strong>
+                            ${minutesToTime(employee.meal_start)}
+                            -
+                            ${minutesToTime(employee.meal_end)}
+                        </div>
+
+                        <div>
+                            <strong>Worked:</strong>
+                            ${employee.worked_minutes} mins
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            <strong>Total Sales:</strong>
+                            ${money(employee.order_sales)}
+                        </div>
+
+                        <div>
+                            <strong>Card Sales:</strong>
+                            ${money(employee.card_sales)}
+                        </div>
+
+                        <div>
+                            <strong>Cash Sales:</strong>
+                            ${money(employee.cash_sales)}
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            <strong>Card Tips:</strong>
+                            ${money(employee.card_tips)}
+                        </div>
+
+                        <div>
+                            <strong>Cash Drop:</strong>
+                            ${money(employee.cash_drop)}
+                        </div>
+
+                        <div>
+                            <strong>Cash Available:</strong>
+                            ${money(employee.cash_available)}
+                        </div>
+
+                        <hr>
+
+                        <div>
+                            <strong>Gratuity:</strong>
+                            ${money(totalGratuity)}
+                        </div>
+
+                        <br>
+
+                        ${ordersHTML}
+
+                    </div>
+
+                </details>
+
+
+                `;
+
+            }
+
+        }
+
         container.innerHTML = `
 
-            <h3>${block.meal}</h3>
+            <div class="meal-header">
 
-            <label>
-                Start:
-                <input
-                    class="time-input"
-                    data-id="${id}"
-                    data-field="start"
-                    value="${minutesToTime(block.start)}"
-                >
-            </label>
+                <h3>${block.meal}</h3>
 
-            <label>
-                End:
-                <input
-                    class="time-input"
-                    data-id="${id}"
-                    data-field="end"
-                    value="${minutesToTime(block.end)}"
-                >
-            </label>
+                <div class="time-editor">
 
-            <hr>
+                    <label>
 
-            <h4>Employees (${block.employees.length})</h4>
+                        Start
 
-            <div class="employee-list"></div>
+                        <input
+                            type="time"
+                            class="time-input"
+                            data-id="${id}"
+                            data-field="start"
+                            value="${minutesToInput(block.start)}"
+                        >
 
-            <hr>
+                    </label>
 
-            <h4>All Orders (${block.orders.length})</h4>
+                    <label>
 
-            <div class="meal-orders"></div>
+                        End
+
+                        <input
+                            type="time"
+                            class="time-input"
+                            data-id="${id}"
+                            data-field="end"
+                            value="${minutesToInput(block.end)}"
+                        >
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <details class="employee-section" open>
+
+                <summary>
+
+                    Employees (${block.employees.length})
+
+                </summary>
+
+                ${employeesHTML}
+
+            </details>
 
         `;
 
-        // -----------------------------
-        // Time editing
-        // -----------------------------
-
-        const inputs = container.querySelectorAll(".time-input");
-
-        inputs.forEach(input => {
+        container.querySelectorAll(".time-input").forEach(input => {
 
             input.addEventListener("change", () => {
 
-                updateFunction(
-                    input.dataset.id,
-                    input.dataset.field,
-                    input.value
+                const mealBlock = mealBlocks.find(
+                    b => `${b.day_key}-${b.meal}` === input.dataset.id
                 );
+
+                if (!mealBlock) {
+                    return;
+                }
+
+                mealBlock[input.dataset.field] =
+                    timeToMinutes(input.value);
+
+                rebuild();
 
             });
 
         });
-
-        // -----------------------------
-        // Employees
-        // -----------------------------
-
-        const employeeContainer =
-            container.querySelector(".employee-list");
-
-        for (const employee of block.employees) {
-
-            const card = document.createElement("div");
-
-            card.className = "employee-card";
-
-            let totalSales = 0;
-            let totalTips = 0;
-            let totalGratuity = 0;
-            let totalCollected = 0;
-
-            for (const order of employee.orders) {
-
-                totalSales += order.amount;
-                totalTips += order.tip;
-                totalGratuity += order.gratuity;
-                totalCollected += order.tip + order.gratuity;
-
-            }
-
-            let html = `
-
-                <h4>${employee.name}</h4>
-
-                <div>${employee.role}</div>
-
-                <div><strong>Orders:</strong> ${employee.orders.length}</div>
-
-                <div><strong>Sales:</strong> ${money(totalSales)}</div>
-
-                <div><strong>Tips:</strong> ${money(totalTips)}</div>
-
-                <div><strong>Gratuity:</strong> ${money(totalGratuity)}</div>
-
-                <div><strong>Total Collected:</strong> ${money(totalCollected)}</div>
-
-            `;
-
-            if (employee.orders.length === 0) {
-
-                html += `<div class="no-orders">No Orders</div>`;
-
-            }
-            else {
-
-                html += `<ul class="employee-orders">`;
-
-                for (const order of employee.orders) {
-
-                    html += `
-
-                        <li>
-
-                            #${order.order_number}
-                            |
-                            ${minutesToTime(order.order_time_min)}
-                            |
-                            Sale ${money(order.amount)}
-                            |
-                            Tip ${money(order.tip)}
-                            |
-                            Grat ${money(order.gratuity)}
-                            |
-                            Total ${money(order.tip + order.gratuity)}
-
-                        </li>
-
-                    `;
-
-                }
-
-                html += `</ul>`;
-
-            }
-
-            card.innerHTML = html;
-
-            employeeContainer.appendChild(card);
-
-        }
-
-        // -----------------------------
-        // All Orders
-        // -----------------------------
-
-        const orderContainer =
-            container.querySelector(".meal-orders");
-
-        for (const order of block.orders) {
-
-            const div = document.createElement("div");
-
-            div.className = "meal-order";
-
-            div.textContent =
-                `#${order.order_number} | ${minutesToTime(order.order_time_min)} | ${order.server} | Sale ${money(order.amount)} | Tip ${money(order.tip)} | Grat ${money(order.gratuity)} | Total ${money(order.tip + order.gratuity)}`;
-
-            orderContainer.appendChild(div);
-
-        }
 
         output.appendChild(container);
 
@@ -198,28 +260,42 @@ export function renderMealBlocks(mealBlocks, updateFunction) {
 
 }
 
+function money(cents) {
+    return `$${(cents / 100).toFixed(2)}`;
+}
+
+function minutesToInput(minutes) {
+
+    minutes %= 1440;
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+
+}
+
 function minutesToTime(minutes) {
 
     minutes %= 1440;
 
-    let hours = Math.floor(minutes / 60);
+    let h = Math.floor(minutes / 60);
+    const m = minutes % 60;
 
-    const mins = minutes % 60;
+    const suffix = h >= 12 ? "PM" : "AM";
 
-    const suffix = hours >= 12 ? "PM" : "AM";
+    h %= 12;
 
-    hours %= 12;
+    if (h === 0) h = 12;
 
-    if (hours === 0) {
-        hours = 12;
-    }
-
-    return `${hours}:${String(mins).padStart(2, "0")} ${suffix}`;
+    return `${h}:${String(m).padStart(2,"0")} ${suffix}`;
 
 }
 
-function money(cents) {
+function timeToMinutes(time) {
 
-    return `$${(cents / 100).toFixed(2)}`;
+    const [h,m] = time.split(":").map(Number);
+
+    return h * 60 + m;
 
 }

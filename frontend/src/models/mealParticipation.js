@@ -1,4 +1,3 @@
-
 export class MealParticipation {
 
     constructor(row) {
@@ -8,38 +7,47 @@ export class MealParticipation {
         this.name = row["Employee"];
 
         this.role = row["Job"];
+        // Will be assigned by the role mapping UI later.
+        // Until then, default to the Toast role.
+        this.standard_role = this.role;
+
 
         this.date = row["Date"];
 
 
-        // Entire shift for now.
+        // Shift
         this.meal_start = timeToMinutes(row["Time In"]);
-
         this.meal_end = timeToMinutes(row["Time Out"]);
 
-        // Overnight shift
         if (this.meal_end <= this.meal_start) {
             this.meal_end += 1440;
         }
 
-
         this.worked_minutes = 0;
-
         this.lost_minutes = 0;
-
 
         this.breaks = [];
 
+        // Orders assigned to this employee
         this.orders = [];
 
+        // ======================
+        // Calculated Values
+        // ======================
+
+        // Total of all order amounts
         this.order_sales = 0;
 
-        this.cash_tips = 0;
-
+        // Card
+        this.card_sales = 0;
         this.card_tips = 0;
 
-    }
+        // Cash
+        this.cash_sales = 0;
+        this.cash_drop = 0;          // User enters this
+        this.cash_available = 0;     // cash_drop - cash_sales
 
+    }
 
     addBreak(row) {
 
@@ -59,7 +67,6 @@ export class MealParticipation {
     }
 
 }
-
 
 
 export function createMealParticipations(rows) {

@@ -28,6 +28,16 @@ export class Order {
         this.gratuity = dollarsToCents(row["Gratuity"]);
 
 
+        // Payments attached later
+        this.payments = [];
+
+        this.cash_payment = 0;
+
+        this.card_payment = 0;
+
+        this.other_payment = 0;
+
+
         this.source = row["Order Source"] || "";
 
     }
