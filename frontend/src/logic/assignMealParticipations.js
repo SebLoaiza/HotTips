@@ -80,7 +80,7 @@ export function assignMealParticipations(
                     clipped.end,
 
                 worked_minutes:
-                    clipped.end - clipped.start,
+                    0,
 
                 lost_minutes:
                     0,
@@ -139,7 +139,104 @@ export function assignMealParticipations(
 
 
 
-            block.employees.push(employee);
+            const existingEmployee =
+                block.employees.find(
+                    e =>
+                    e.employee_id === employee.employee_id
+                );
+
+
+            if (existingEmployee) {
+
+
+                // add gap as break
+                if (
+                    employee.meal_start >
+                    existingEmployee.meal_end
+                ) {
+
+                    existingEmployee.breaks.push([
+                        existingEmployee.meal_end,
+                        employee.meal_start
+                    ]);
+
+                }
+
+
+
+                if (
+                    employee.meal_end <
+                    existingEmployee.meal_start
+                ) {
+
+                    existingEmployee.breaks.push([
+                        employee.meal_end,
+                        existingEmployee.meal_start
+                    ]);
+
+                }
+
+
+
+                // expand range
+
+                existingEmployee.meal_start =
+                    Math.min(
+                        existingEmployee.meal_start,
+                        employee.meal_start
+                    );
+
+
+                existingEmployee.meal_end =
+                    Math.max(
+                        existingEmployee.meal_end,
+                        employee.meal_end
+                    );
+
+
+
+                // add actual breaks
+
+                existingEmployee.breaks.push(
+                    ...employee.breaks
+                );
+
+
+
+                // clean order
+
+                existingEmployee.breaks.sort(
+                    (a,b) => a[0] - b[0]
+                );
+
+
+
+                // recalculate from scratch
+
+                existingEmployee.worked_minutes = 0;
+
+
+                existingEmployee.worked_minutes =
+                    calculateWorkedMinutes(
+                        existingEmployee.meal_start,
+                        existingEmployee.meal_end,
+                        existingEmployee.breaks
+                    );
+
+
+            }
+            else {
+                employee.worked_minutes =
+                    calculateWorkedMinutes(
+                        employee.meal_start,
+                        employee.meal_end,
+                        employee.breaks
+                    );
+
+                block.employees.push(employee);
+
+
+            }
 
 
 
@@ -318,6 +415,31 @@ function clipBreaks(
 // =====================================================
 // NAME NORMALIZATION
 // =====================================================
+// =====================================================
+// CALCULATE WORKED MINUTES AFTER BREAKS
+// =====================================================
+
+function calculateWorkedMinutes(
+    start,
+    end,
+    breaks
+) {
+
+    let total =
+        end - start;
+
+
+    for (const br of breaks) {
+
+        total -=
+            br[1] - br[0];
+
+    }
+
+
+    return total;
+
+}
 
 function normalizeName(name) {
 
