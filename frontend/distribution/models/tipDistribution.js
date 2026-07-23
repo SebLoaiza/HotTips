@@ -164,7 +164,9 @@ export function createTipDistribution(
 
             trainer_employee_name:
                 employee.trainer_employee_name ?? "",
-
+                
+            order_count:
+                employee.orders?.length ?? 0,
 
             // Sales Tracking
             card_sales:

@@ -255,3 +255,22 @@ if (debugButton) {
 // =========================
 
 refreshUI();
+
+
+
+document
+    .getElementById("resultsButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            sessionStorage.setItem(
+                "tipDistribution",
+                JSON.stringify(tipDistribution)
+            );
+
+            window.location.href =
+                "/results/results.html";
+
+        }
+    );

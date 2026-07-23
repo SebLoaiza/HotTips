@@ -1,172 +1,172 @@
-export function renderCashCollectedTables(mealBlocks) {
+    export function renderCashCollectedTables(mealBlocks) {
 
-    const output = document.getElementById("cashCollectedTables");
+        const output = document.getElementById("cashCollectedTables");
 
-    if (!output) {
-        return;
-    }
-
-    output.innerHTML = "";
-
-    const meals = ["Breakfast", "Lunch", "Dinner"];
-
-    for (const meal of meals) {
-
-        const blocks = mealBlocks.filter(
-            b => b.meal === meal
-        );
-
-        if (blocks.length === 0) {
-            continue;
+        if (!output) {
+            return;
         }
 
-        // ------------------------
-        // Collect all employees
-        // ------------------------
+        output.innerHTML = "";
 
-        const employeeMap = new Map();
+        const meals = ["Breakfast", "Lunch", "Dinner"];
 
-        for (const block of blocks) {
+        for (const meal of meals) {
 
-            for (const employee of block.employees) {
+            const blocks = mealBlocks.filter(
+                b => b.meal === meal
+            );
 
-                if (!employeeMap.has(employee.employee_id)) {
+            if (blocks.length === 0) {
+                continue;
+            }
 
-                    employeeMap.set(
-                        employee.employee_id,
-                        employee.name
-                    );
+            // ------------------------
+            // Collect all employees
+            // ------------------------
+
+            const employeeMap = new Map();
+
+            for (const block of blocks) {
+
+                for (const employee of block.employees) {
+
+                    if (!employeeMap.has(employee.employee_id)) {
+
+                        employeeMap.set(
+                            employee.employee_id,
+                            employee.name
+                        );
+
+                    }
 
                 }
 
             }
 
-        }
+            const table = document.createElement("table");
+            table.className = "summary-table";
 
-        const table = document.createElement("table");
-        table.className = "summary-table";
+            // ------------------------
+            // Header
+            // ------------------------
 
-        // ------------------------
-        // Header
-        // ------------------------
+            let html = `
+                <caption>${meal} Cash Collected</caption>
 
-        let html = `
-            <caption>${meal} Cash Collected</caption>
+                <thead>
 
-            <thead>
+                    <tr>
 
-                <tr>
-
-                    <th>Employee</th>
-        `;
-
-        for (const block of blocks) {
-
-            html += `
-                <th>${block.date}</th>
+                        <th>Employee</th>
             `;
-
-        }
-
-        html += `
-                    <th>Total</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-        `;
-
-        // ------------------------
-        // Employee rows
-        // ------------------------
-
-        for (const [employeeId, employeeName] of employeeMap) {
-
-            html += `
-                <tr>
-
-                    <td>${employeeName}</td>
-            `;
-
-            let employeeTotal = 0;
 
             for (const block of blocks) {
 
-                const employee = block.employees.find(
-                    e => e.employee_id === employeeId
-                );
-
-                const cashCollected =
-                    employee
-                        ? employee.cash_sales
-                        : 0;
-
-                employeeTotal += cashCollected;
-
                 html += `
-                    <td>${money(cashCollected)}</td>
+                    <th>${block.date}</th>
                 `;
 
             }
 
             html += `
-                    <td><strong>${money(employeeTotal)}</strong></td>
+                        <th>Total</th>
 
-                </tr>
+                    </tr>
+
+                </thead>
+
+                <tbody>
             `;
 
-        }
+            // ------------------------
+            // Employee rows
+            // ------------------------
 
-        // ------------------------
-        // Totals row
-        // ------------------------
+            for (const [employeeId, employeeName] of employeeMap) {
 
-        html += `
-            <tr>
+                html += `
+                    <tr>
 
-                <th>Total</th>
-        `;
+                        <td>${employeeName}</td>
+                `;
 
-        let grandTotal = 0;
+                let employeeTotal = 0;
 
-        for (const block of blocks) {
+                for (const block of blocks) {
 
-            let dayTotal = 0;
+                    const employee = block.employees.find(
+                        e => e.employee_id === employeeId
+                    );
 
-            for (const employee of block.employees) {
+                    const cashCollected =
+                        employee
+                            ? employee.cash_sales
+                            : 0;
 
-                dayTotal += employee.cash_sales;
+                    employeeTotal += cashCollected;
+
+                    html += `
+                        <td>${money(cashCollected)}</td>
+                    `;
+
+                }
+
+                html += `
+                        <td><strong>${money(employeeTotal)}</strong></td>
+
+                    </tr>
+                `;
 
             }
 
-            grandTotal += dayTotal;
+            // ------------------------
+            // Totals row
+            // ------------------------
 
             html += `
-                <th>${money(dayTotal)}</th>
+                <tr>
+
+                    <th>Total</th>
             `;
+
+            let grandTotal = 0;
+
+            for (const block of blocks) {
+
+                let dayTotal = 0;
+
+                for (const employee of block.employees) {
+
+                    dayTotal += employee.cash_sales;
+
+                }
+
+                grandTotal += dayTotal;
+
+                html += `
+                    <th>${money(dayTotal)}</th>
+                `;
+
+            }
+
+            html += `
+                    <th>${money(grandTotal)}</th>
+
+                </tr>
+
+                </tbody>
+            `;
+
+            table.innerHTML = html;
+
+            output.appendChild(table);
 
         }
 
-        html += `
-                <th>${money(grandTotal)}</th>
-
-            </tr>
-
-            </tbody>
-        `;
-
-        table.innerHTML = html;
-
-        output.appendChild(table);
-
     }
 
-}
+    function money(cents) {
 
-function money(cents) {
+        return `$${(cents / 100).toFixed(2)}`;
 
-    return `$${(cents / 100).toFixed(2)}`;
-
-}
+    }

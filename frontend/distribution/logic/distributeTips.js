@@ -56,12 +56,10 @@ function distributeEmployeeTip(
 ) {
 
 
-    const originalCard =
-        employee.card_tips ?? 0;
+    const originalCard = employee.card_tips ?? 0;
 
 
-    const cash =
-        employee.cash_tips ?? 0;
+    const cash = employee.cash_tips ?? 0;
 
 
 
@@ -69,18 +67,10 @@ function distributeEmployeeTip(
     // Card Processing Fee
     // =====================
 
-    const card =
-        Math.floor(
-            originalCard * 0.97
-        );
+    const card = Math.floor(originalCard * 0.97);
 
 
-    employee.original_card_tips =
-        originalCard;
-
-
-    employee.card_after_fee =
-        card;
+    employee.card_after_fee = card;
 
 
 
@@ -88,69 +78,52 @@ function distributeEmployeeTip(
     // Ratios
     // =====================
 
-    const bohRatio =
-        0.30;
+    const bohRatio =0.30;
 
+    const busserRatio =getBusserTipRatio(mealBlock);
 
-    const busserRatio =
-        getBusserTipRatio(
-            mealBlock
-        );
-
-
-    const hostRatio =
-        getHostTipRatio(
-            mealBlock
-        );
+    const hostRatio =getHostTipRatio(mealBlock);
 
 
 
     // =====================
     // CARD DISTRIBUTION
     // =====================
+    // The `rules` object determines w  hich pools this employee
+    // contributes to based on their distribution role.
+    //
+    // Example:
+    // Server:
+    // {
+    //     boh: true,
+    //     busser: true,
+    //     host: true
+    // }
+    //
+    // Host:
+    // {
+    //     boh: true,
+    //     busser: true,
+    //     host: false
+    // }
+    //
+    // If a rule is true, that percentage is deducted from the
+    // employee's card tips and added to that role's pool.
+    // If false, nothing is contributed to that pool.
 
-
-    const bohCard =
-        rules.boh
-        ?
-        Math.floor(
-            card * bohRatio
-        )
-        :
-        0;
-
-
-
-    const busserCard =
-        rules.busser
-        ?
-        Math.floor(
-            card * busserRatio
-        )
-        :
-        0;
-
-
-
-    const hostCard =
-        rules.host
-        ?
-        Math.floor(
-            card * hostRatio
-        )
-        :
-        0;
+    const bohCard = rules.boh ? Math.floor(card * bohRatio) : 0;
 
 
 
-    const keptCard =
-        card
-        -
-        bohCard
-        -
-        busserCard
-        -
-        hostCard;
+    const busserCard = rules.busser ? Math.floor(card * busserRatio) : 0;
+
+
+
+    let hostCard =  rules.host ? Math.floor(card * hostRatio) : 0;
+
+
+
+    let keptCard = card - bohCard - busserCard - hostCard;
 
 
 
@@ -160,47 +133,34 @@ function distributeEmployeeTip(
 
 
     const bohCash =
-        rules.boh
-        ?
-        Math.floor(
-            cash * bohRatio
-        )
-        :
-        0;
+        rules.boh ? Math.floor(cash * bohRatio) : 0;
 
 
 
-    const busserCash =
-        rules.busser
-        ?
-        Math.floor(
-            cash * busserRatio
-        )
-        :
-        0;
+    const busserCash = rules.busser ? Math.floor(cash * busserRatio) : 0;
 
 
 
-    const hostCash =
-        rules.host
-        ?
-        Math.floor(
-            cash * hostRatio
-        )
-        :
-        0;
+    let hostCash = rules.host ? Math.floor(cash * hostRatio) : 0;
 
 
 
-    const keptCash =
-        cash
-        -
-        bohCash
-        -
-        busserCash
-        -
-        hostCash;
+    let keptCash =cash - bohCash -  busserCash - hostCash;
 
+
+
+
+
+
+    if (employee.distribution_role === "host") {
+
+        hostCard = keptCard;
+        hostCash = keptCash;
+
+        keptCard = 0;
+        keptCash = 0;
+
+    }
 
 
     // =====================

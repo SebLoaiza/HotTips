@@ -1,0 +1,276 @@
+/* =========================
+   Base
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    padding: 30px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #f4f6f8;
+
+    color:
+        #222;
+
+}
+
+
+
+/* =========================
+   Header
+========================= */
+
+h1 {
+
+    margin-bottom: 25px;
+
+    font-size: 32px;
+
+}
+
+
+
+/* =========================
+   Table Container
+========================= */
+
+#resultsTable {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    background:
+        white;
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+
+
+/* =========================
+   Table
+========================= */
+
+table {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    min-width:
+        900px;
+
+}
+
+
+
+thead {
+
+    background:
+        #1f2937;
+
+    color:
+        white;
+
+}
+
+
+
+th {
+
+    padding:
+        14px 16px;
+
+    text-align:
+        left;
+
+    font-size:
+        14px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+
+td {
+
+    padding:
+        14px 16px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+    white-space:
+        nowrap;
+
+}
+
+
+
+/* =========================
+   Rows
+========================= */
+
+tbody tr:hover {
+
+    background:
+        #f8fafc;
+
+}
+
+
+
+tbody tr:last-child td {
+
+    border-bottom:
+        none;
+
+}
+
+
+
+/* =========================
+   Money Columns
+========================= */
+
+
+td:nth-child(3),
+td:nth-child(4) {
+
+    font-weight:
+        bold;
+
+    color:
+        #047857;
+
+}
+
+
+
+/* =========================
+   Analytics
+========================= */
+
+
+td:nth-child(6),
+td:nth-child(7),
+td:nth-child(8) {
+
+    color:
+        #4b5563;
+
+}
+
+
+
+/* =========================
+   Mobile
+========================= */
+
+
+@media(max-width:700px) {
+
+
+    body {
+
+        padding:
+            15px;
+
+    }
+
+
+    h1 {
+
+        font-size:
+            24px;
+
+    }
+
+
+}
+
+.employeeDetailsRow td {
+
+    background:
+        #f9fafb;
+
+    padding:
+        20px;
+
+}
+
+
+
+.employeeDetailsRow {
+
+    animation:
+        slideDown 0.2s ease;
+
+}
+
+
+
+.employeeDetailsRow h2 {
+
+    margin-top:
+        0;
+
+}
+
+
+
+tbody tr {
+
+    cursor:
+        pointer;
+
+}
+
+
+
+@keyframes slideDown {
+
+    from {
+
+        opacity:0;
+
+    }
+
+    to {
+
+        opacity:1;
+
+    }
+
+}
+
+th {
+    cursor: pointer;
+    user-select: none;
+}
+
+
+th:hover {
+    background: #e5e7eb;
+}
