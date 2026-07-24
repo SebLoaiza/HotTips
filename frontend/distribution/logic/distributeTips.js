@@ -115,7 +115,7 @@ function distributeEmployeeTip(
 
 
 
-    const busserCard = rules.busser ? Math.floor(card * busserRatio) : 0;
+    let busserCard = rules.busser ? Math.floor(card * busserRatio) : 0;
 
 
 
@@ -137,7 +137,7 @@ function distributeEmployeeTip(
 
 
 
-    const busserCash = rules.busser ? Math.floor(cash * busserRatio) : 0;
+    let busserCash = rules.busser ? Math.floor(cash * busserRatio) : 0;
 
 
 
@@ -161,6 +161,18 @@ function distributeEmployeeTip(
         keptCash = 0;
 
     }
+
+
+        if (employee.distribution_role === "busser/runner") {
+
+        busserCard = keptCard;
+        busserCash = keptCash;
+
+        keptCard = 0;
+        keptCash = 0;
+
+    }
+
 
 
     // =====================

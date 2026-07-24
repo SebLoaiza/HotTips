@@ -1,4 +1,10 @@
 import {
+    ResultsSession
+}
+from "./model/resultsSession.js";
+
+
+import {
     compileResults
 }
 from "./logic/compileResults.js";
@@ -15,7 +21,14 @@ import {
 }
 from "./render/renderEmployeeDetails.js";
 
+import {
+    renderDateSelector
+}
+from "./render/renderDateSelector.js";
 
+// =========================
+// LOAD TIP DISTRIBUTION
+// =========================
 
 const tipDistribution =
     JSON.parse(
@@ -26,12 +39,40 @@ const tipDistribution =
 
 
 
-const employees =
-    compileResults(
+console.log(
+    "TIP DISTRIBUTION LOADED",
+    tipDistribution
+);
+
+
+
+// =========================
+// CREATE RESULTS SESSION
+// =========================
+
+const resultsSession =
+    new ResultsSession(
         tipDistribution
     );
 
 
+
+console.log(
+    "AVAILABLE DAYS",
+    resultsSession.getAvailableDays()
+);
+
+
+console.log(
+    "DATE RANGES",
+    resultsSession.getDateRanges()
+);
+
+
+
+// =========================
+// DOM
+// =========================
 
 const resultsContainer =
     document.getElementById(
@@ -39,11 +80,15 @@ const resultsContainer =
     );
 
 
-const detailsContainer =
+const dateContainer =
     document.getElementById(
-        "employeeDetails"
+        "dateSelector"
     );
 
+
+// =========================
+// OPEN EMPLOYEE DETAILS
+// =========================
 
 function openEmployee(
     row,
@@ -51,10 +96,9 @@ function openEmployee(
 ) {
 
 
-    // already open -> close it
-
     const existing =
         row.nextElementSibling;
+
 
 
     if (
@@ -72,12 +116,11 @@ function openEmployee(
 
 
 
-    // create details row
-
     const detailsRow =
         document.createElement(
             "tr"
         );
+
 
 
     detailsRow.className =
@@ -91,7 +134,9 @@ function openEmployee(
         );
 
 
-    detailsCell.colSpan = 4;
+
+    detailsCell.colSpan =
+        10;
 
 
 
@@ -113,14 +158,89 @@ function openEmployee(
         detailsRow
     );
 
+
 }
 
 
-resultsContainer.appendChild(
 
-    renderResultsTable(
-        employees,
-        openEmployee
+// =========================
+// RENDER RESULTS
+// =========================
+
+function renderResults() {
+
+
+    console.log(
+        "FILTERED BLOCKS",
+        resultsSession.filtered_distribution
+    );
+
+
+
+    resultsContainer.innerHTML =
+        "";
+
+
+
+    const employees =
+        compileResults(
+            resultsSession.filtered_distribution
+        );
+
+
+
+    console.log(
+        "COMPILED EMPLOYEES",
+        employees
+    );
+
+
+
+    resultsContainer.appendChild(
+
+        renderResultsTable(
+            employees,
+            openEmployee
+        )
+
+    );
+
+
+}
+
+
+
+// =========================
+// INITIAL RENDER
+// =========================
+dateContainer.appendChild(
+
+    renderDateSelector(
+        resultsSession,
+        renderResults
     )
 
 );
+
+renderResults();
+
+
+
+// =========================
+// GLOBAL ACCESS
+// =========================
+//
+// Used from console and
+// future date filter UI
+//
+
+window.RESULTS_SESSION =
+    resultsSession;
+
+
+window.RENDER_RESULTS =
+    renderResults;
+
+
+window.TIP_DISTRIBUTION =
+    tipDistribution;

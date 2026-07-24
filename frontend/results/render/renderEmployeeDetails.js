@@ -17,12 +17,113 @@ export function renderEmployeeDetails(
         );
 
 
+
+    let trainerSection = "";
+
+
+
+    // =========================
+    // Trainee Transfers
+    // =========================
+
+    if (
+        employee.tips_sent_to_trainers
+        &&
+        employee.tips_sent_to_trainers.length > 0
+    ) {
+
+
+        trainerSection += `
+
+            <hr>
+
+            <h3>
+                Tips Sent To Trainer
+            </h3>
+
+        `;
+
+
+
+        for (
+            const transfer of employee.tips_sent_to_trainers
+        ) {
+
+
+            trainerSection += `
+
+                <p>
+
+                    ➡ 
+                    ${transfer.trainer_name}
+
+                    <br>
+
+                    ${transfer.date}
+                    -
+                    ${transfer.meal}
+
+                    <br>
+
+                    Sent:
+                    ${formatMoney(
+                        transfer.amount
+                    )}
+
+                </p>
+
+            `;
+
+
+        }
+
+
+    }
+
+
+
+
+    // =========================
+    // Trainer Received Tips
+    // =========================
+
+    if (
+        employee.training_tips_received > 0
+    ) {
+
+
+        trainerSection += `
+
+            <hr>
+
+            <h3>
+                Training Tips Received
+            </h3>
+
+
+            <p>
+
+                Received:
+                ${formatMoney(
+                    employee.training_tips_received
+                )}
+
+            </p>
+
+        `;
+
+
+    }
+
+
+
     div.innerHTML = `
 
 
     <h2>
         ${employee.name}
     </h2>
+
 
 
     <p>
@@ -33,12 +134,14 @@ export function renderEmployeeDetails(
     </p>
 
 
+
     <p>
         Card:
         ${formatMoney(
             employee.card_payout
         )}
     </p>
+
 
 
     <p>
@@ -49,13 +152,20 @@ export function renderEmployeeDetails(
     </p>
 
 
+
+    ${trainerSection}
+
+
+
     <hr>
+
 
 
     <p>
         Orders:
         ${employee.order_count}
     </p>
+
 
 
     <p>
@@ -66,6 +176,7 @@ export function renderEmployeeDetails(
     </p>
 
 
+
     <p>
         Hours:
         ${formatHours(
@@ -74,7 +185,9 @@ export function renderEmployeeDetails(
     </p>
 
 
+
     `;
+
 
 
     return div;

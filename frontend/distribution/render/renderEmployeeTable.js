@@ -105,6 +105,7 @@ export function renderEmployeeTable(
 
                     <th>Pool Cash Received</th>
 
+                    <th>Trainer</th>
 
                     `
 
@@ -226,6 +227,22 @@ export function renderEmployeeTable(
 
         else {
 
+            const isTrainee =
+                employee.is_trainee;
+                
+            const trainerDisplay =
+                employee.is_trainee
+                    ? (
+                        employee.trainer_employee_id
+                            ?
+                            ` ${employee.trainer_employee_name}`
+                            :
+                            `<span style="color:red;font-weight:bold;">
+                                NO TRAINER ASSIGNED
+                            </span>`
+                    )
+                    : "-";
+
             row.innerHTML = `
 
                 <td>
@@ -272,14 +289,15 @@ export function renderEmployeeTable(
                     )}
                 </td>
 
-                
                 <td>
                     ${formatMoney(
                         employee.pool_cash_received
                     )}
                 </td>
 
-
+                <td>
+                    ${trainerDisplay}
+                </td>
 
             `;
 

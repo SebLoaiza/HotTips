@@ -12,8 +12,7 @@ export class EmployeeResult {
             employee.name;
 
 
-
-        // Money (cents)
+        // Money
 
         this.cash_kept = 0;
 
@@ -25,13 +24,20 @@ export class EmployeeResult {
         this.pool_card = 0;
 
 
-
         this.cash_payout = 0;
 
         this.card_payout = 0;
 
         this.total_payout = 0;
 
+
+
+        // Training
+
+        this.training_cash_received = 0;
+        this.training_card_received = 0;
+
+        this.tips_sent_to_trainers = [];
 
 
         // Analytics
@@ -44,7 +50,6 @@ export class EmployeeResult {
 
 
     }
-
 
 
 }

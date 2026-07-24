@@ -14,6 +14,10 @@ export function compileResults(
 
 
 
+    // =========================
+    // BUILD EMPLOYEE RESULTS
+    // =========================
+
     for (
         const block of tipDistribution
     ) {
@@ -22,7 +26,6 @@ export function compileResults(
         for (
             const employee of block.employees
         ) {
-
 
 
             const id =
@@ -49,7 +52,7 @@ export function compileResults(
 
 
             // =====================
-            // Money
+            // Money Generated
             // =====================
 
 
@@ -64,7 +67,6 @@ export function compileResults(
 
             result.pool_cash +=
                 employee.pool_cash_received ?? 0;
-
 
 
             result.pool_card +=
@@ -92,10 +94,71 @@ export function compileResults(
 
 
 
+
+            // =====================
+            // TRAINER TRACKING
+            // =====================
+            //
+            // Store transfers per meal.
+            // A trainee may have different
+            // trainers on different shifts.
+            //
+
+            if (
+                employee.is_trainee &&
+                employee.trainer_employee_id
+            ) {
+
+
+                result.tips_sent_to_trainers.push({
+
+                    trainer_id:
+                        employee.trainer_employee_id,
+
+
+                    trainer_name:
+                        employee.trainer_employee_name,
+
+
+                    date:
+                        block.date,
+
+
+                    meal:
+                        block.meal,
+
+
+                    cash_amount:
+                        (
+                            employee.cash_kept ?? 0
+                        )
+                        +
+                        (
+                            employee.pool_cash_received ?? 0
+                        ),
+
+
+
+                    card_amount:
+                        (
+                            employee.card_kept ?? 0
+                        )
+                        +
+                        (
+                            employee.pool_card_received ?? 0
+                        )
+
+                });
+
+
+            }
+
+
         }
 
 
     }
+
 
 
 
@@ -106,14 +169,14 @@ export function compileResults(
 
 
 
+
+    // =========================
+    // INITIAL PAYOUT CALCULATION
+    // =========================
+
     for (
         const employee of output
     ) {
-
-
-        // =====================
-        // Final Payouts
-        // =====================
 
 
         employee.cash_payout =
@@ -138,10 +201,7 @@ export function compileResults(
 
 
 
-        // =====================
         // Analytics
-        // =====================
-
 
         employee.hours =
             employee.worked_minutes / 60;
@@ -177,13 +237,143 @@ export function compileResults(
                 0;
 
 
+    }
+
+
+
+
+
+    // =========================
+    // APPLY TRAINER TRANSFERS
+    // =========================
+
+    for (
+        const trainee of output
+    ) {
+
+
+        for (
+            const transfer of trainee.tips_sent_to_trainers
+        ) {
+
+
+            const trainer =
+                output.find(
+                    employee =>
+                        employee.employee_id ===
+                        transfer.trainer_id
+                );
+
+
+
+            if (!trainer) {
+
+
+                console.warn(
+                    "Trainer not found",
+                    transfer
+                );
+
+
+                continue;
+
+            }
+
+
+
+
+            const totalTransfer =
+                transfer.cash_amount
+                +
+                transfer.card_amount;
+
+
+
+
+            // =====================
+            // TRAINEE SIDE
+            // =====================
+
+
+            trainee.tips_sent_to_trainers_history =
+                trainee.tips_sent_to_trainers_history ?? [];
+
+
+            trainee.tips_sent_to_trainers_history.push(
+                transfer
+            );
+
+
+
+            trainee.total_sent_to_trainers =
+                (
+                    trainee.total_sent_to_trainers ?? 0
+                )
+                +
+                totalTransfer;
+
+
+
+            trainee.cash_payout -=
+                transfer.cash_amount;
+
+
+
+            trainee.card_payout -=
+                transfer.card_amount;
+
+
+
+            trainee.total_payout -=
+                totalTransfer;
+
+
+
+
+
+            // =====================
+            // TRAINER SIDE
+            // =====================
+
+
+            trainer.training_cash_received +=
+                transfer.cash_amount;
+
+
+
+            trainer.training_card_received +=
+                transfer.card_amount;
+
+
+
+
+        }
+
 
     }
 
 
 
+
+    console.log(
+        "========== COMPILED RESULTS =========="
+    );
+
+
+    console.log(
+        output
+    );
+
+
+    console.log(
+        "======================================"
+    );
+
+
+
+
     return output.sort(
-        (a, b) =>
+        (a,b) =>
             a.name.localeCompare(
                 b.name
             )

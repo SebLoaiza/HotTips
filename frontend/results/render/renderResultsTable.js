@@ -36,41 +36,51 @@ export function renderResultsTable(
                 Name
             </th>
 
-            <th data-sort="cash_payout">
+
+            <th>
                 Cash
             </th>
 
-            <th data-sort="card_payout">
+
+            <th>
                 Card
             </th>
+
 
             <th data-sort="total_payout">
                 Total
             </th>
 
+
             <th data-sort="sales">
                 Sales
             </th>
+
 
             <th data-sort="sales_per_hour">
                 Sales / Hr
             </th>
 
+
             <th data-sort="orders_per_hour">
                 Orders / Hr
             </th>
+
 
             <th data-sort="tips_per_hour">
                 Tips / Hr
             </th>
 
+
             <th data-sort="avg_tip_per_order">
                 Avg Tip / Order
             </th>
 
+
         </tr>
 
     </thead>
+
 
     <tbody></tbody>
 
@@ -85,7 +95,147 @@ export function renderResultsTable(
 
 
 
-    function calculateStats(employee) {
+
+    // =========================
+    // Training Calculations
+    // =========================
+
+
+    function getTrainingTransfers(
+        employee
+    ) {
+
+
+        const transfers =
+            employee.tips_sent_to_trainers ?? [];
+
+
+        let sentCash = 0;
+
+        let sentCard = 0;
+
+
+        for (
+            const transfer of transfers
+        ) {
+
+
+            sentCash +=
+                transfer.cash_amount ?? 0;
+
+
+            sentCard +=
+                transfer.card_amount ?? 0;
+
+
+        }
+
+
+
+        return {
+
+            cash:
+                sentCash,
+
+
+            card:
+                sentCard
+
+
+        };
+
+
+    }
+
+
+
+
+    function getTrainingReceived(
+        employee
+    ) {
+
+
+        return {
+
+            cash:
+                employee.training_cash_received ?? 0,
+
+
+            card:
+                employee.training_card_received ?? 0
+
+        };
+
+
+    }
+
+
+
+
+    function getMoneyBreakdown(
+        employee
+    ) {
+
+
+        const received =
+            getTrainingReceived(
+                employee
+            );
+
+
+        return {
+
+
+            cash:
+
+
+                (
+                    employee.cash_payout ?? 0
+                )
+                +
+                received.cash,
+
+
+
+            card:
+
+
+                (
+                    employee.card_payout ?? 0
+                )
+                +
+                received.card,
+
+
+            total:
+
+
+                (
+                    employee.cash_payout ?? 0
+                )
+                +
+                (
+                    employee.card_payout ?? 0
+                )
+                +
+                received.cash
+                +
+                received.card
+
+
+
+        };
+
+
+    }
+
+
+
+
+
+    function calculateStats(
+        employee
+    ) {
 
 
         const hours =
@@ -101,57 +251,71 @@ export function renderResultsTable(
 
 
             sales_per_hour:
+
                 hours > 0
+
                     ?
-                    (
-                        employee.sales ?? 0
-                    )
-                    /
+
+                    employee.sales /
                     hours
+
                     :
+
                     0,
 
 
 
             orders_per_hour:
+
                 hours > 0
+
                     ?
-                    (
-                        employee.order_count ?? 0
-                    )
-                    /
+
+                    employee.order_count /
                     hours
+
                     :
+
                     0,
 
 
 
             tips_per_hour:
+
                 hours > 0
+
                     ?
+
                     (
-                        employee.total_payout ?? 0
+                        getMoneyBreakdown(employee)
+                            .total
                     )
                     /
                     hours
+
                     :
+
                     0,
 
 
 
             avg_tip_per_order:
-                (
-                    employee.order_count ?? 0
-                )
-                > 0
+
+                employee.order_count > 0
+
                     ?
+
                     (
-                        employee.total_payout ?? 0
+                        getMoneyBreakdown(employee)
+                            .total
                     )
                     /
                     employee.order_count
+
                     :
+
                     0
+
 
         };
 
@@ -160,7 +324,99 @@ export function renderResultsTable(
 
 
 
-    function renderRows(list) {
+
+
+    function buildTrainerSentNote(
+        employee
+    ) {
+
+
+        const transfers =
+            employee.tips_sent_to_trainers ?? [];
+
+
+
+        if (
+            transfers.length === 0
+        ) {
+
+            return "";
+
+        }
+
+
+
+        let html = `
+
+            <br>
+
+            <small style="
+                color:red;
+                font-weight:bold;
+            ">
+                Sent:
+            </small>
+
+        `;
+
+
+
+        for (
+            const transfer of transfers
+        ) {
+
+
+            html += `
+
+                <br>
+
+                <small style="
+                    color:red;
+                ">
+
+                    ➡ ${transfer.trainer_name}
+
+                    <br>
+
+                    ${transfer.date}
+                    -
+                    ${transfer.meal}
+
+                    <br>
+
+                    Cash:
+                    ${formatMoney(
+                        transfer.cash_amount
+                    )}
+
+                    <br>
+
+                    Card:
+                    ${formatMoney(
+                        transfer.card_amount
+                    )}
+
+                </small>
+
+            `;
+
+
+        }
+
+
+
+        return html;
+
+
+    }
+
+
+
+
+
+    function renderRows(
+        list
+    ) {
 
 
         body.innerHTML = "";
@@ -179,6 +435,20 @@ export function renderResultsTable(
 
 
 
+            const money =
+                getMoneyBreakdown(
+                    employee
+                );
+
+
+
+            const received =
+                getTrainingReceived(
+                    employee
+                );
+
+
+
             const row =
                 document.createElement(
                     "tr"
@@ -188,65 +458,140 @@ export function renderResultsTable(
 
             row.innerHTML = `
 
+
                 <td>
+
                     ${employee.name}
-                </td>
 
-
-                <td>
-                    ${formatMoney(
-                        employee.cash_payout
+                    ${buildTrainerSentNote(
+                        employee
                     )}
+
                 </td>
 
 
+
                 <td>
+
                     ${formatMoney(
-                        employee.card_payout
+                        money.cash
                     )}
+
+                    <br>
+
+                    <small>
+
+                        Base:
+                        ${formatMoney(
+                            employee.cash_payout
+                        )}
+
+                        <br>
+
+                        From Trainees:
+                        ${formatMoney(
+                            received.cash
+                        )}
+
+                    </small>
+
                 </td>
 
 
+
+
                 <td>
+
                     ${formatMoney(
-                        employee.total_payout
+                        money.card
                     )}
+
+                    <br>
+
+                    <small>
+
+                        Base:
+                        ${formatMoney(
+                            employee.card_payout
+                        )}
+
+                        <br>
+
+                        From Trainees:
+                        ${formatMoney(
+                            received.card
+                        )}
+
+                    </small>
+
                 </td>
 
 
+
+
                 <td>
+
+                    ${formatMoney(
+                        money.total
+                    )}
+
+                </td>
+
+
+
+
+                <td>
+
                     ${formatMoney(
                         employee.sales
                     )}
+
                 </td>
 
 
+
+
                 <td>
+
                     ${formatMoney(
                         stats.sales_per_hour
                     )}
+
                 </td>
 
 
+
+
                 <td>
+
                     ${formatNumber(
                         stats.orders_per_hour
                     )}
+
                 </td>
 
 
+
+
                 <td>
+
                     ${formatMoney(
                         stats.tips_per_hour
                     )}
+
                 </td>
+
+
 
 
                 <td>
+
                     ${formatMoney(
                         stats.avg_tip_per_order
                     )}
+
                 </td>
+
 
             `;
 
@@ -275,13 +620,17 @@ export function renderResultsTable(
 
 
 
+
+
     function sortEmployees(
         key
     ) {
 
 
         const sorted =
-            [...employees];
+            [
+                ...employees
+            ];
 
 
 
@@ -290,18 +639,27 @@ export function renderResultsTable(
 
 
                 let A;
+
                 let B;
 
 
 
                 if (
+
                     key === "sales_per_hour"
+
                     ||
+
                     key === "orders_per_hour"
+
                     ||
+
                     key === "tips_per_hour"
+
                     ||
+
                     key === "avg_tip_per_order"
+
                 ) {
 
 
@@ -321,11 +679,13 @@ export function renderResultsTable(
                     A =
                         statsA[key];
 
+
                     B =
                         statsB[key];
 
 
                 }
+
                 else {
 
 
@@ -347,9 +707,13 @@ export function renderResultsTable(
 
 
                     return currentSort.direction === "asc"
+
                         ?
+
                         A.localeCompare(B)
+
                         :
+
                         B.localeCompare(A);
 
 
@@ -358,9 +722,13 @@ export function renderResultsTable(
 
 
                 return currentSort.direction === "asc"
+
                     ?
+
                     A - B
+
                     :
+
                     B - A;
 
 
@@ -371,13 +739,16 @@ export function renderResultsTable(
 
         return sorted;
 
+
     }
+
+
 
 
 
     table
     .querySelectorAll(
-        "th"
+        "th[data-sort]"
     )
     .forEach(
         header => {
@@ -405,6 +776,7 @@ export function renderResultsTable(
 
 
                 }
+
                 else {
 
 

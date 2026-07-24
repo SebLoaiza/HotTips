@@ -157,6 +157,11 @@ export function createTipDistribution(
             tip_points:
                 employee.tip_points ?? 1,
 
+            // ------------------------
+            // Trainer Relationship
+            // ------------------------
+
+            is_trainee:Boolean(employee.role?.toLowerCase().includes("trainee")),
 
             // Trainer
             trainer_employee_id:
@@ -164,7 +169,7 @@ export function createTipDistribution(
 
             trainer_employee_name:
                 employee.trainer_employee_name ?? "",
-                
+
             order_count:
                 employee.orders?.length ?? 0,
 
