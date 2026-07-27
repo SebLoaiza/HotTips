@@ -75,6 +75,10 @@ export function renderDateSelector(
 
 
 
+    // =========================
+    // BUILD DATE OPTIONS
+    // =========================
+
     for (
         const day of days
     ) {
@@ -82,7 +86,7 @@ export function renderDateSelector(
 
         start.innerHTML += `
 
-            <option>
+            <option value="${day}">
                 ${day}
             </option>
 
@@ -91,7 +95,7 @@ export function renderDateSelector(
 
         end.innerHTML += `
 
-            <option>
+            <option value="${day}">
                 ${day}
             </option>
 
@@ -100,6 +104,34 @@ export function renderDateSelector(
 
     }
 
+
+
+    // =========================
+    // INITIAL DISPLAY
+    // =========================
+    //
+    // Match ResultsSession's
+    // initial full week filter.
+    //
+
+    const fullWeek =
+        resultsSession.getDateRanges()
+            .full_week;
+
+
+
+    start.value =
+        fullWeek.start;
+
+
+    end.value =
+        fullWeek.end;
+
+
+
+    // =========================
+    // RANGE BUTTONS
+    // =========================
 
 
     div.querySelector(
@@ -111,10 +143,26 @@ export function renderDateSelector(
         resultsSession.resetFilter();
 
 
+        const range =
+            resultsSession.getDateRanges()
+                .full_week;
+
+
+
+        start.value =
+            range.start;
+
+
+        end.value =
+            range.end;
+
+
+
         renderResults();
 
 
     };
+
 
 
 
@@ -136,11 +184,27 @@ export function renderDateSelector(
         );
 
 
+
+        start.value =
+            range.start;
+
+
+        end.value =
+            range.end;
+
+
+
         renderResults();
 
 
     };
 
+
+
+
+    // =========================
+    // MANUAL APPLY
+    // =========================
 
 
     div.querySelector(

@@ -21,10 +21,25 @@ import {
 }
 from "./render/renderEmployeeDetails.js";
 
+
 import {
     renderDateSelector
 }
 from "./render/renderDateSelector.js";
+
+
+import {
+    renderPrintSummary
+}
+from "./render/renderPrintSummary.js";
+
+
+import {
+    exportTipDistributionCSV
+}
+from "./logic/exportTipDistributionCSV.js";
+
+
 
 // =========================
 // LOAD TIP DISTRIBUTION
@@ -84,6 +99,25 @@ const dateContainer =
     document.getElementById(
         "dateSelector"
     );
+
+
+const printContainer =
+    document.getElementById(
+        "printSummary"
+    );
+
+
+const printButton =
+    document.getElementById(
+        "printButton"
+    );
+
+
+const exportButton =
+    document.getElementById(
+        "exportButton"
+    );
+
 
 
 // =========================
@@ -158,7 +192,6 @@ function openEmployee(
         detailsRow
     );
 
-
 }
 
 
@@ -181,6 +214,10 @@ function renderResults() {
         "";
 
 
+    printContainer.innerHTML =
+        "";
+
+
 
     const employees =
         compileResults(
@@ -196,6 +233,8 @@ function renderResults() {
 
 
 
+    // Employee table
+
     resultsContainer.appendChild(
 
         renderResultsTable(
@@ -206,13 +245,26 @@ function renderResults() {
     );
 
 
+
+    // Printable sheet
+
+    printContainer.appendChild(
+
+        renderPrintSummary(
+            employees
+        )
+
+    );
+
+
 }
 
 
 
 // =========================
-// INITIAL RENDER
+// DATE SELECTOR
 // =========================
+
 dateContainer.appendChild(
 
     renderDateSelector(
@@ -222,17 +274,55 @@ dateContainer.appendChild(
 
 );
 
+
+
+// =========================
+// BUTTONS
+// =========================
+
+if (
+    printButton
+) {
+
+    printButton.onclick = () => {
+
+        window.print();
+
+    };
+
+}
+
+
+
+if (
+    exportButton
+) {
+
+    exportButton.onclick = () => {
+
+
+        exportTipDistributionCSV(
+            tipDistribution
+        );
+
+
+    };
+
+}
+
+
+
+// =========================
+// INITIAL LOAD
+// =========================
+
 renderResults();
 
 
 
 // =========================
-// GLOBAL ACCESS
+// GLOBAL DEBUG ACCESS
 // =========================
-//
-// Used from console and
-// future date filter UI
-//
 
 window.RESULTS_SESSION =
     resultsSession;
