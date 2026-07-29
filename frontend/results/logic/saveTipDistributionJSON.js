@@ -1,19 +1,19 @@
-export function exportHistory(
+import {
+    History
+}
+from "../model/History.js";
+
+
+
+export function saveTipDistributionJSON(
     tipDistribution
 ) {
 
 
-    const history = {
-
-        version: 1,
-
-        exported_at:
-            new Date().toISOString(),
-
-        tipDistribution:
+    const history =
+        new History(
             tipDistribution
-
-    };
+        );
 
 
 
@@ -33,7 +33,7 @@ export function exportHistory(
             ],
             {
                 type:
-                    "application/json"
+                "application/json"
             }
         );
 
@@ -56,16 +56,29 @@ export function exportHistory(
         url;
 
 
+
     link.download =
-        "HotTips_History.json";
+        `${history.start_date}_to_${history.end_date}_HotTips.json`;
+
+
+
+    document.body.appendChild(
+        link
+    );
 
 
     link.click();
 
 
 
+    document.body.removeChild(
+        link
+    );
+
+
     URL.revokeObjectURL(
         url
     );
+
 
 }

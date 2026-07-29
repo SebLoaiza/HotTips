@@ -1,0 +1,486 @@
+/* =========================
+   GLOBAL
+========================= */
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #f4f6f8;
+
+    margin:
+        0;
+
+    color:
+        #222;
+
+}
+
+
+
+header {
+
+    background:
+        #1f2937;
+
+    color:
+        white;
+
+    padding:
+        20px 30px;
+
+}
+
+
+
+header h1 {
+
+    margin:
+        0;
+
+}
+
+
+
+
+
+/* =========================
+   PANELS
+========================= */
+
+
+.panel {
+
+    background:
+        white;
+
+    margin:
+        25px auto;
+
+    padding:
+        25px;
+
+    width:
+        90%;
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.08);
+
+}
+
+
+
+
+
+
+
+/* =========================
+   DAY TABS
+========================= */
+
+
+.day-tabs {
+
+    display:
+        flex;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        25px;
+
+    flex-wrap:
+        wrap;
+
+}
+
+
+
+.day-tabs button {
+
+    border:
+        none;
+
+    background:
+        #e5e7eb;
+
+    padding:
+        12px 20px;
+
+    border-radius:
+        8px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        15px;
+
+    font-weight:
+        bold;
+
+    transition:
+        .2s;
+
+}
+
+
+
+.day-tabs button:hover {
+
+    background:
+        #d1d5db;
+
+}
+
+
+
+.day-tabs button.active {
+
+    background:
+        #2563eb;
+
+    color:
+        white;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MEAL BLOCK
+========================= */
+
+
+.meal-block {
+
+    margin-bottom:
+        35px;
+
+    padding:
+        20px;
+
+    border-radius:
+        12px;
+
+    background:
+        #fafafa;
+
+    border:
+        1px solid #ddd;
+
+}
+
+
+
+.meal-block h2 {
+
+    margin-top:
+        0;
+
+    color:
+        #111827;
+
+    border-bottom:
+        2px solid #2563eb;
+
+    padding-bottom:
+        8px;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MONEY SUMMARY
+========================= */
+
+
+.money-summary {
+
+    display:
+        flex;
+
+    gap:
+        15px;
+
+    flex-wrap:
+        wrap;
+
+    margin-bottom:
+        20px;
+
+}
+
+
+
+.money-card {
+
+    background:
+        white;
+
+    border:
+        1px solid #ddd;
+
+    padding:
+        15px;
+
+    border-radius:
+        10px;
+
+    min-width:
+        160px;
+
+}
+
+
+
+.money-card h3 {
+
+    margin:
+        0 0 5px 0;
+
+    font-size:
+        14px;
+
+    color:
+        #666;
+
+}
+
+
+
+.money-card p {
+
+    margin:
+        0;
+
+    font-size:
+        22px;
+
+    font-weight:
+        bold;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   TABLES
+========================= */
+
+
+.employee-table {
+
+    margin-top:
+        25px;
+
+}
+
+
+
+.employee-table h3 {
+
+    margin-bottom:
+        10px;
+
+}
+
+
+
+.employee-table table {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    background:
+        white;
+
+    border-radius:
+        10px;
+
+    overflow:
+        hidden;
+
+}
+
+
+
+.employee-table th {
+
+    background:
+        #1f2937;
+
+    color:
+        white;
+
+    padding:
+        10px;
+
+    text-align:
+        left;
+
+}
+
+
+
+.employee-table td {
+
+    padding:
+        10px;
+
+    border-bottom:
+        1px solid #ddd;
+
+}
+
+
+
+.employee-table tr:hover {
+
+    background:
+        #f3f4f6;
+
+}
+
+
+
+
+
+/* =========================
+   INPUTS
+========================= */
+
+
+.tip-point-input {
+
+    width:
+        70px;
+
+    padding:
+        5px;
+
+    border-radius:
+        6px;
+
+    border:
+        1px solid #aaa;
+
+}
+
+
+
+
+
+
+/* =========================
+   DEBUG
+========================= */
+
+
+pre {
+
+    background:
+        #111827;
+
+    color:
+        #d1fae5;
+
+    padding:
+        15px;
+
+    border-radius:
+        8px;
+
+    overflow:
+        auto;
+
+}
+
+
+
+
+
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+
+button {
+
+    font-family:
+        inherit;
+
+}
+
+
+
+.navigation-panel {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+}
+
+
+
+.navigation-panel button,
+#resultsButton {
+
+    background:
+        #2563eb;
+
+    color:
+        white;
+
+    border:
+        none;
+
+    padding:
+        12px 20px;
+
+    border-radius:
+        8px;
+
+    cursor:
+        pointer;
+
+}
+
+
+
+.navigation-panel button:hover,
+#resultsButton:hover {
+
+    background:
+        #1d4ed8;
+
+}

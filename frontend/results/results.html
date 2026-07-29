@@ -5,7 +5,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         HotTips Results
@@ -26,74 +29,110 @@
 <main>
 
 
-    <header>
+<header>
 
 
-        <h1>
-            Employee Results
-        </h1>
-
-
-
-        <div class="headerButtons">
-
-
-            <button id="backButton">
-                Back
-            </button>
+    <h1>
+        Employee Results
+    </h1>
 
 
 
-            <button id="printButton">
-                Print Summary
-            </button>
+    <div class="headerButtons">
+
+
+        <button id="backButton">
+
+            Back
+
+        </button>
 
 
 
-            <button id="exportButton">
-                Export Excel Report
-            </button>
+        <button id="printButton">
 
+            Print Summary
 
-        </div>
-
-
-    </header>
+        </button>
 
 
 
+        <button id="exportCSVButton">
 
-    <div id="dateSelector"></div>
+            Export CSV
+
+        </button>
 
 
 
+        <button id="saveButton">
 
+            Save History
 
-    <!-- PRINT ONLY -->
-
-    <section id="printSummary">
-
-    </section>
+        </button>
 
 
 
 
-
-    <!-- EMPLOYEE TABLE -->
-
-    <section id="resultsContainer">
-
-    </section>
+        <button id="loadButton">
+            Load History
+        </button>
 
 
+        <input
+            type="file"
+            id="historyInput"
+            accept=".json"
+            hidden
+        >
 
 
 
-    <!-- EMPLOYEE DETAILS -->
 
-    <section id="employeeDetails">
+    </div>
 
-    </section>
+
+</header>
+
+
+
+
+
+<div id="dateSelector">
+
+</div>
+
+
+
+
+
+<!--
+    Printable summary only.
+    Hidden normally.
+    Visible during print.
+-->
+
+<section id="printSummary">
+
+</section>
+
+
+
+
+
+<section id="resultsContainer">
+
+</section>
+
+
+
+
+
+<section id="employeeDetails">
+
+</section>
+
+
 
 
 
@@ -107,6 +146,7 @@
     type="module"
     src="./app.js"
 ></script>
+
 
 
 </body>

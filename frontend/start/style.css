@@ -1,0 +1,274 @@
+/* =========================
+   Global
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+
+main {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+
+
+/* =========================
+   Headings
+========================= */
+
+h1 {
+    margin: 0;
+    font-size: 34px;
+}
+
+
+h2 {
+    margin: 0 0 15px;
+}
+
+
+p {
+    margin-top: 6px;
+    color: #666;
+}
+
+
+
+/* =========================
+   Panels
+========================= */
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
+}
+
+
+
+/* =========================
+   Upload Area
+========================= */
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+
+.upload-card {
+    border: 2px dashed #cfcfcf;
+    border-radius: 10px;
+    padding: 18px;
+    background: #fafafa;
+}
+
+
+.upload-card:hover {
+    border-color: #444;
+}
+
+
+.upload-card label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+
+input[type="file"] {
+    width: 100%;
+}
+
+
+
+/* =========================
+   Tables
+========================= */
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+.summary-table caption {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+
+.summary-table th,
+.summary-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+.summary-table th {
+    background: #ececec;
+}
+
+
+
+/* =========================
+   Buttons
+========================= */
+
+button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #1f2937;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+
+button:hover {
+    background: #374151;
+}
+
+
+
+/* =========================
+   Continue Button
+========================= */
+
+.continue-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+
+/* =========================
+   Meal Block Page Support
+========================= */
+
+.meal-block {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .08);
+}
+
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.time-editor {
+    display: flex;
+    gap: 15px;
+}
+
+
+.time-editor label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-weight: bold;
+}
+
+
+.time-input {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+
+
+/* =========================
+   Employee / Order Details
+========================= */
+
+.employee-card,
+.order-card {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+
+.employee-details,
+.order-details {
+    padding: 10px;
+}
+
+
+details summary {
+    cursor: pointer;
+}
+
+
+
+/* =========================
+   Debug
+========================= */
+
+pre {
+    background: #111827;
+    color: #f9fafb;
+    padding: 15px;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 900px) {
+
+    body {
+        padding: 15px;
+    }
+
+
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .meal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+
+    .time-editor {
+        flex-direction: column;
+    }
+
+}

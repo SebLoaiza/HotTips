@@ -1,427 +1,170 @@
-body{
+* {
+    box-sizing:border-box;
+}
+
+
+body {
 
     margin:0;
 
-    padding:40px;
+    height:100vh;
 
-    font-family:Segoe UI,Arial,sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-    background:#eef2f7;
-
-    color:#2f3640;
-
-}
-
-header{
-
-    margin-bottom:35px;
-
-}
-
-h1{
-
-    margin:0;
-
-    font-size:2rem;
-
-}
-
-.panel{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:28px;
-
-    margin-bottom:30px;
-
-    box-shadow:0 6px 20px rgba(0,0,0,.08);
-
-}
-
-.panel h2{
-
-    margin-top:0;
-
-    margin-bottom:20px;
-
-}
-
-
-
-/* ===========================
-   Upload Cards
-=========================== */
-
-.upload-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-
-    gap:20px;
-
-}
-
-.upload-card{
-
-    border:2px dashed #cbd5e1;
-
-    border-radius:12px;
-
-    padding:18px;
-
-    background:#fafcff;
-
-}
-
-.upload-card label{
-
-    display:block;
-
-    margin-bottom:12px;
-
-}
-
-input[type=file]{
-
-    width:100%;
-
-}
-
-
-
-/* ===========================
-   Two-column summary section
-=========================== */
-
-.sales-grid{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:30px;
-
-}
-
-@media (max-width:1000px){
-
-    .sales-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-
-
-/* ===========================
-   Meal Blocks
-=========================== */
-
-.date-title{
-
-    margin-top:35px;
-
-    color:#2d3748;
-
-    border-bottom:3px solid #4f8ef7;
-
-    padding-bottom:8px;
-
-}
-
-.meal-block{
-
-    background:white;
-
-    border-radius:14px;
-
-    padding:20px;
-
-    margin:20px 0;
-
-    border:1px solid #e5e7eb;
-
-}
-
-.meal-header{
+    background:#f4f6f8;
 
     display:flex;
 
-    justify-content:space-between;
+    justify-content:center;
 
     align-items:center;
 
-    margin-bottom:15px;
+}
+
+
+
+.landing {
+
+    width:100%;
+
+    max-width:900px;
 
 }
 
-.meal-header h3{
 
-    margin:0;
+
+.hero {
+
+    background:white;
+
+    padding:60px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.1);
 
 }
 
-.time-editor{
+
+
+.hero h1 {
+
+    font-size:56px;
+
+    margin:0 0 10px;
+
+}
+
+
+
+.hero p {
+
+    font-size:22px;
+
+    color:#6b7280;
+
+    margin-bottom:40px;
+
+}
+
+
+
+.landingButtons {
 
     display:flex;
+
+    justify-content:center;
 
     gap:20px;
 
 }
 
-.time-editor label{
-
-    display:flex;
-
-    flex-direction:column;
-
-    font-size:.85rem;
-
-    font-weight:600;
-
-}
-
-.time-input{
-
-    margin-top:6px;
-
-    padding:8px;
-
-    border:1px solid #d0d7e2;
-
-    border-radius:6px;
-
-}
 
 
+button {
 
-/* ===========================
-   Employee Cards
-=========================== */
+    padding:
+        14px 28px;
 
-.employee-section{
-
-    margin-top:15px;
-
-}
-
-.employee-section summary{
-
-    cursor:pointer;
-
-    font-weight:bold;
-
-    padding:10px;
-
-    background:#edf4ff;
-
-    border-radius:8px;
-
-}
-
-.employee-card{
-
-    margin:15px 0;
-
-    border:1px solid #d8dee8;
+    border:none;
 
     border-radius:10px;
 
-    overflow:hidden;
-
-    background:white;
-
-}
-
-.employee-card summary{
-
-    cursor:pointer;
-
-    padding:14px 16px;
-
-    background:#f8fafc;
-
-    font-weight:600;
-
-}
-
-.employee-card summary:hover{
-
-    background:#edf4ff;
-
-}
-
-.employee-details{
-
-    padding:18px;
-
-    display:grid;
-
-    gap:6px;
-
-}
-
-
-
-/* ===========================
-   Orders
-=========================== */
-
-.order-card{
-
-    margin-top:12px;
-
-    border:1px solid #e2e8f0;
-
-    border-radius:8px;
-
-    overflow:hidden;
-
-}
-
-.order-card summary{
-
-    cursor:pointer;
-
-    background:#fafafa;
-
-    padding:10px 12px;
-
-}
-
-.order-card summary:hover{
-
-    background:#f2f6fc;
-
-}
-
-.order-details{
-
-    padding:12px 16px;
-
-    display:grid;
-
-    gap:6px;
-
-}
-
-
-
-/* ===========================
-   Details arrows
-=========================== */
-
-details summary{
-
-    list-style:none;
-
-}
-
-details summary::-webkit-details-marker{
-
-    display:none;
-
-}
-
-details summary::before{
-
-    content:"▶";
-
-    display:inline-block;
-
-    width:18px;
-
-    transition:.2s;
-
-}
-
-details[open] summary::before{
-
-    transform:rotate(90deg);
-
-}
-
-
-
-/* ===========================
-   Tables
-=========================== */
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    background:white;
-
-    margin-bottom:25px;
-
-}
-
-th,td{
-
-    border:1px solid #e2e8f0;
-
-    padding:10px;
-
-    text-align:center;
-
-}
-
-th{
-
-    background:#4f8ef7;
+    background:#1f2937;
 
     color:white;
 
-}
+    font-size:16px;
 
-tr:nth-child(even){
-
-    background:#f8fafc;
-
-}
-
-caption{
-
-    text-align:left;
-
-    font-size:1.1rem;
-
-    font-weight:600;
-
-    margin-bottom:10px;
+    cursor:pointer;
 
 }
 
 
 
-/* ===========================
-   Debug
-=========================== */
+button:hover {
 
-#debugOutput{
+    background:#374151;
 
-    margin-top:20px;
+}
 
-    max-height:500px;
+.cash-grid-wrapper {
+    margin-bottom: 30px;
+}
 
-    overflow:auto;
+.cash-grid {
+    display: grid;
+    gap: 2px;
+    margin-top: 15px;
+}
 
-    background:#1e1e1e;
+.grid-header {
+    background: #eeeeee;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
 
-    color:#8df58d;
+.employee-cell {
+    padding: 10px;
+    font-weight: bold;
+    background: #f9fafb;
+}
 
-    padding:15px;
+.cash-grid-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    background: white;
+}
 
-    border-radius:8px;
+.cash-grid-cell label {
+    font-size: 12px;
+    color: #666;
+}
 
-    font-family:Consolas,monospace;
+.cash-grid-cell input {
+    width: 100%;
+    text-align: center;
+}
 
+.cash-grid-cell span {
+    font-size: 12px;
+    color: #666;
+}
+
+.disabled-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #999;
+    background: #f5f5f5;
 }

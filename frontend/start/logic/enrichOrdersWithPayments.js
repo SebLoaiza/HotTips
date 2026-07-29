@@ -2,10 +2,8 @@ export function enrichOrdersWithPayments(orders, payments) {
 
     const orderMap = new Map();
 
-    // -----------------------------
-    // Index every order
-    // -----------------------------
 
+    // Index every order by ID
     for (const order of orders) {
 
         order.cash_payment = 0;
@@ -16,10 +14,8 @@ export function enrichOrdersWithPayments(orders, payments) {
 
     }
 
-    // -----------------------------
-    // Apply payments
-    // -----------------------------
 
+    // Attach each payment to its order
     for (const payment of payments) {
 
         const order = orderMap.get(payment.order_id);
@@ -35,12 +31,14 @@ export function enrichOrdersWithPayments(orders, payments) {
 
         }
 
+
         console.log(
             "Payment:",
             payment.order_id,
             payment.type,
             payment.amount
         );
+
 
         switch (payment.type.trim().toUpperCase()) {
 
@@ -52,6 +50,7 @@ export function enrichOrdersWithPayments(orders, payments) {
 
                 break;
 
+
             case "CARD":
             case "CREDIT":
             case "CREDIT CARD":
@@ -62,12 +61,13 @@ export function enrichOrdersWithPayments(orders, payments) {
 
                 break;
 
+
             default:
 
                 order.other_payment += payment.amount;
 
                 console.log(
-                    " -> OTHER:",
+                    " -> Other:",
                     payment.type
                 );
 
@@ -77,10 +77,8 @@ export function enrichOrdersWithPayments(orders, payments) {
 
     }
 
-    // -----------------------------
-    // Print a few orders
-    // -----------------------------
 
+    // Print a few orders for debugging
     console.log("========== Orders ==========");
 
     for (let i = 0; i < Math.min(10, orders.length); i++) {

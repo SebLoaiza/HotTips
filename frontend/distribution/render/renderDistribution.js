@@ -2,6 +2,14 @@ import { renderMealBlock }
 from "./renderMealBlock.js";
 
 
+import { renderTabs }
+from "./renderTabs.js";
+
+
+
+let selectedDate = null;
+
+
 
 export function renderDistribution(
     tipDistribution,
@@ -16,8 +24,94 @@ export function renderDistribution(
 
 
     if (!output) {
+        console.error(
+            "Missing distributionTables"
+        );
+
         return;
     }
+
+
+
+
+    // =========================
+    // FIND ALL DAYS
+    // =========================
+
+    const dates =
+        [
+            ...new Set(
+                tipDistribution.map(
+                    block =>
+                        block.date
+                )
+            )
+        ];
+
+
+
+    console.log(
+        "DATES FOUND",
+        dates
+    );
+
+
+
+    if (!selectedDate && dates.length > 0) {
+
+        selectedDate =
+            dates[0];
+
+    }
+
+
+
+
+    // =========================
+    // RENDER TABS
+    // =========================
+
+    renderTabs(
+        dates,
+        selectedDate,
+        (date)=>{
+
+
+            selectedDate =
+                date;
+
+
+            renderDistribution(
+                tipDistribution,
+                refreshUI
+            );
+
+
+        }
+    );
+
+
+
+
+
+
+    // =========================
+    // FILTER CURRENT DAY
+    // =========================
+
+    const currentBlocks =
+        tipDistribution.filter(
+            block =>
+                block.date === selectedDate
+        );
+
+
+
+    console.log(
+        "CURRENT DAY BLOCKS",
+        currentBlocks
+    );
+
 
 
 
@@ -25,20 +119,17 @@ export function renderDistribution(
 
 
 
-    for (const block of tipDistribution) {
-
-
-        const section =
-            renderMealBlock(
-                block,
-                refreshUI
-            );
+    for (const block of currentBlocks) {
 
 
         output.appendChild(
-            section
-        );
 
+            renderMealBlock(
+                block,
+                refreshUI
+            )
+
+        );
 
     }
 

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HotTips</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+
+<main>
+
+    <header class="panel">
+
+        <h1>HotTips</h1>
+
+        <p>
+            Restaurant Tip Distribution
+        </p>
+
+    </header>
+
+
+
+    <section class="panel">
+
+        <h2>
+            Upload Files
+        </h2>
+
+        <div class="upload-grid">
+
+            <div class="upload-card">
+
+                <label for="shiftCsv">
+                    Shift CSV
+                </label>
+
+                <input
+                    id="shiftCsv"
+                    type="file"
+                    accept=".csv"
+                >
+
+            </div>
+
+
+
+            <div class="upload-card">
+
+                <label for="orderCsv">
+                    Order CSV
+                </label>
+
+                <input
+                    id="orderCsv"
+                    type="file"
+                    accept=".csv"
+                >
+
+            </div>
+
+
+
+            <div class="upload-card">
+
+                <label for="paymentCsv">
+                    Payment CSV
+                </label>
+
+                <input
+                    id="paymentCsv"
+                    type="file"
+                    accept=".csv"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="panel">
+
+        <h2>
+            Card Tips
+        </h2>
+
+        <div id="cardSalesTables">
+
+            <!-- Card tip tables render here -->
+
+        </div>
+
+    </section>
+
+
+
+    <section class="panel">
+
+        <h2>
+            Cash Collected
+        </h2>
+
+        <div id="cashCollectedTables">
+
+            <!-- Cash tables render here -->
+
+        </div>
+
+    </section>
+
+
+
+    <section class="panel continue-panel">
+
+        <div class="bottom-buttons">
+
+            <button
+                id="resetProcess"
+                class="danger-button"
+            >
+                Reset Process
+            </button>
+
+            <button id="nextPage">
+
+                Continue →
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="panel debug-panel">
+
+        <button id="debugObjects">
+
+            Debug Objects
+
+        </button>
+
+        <pre id="debugOutput"></pre>
+
+    </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script type="module" src="./app.js"></script>
+
+</body>
+
+</html>

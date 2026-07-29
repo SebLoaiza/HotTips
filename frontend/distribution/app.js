@@ -1,14 +1,11 @@
 import { createTipDistribution }
 from "./models/tipDistribution.js";
 
-
 import { renderDistribution }
 from "./render/renderDistribution.js";
 
-
 import { rebuildDistributionPools }
 from "./logic/rebuildDistributionPools.js";
-
 
 import { calculateRoleRatios }
 from "./logic/calculateRoleRatios.js";
@@ -19,6 +16,12 @@ from "./logic/distributeTips.js";
 import { distributePools }
 from "./logic/distributePools.js";
 
+
+
+// =========================
+// LOAD DATA
+// =========================
+
 const mealBlocks =
     JSON.parse(
         sessionStorage.getItem("mealBlocks")
@@ -28,23 +31,33 @@ const mealBlocks =
 
 if (mealBlocks.length === 0) {
 
-    alert("No data found.");
+    alert(
+        "No data found."
+    );
 
-    window.location.href = "/";
+    window.location.href =
+        "../start/start.html";
 
 }
 
 
 
+console.log(
+    "MEAL BLOCKS",
+    mealBlocks
+);
+
+
+
+
 // =========================
-// CREATE DISTRIBUTION OBJECT
+// CREATE DISTRIBUTION
 // =========================
 
 const tipDistribution =
     createTipDistribution(
         mealBlocks
     );
-
 
 
 console.log(
@@ -56,47 +69,51 @@ console.log(
 
 
 // =========================
-// RECALCULATE EVERYTHING
+// RECALCULATE
 // =========================
+
 function recalculateDistribution() {
+
 
     for (const mealBlock of tipDistribution) {
 
-        // rebuild role arrays
+
         rebuildDistributionPools(
             mealBlock
         );
 
-        // calculate host/busser coverage
+
         calculateRoleRatios(
             mealBlock
         );
 
-        // calculate contributions and pool totals
+
         distributeTips(
             mealBlock
         );
 
-        // distribute pool totals back to employees
+
         distributePools(
             mealBlock
         );
 
+
     }
+
 
 }
 
 
 
+
 // =========================
-// UI REFRESH
+// REFRESH UI
 // =========================
 
 function refreshUI() {
 
 
     recalculateDistribution();
-
 
 
     renderDistribution(
@@ -108,6 +125,8 @@ function refreshUI() {
 }
 
 
+
+
 // =========================
 // TIP POINT EDITING
 // =========================
@@ -115,6 +134,7 @@ function refreshUI() {
 document.addEventListener(
     "change",
     (event) => {
+
 
         if (
             !event.target.classList.contains(
@@ -127,21 +147,38 @@ document.addEventListener(
         }
 
 
+
         const employeeId =
             event.target.dataset.employeeId;
+
 
         const mealBlockId =
             event.target.dataset.mealBlockId;
 
 
-        let newPoints =
-            Number(event.target.value);
 
-        if (isNaN(newPoints) || newPoints < 0) {
+        let newPoints =
+            Number(
+                event.target.value
+            );
+
+
+
+        if (
+            isNaN(newPoints)
+            ||
+            newPoints < 0
+        ) {
+
             newPoints = 0;
+
         }
 
-        event.target.value = newPoints;
+
+
+        event.target.value =
+            newPoints;
+
 
 
         const mealBlock =
@@ -149,6 +186,7 @@ document.addEventListener(
                 block =>
                     block.id === mealBlockId
             );
+
 
 
         if (!mealBlock) {
@@ -163,11 +201,14 @@ document.addEventListener(
         }
 
 
+
+
         const employee =
             mealBlock.employees.find(
                 e =>
                     e.employee_id === employeeId
             );
+
 
 
         if (!employee) {
@@ -182,95 +223,162 @@ document.addEventListener(
         }
 
 
+
+
         employee.tip_points =
             newPoints;
+
+
 
         rebuildDistributionPools(
             mealBlock
         );
 
+
         calculateRoleRatios(
             mealBlock
         );
+
 
         distributeTips(
             mealBlock
         );
 
+
         distributePools(
             mealBlock
         );
 
+
+
         refreshUI();
-
-        console.log(
-            "UPDATED",
-            mealBlock.meal,
-            mealBlock.date,
-            employee.name,
-            employee.tip_points
-        );
-
     }
 );
+
+
+
 
 
 // =========================
 // DEBUG
 // =========================
 
-const debugButton =
-    document.getElementById(
-        "debugObjects"
-    );
+document
+.getElementById("debugObjects")
+?.addEventListener(
+    "click",
+    () => {
 
 
-if (debugButton) {
-
-    debugButton.addEventListener(
-        "click",
-        () => {
-
-
+        const output =
             document.getElementById(
                 "debugOutput"
-            ).textContent =
+            );
 
-                JSON.stringify(
-                    tipDistribution,
-                    null,
-                    2
-                );
 
+
+        if (!output) {
+
+            return;
 
         }
-    );
 
-}
+
+
+        output.textContent =
+            JSON.stringify(
+                tipDistribution,
+                null,
+                2
+            );
+
+
+    }
+);
+
+
 
 
 
 // =========================
-// INITIAL RENDER
+// RESULTS
 // =========================
 
-refreshUI();
+document
+.getElementById("resultsButton")
+?.addEventListener(
+    "click",
+    () => {
+
+
+        sessionStorage.setItem(
+            "tipDistribution",
+            JSON.stringify(
+                tipDistribution
+            )
+        );
+
+
+        window.location.href =
+            "../results/results.html";
+
+
+    }
+);
+
+
+
+
+
+// =========================
+// NAVIGATION
+// =========================
+
+document
+.getElementById("backButton")
+?.addEventListener(
+    "click",
+    () => {
+
+
+        window.location.href =
+            "../inputs/inputs.html";
+
+
+    }
+);
+
 
 
 
 document
-    .getElementById("resultsButton")
-    .addEventListener(
-        "click",
-        () => {
+.getElementById("continueButton")
+?.addEventListener(
+    "click",
+    () => {
 
-            sessionStorage.setItem(
-                "tipDistribution",
-                JSON.stringify(tipDistribution)
-            );
 
-            window.location.href =
-                "/results/results.html";
+        sessionStorage.setItem(
+            "tipDistribution",
+            JSON.stringify(
+                tipDistribution
+            )
+        );
 
-        }
-    );
+
+        window.location.href =
+            "../results/results.html";
+
+
+    }
+);
+
+
+
+
+
+// =========================
+// START
+// =========================
+
+refreshUI();

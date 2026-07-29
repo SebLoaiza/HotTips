@@ -40,12 +40,24 @@ import {
 from "./logic/exportTipDistributionCSV.js";
 
 
+import {
+    saveTipDistributionJSON
+}
+from "./logic/saveTipDistributionJSON.js";
 
-// =========================
-// LOAD TIP DISTRIBUTION
-// =========================
 
-const tipDistribution =
+import {
+    loadTipDistributionJSON
+}
+from "./logic/loadTipDistributionJSON.js";
+
+
+
+// =================================
+// LOAD CURRENT HISTORY
+// =================================
+
+let tipDistribution =
     JSON.parse(
         sessionStorage.getItem(
             "tipDistribution"
@@ -54,17 +66,6 @@ const tipDistribution =
 
 
 
-console.log(
-    "TIP DISTRIBUTION LOADED",
-    tipDistribution
-);
-
-
-
-// =========================
-// CREATE RESULTS SESSION
-// =========================
-
 const resultsSession =
     new ResultsSession(
         tipDistribution
@@ -72,22 +73,11 @@ const resultsSession =
 
 
 
-console.log(
-    "AVAILABLE DAYS",
-    resultsSession.getAvailableDays()
-);
 
 
-console.log(
-    "DATE RANGES",
-    resultsSession.getDateRanges()
-);
-
-
-
-// =========================
+// =================================
 // DOM
-// =========================
+// =================================
 
 const resultsContainer =
     document.getElementById(
@@ -113,16 +103,36 @@ const printButton =
     );
 
 
-const exportButton =
+const exportCSVButton =
     document.getElementById(
-        "exportButton"
+        "exportCSVButton"
+    );
+
+
+const saveButton =
+    document.getElementById(
+        "saveButton"
+    );
+
+
+const loadButton =
+    document.getElementById(
+        "loadButton"
+    );
+
+
+const historyInput =
+    document.getElementById(
+        "historyInput"
     );
 
 
 
-// =========================
-// OPEN EMPLOYEE DETAILS
-// =========================
+
+
+// =================================
+// EMPLOYEE DETAILS
+// =================================
 
 function openEmployee(
     row,
@@ -156,25 +166,22 @@ function openEmployee(
         );
 
 
-
     detailsRow.className =
         "employeeDetailsRow";
 
 
 
-    const detailsCell =
+    const cell =
         document.createElement(
             "td"
         );
 
 
-
-    detailsCell.colSpan =
-        10;
+    cell.colSpan = 10;
 
 
 
-    detailsCell.appendChild(
+    cell.appendChild(
         renderEmployeeDetails(
             employee
         )
@@ -183,9 +190,8 @@ function openEmployee(
 
 
     detailsRow.appendChild(
-        detailsCell
+        cell
     );
-
 
 
     row.after(
@@ -196,18 +202,13 @@ function openEmployee(
 
 
 
-// =========================
-// RENDER RESULTS
-// =========================
+
+
+// =================================
+// RENDER
+// =================================
 
 function renderResults() {
-
-
-    console.log(
-        "FILTERED BLOCKS",
-        resultsSession.filtered_distribution
-    );
-
 
 
     resultsContainer.innerHTML =
@@ -219,21 +220,17 @@ function renderResults() {
 
 
 
+    const filtered =
+        resultsSession.filtered_distribution;
+
+
+
     const employees =
         compileResults(
-            resultsSession.filtered_distribution
+            filtered
         );
 
 
-
-    console.log(
-        "COMPILED EMPLOYEES",
-        employees
-    );
-
-
-
-    // Employee table
 
     resultsContainer.appendChild(
 
@@ -246,12 +243,11 @@ function renderResults() {
 
 
 
-    // Printable sheet
-
     printContainer.appendChild(
 
         renderPrintSummary(
-            employees
+            employees,
+            filtered
         )
 
     );
@@ -261,9 +257,11 @@ function renderResults() {
 
 
 
-// =========================
+
+
+// =================================
 // DATE SELECTOR
-// =========================
+// =================================
 
 dateContainer.appendChild(
 
@@ -276,17 +274,23 @@ dateContainer.appendChild(
 
 
 
-// =========================
-// BUTTONS
-// =========================
 
-if (
-    printButton
-) {
 
-    printButton.onclick = () => {
+// =================================
+// EXPORT CSV
+// =================================
 
-        window.print();
+if(exportCSVButton) {
+
+
+    exportCSVButton.onclick =
+    () => {
+
+
+        exportTipDistributionCSV(
+            resultsSession.filtered_distribution
+        );
+
 
     };
 
@@ -294,14 +298,20 @@ if (
 
 
 
-if (
-    exportButton
-) {
-
-    exportButton.onclick = () => {
 
 
-        exportTipDistributionCSV(
+// =================================
+// SAVE JSON
+// =================================
+
+if(saveButton) {
+
+
+    saveButton.onclick =
+    () => {
+
+
+        saveTipDistributionJSON(
             tipDistribution
         );
 
@@ -312,25 +322,180 @@ if (
 
 
 
-// =========================
-// INITIAL LOAD
-// =========================
+
+
+// =================================
+// IMPORT JSON HISTORY
+// =================================
+
+if(loadButton) {
+
+
+    loadButton.onclick =
+    () => {
+
+        historyInput.click();
+
+    };
+
+}
+
+
+
+
+
+if(historyInput) {
+
+
+    historyInput.onchange =
+    async(event)=>{
+
+
+        const file =
+            event.target.files[0];
+
+
+        if(!file)
+            return;
+
+
+
+        try {
+
+
+            const imported =
+                await loadTipDistributionJSON(
+                    file
+                );
+
+
+
+            const existing =
+                JSON.parse(
+                    sessionStorage.getItem(
+                        "tipDistribution"
+                    )
+                ) || [];
+
+
+
+            const incoming =
+                imported.tipDistribution || [];
+
+
+
+            const merged =
+                Array.from(
+
+                    new Map(
+
+                        [
+                            ...existing,
+                            ...incoming
+
+                        ]
+
+                        .map(
+                            block => [
+                                block.id,
+                                block
+                            ]
+                        )
+
+                    )
+                    .values()
+
+                );
+
+
+
+            sessionStorage.setItem(
+
+                "tipDistribution",
+
+                JSON.stringify(
+                    merged
+                )
+
+            );
+
+
+
+            alert(
+                `Imported ${incoming.length} meal blocks. Total history: ${merged.length}`
+            );
+
+
+
+            location.reload();
+
+
+        }
+        catch(error) {
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Invalid HotTips JSON history file"
+            );
+
+
+        }
+
+
+    };
+
+}
+
+
+
+
+
+// =================================
+// PRINT
+// =================================
+
+if(printButton) {
+
+
+    printButton.onclick =
+    () => {
+
+        window.print();
+
+    };
+
+}
+
+
+
+
+
+// =================================
+// START
+// =================================
 
 renderResults();
 
 
 
-// =========================
-// GLOBAL DEBUG ACCESS
-// =========================
+
+
+// =================================
+// DEBUG
+// =================================
 
 window.RESULTS_SESSION =
     resultsSession;
 
 
-window.RENDER_RESULTS =
-    renderResults;
-
-
 window.TIP_DISTRIBUTION =
     tipDistribution;
+
+
+window.RENDER_RESULTS =
+    renderResults;

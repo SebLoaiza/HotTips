@@ -1,6 +1,6 @@
-export function renderTipTables(mealBlocks) {
+export function renderCashCollectedTables(mealBlocks) {
 
-    const output = document.getElementById("cardSalesTables");
+    const output = document.getElementById("cashCollectedTables");
 
     if (!output) {
         return;
@@ -12,18 +12,17 @@ export function renderTipTables(mealBlocks) {
 
     for (const meal of meals) {
 
-        const blocks = mealBlocks.filter(
-            b => b.meal === meal
-        );
+        const blocks =
+            mealBlocks.filter(
+                b => b.meal === meal
+            );
 
         if (blocks.length === 0) {
             continue;
         }
 
-        // ------------------------
-        // Collect all employees
-        // ------------------------
 
+        // Build a unique employee list for this meal
         const employeeMap = new Map();
 
         for (const block of blocks) {
@@ -43,20 +42,17 @@ export function renderTipTables(mealBlocks) {
 
         }
 
+
         const table = document.createElement("table");
         table.className = "summary-table";
 
-        // ------------------------
-        // Header
-        // ------------------------
 
+        // Header
         let html = `
-            <caption>${meal} Tips &amp; Gratuity Earned</caption>
+            <caption>${meal} Cash Collected</caption>
 
             <thead>
-
                 <tr>
-
                     <th>Employee</th>
         `;
 
@@ -70,23 +66,18 @@ export function renderTipTables(mealBlocks) {
 
         html += `
                     <th>Total</th>
-
                 </tr>
-
             </thead>
 
             <tbody>
         `;
 
-        // ------------------------
-        // Employee rows
-        // ------------------------
 
+        // Employee rows
         for (const [employeeId, employeeName] of employeeMap) {
 
             html += `
                 <tr>
-
                     <td>${employeeName}</td>
             `;
 
@@ -94,38 +85,35 @@ export function renderTipTables(mealBlocks) {
 
             for (const block of blocks) {
 
-                const employee = block.employees.find(
-                    e => e.employee_id === employeeId
-                );
+                const employee =
+                    block.employees.find(
+                        e => e.employee_id === employeeId
+                    );
 
-                const cardTips =
+                const cashCollected =
                     employee
-                        ? employee.card_tips
+                        ? employee.cash_sales
                         : 0;
 
-                employeeTotal += cardTips;
+                employeeTotal += cashCollected;
 
                 html += `
-                    <td>${money(cardTips)}</td>
+                    <td>${money(cashCollected)}</td>
                 `;
 
             }
 
             html += `
                     <td><strong>${money(employeeTotal)}</strong></td>
-
                 </tr>
             `;
 
         }
 
-        // ------------------------
-        // Totals row
-        // ------------------------
 
+        // Totals row
         html += `
             <tr>
-
                 <th>Total</th>
         `;
 
@@ -136,9 +124,7 @@ export function renderTipTables(mealBlocks) {
             let dayTotal = 0;
 
             for (const employee of block.employees) {
-
-                dayTotal += employee.card_tips;
-
+                dayTotal += employee.cash_sales;
             }
 
             grandTotal += dayTotal;
@@ -151,7 +137,6 @@ export function renderTipTables(mealBlocks) {
 
         html += `
                 <th>${money(grandTotal)}</th>
-
             </tr>
 
             </tbody>
@@ -165,9 +150,8 @@ export function renderTipTables(mealBlocks) {
 
 }
 
-function money(cents) {
 
-    cents = Number(cents) || 0;
+function money(cents) {
 
     return `$${(cents / 100).toFixed(2)}`;
 

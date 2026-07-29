@@ -1,7 +1,4 @@
-export function renderEmployeePoints(
-    mealBlocks,
-    refreshUI
-) {
+export function renderEmployeePoints(mealBlocks, refreshUI) {
 
     const output =
         document.getElementById("employeePoints");
@@ -10,127 +7,163 @@ export function renderEmployeePoints(
         return;
     }
 
+
     output.innerHTML = "";
 
 
-    // =========================
-    // Build Unique Employee List
-    // =========================
-
-    const uniqueEmployees =
-        new Map();
+    const employees = new Map();
 
 
     for (const block of mealBlocks) {
 
         for (const employee of block.employees) {
 
-            const key =
-                employee.normalized_name;
+            if (!employees.has(employee.employee_id)) {
 
-            if (!uniqueEmployees.has(key)) {
-
-                if (
-                    employee.tip_points === undefined
-                ) {
-                    employee.tip_points = 1;
-                }
-
-                uniqueEmployees.set(key, {
-
-                    name:
-                        employee.name,
-
-                    role:
-                        employee.role,
-
-                    normalized_name:
-                        employee.normalized_name,
-
-                    employees: []
-
-                });
+                employees.set(
+                    employee.employee_id,
+                    employee
+                );
 
             }
-
-            uniqueEmployees
-                .get(key)
-                .employees
-                .push(employee);
 
         }
 
     }
 
 
-    // =========================
-    // Render Inputs
-    // =========================
 
-    for (const person of uniqueEmployees.values()) {
-
-        const row =
-            document.createElement("div");
-
-        row.className =
-            "employee-point-row";
+    const table =
+        document.createElement("table");
 
 
-        const label =
-            document.createElement("span");
-
-        label.textContent =
-            `${person.name} (${person.role})`;
+    table.className =
+        "config-table";
 
 
-        const input =
-            document.createElement("input");
 
-        input.type = "number";
-        input.min = "0";
-        input.step = "0.1";
+    let html = `
 
-        input.value =
-            person.employees[0].tip_points;
+        <thead>
+
+            <tr>
+
+                <th>
+                    Employee
+                </th>
+
+                <th>
+                    Points
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+    `;
+
+
+
+    for (const employee of employees.values()) {
+
+
+        html += `
+
+            <tr>
+
+                <td>
+                    ${employee.name}
+                </td>
+
+
+                <td>
+
+                    <input
+                        class="points-input"
+                        type="number"
+                        step="0.25"
+                        min="0"
+                        value="${employee.tip_points ?? 1}"
+                        data-employee="${employee.employee_id}"
+                    >
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+
+    html += `
+
+        </tbody>
+
+    `;
+
+
+
+    table.innerHTML = html;
+
+
+    output.appendChild(table);
+
+
+
+    // Attach listeners AFTER creating the table
+
+    table.querySelectorAll(
+        ".points-input"
+    ).forEach(input => {
 
 
         input.addEventListener(
             "change",
             () => {
 
-                let value =
-                    Number(input.value);
+                const id =
+                    input.dataset.employee;
 
-                if (
-                    Number.isNaN(value) ||
-                    value < 0
-                ) {
 
-                    value = 0;
+                const value =
+                    Number(input.value) || 0;
+
+
+
+                for (const block of mealBlocks) {
+
+                    const employee =
+                        block.employees.find(
+                            e =>
+                                e.employee_id === id
+                        );
+
+
+                    if (employee) {
+
+                        employee.tip_points =
+                            value;
+
+                    }
 
                 }
 
-                input.value = value;
 
-                // Update every occurrence
-                for (const employee of person.employees) {
 
-                    employee.tip_points =
-                        value;
-
+                if (refreshUI) {
+                    refreshUI();
                 }
-
-                refreshUI();
 
             }
         );
 
 
-        row.appendChild(label);
-        row.appendChild(input);
+    });
 
-        output.appendChild(row);
-
-    }
 
 }

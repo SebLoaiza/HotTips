@@ -6,9 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Tip Distribution Tool - Inputs</title>
+    <title>
+        Tip Distribution Tool - Inputs
+    </title>
 
-    <link rel="stylesheet" href="./../style.css">
+    <link rel="stylesheet" href="./style.css">
 
 </head>
 
@@ -16,65 +18,160 @@
 
 <header>
 
-    <h1>Tip Distribution Tool</h1>
+    <h1>
+        Tip Distribution Tool
+    </h1>
 
 </header>
 
-<!-- ====================================== -->
-<!-- TRAINEE ASSIGNMENTS -->
-<!-- ====================================== -->
 
-<section class="panel">
-
-    <h2>4. Trainee Tip Assignments</h2>
-
-    <p>
-        Choose which employee should receive each trainee's share
-        of the tip pool.
-    </p>
-
-    <div id="traineeAssignments"></div>
-
-</section>
+<main>
 
 
-<!-- ====================================== -->
-<!-- CASH DROPS -->
-<!-- ====================================== -->
+<!-- Tabs -->
 
-<section class="panel">
+<div class="tabs">
 
-    <h2>5. Cash Drop Entry</h2>
+    <button class="tab-button active" data-tab="inputTab">
+        Inputs
+    </button>
 
-    <p>
-        Enter the amount of cash each employee turned in for each
-        meal block.
-    </p>
+    <button class="tab-button" data-tab="employeeTab">
+        Employee Config
+    </button>
 
-    <div id="cashDropTables"></div>
+    <button class="tab-button" data-tab="summaryTab">
+        Summaries
+    </button>
 
-</section>
-
-
-<!-- ====================================== -->
-<!-- REVIEW -->
-<!-- ====================================== -->
-
-<section class="panel">
-
-    <h2>6. Review</h2>
-
-    <p>
-        Once trainee assignments and cash drops are complete,
-        continue to calculate the final tip distribution.
-    </p>
-
-</section>
+</div>
 
 
-<!-- ====================================== -->
-<!-- NAVIGATION -->
-<!-- ====================================== -->
+
+<!-- Inputs -->
+
+<div id="inputTab" class="tab-page active">
+
+    <section class="panel">
+
+        <h2>
+            Cash Drop Entry
+        </h2>
+
+        <p>
+            Enter the amount of cash each employee turned in for each meal block.
+        </p>
+
+        <div id="cashDropTables"></div>
+
+    </section>
+
+
+
+    <section class="panel">
+
+        <h2>
+            Card Tips
+        </h2>
+
+        <p>
+            Review card tips and gratuity earned from card payments.
+        </p>
+
+        <div id="cardSalesTables"></div>
+
+    </section>
+
+</div>
+
+
+
+
+<!-- Employee Config -->
+
+<div id="employeeTab" class="tab-page">
+
+    <div class="config-grid">
+
+        <section class="panel config-card">
+
+            <h2>
+                Employee Tip Points
+            </h2>
+
+            <p class="section-description">
+                Adjust each employee's share weight in the tip pool.
+            </p>
+
+            <div id="employeePoints"></div>
+
+        </section>
+
+
+
+        <section class="panel config-card">
+
+            <h2>
+                Trainee Assignments
+            </h2>
+
+            <p class="section-description">
+                Assign each trainee's tips to the employee receiving credit.
+            </p>
+
+            <div id="traineeAssignments"></div>
+
+        </section>
+
+    </div>
+
+
+
+    <section class="panel debug-panel">
+
+        <h2>
+            Debug Objects
+        </h2>
+
+        <button id="debugObjects">
+            Show Current Objects
+        </button>
+
+        <pre id="debugOutput"></pre>
+
+    </section>
+
+</div>
+
+
+
+
+<!-- Summaries -->
+
+<div id="summaryTab" class="tab-page">
+
+    <section class="panel">
+
+        <h2>
+            Cash Tip Summary
+        </h2>
+
+        <p>
+            Review calculated cash tips by day.
+        </p>
+
+        <div id="cashSummaryDays"></div>
+
+        <div id="cashTipSummary"></div>
+
+    </section>
+
+</div>
+
+
+
+
+<!-- Navigation -->
 
 <section class="panel navigation-panel">
 
@@ -89,59 +186,12 @@
 </section>
 
 
-
-<section class="panel">
-
-    <h2>Cash Tip Summary</h2>
-
-    <div id="cashTipSummary"></div>
-
-</section>
-    <section class="panel">
-
-    <h2>Employee Tip Points</h2>
-
-    <p>
-        Set each employee's default weighting for tip distribution.
-    </p>
-
-    <div id="employeePoints"></div>
-
-</section>
+</main>
 
 
-
-
-    <section class="panel">
-
-    <h2>Debug Objects</h2>
-
-    <button id="debugObjects">
-        Show Current Objects
-    </button>
-
-    <pre id="debugOutput"></pre>
-
-</section>
-
-<section class="panel">
-
-    <h2>Cash Tip Summary</h2>
-
-    <div id="cashTipSummary"></div>
-
-</section>
-
-
-
-
-
-
-</section>
-
-<script
-    type="module" src="./app.js">
-</script>
+<script type="module" src="./tabs.js"></script>
+<script type="module" src="./app.js"></script>
 
 </body>
+
 </html>

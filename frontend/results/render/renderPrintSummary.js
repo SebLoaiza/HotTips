@@ -6,7 +6,8 @@ from "../utils/formatters.js";
 
 
 export function renderPrintSummary(
-    employees
+    employees,
+    distribution
 ) {
 
 
@@ -22,12 +23,34 @@ export function renderPrintSummary(
 
 
     // =========================
-    // FILTER QUALIFIED EMPLOYEES
+    // DATE RANGE
     // =========================
-    //
-    // Money is stored in cents.
-    // $250 = 25000
-    //
+
+    const dates =
+        [
+            ...new Set(
+                distribution.map(
+                    block => block.date
+                )
+            )
+        ];
+
+
+
+    const startDate =
+        dates[0] || "";
+
+
+
+    const endDate =
+        dates[dates.length - 1] || "";
+
+
+
+
+    // =========================
+    // QUALIFIED EMPLOYEES
+    // =========================
 
     const qualifiedEmployees =
         employees.filter(
@@ -44,14 +67,15 @@ export function renderPrintSummary(
 
 
 
+
     // =========================
-    // TOP 5 SALES
+    // TOP SALES
     // =========================
 
     const topSales =
         [...employees]
         .sort(
-            (a,b) =>
+            (a,b)=>
                 b.sales - a.sales
         )
         .slice(0,5);
@@ -61,18 +85,19 @@ export function renderPrintSummary(
 
 
     // =========================
-    // TOP 5 TIP %
+    // TOP TIP %
     // =========================
 
     const topTips =
         [...qualifiedEmployees]
         .sort(
-            (a,b) => {
+            (a,b)=>{
 
 
                 const tipA =
                     a.total_payout /
                     a.sales;
+
 
 
                 const tipB =
@@ -81,7 +106,7 @@ export function renderPrintSummary(
 
 
 
-                return tipB - tipA;
+                return tipB-tipA;
 
             }
         )
@@ -91,39 +116,33 @@ export function renderPrintSummary(
 
 
 
-
     // =========================
-    // TOP 5 TIPS / HOUR
+    // TOP TIPS / HOUR
     // =========================
 
     const topTipsPerHour =
         [...qualifiedEmployees]
         .sort(
-            (a,b) => {
-
-
-                const hoursA =
-                    a.worked_minutes / 60;
-
-
-                const hoursB =
-                    b.worked_minutes / 60;
-
+            (a,b)=>{
 
 
                 const tipsA =
                     a.total_payout /
-                    hoursA;
+                    (
+                        a.worked_minutes / 60
+                    );
+
 
 
                 const tipsB =
                     b.total_payout /
-                    hoursB;
+                    (
+                        b.worked_minutes / 60
+                    );
 
 
 
                 return tipsB - tipsA;
-
 
             }
         )
@@ -142,9 +161,16 @@ export function renderPrintSummary(
         </h2>
 
 
+        <h4>
+            ${startDate}
+            -
+            ${endDate}
+        </h4>
+
+
+
 
         <div class="printColumns">
-
 
 
             <div>
@@ -156,25 +182,25 @@ export function renderPrintSummary(
 
                 <ol>
 
-                    ${
-                        topSales.map(
-                            employee => `
+                ${
+                    topSales.map(
+                        employee => `
 
-                            <li>
+                        <li>
 
-                                ${employee.name}
+                            ${employee.name}
 
-                                -
+                            -
 
-                                ${formatMoney(
-                                    employee.sales
-                                )}
+                            ${formatMoney(
+                                employee.sales
+                            )}
 
-                            </li>
+                        </li>
 
-                            `
-                        ).join("")
-                    }
+                        `
+                    ).join("")
+                }
 
                 </ol>
 
@@ -183,9 +209,7 @@ export function renderPrintSummary(
 
 
 
-
             <div>
-
 
                 <h3>
                     Top 5 Tip %
@@ -197,46 +221,42 @@ export function renderPrintSummary(
                 </small>
 
 
-
                 <ol>
 
+                ${
+                    topTips.map(
+                        employee => {
 
-                    ${
-                        topTips.map(
-                            employee => {
 
-
-                                const percent =
-                                    (
-                                        employee.total_payout /
-                                        employee.sales
-                                    )
-                                    *
-                                    100;
+                            const percent =
+                                (
+                                    employee.total_payout /
+                                    employee.sales
+                                )
+                                *100;
 
 
 
-                                return `
+                            return `
 
-                                <li>
+                            <li>
 
-                                    ${employee.name}
+                                ${employee.name}
 
-                                    -
+                                -
 
-                                    ${percent.toFixed(2)}%
+                                ${percent.toFixed(2)}%
 
-                                </li>
+                            </li>
 
-                                `;
+                            `;
 
-                            }
-                        ).join("")
-                    }
 
+                        }
+                    ).join("")
+                }
 
                 </ol>
-
 
             </div>
 
@@ -245,7 +265,6 @@ export function renderPrintSummary(
 
 
             <div>
-
 
                 <h3>
                     Top 5 Tips / Hour
@@ -257,49 +276,43 @@ export function renderPrintSummary(
                 </small>
 
 
-
                 <ol>
 
-
-                    ${
-                        topTipsPerHour.map(
-                            employee => {
-
-
-                                const tipsPerHour =
-                                    employee.total_payout /
-                                    (
-                                        employee.worked_minutes / 60
-                                    );
+                ${
+                    topTipsPerHour.map(
+                        employee => {
 
 
-
-                                return `
-
-                                <li>
-
-                                    ${employee.name}
-
-                                    -
-
-                                    ${formatMoney(
-                                        tipsPerHour
-                                    )}
-
-                                    / hr
-
-                                </li>
-
-                                `;
+                            const hourly =
+                                employee.total_payout /
+                                (
+                                    employee.worked_minutes / 60
+                                );
 
 
-                            }
-                        ).join("")
-                    }
 
+                            return `
+
+                            <li>
+
+                                ${employee.name}
+
+                                -
+
+                                ${formatMoney(
+                                    hourly
+                                )}
+                                / hr
+
+                            </li>
+
+                            `;
+
+                        }
+                    ).join("")
+                }
 
                 </ol>
-
 
             </div>
 

@@ -1,36 +1,45 @@
-import { renderCashDropTables } from "./render/cashDropTables.js";
+import { renderCashDropTables } from "./render/cashDropGrid.js";
 import { renderTraineeAssignments } from "./render/renderTraineeAssignments.js";
 import { renderEmployeePoints } from "./render/renderEmployeePoints.js";
-import { calculateCashTips } from "./logic/calculateCashTips.js";
 import { renderCashTipSummary } from "./render/renderCashTipSummary.js";
+import { calculateCashTips } from "./logic/calculateCashTips.js";
+
 
 // =========================
-// LOAD SAVED DATA
+// LOAD DATA
 // =========================
 
 const currentMealBlocks =
     JSON.parse(
-        sessionStorage.getItem("mealBlocks")
+        sessionStorage.getItem(
+            "mealBlocks"
+        )
     ) || [];
 
 
-// =========================
-// PAGE
-// =========================
-
 if (currentMealBlocks.length === 0) {
 
-    alert("No imported data found.");
+    alert(
+        "No imported data found."
+    );
 
-    window.location.href = "/";
+    window.location.href =
+        "../start/start.html";
 
 }
+
+
+
+// =========================
+// INITIAL RENDER
+// =========================
 
 refreshUI();
 
 
+
 // =========================
-// UI
+// REFRESH UI
 // =========================
 
 function refreshUI() {
@@ -39,104 +48,94 @@ function refreshUI() {
         currentMealBlocks
     );
 
-    renderTraineeAssignments(
-        currentMealBlocks,
-        refreshUI
-    );
-
-    renderEmployeePoints(
-        currentMealBlocks,
-        refreshUI
-    );
 
     renderCashDropTables(
         currentMealBlocks,
         refreshUI
     );
 
+
+    renderTraineeAssignments(
+        currentMealBlocks,
+        refreshUI
+    );
+
+
+    renderEmployeePoints(
+        currentMealBlocks,
+        refreshUI
+    );
+
+
     renderCashTipSummary(
         currentMealBlocks
     );
 
 }
+
+
+
 // =========================
-// SAVE
+// SAVE STATE
 // =========================
 
 export function saveState() {
 
     sessionStorage.setItem(
         "mealBlocks",
-        JSON.stringify(currentMealBlocks)
+        JSON.stringify(
+            currentMealBlocks
+        )
     );
 
 }
 
 
+
 // =========================
-// BUTTONS
-// =========================
-
-document
-    .getElementById("backButton")
-    .addEventListener("click", () => {
-
-        saveState();
-
-        window.location.href = "/";
-
-    });
-
-document
-    .getElementById("continueButton")
-    .addEventListener("click", () => {
-
-        saveState();
-
-        alert("Page 3 not built yet.");
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-    // =========================
-// DEBUG OBJECTS
+// NAVIGATION
 // =========================
 
-const debugButton =
-    document.getElementById("debugObjects");
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
 
 
-if (debugButton) {
+if (backButton) {
 
-    debugButton.addEventListener(
+    backButton.addEventListener(
         "click",
         () => {
 
-            const debug = {
+            saveState();
 
-                mealBlocks:
-                    currentMealBlocks
+            window.location.href =
+                "../start/start.html";
 
-            };
+        }
+    );
+
+}
 
 
-            document
-                .getElementById("debugOutput")
-                .textContent =
-                JSON.stringify(
-                    debug,
-                    null,
-                    2
-                );
+
+const continueButton =
+    document.getElementById(
+        "continueButton"
+    );
+
+
+if (continueButton) {
+
+    continueButton.addEventListener(
+        "click",
+        () => {
+
+            saveState();
+
+            window.location.href =
+                "../distribution/distribution.html";
 
         }
     );
@@ -146,25 +145,43 @@ if (debugButton) {
 
 
 // =========================
-// BUTTONS
+// DEBUG
 // =========================
 
-document
-    .getElementById("backButton")
-    .addEventListener("click", () => {
-
-        saveState();
-
-        window.location.href = "/";
-
-    });
+const debugButton =
+    document.getElementById(
+        "debugObjects"
+    );
 
 
-document
-    .getElementById("continueButton")
-    .addEventListener("click", () => {
+if (debugButton) {
 
-        saveState();
+    debugButton.addEventListener(
+        "click",
+        () => {
 
-        window.location.href = "../distribution/distribution.html";
-    });
+            const output =
+                document.getElementById(
+                    "debugOutput"
+                );
+
+
+            if (!output) {
+                return;
+            }
+
+
+            output.textContent =
+                JSON.stringify(
+                    {
+                        mealBlocks:
+                            currentMealBlocks
+                    },
+                    null,
+                    2
+                );
+
+        }
+    );
+
+}
