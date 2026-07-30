@@ -306,21 +306,13 @@ function createCashCell(
 
 
     input.addEventListener(
-        "input",
-        () => {
-
+    "input",
+    () => {
 
             const value =
                 Math.round(
-                    (
-                        Number(input.value)
-                        ||
-                        0
-                    )
-                    *
-                    100
+                    (Number(input.value) || 0) * 100
                 );
-
 
 
             input.className =
@@ -335,10 +327,8 @@ function createCashCell(
                     "drop-equal"
                 );
 
-
         }
     );
-
 
 
 
