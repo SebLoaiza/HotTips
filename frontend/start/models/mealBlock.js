@@ -15,7 +15,9 @@ export function createMealBlock(date, dayKey, meal, start, end) {
         online_total: 0,
 
         employees: [],
-        orders: []
+        orders: [],
+
+        special_orders: []
 
     };
 

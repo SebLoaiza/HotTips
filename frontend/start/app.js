@@ -21,6 +21,9 @@ let currentMealParticipations = [];
 let currentOrders = [];
 let currentPayments = [];
 
+let shiftUploaded = false;
+let orderUploaded = false;
+let paymentUploaded = false;
 
 const shiftInput = document.getElementById("shiftCsv");
 const orderInput = document.getElementById("orderCsv");
@@ -31,6 +34,9 @@ const debugOutput = document.getElementById("debugOutput");
 const nextButton = document.getElementById("nextPage");
 const resetButton = document.getElementById("resetProcess");
 
+if (nextButton) {
+    nextButton.disabled = true;
+}
 
 // Shift CSV
 
@@ -47,8 +53,11 @@ if (shiftInput) {
         currentMealBlocks = createMealBlocks(rows);
         currentMealParticipations = createMealParticipations(rows);
 
-        rebuildMealBlocks();
+        shiftUploaded = true;
 
+        updateContinueButton();
+
+        rebuildMealBlocks();
     });
 
 }
@@ -68,6 +77,10 @@ if (orderInput) {
         currentOrders = createOrders(
             await readCsv(file)
         );
+
+        orderUploaded = true;
+
+        updateContinueButton();
 
         rebuildMealBlocks();
 
@@ -90,6 +103,10 @@ if (paymentInput) {
         currentPayments = createPayments(
             await readCsv(file)
         );
+
+        paymentUploaded = true;
+
+        updateContinueButton();
 
         rebuildMealBlocks();
 
@@ -176,6 +193,13 @@ function loadState() {
         JSON.parse(sessionStorage.getItem("payments")) || [];
 
 
+    shiftUploaded = currentMealBlocks.length > 0;
+    orderUploaded = currentOrders.length > 0;
+    paymentUploaded = currentPayments.length > 0;
+
+    updateContinueButton();
+
+
     return true;
 
 }
@@ -234,6 +258,15 @@ if (resetButton) {
         currentOrders = [];
         currentPayments = [];
 
+
+        shiftUploaded = false;
+        orderUploaded = false;
+        paymentUploaded = false;
+
+        updateContinueButton();
+
+
+
         // Reload fresh page
         window.location.reload();
 
@@ -246,5 +279,22 @@ if (resetButton) {
 if (loadState()) {
 
     refreshUI();
+
+}
+
+
+function updateContinueButton() {
+
+    if (!nextButton) {
+        return;
+    }
+
+
+    nextButton.disabled =
+        !(
+            shiftUploaded &&
+            orderUploaded &&
+            paymentUploaded
+        );
 
 }

@@ -2,8 +2,13 @@ export function assignOrders(mealBlocks, orders) {
 
     // Clear previous meal block assignments
     for (const block of mealBlocks) {
+
         block.orders = [];
+
+        block.special_orders = [];
+
         block.online_total = 0;
+
     }
 
 
@@ -11,29 +16,6 @@ export function assignOrders(mealBlocks, orders) {
     for (const order of orders) {
 
         let matches = 0;
-
-        // Skip voided orders
-        if (
-            String(order.voided)
-                .trim()
-                .toUpperCase() === "TRUE"
-        ) {
-
-            console.group(
-                "%c⚠️ VOIDED ORDER SKIPPED",
-                "color:orange;font-size:16px;font-weight:bold;"
-            );
-
-            console.warn(
-                "This order was marked as voided and was not assigned."
-            );
-
-            console.log(order);
-
-            console.groupEnd();
-
-            continue;
-        }
 
 
         for (const block of mealBlocks) {
@@ -66,7 +48,34 @@ export function assignOrders(mealBlocks, orders) {
                 orderTime <= end
             ) {
 
+
                 block.orders.push(order);
+
+
+
+                // ----------------------------------
+                // Special OTHER payment orders
+                // ----------------------------------
+
+                const hasSpecialOtherPayment =
+                    order.payments?.some(
+                        payment =>
+                            payment.type
+                                .trim()
+                                .toUpperCase() === "OTHER"
+                            &&
+                            (
+                                payment.tip > 0 ||
+                                payment.gratuity > 0
+                            )
+                    );
+
+
+                if (hasSpecialOtherPayment) {
+
+                    block.special_orders.push(order);
+
+                }
 
 
                 // Track online tips separately
@@ -89,6 +98,7 @@ export function assignOrders(mealBlocks, orders) {
         }
 
 
+
         // Order never found a meal block
         if (matches === 0) {
 
@@ -108,6 +118,7 @@ export function assignOrders(mealBlocks, orders) {
             console.groupEnd();
 
         }
+
 
 
         // Order matched more than one meal block

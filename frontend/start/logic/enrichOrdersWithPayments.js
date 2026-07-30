@@ -10,6 +10,9 @@ export function enrichOrdersWithPayments(orders, payments) {
         order.card_payment = 0;
         order.other_payment = 0;
 
+        // Store every payment attached to this order
+        order.payments = [];
+
         orderMap.set(order.order_id, order);
 
     }
@@ -24,7 +27,7 @@ export function enrichOrdersWithPayments(orders, payments) {
 
             console.log(
                 "No matching order:",
-                payment.order_id
+                payment.payment_id
             );
 
             continue;
@@ -32,9 +35,13 @@ export function enrichOrdersWithPayments(orders, payments) {
         }
 
 
+        // Keep the full payment object
+        order.payments.push(payment);
+
+
         console.log(
             "Payment:",
-            payment.order_id,
+            payment.payment_id,
             payment.type,
             payment.amount
         );
@@ -62,12 +69,22 @@ export function enrichOrdersWithPayments(orders, payments) {
                 break;
 
 
-            default:
+            case "OTHER":
 
                 order.other_payment += payment.amount;
 
+                console.log(" -> Other");
+
+                break;
+
+
+            default:
+
+                // Unknown payment types are treated as "Other"
+                order.other_payment += payment.amount;
+
                 console.log(
-                    " -> Other:",
+                    " -> Unknown Type:",
                     payment.type
                 );
 

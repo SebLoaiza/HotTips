@@ -48,7 +48,12 @@ export function createTipDistribution(
                 block.end,
 
 
+            special_orders:
+                    block.special_orders ?? [],
 
+            
+            online_total:
+                block.online_total ?? 0,
             // ------------------------
             // Employees
             // ------------------------

@@ -51,6 +51,10 @@ import {
 }
 from "./logic/loadTipDistributionJSON.js";
 
+import {
+    renderSpecialOrders
+}
+from "./render/renderSpecialOrders.js";
 
 
 // =================================
@@ -252,6 +256,13 @@ function renderResults() {
 
     );
 
+
+
+    resultsContainer.appendChild(
+    renderSpecialOrders(
+        filtered
+    )
+);
 
 }
 
@@ -499,3 +510,10 @@ window.TIP_DISTRIBUTION =
 
 window.RENDER_RESULTS =
     renderResults;
+
+
+
+console.log(
+    "TIP DISTRIBUTION",
+    tipDistribution
+);

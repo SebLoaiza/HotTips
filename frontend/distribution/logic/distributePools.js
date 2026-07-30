@@ -17,6 +17,18 @@ export function distributePools(
 
 
     // =========================
+    // Add Online Tips
+    // Split Across Active Pools
+    // Remainder -> BOH
+    // =========================
+
+    distributeOnlineTotal(
+        mealBlock
+    );
+
+
+
+    // =========================
     // BOH POOL
     // =========================
 
@@ -57,6 +69,147 @@ export function distributePools(
 
 
 
+function distributeOnlineTotal(
+    mealBlock
+) {
+
+
+    const onlineTotal =
+        mealBlock.online_total ?? 0;
+
+
+
+    if (
+        onlineTotal <= 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    const pools = [
+
+        {
+            key: "servers",
+
+            employees:
+                mealBlock.servers
+
+        },
+
+
+        {
+            key: "boh",
+
+            employees:
+                mealBlock.boh
+
+        },
+
+
+        {
+            key: "busser",
+
+            employees:
+                mealBlock.bussers
+
+        },
+
+
+        {
+            key: "host",
+
+            employees:
+                mealBlock.hosts
+
+        }
+
+    ];
+
+
+
+    // Only pools that actually exist receive online tips
+
+    const activePools =
+        pools.filter(
+            pool =>
+                pool.employees &&
+                pool.employees.length > 0
+        );
+
+
+
+    if (
+        activePools.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    const split =
+        Math.floor(
+            onlineTotal /
+            activePools.length
+        );
+
+
+
+    let distributed = 0;
+
+
+
+    for (
+        const pool of activePools
+    ) {
+
+
+        mealBlock[
+            `${pool.key}_card`
+        ] =
+            (
+                mealBlock[
+                    `${pool.key}_card`
+                ] ?? 0
+            )
+            +
+            split;
+
+
+
+        distributed += split;
+
+    }
+
+
+
+    // Give leftover cents to BOH
+
+    const remainder =
+        onlineTotal -
+        distributed;
+
+
+
+    mealBlock.boh_card =
+        (
+            mealBlock.boh_card ?? 0
+        )
+        +
+        remainder;
+
+
+}
+
+
+
+
+
+
 function distributePool(
     employees,
     cardAmount,
@@ -82,9 +235,6 @@ function distributePool(
     // Must:
     // - Work at least 90 mins
     // - Have points above 0
-    //
-    // Only these employees
-    // participate in pool split
     //
 
     const eligibleEmployees =
@@ -217,7 +367,7 @@ function distributePool(
 
         // =========================
         // Give Remainder
-        // Only to Eligible Person
+        // Last Eligible Employee
         // =========================
 
         if (
@@ -237,11 +387,11 @@ function distributePool(
 
 
 
-        employee.pool_card_received =
+        employee.pool_card_received +=
             cardShare;
 
 
-        employee.pool_cash_received =
+        employee.pool_cash_received +=
             cashShare;
 
 

@@ -13,3 +13,5 @@ newProcessButton.onclick = () => {
 historyButton.onclick = () => {
     window.location.href = "./results/results.html";
 };
+
+

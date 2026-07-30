@@ -52,13 +52,36 @@ export function createPayments(rows) {
 
     }
 
+
     const payments = [];
 
     const seen = new Set();
 
+
     for (const row of rows) {
 
+
         const payment = new Payment(row);
+
+
+
+        // Never store VOIDED payments
+        if (
+            payment.status.trim().toUpperCase() === "VOIDED" ||
+            payment.status.trim().toUpperCase() === "DENIED"
+
+        ) {
+
+            console.log(
+                "Ignoring VOIDED or DENIED payment:",
+                payment.payment_id
+            );
+
+            continue;
+
+        }
+
+
 
         if (seen.has(payment.payment_id)) {
 
@@ -69,11 +92,13 @@ export function createPayments(rows) {
 
         }
 
+
         seen.add(payment.payment_id);
 
         payments.push(payment);
 
     }
+
 
     console.table(payments);
 
