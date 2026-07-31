@@ -31,10 +31,74 @@ if (currentMealBlocks.length === 0) {
 
 
 // =========================
-// INITIAL RENDER
+// DOM
 // =========================
 
-refreshUI();
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
+
+
+const continueButton =
+    document.getElementById(
+        "continueButton"
+    );
+
+
+const debugButton =
+    document.getElementById(
+        "debugObjects"
+    );
+
+
+
+
+// =========================
+// VALIDATION
+// =========================
+
+function validateInputs() {
+
+    let valid = true;
+
+    for (const block of currentMealBlocks) {
+
+        for (const employee of block.employees) {
+
+            if (
+                !employee.role
+                    .toLowerCase()
+                    .includes("trainee")
+            ) {
+
+                continue;
+
+            }
+
+            const hasTrainer =
+                employee.trainer_employee_id != null;
+
+            const noTrainer =
+                employee.no_trainer === true;
+
+            if (!hasTrainer && !noTrainer) {
+
+                valid = false;
+
+            }
+
+        }
+
+    }
+
+    if (continueButton) {
+
+        continueButton.disabled = !valid;
+
+    }
+
+}
 
 
 
@@ -71,6 +135,9 @@ function refreshUI() {
         currentMealBlocks
     );
 
+
+    validateInputs();
+
 }
 
 
@@ -96,12 +163,6 @@ export function saveState() {
 // NAVIGATION
 // =========================
 
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-
 if (backButton) {
 
     backButton.addEventListener(
@@ -118,12 +179,6 @@ if (backButton) {
 
 }
 
-
-
-const continueButton =
-    document.getElementById(
-        "continueButton"
-    );
 
 
 if (continueButton) {
@@ -147,12 +202,6 @@ if (continueButton) {
 // =========================
 // DEBUG
 // =========================
-
-const debugButton =
-    document.getElementById(
-        "debugObjects"
-    );
-
 
 if (debugButton) {
 
@@ -185,3 +234,11 @@ if (debugButton) {
     );
 
 }
+
+
+
+// =========================
+// INITIAL RENDER
+// =========================
+
+refreshUI();

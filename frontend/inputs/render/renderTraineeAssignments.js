@@ -20,7 +20,9 @@ export function renderTraineeAssignments(
 
 
 
+    // =========================
     // Group meal blocks by date
+    // =========================
 
     for (const block of mealBlocks) {
 
@@ -57,12 +59,13 @@ export function renderTraineeAssignments(
                 trainees
             });
 
-
     }
 
 
 
-
+    // =========================
+    // Render
+    // =========================
 
     for (const [date, meals] of dates) {
 
@@ -126,7 +129,6 @@ export function renderTraineeAssignments(
 
 
 
-
                 const card =
                     document.createElement("div");
 
@@ -157,7 +159,6 @@ export function renderTraineeAssignments(
 
 
 
-
                 const select =
                     document.createElement("select");
 
@@ -166,6 +167,10 @@ export function renderTraineeAssignments(
                     "assignment-select";
 
 
+
+                // =========================
+                // No Selection
+                // =========================
 
                 const blank =
                     document.createElement("option");
@@ -177,12 +182,37 @@ export function renderTraineeAssignments(
                     "-- Select Employee --";
 
 
-                select.appendChild(blank);
+                select.appendChild(
+                    blank
+                );
 
 
 
+                // =========================
+                // Explicit No Trainer
+                // =========================
+
+                const noTrainer =
+                    document.createElement("option");
 
 
+                noTrainer.value =
+                    "__NO_TRAINER__";
+
+
+                noTrainer.textContent =
+                    "No Trainer";
+
+
+                select.appendChild(
+                    noTrainer
+                );
+
+
+
+                // =========================
+                // Employees
+                // =========================
 
                 for (const trainer of trainers) {
 
@@ -199,21 +229,38 @@ export function renderTraineeAssignments(
                         trainer.name;
 
 
+                    select.appendChild(
+                        option
+                    );
 
-
-                    if (
-                        trainee.trainer_employee_id ===
-                        trainer.employee_id
-                    ) {
-
-                        option.selected = true;
-
-                    }
+                }
 
 
 
-                    select.appendChild(option);
+                // =========================
+                // Restore Current State
+                // =========================
 
+                if (
+                    trainee.no_trainer === true
+                ) {
+
+                    select.value =
+                        "__NO_TRAINER__";
+
+                }
+                else if (
+                    trainee.trainer_employee_id
+                ) {
+
+                    select.value =
+                        trainee.trainer_employee_id;
+
+                }
+                else {
+
+                    select.value =
+                        "";
 
                 }
 
@@ -221,10 +268,42 @@ export function renderTraineeAssignments(
 
 
 
+                // =========================
+                // Change Handler
+                // =========================
 
                 select.addEventListener(
                     "change",
                     () => {
+
+
+                        // Manual No Trainer choice
+
+                        if (
+                            select.value === "__NO_TRAINER__"
+                        ) {
+
+
+                            trainee.no_trainer =
+                                true;
+
+
+                            trainee.trainer_employee_id =
+                                null;
+
+
+                            trainee.trainer_employee_name =
+                                "";
+
+
+                            refreshUI();
+
+                            return;
+
+                        }
+
+
+
 
 
                         const trainer =
@@ -236,7 +315,12 @@ export function renderTraineeAssignments(
 
 
 
+
                         if (trainer) {
+
+
+                            trainee.no_trainer =
+                                false;
 
 
                             trainee.trainer_employee_id =
@@ -248,7 +332,14 @@ export function renderTraineeAssignments(
 
 
                         }
+
                         else {
+
+
+                            // Reset unanswered
+
+                            trainee.no_trainer =
+                                false;
 
 
                             trainee.trainer_employee_id =
@@ -264,6 +355,7 @@ export function renderTraineeAssignments(
 
                         refreshUI();
 
+
                     }
                 );
 
@@ -271,27 +363,37 @@ export function renderTraineeAssignments(
 
 
 
+                card.appendChild(
+                    info
+                );
 
-                card.appendChild(info);
 
-                card.appendChild(select);
+                card.appendChild(
+                    select
+                );
 
 
-                mealSection.appendChild(card);
+                mealSection.appendChild(
+                    card
+                );
 
 
             }
 
 
 
-            dateSection.appendChild(mealSection);
+            dateSection.appendChild(
+                mealSection
+            );
 
 
         }
 
 
 
-        output.appendChild(dateSection);
+        output.appendChild(
+            dateSection
+        );
 
 
     }
