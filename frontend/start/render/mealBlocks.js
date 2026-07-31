@@ -1,5 +1,8 @@
-export function renderMealBlocks(mealBlocks, rebuild) {
+//THIS IS FOR RENDERING THE MEAL BLOCKS IN THE CONSOLE IF YOU WANT THIS TO BE PUT IN THE final batch be my guest
 
+console.log("mealBlocks renderer loaded");
+export function renderMealBlocks(mealBlocks, rebuild) {
+    console.log("renderMealBlocks called", mealBlocks);
     const output = document.getElementById("mealBlocks");
 
     if (!output) {

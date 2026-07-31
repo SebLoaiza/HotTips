@@ -11,7 +11,6 @@ import { assignOrders } from "./logic/assignOrders.js";
 import { enrichOrdersWithPayments } from "./logic/enrichOrdersWithPayments.js";
 import { calculateParticipationTotals } from "./logic/calculateParticipationTotals.js";
 
-import { renderMealBlocks } from "./render/mealBlocks.js";
 import { renderTipTables } from "./render/tipTables.js";
 import { renderCashCollectedTables } from "./render/cashCollectedTables.js";
 
@@ -138,8 +137,6 @@ function rebuildMealBlocks() {
 
 function refreshUI() {
 
-    renderMealBlocks(currentMealBlocks, rebuildMealBlocks);
-
     renderTipTables(currentMealBlocks);
 
     renderCashCollectedTables(currentMealBlocks);
@@ -191,13 +188,6 @@ function loadState() {
 
     currentPayments =
         JSON.parse(sessionStorage.getItem("payments")) || [];
-
-
-    shiftUploaded = currentMealBlocks.length > 0;
-    orderUploaded = currentOrders.length > 0;
-    paymentUploaded = currentPayments.length > 0;
-
-    updateContinueButton();
 
 
     return true;
