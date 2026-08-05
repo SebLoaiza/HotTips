@@ -2,6 +2,43 @@
    GLOBAL
 ========================= */
 
+* {
+    box-sizing:border-box;
+}
+
+
+:root {
+
+    --background:#0f1020;
+
+    --section:#181a2b;
+
+    --section-dark:#121421;
+
+    --input:#242840;
+
+    --output:#202338;
+
+    --border:#343852;
+
+
+    --cyan:#9beeff;
+
+    --pink:#ff2e97;
+
+    --pink-hover:#ff55aa;
+
+    --gold:#fff261;
+
+
+    --text:#f5f5f7;
+
+    --muted:#bdb9cc;
+
+}
+
+
+
 body {
 
     font-family:
@@ -9,29 +46,32 @@ body {
         Helvetica,
         sans-serif;
 
-    background:
-        #f4f6f8;
+    background:var(--background);
 
-    margin:
-        0;
+    margin:0;
 
-    color:
-        #222;
+    padding:0;
+
+    color:var(--text);
+
+    overflow-x:hidden;
 
 }
 
 
 
+/* =========================
+   HEADER
+========================= */
+
+
 header {
 
-    background:
-        #1f2937;
+    background:var(--section);
 
-    color:
-        white;
+    border-bottom:1px solid var(--border);
 
-    padding:
-        20px 30px;
+    padding:20px 30px;
 
 }
 
@@ -39,12 +79,69 @@ header {
 
 header h1 {
 
-    margin:
-        0;
+    margin:0;
+
+    color:var(--cyan);
+
+    font-size:34px;
 
 }
 
 
+
+.app-header {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:25px;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.logo {
+
+    width:120px;
+
+    max-width:30%;
+
+    height:auto;
+
+}
+
+
+
+.header-text {
+
+    text-align:left;
+
+}
+
+
+
+.header-text h1 {
+
+    margin:0;
+
+}
+
+
+
+.header-text p {
+
+    margin:5px 0 0;
+
+    color:var(--muted);
+
+    font-size:18px;
+
+}
 
 
 
@@ -55,29 +152,21 @@ header h1 {
 
 .panel {
 
-    background:
-        white;
+    background:var(--section);
 
-    margin:
-        25px auto;
+    border:1px solid var(--border);
 
-    padding:
-        25px;
+    margin:25px auto;
 
-    width:
-        90%;
+    padding:25px;
 
-    border-radius:
-        12px;
+    width:min(95%,1300px);
 
-    box-shadow:
-        0 3px 10px rgba(0,0,0,.08);
+    border-radius:6px;
+
+    overflow:hidden;
 
 }
-
-
-
-
 
 
 
@@ -88,17 +177,13 @@ header h1 {
 
 .day-tabs {
 
-    display:
-        flex;
+    display:flex;
 
-    gap:
-        10px;
+    gap:10px;
 
-    margin-bottom:
-        25px;
+    margin-bottom:25px;
 
-    flex-wrap:
-        wrap;
+    flex-wrap:wrap;
 
 }
 
@@ -106,29 +191,21 @@ header h1 {
 
 .day-tabs button {
 
-    border:
-        none;
+    border:1px solid var(--border);
 
-    background:
-        #e5e7eb;
+    background:var(--section);
 
-    padding:
-        12px 20px;
+    color:var(--text);
 
-    border-radius:
-        8px;
+    padding:12px 20px;
 
-    cursor:
-        pointer;
+    border-radius:4px;
 
-    font-size:
-        15px;
+    cursor:pointer;
 
-    font-weight:
-        bold;
+    font-size:15px;
 
-    transition:
-        .2s;
+    font-weight:bold;
 
 }
 
@@ -136,8 +213,7 @@ header h1 {
 
 .day-tabs button:hover {
 
-    background:
-        #d1d5db;
+    border-color:var(--cyan);
 
 }
 
@@ -145,17 +221,13 @@ header h1 {
 
 .day-tabs button.active {
 
-    background:
-        #2563eb;
+    background:var(--pink);
 
-    color:
-        white;
+    color:white;
+
+    border-color:var(--pink);
 
 }
-
-
-
-
 
 
 
@@ -166,20 +238,17 @@ header h1 {
 
 .meal-block {
 
-    margin-bottom:
-        35px;
+    margin-bottom:35px;
 
-    padding:
-        20px;
+    padding:20px;
 
-    border-radius:
-        12px;
+    border-radius:6px;
 
-    background:
-        #fafafa;
+    background:var(--section-dark);
 
-    border:
-        1px solid #ddd;
+    border-left:4px solid var(--cyan);
+
+    overflow:hidden;
 
 }
 
@@ -187,23 +256,15 @@ header h1 {
 
 .meal-block h2 {
 
-    margin-top:
-        0;
+    margin-top:0;
 
-    color:
-        #111827;
+    color:var(--gold);
 
-    border-bottom:
-        2px solid #2563eb;
+    border-bottom:2px solid var(--cyan);
 
-    padding-bottom:
-        8px;
+    padding-bottom:8px;
 
 }
-
-
-
-
 
 
 
@@ -214,17 +275,13 @@ header h1 {
 
 .money-summary {
 
-    display:
-        flex;
+    display:flex;
 
-    gap:
-        15px;
+    gap:15px;
 
-    flex-wrap:
-        wrap;
+    flex-wrap:wrap;
 
-    margin-bottom:
-        20px;
+    margin-bottom:20px;
 
 }
 
@@ -232,20 +289,17 @@ header h1 {
 
 .money-card {
 
-    background:
-        white;
+    background:var(--output);
 
-    border:
-        1px solid #ddd;
+    border:1px solid var(--border);
 
-    padding:
-        15px;
+    padding:15px;
 
-    border-radius:
-        10px;
+    border-radius:6px;
 
-    min-width:
-        160px;
+    min-width:160px;
+
+    flex:1;
 
 }
 
@@ -253,14 +307,11 @@ header h1 {
 
 .money-card h3 {
 
-    margin:
-        0 0 5px 0;
+    margin:0 0 5px;
 
-    font-size:
-        14px;
+    font-size:14px;
 
-    color:
-        #666;
+    color:var(--gold);
 
 }
 
@@ -268,20 +319,15 @@ header h1 {
 
 .money-card p {
 
-    margin:
-        0;
+    margin:0;
 
-    font-size:
-        22px;
+    font-size:22px;
 
-    font-weight:
-        bold;
+    font-weight:bold;
+
+    color:var(--text);
 
 }
-
-
-
-
 
 
 
@@ -292,8 +338,19 @@ header h1 {
 
 .employee-table {
 
-    margin-top:
-        25px;
+    margin-top:25px;
+
+    width:100%;
+
+    max-width:100%;
+
+    overflow-x:auto;
+
+    background:var(--section-dark);
+
+    border:1px solid var(--border);
+
+    border-radius:6px;
 
 }
 
@@ -301,8 +358,9 @@ header h1 {
 
 .employee-table h3 {
 
-    margin-bottom:
-        10px;
+    margin:15px;
+
+    color:var(--cyan);
 
 }
 
@@ -310,20 +368,13 @@ header h1 {
 
 .employee-table table {
 
-    width:
-        100%;
+    width:100%;
 
-    border-collapse:
-        collapse;
+    min-width:700px;
 
-    background:
-        white;
+    border-collapse:collapse;
 
-    border-radius:
-        10px;
-
-    overflow:
-        hidden;
+    background:var(--output);
 
 }
 
@@ -331,17 +382,17 @@ header h1 {
 
 .employee-table th {
 
-    background:
-        #1f2937;
+    background:#252942;
 
-    color:
-        white;
+    color:var(--gold);
 
-    padding:
-        10px;
+    padding:10px;
 
-    text-align:
-        left;
+    text-align:left;
+
+    border:1px solid var(--border);
+
+    white-space:nowrap;
 
 }
 
@@ -349,24 +400,21 @@ header h1 {
 
 .employee-table td {
 
-    padding:
-        10px;
+    padding:10px;
 
-    border-bottom:
-        1px solid #ddd;
+    border:1px solid var(--border);
 
-}
-
-
-
-.employee-table tr:hover {
-
-    background:
-        #f3f4f6;
+    white-space:nowrap;
 
 }
 
 
+
+.employee-table tr:hover td {
+
+    background:#252942;
+
+}
 
 
 
@@ -377,22 +425,29 @@ header h1 {
 
 .tip-point-input {
 
-    width:
-        70px;
+    width:70px;
 
-    padding:
-        5px;
+    padding:5px;
 
-    border-radius:
-        6px;
+    border-radius:4px;
 
-    border:
-        1px solid #aaa;
+    border:1px solid var(--border);
+
+    background:var(--input);
+
+    color:white;
 
 }
 
 
 
+.tip-point-input:focus {
+
+    outline:none;
+
+    border-color:var(--cyan);
+
+}
 
 
 
@@ -403,26 +458,19 @@ header h1 {
 
 pre {
 
-    background:
-        #111827;
+    background:#090b14;
 
-    color:
-        #d1fae5;
+    color:#d1fae5;
 
-    padding:
-        15px;
+    padding:15px;
 
-    border-radius:
-        8px;
+    border:1px solid var(--border);
 
-    overflow:
-        auto;
+    border-radius:6px;
+
+    overflow:auto;
 
 }
-
-
-
-
 
 
 
@@ -433,8 +481,7 @@ pre {
 
 button {
 
-    font-family:
-        inherit;
+    font-family:inherit;
 
 }
 
@@ -442,45 +489,119 @@ button {
 
 .navigation-panel {
 
-    display:
-        flex;
+    display:flex;
 
-    justify-content:
-        space-between;
+    justify-content:space-between;
+
+    gap:15px;
 
 }
 
 
 
 .navigation-panel button,
+.top-navigation button,
 #resultsButton {
 
-    background:
-        #2563eb;
+    background:var(--pink);
 
-    color:
-        white;
+    color:white;
 
-    border:
-        none;
+    border:none;
 
-    padding:
-        12px 20px;
+    padding:12px 20px;
 
-    border-radius:
-        8px;
+    border-radius:4px;
 
-    cursor:
-        pointer;
+    cursor:pointer;
 
 }
 
 
 
 .navigation-panel button:hover,
+.top-navigation button:hover,
 #resultsButton:hover {
 
-    background:
-        #1d4ed8;
+    background:var(--pink-hover);
+
+}
+
+
+
+/* =========================
+   GENERAL RESPONSIVE
+========================= */
+
+
+@media(max-width:900px){
+
+
+    body {
+
+        padding:0;
+
+    }
+
+
+    .panel {
+
+        width:100%;
+
+        padding:18px;
+
+        margin:15px auto;
+
+        border-radius:0;
+
+    }
+
+
+    .app-header {
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+
+    .header-text {
+
+        text-align:center;
+
+    }
+
+
+    .navigation-panel {
+
+        flex-direction:column;
+
+    }
+
+
+    .employee-table {
+
+        border-radius:4px;
+
+    }
+
+
+}
+
+/* =========================
+   TOP NAVIGATION
+========================= */
+
+
+.top-navigation {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:25px;
 
 }

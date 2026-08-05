@@ -517,3 +517,25 @@ console.log(
     "TIP DISTRIBUTION",
     tipDistribution
 );
+
+// =================================
+// BACK BUTTON
+// =================================
+
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
+
+
+if(backButton) {
+
+    backButton.onclick =
+    () => {
+
+        window.location.href =
+            "../distribution/distribution.html";
+
+    };
+
+}

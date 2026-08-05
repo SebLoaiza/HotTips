@@ -350,6 +350,44 @@ document
 
 
 
+// =========================
+// TOP NAVIGATION
+// =========================
+
+document
+.getElementById("topBackButton")
+?.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../inputs/inputs.html";
+
+    }
+);
+
+
+
+document
+.getElementById("topContinueButton")
+?.addEventListener(
+    "click",
+    () => {
+
+        sessionStorage.setItem(
+            "tipDistribution",
+            JSON.stringify(
+                tipDistribution
+            )
+        );
+
+
+        window.location.href =
+            "../results/results.html";
+
+    }
+);
+
 
 document
 .getElementById("continueButton")

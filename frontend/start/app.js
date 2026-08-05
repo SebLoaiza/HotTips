@@ -258,12 +258,13 @@ if (resetButton) {
 
 
         // Reload fresh page
-        window.location.reload();
+        //window.location.reload();
+        
+        window.location.href = "../index.html";
 
     };
 
 }
-
 
 
 if (loadState()) {

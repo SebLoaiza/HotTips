@@ -1,34 +1,39 @@
 /* =========================
-   Base
+   Global
 ========================= */
 
 * {
-    box-sizing: border-box;
+    box-sizing:border-box;
 }
 
 
 :root {
 
-    --bg: #f5f7fb;
+    --background:#0f1020;
 
-    --panel: #ffffff;
+    --section:#181a2b;
 
-    --border: #e2e8f0;
+    --section-dark:#121421;
 
-    --header: #f8fafc;
+    --input:#242840;
 
-    --text: #1f2937;
+    --output:#202338;
 
-    --muted: #6b7280;
+    --border:#343852;
 
-    --accent: #111827;
 
-    --hover: #f9fafb;
+    --cyan:#9beeff;
 
-    --radius: 14px;
+    --pink:#ff2e97;
 
-    --shadow:
-        0 6px 20px rgba(15,23,42,.06);
+    --pink-hover:#ff55aa;
+
+    --gold:#fff261;
+
+
+    --text:#f5f5f7;
+
+    --muted:#bdb9cc;
 
 }
 
@@ -36,38 +41,107 @@
 
 body {
 
-    margin: 0;
+    margin:0;
 
-    padding: 30px;
+    padding:30px;
 
     font-family:
-        Inter,
         Arial,
+        Helvetica,
         sans-serif;
 
-    background: var(--bg);
+    background:var(--background);
 
-    color: var(--text);
+    color:var(--text);
+
+}
+
+
+main {
+
+    max-width:1300px;
+
+    margin:auto;
 
 }
 
 
 
-header {
+/* =========================
+   Header + Logo
+========================= */
 
-    margin-bottom: 28px;
+
+.app-header {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:25px;
+
+    margin-bottom:30px;
 
 }
 
+
+
+.logo {
+
+    width:120px;
+
+    max-width:30%;
+
+    height:auto;
+
+    display:block;
+
+}
+
+
+
+.header-text {
+
+    text-align:left;
+
+}
+
+
+
+.header-text h1 {
+
+    margin:0;
+
+    font-size:34px;
+
+    color:var(--cyan);
+
+}
+
+
+
+.header-text p {
+
+    margin:5px 0 0;
+
+    font-size:18px;
+
+    color:var(--muted);
+
+}
+
+
+
+/* =========================
+   Headings
+========================= */
 
 
 h1 {
 
-    margin: 0;
-
-    font-size: 34px;
-
-    font-weight: 700;
+    color:var(--cyan);
 
 }
 
@@ -75,9 +149,9 @@ h1 {
 
 h2 {
 
-    margin: 0 0 10px;
+    color:var(--gold);
 
-    font-size: 22px;
+    margin-bottom:15px;
 
 }
 
@@ -85,9 +159,7 @@ h2 {
 
 h3 {
 
-    margin: 0;
-
-    font-size: 20px;
+    color:var(--cyan);
 
 }
 
@@ -95,84 +167,7 @@ h3 {
 
 p {
 
-    margin: 6px 0 0;
-
-    color: var(--muted);
-
-    line-height: 1.5;
-
-}
-
-
-
-/* =========================
-   Tabs
-========================= */
-
-
-.tabs {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-bottom: 24px;
-
-}
-
-
-
-.tab-button {
-
-    border: none;
-
-    background: #e5e7eb;
-
-    color: #374151;
-
-    padding: 12px 22px;
-
-    border-radius: 10px;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition: .18s;
-
-}
-
-
-
-.tab-button:hover {
-
-    background: #d1d5db;
-
-}
-
-
-
-.tab-button.active {
-
-    background: var(--accent);
-
-    color: white;
-
-}
-
-
-
-.tab-page {
-
-    display: none;
-
-}
-
-
-
-.tab-page.active {
-
-    display: block;
+    color:var(--muted);
 
 }
 
@@ -184,17 +179,20 @@ p {
 
 
 .panel,
-.cash-grid-section {
+.cash-grid-section,
+.distribution-meal,
+.money-summary,
+.employee-table {
 
-    background: var(--panel);
+    background:var(--section);
 
-    border-radius: var(--radius);
+    border:1px solid var(--border);
 
-    padding: 24px;
+    padding:25px;
 
-    margin-bottom: 24px;
+    margin-bottom:25px;
 
-    box-shadow: var(--shadow);
+    border-radius:4px;
 
 }
 
@@ -207,23 +205,19 @@ p {
 
 button {
 
-    border: none;
+    background:var(--pink);
 
-    background: var(--accent);
+    color:white;
 
-    color: white;
+    border:none;
 
-    height: 42px;
+    padding:10px 20px;
 
-    padding: 0 20px;
+    border-radius:3px;
 
-    border-radius: 10px;
+    font-size:15px;
 
-    font-size: 14px;
-
-    cursor: pointer;
-
-    transition: .18s;
+    cursor:pointer;
 
 }
 
@@ -231,7 +225,7 @@ button {
 
 button:hover {
 
-    background: #374151;
+    background:var(--pink-hover);
 
 }
 
@@ -239,9 +233,9 @@ button:hover {
 
 .navigation-panel {
 
-    display: flex;
+    display:flex;
 
-    justify-content: space-between;
+    justify-content:space-between;
 
 }
 
@@ -255,17 +249,15 @@ button:hover {
 input,
 select {
 
-    height: 38px;
+    background:var(--input);
 
-    padding: 0 10px;
+    color:white;
 
-    border: 1px solid var(--border);
+    border:1px solid var(--border);
 
-    border-radius: 8px;
+    padding:8px 10px;
 
-    background: white;
-
-    font-size: 14px;
+    border-radius:3px;
 
 }
 
@@ -274,72 +266,67 @@ select {
 input:focus,
 select:focus {
 
-    outline: none;
+    outline:none;
 
-    border-color: var(--accent);
-
-    box-shadow:
-        0 0 0 3px rgba(17,24,39,.08);
+    border-color:var(--cyan);
 
 }
 
 
 
 /* =========================
-   Config Tables
+   Tables
 ========================= */
 
 
-.config-grid {
+.config-table,
+.summary-table,
+.money-summary table,
+.employee-table table {
 
-    display: grid;
+    width:100%;
 
-    grid-template-columns: 1fr 1fr;
-
-    gap: 22px;
-
-}
-
-
-
-.config-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
+    border-collapse:collapse;
 
 }
 
 
 
-.config-table th {
+th {
 
-    background: var(--header);
+    background:#252942;
 
-    text-align: left;
-
-    font-weight: 600;
+    color:var(--gold);
 
 }
 
 
 
-.config-table th,
-.config-table td {
+td {
 
-    padding: 12px;
-
-    border-bottom: 1px solid var(--border);
+    background:var(--output);
 
 }
 
 
 
-.points-input {
+th,
+td {
 
-    width: 85px;
+    border:1px solid var(--border);
 
-    text-align: center;
+    padding:12px;
+
+}
+
+
+
+.summary-table th,
+.summary-table td,
+.money-summary th,
+.money-summary td {
+
+    text-align:center;
 
 }
 
@@ -350,40 +337,16 @@ select:focus {
 ========================= */
 
 
-.cash-grid-section h3 {
-
-    margin-bottom: 16px;
-
-}
-
-
-
 .cash-grid {
 
-    display: grid;
+    display:grid;
 
     grid-template-columns:
         190px repeat(var(--columns),150px);
 
-    overflow-x: auto;
+    overflow-x:auto;
 
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    background: white;
-
-}
-
-
-
-.cash-grid > div {
-
-    min-height: 90px;
-
-    border-right: 1px solid var(--border);
-
-    border-bottom: 1px solid var(--border);
+    border:1px solid var(--border);
 
 }
 
@@ -391,19 +354,15 @@ select:focus {
 
 .grid-header {
 
-    display: flex;
+    background:#252942;
 
-    justify-content: center;
+    color:var(--gold);
 
-    align-items: center;
+    display:flex;
 
-    padding: 12px;
+    align-items:center;
 
-    background: var(--header);
-
-    font-weight: 600;
-
-    text-align: center;
+    justify-content:center;
 
 }
 
@@ -411,15 +370,9 @@ select:focus {
 
 .employee-cell {
 
-    display: flex;
+    background:var(--section-dark);
 
-    align-items: center;
-
-    padding-left: 16px;
-
-    background: var(--header);
-
-    font-weight: 600;
+    color:var(--cyan);
 
 }
 
@@ -427,33 +380,9 @@ select:focus {
 
 .disabled-cell {
 
-    display: flex;
+    background:#151724;
 
-    justify-content: center;
-
-    align-items: center;
-
-    background: #fafafa;
-
-    color: #b0b7c3;
-
-}
-
-
-
-.cash-grid-cell {
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 12px;
+    color:#777;
 
 }
 
@@ -461,72 +390,7 @@ select:focus {
 
 .cash-grid-cell:hover {
 
-    background: var(--hover);
-
-}
-
-
-
-.cash-drop-input {
-
-    width: 90px;
-
-    text-align: center;
-
-}
-
-
-
-.cash-grid-cell span {
-
-    font-size: 12px;
-
-    color: var(--muted);
-
-}
-
-
-
-.cash-drop-input {
-
-    transition:
-        background .15s,
-        border-color .15s,
-        color .15s;
-
-}
-
-
-
-.cash-drop-input.drop-low {
-
-    background: #fef2f2;
-
-    border-color: #ef4444;
-
-    color: #991b1b;
-
-}
-
-
-
-.cash-drop-input.drop-high {
-
-    background: #ecfdf5;
-
-    border-color: #22c55e;
-
-    color: #166534;
-
-}
-
-
-
-.cash-drop-input.drop-equal {
-
-    background: white;
-
-    border-color: #d1d5db;
+    background:#252942;
 
 }
 
@@ -537,23 +401,13 @@ select:focus {
 ========================= */
 
 
-.trainee-date-section {
-
-    margin-bottom: 24px;
-
-}
-
-
-
 .trainee-meal-section {
 
-    background: var(--header);
+    background:var(--section-dark);
 
-    border-radius: 12px;
+    border-left:4px solid var(--cyan);
 
-    padding: 14px;
-
-    margin-bottom: 12px;
+    padding:20px;
 
 }
 
@@ -561,253 +415,50 @@ select:focus {
 
 .trainee-config-card {
 
-    display: flex;
+    background:var(--output);
 
-    justify-content: space-between;
+    border:1px solid var(--border);
 
-    align-items: center;
-
-    background: white;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    padding: 12px;
-
-    margin-top: 8px;
-
-}
-
-
-
-.assignment-select {
-
-    width: 180px;
+    padding:12px;
 
 }
 
 
 
 /* =========================
-   Summary
+   Drop Status
 ========================= */
 
 
-.summary-table {
+.cash-drop-input.drop-low {
 
-    width: 100%;
+    background:#3b2025;
 
-    border-collapse: collapse;
+    border-color:#ff6b81;
 
-}
-
-
-
-.summary-table th {
-
-    background: var(--header);
-
-    font-weight: 600;
+    color:#ffb3bd;
 
 }
 
 
 
-.summary-table th,
-.summary-table td {
+.cash-drop-input.drop-high {
 
-    padding: 12px;
+    background:#15352d;
 
-    text-align: center;
+    border-color:#4ade80;
 
-    border-bottom: 1px solid var(--border);
-
-}
-
-
-
-/* =========================
-   Distribution
-========================= */
-
-
-.distribution-meal {
-
-    background: var(--panel);
-
-    border-radius: var(--radius);
-
-    padding: 24px;
-
-    margin-bottom: 24px;
-
-    box-shadow: var(--shadow);
+    color:#bbf7d0;
 
 }
 
 
 
-.distribution-meal h2 {
+.cash-drop-input.drop-equal {
 
-    margin-bottom: 18px;
+    background:var(--input);
 
-}
-
-
-
-.money-summary {
-
-    background: var(--panel);
-
-    border-radius: var(--radius);
-
-    padding: 18px;
-
-    margin-bottom: 18px;
-
-    box-shadow: var(--shadow);
-
-    overflow-x: auto;
-
-}
-
-
-
-.money-summary table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-}
-
-
-
-.money-summary th {
-
-    background: var(--header);
-
-    font-weight: 600;
-
-}
-
-
-
-.money-summary th,
-.money-summary td {
-
-    padding: 12px;
-
-    border-bottom: 1px solid var(--border);
-
-    text-align: center;
-
-}
-
-
-
-.money-summary td:first-child {
-
-    font-weight: 600;
-
-    text-align: left;
-
-}
-
-
-
-.money-summary tr:hover td {
-
-    background: var(--hover);
-
-}
-
-
-
-
-.employee-table {
-
-    background: var(--panel);
-
-    border-radius: var(--radius);
-
-    padding: 18px;
-
-    margin-bottom: 20px;
-
-    box-shadow: var(--shadow);
-
-    overflow-x: auto;
-
-}
-
-
-
-.employee-table h3 {
-
-    margin-bottom: 14px;
-
-}
-
-
-
-.employee-table table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 900px;
-
-}
-
-
-
-.employee-table th {
-
-    background: var(--header);
-
-    font-weight: 600;
-
-    text-align: left;
-
-}
-
-
-
-.employee-table th,
-.employee-table td {
-
-    padding: 10px 12px;
-
-    border-bottom: 1px solid var(--border);
-
-}
-
-
-
-.employee-table tr:hover td {
-
-    background: var(--hover);
-
-}
-
-
-
-.employee-table td {
-
-    white-space: nowrap;
-
-}
-
-
-
-.tip-point-input {
-
-    width: 75px;
-
-    text-align: center;
+    border-color:var(--border);
 
 }
 
@@ -820,56 +471,408 @@ select:focus {
 
 pre {
 
-    background: #111827;
+    background:#090b14;
 
-    color: white;
+    color:#e8e8e8;
 
-    padding: 18px;
+    border:1px solid var(--border);
 
-    border-radius: var(--radius);
-
-    overflow: auto;
+    padding:15px;
 
 }
 
 
 
 /* =========================
-   Mobile
+   Responsive
 ========================= */
 
 
-@media (max-width:900px) {
-
+@media(max-width:900px){
 
     body {
 
-        padding: 16px;
+        padding:15px;
+
+    }
+
+
+    .app-header {
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+
+    .header-text {
+
+        text-align:center;
 
     }
 
 
     .config-grid {
 
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
 
     }
 
 
     .navigation-panel {
 
-        flex-direction: column;
+        flex-direction:column;
 
-        gap: 12px;
+        gap:12px;
+
+    }
+
+}
+
+/* =========================
+   Vertical Spacing Upgrade
+========================= */
+
+
+/* Header spacing */
+.app-header {
+
+    margin-bottom:45px;
+
+}
+
+
+/* Main sections */
+.panel,
+.cash-grid-section,
+.distribution-meal,
+.money-summary,
+.employee-table {
+
+    padding:32px;
+
+    margin-bottom:35px;
+
+}
+
+
+
+/* Headings */
+h1 {
+
+    margin-bottom:10px;
+
+}
+
+
+h2 {
+
+    margin-bottom:22px;
+
+}
+
+
+h3 {
+
+    margin-bottom:18px;
+
+}
+
+
+
+/* Paragraph spacing */
+p {
+
+    margin-top:10px;
+
+    line-height:1.7;
+
+}
+
+
+
+/* Tabs */
+.tabs {
+
+    margin-bottom:35px;
+
+    gap:14px;
+
+}
+
+
+
+.tab-button {
+
+    padding:14px 26px;
+
+}
+
+
+
+/* Tables */
+.config-table th,
+.config-table td,
+.summary-table th,
+.summary-table td,
+.money-summary th,
+.money-summary td,
+.employee-table th,
+.employee-table td {
+
+    padding:16px;
+
+}
+
+
+
+/* Config sections */
+.config-grid {
+
+    gap:30px;
+
+}
+
+
+
+/* Cash grid */
+.cash-grid-section h3 {
+
+    margin-bottom:24px;
+
+}
+
+
+.cash-grid-cell {
+
+    padding:18px;
+
+    gap:12px;
+
+}
+
+
+
+/* Trainee cards */
+.trainee-meal-section {
+
+    padding:25px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.trainee-config-card {
+
+    padding:16px;
+
+    margin-top:14px;
+
+}
+
+
+
+/* Employee tables */
+.employee-table h3 {
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* Navigation buttons */
+.navigation-panel {
+
+    margin-top:30px;
+
+}
+
+
+
+/* Inputs inside forms */
+input,
+select {
+
+    height:42px;
+
+}
+
+
+
+/* Mobile adjustment */
+@media(max-width:900px){
+
+    .panel,
+    .cash-grid-section,
+    .distribution-meal,
+    .money-summary,
+    .employee-table {
+
+        padding:22px;
+
+        margin-bottom:25px;
 
     }
 
+}
 
-    .cash-grid {
+/* =========================
+   Cash Grid Cells
+========================= */
 
-        grid-template-columns:
-            150px repeat(var(--columns),130px);
+.cash-grid-cell {
 
-    }
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:8px;
+
+    min-width:0;
+
+    overflow:hidden;
+
+}
+
+
+
+.cash-grid-cell:hover {
+
+    background:#252942;
+
+}
+
+
+
+.cash-drop-input {
+
+    width:100%;
+
+    max-width:90px;
+
+    height:34px;
+
+    padding:4px;
+
+    text-align:center;
+
+    font-size:14px;
+
+    box-sizing:border-box;
+
+}
+
+
+
+.cash-grid-cell span {
+
+    font-size:12px;
+
+    color:var(--muted);
+
+    white-space:nowrap;
+
+}
+
+/* =========================
+   Tab Navigation Fix
+========================= */
+
+.tabs {
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.tab-button {
+
+    display:block;
+
+    border:1px solid var(--border);
+
+    background:var(--section);
+
+    color:var(--text);
+
+    padding:12px 22px;
+
+    border-radius:4px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+.tab-button:hover {
+
+    background:#252942;
+
+    border-color:var(--cyan);
+
+}
+
+
+
+.tab-button.active {
+
+    background:var(--pink);
+
+    color:white;
+
+    border-color:var(--pink);
+
+}
+
+
+
+.tab-page {
+
+    display:none;
+
+}
+
+
+
+.tab-page.active {
+
+    display:block;
+
+}
+
+/* =========================
+   TOP NAVIGATION
+========================= */
+
+
+.top-navigation {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:25px;
 
 }

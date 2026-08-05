@@ -190,13 +190,51 @@ if (continueButton) {
             saveState();
 
             window.location.href =
-                "../distribution/distribution.html";
+            "../results/results.html";
 
         }
     );
 
 }
 
+
+// =========================
+// TOP NAVIGATION
+// =========================
+
+document
+.getElementById("topBackButton")
+?.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+                "../start/start.html";
+
+    }
+);
+
+
+
+document
+.getElementById("topContinueButton")
+?.addEventListener(
+    "click",
+    () => {
+
+        sessionStorage.setItem(
+            "tipDistribution",
+            JSON.stringify(
+                tipDistribution
+            )
+        );
+
+
+        window.location.href =
+            "../results/results.html";
+
+    }
+);
 
 
 // =========================
