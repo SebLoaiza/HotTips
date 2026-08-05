@@ -2,50 +2,154 @@
 <html lang="en">
 
 <head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HotTips</title>
+<meta charset="UTF-8">
 
-    <link rel="stylesheet" href="./style.css">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>HotTips</title>
+
+<link rel="stylesheet" href="./style.css">
+
 </head>
+
 
 <body>
 
-<main class="landing">
 
-    <section class="hero">
+<header class="topbar">
 
-        <img
-            src="./logo.png"
-            alt="HotTips Logo"
-            class="logo"
-        >
+    <div class="brand">
 
-        <h1>HotTips</h1>
-        
+        <img src="./logo.png"
+             class="logo">
 
-        <p>Restaurant Tip Distribution</p>
+        <span>
+            HotTips
+        </span>
 
-        <div class="landingButtons">
+    </div>
 
-            <button id="newProcessButton">
-                Start New Process
-            </button>
 
-            <button id="historyButton">
-                View History
-            </button>
+    <nav>
 
-        </div>
+        <a href="#">
+            Dashboard
+        </a>
 
-    </section>
+        <a href="#">
+            History
+        </a>
+
+        <a href="#">
+            Settings
+        </a>
+
+    </nav>
+
+
+</header>
+
+
+
+<main class="workspace">
+
+
+<section class="intro">
+
+
+<h1>
+Restaurant Tip Distribution
+</h1>
+
+
+<p>
+Import shift reports, calculate employee
+tip distributions, and prepare payroll exports.
+</p>
+
+
+
+<div class="actions">
+
+    <button id="newProcessButton">
+        Start New Process
+    </button>
+
+
+    <button id="historyButton">
+        View History
+    </button>
+
+</div>
+
+
+</section>
+
+
+
+<section class="tools">
+
+
+<div class="tool">
+
+<h3>
+Import Reports
+</h3>
+
+<p>
+Upload Toast exports and shift data.
+</p>
+
+</div>
+
+
+
+<div class="tool">
+
+<h3>
+Tip Calculation
+</h3>
+
+<p>
+Automatically distribute tips based on rules.
+</p>
+
+</div>
+
+
+
+<div class="tool">
+
+<h3>
+Payroll Export
+</h3>
+
+<p>
+Generate payroll-ready reports.
+</p>
+
+</div>
+
+
+</section>
+
+
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+
+<footer>
+
+HotTips © 2026
+
+</footer>
+
+
 <script type="module" src="./app.js"></script>
+
 
 </body>
 

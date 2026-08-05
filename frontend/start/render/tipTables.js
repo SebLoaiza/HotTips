@@ -171,7 +171,16 @@ export function renderTipTables(mealBlocks) {
 
         table.innerHTML = html;
 
-        output.appendChild(table);
+
+        const wrapper = document.createElement("div");
+
+        wrapper.className = "table-scroll";
+
+
+        wrapper.appendChild(table);
+
+
+        output.appendChild(wrapper);
 
     }
 

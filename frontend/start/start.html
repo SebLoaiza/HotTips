@@ -7,46 +7,79 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HotTips</title>
+    <title>Toast Inputs</title>
 
     <link rel="stylesheet" href="./style.css">
 
 </head>
 
+
 <body>
 
-<main>
 
-    <header class="app-header">
+<header class="app-header">
 
-    <img src="logo.png" class="logo">
+    <img 
+        src="logo.png" 
+        class="logo"
+    >
+
 
     <div class="header-text">
 
-        <h1>HotTips</h1>
+        <h1>
+            HotTips
+        </h1>
 
-        <p>Restaurant Tip Distribution</p>
+        <p>
+            Toast Inputs
+        </p>
 
     </div>
 
 </header>
-    </header>
 
 
 
-    <section class="panel">
+
+
+<main>
+
+
+
+<section class="panel process-panel">
+
 
     <h2>
-        Process
+        Toast Inputs
     </h2>
+
+
+    <p class="page-description">
+
+        Upload your shift, order, and payment CSV files to automatically
+        calculate employee tips, cash collected, and daily tip distribution.
+
+    </p>
+
+
+
+
 
     <div class="process-flow">
 
-        <div class="upload-card process-step" id="shiftCard">
+
+
+        <div 
+            class="upload-card process-step" 
+            id="shiftCard"
+        >
+
 
             <label for="shiftCsv">
                 Shift CSV
             </label>
+
 
             <input
                 id="shiftCsv"
@@ -54,19 +87,23 @@
                 accept=".csv"
             >
 
+
         </div>
 
 
-        <div class="process-arrow">
-            →
-        </div>
 
 
-        <div class="upload-card process-step" id="orderCard">
+
+        <div 
+            class="upload-card process-step" 
+            id="orderCard"
+        >
+
 
             <label for="orderCsv">
                 Order CSV
             </label>
+
 
             <input
                 id="orderCsv"
@@ -74,19 +111,23 @@
                 accept=".csv"
             >
 
+
         </div>
 
 
-        <div class="process-arrow">
-            →
-        </div>
 
 
-        <div class="upload-card process-step" id="paymentCard">
+
+        <div 
+            class="upload-card process-step" 
+            id="paymentCard"
+        >
+
 
             <label for="paymentCsv">
                 Payment CSV
             </label>
+
 
             <input
                 id="paymentCsv"
@@ -94,33 +135,98 @@
                 accept=".csv"
             >
 
+
         </div>
 
 
-        <div class="process-arrow">
-            →
-        </div>
 
 
-        <div class="continue-step" id="continueStep">
 
-            <button id="nextPage">
+
+
+        <div 
+            class="continue-step" 
+            id="continueStep"
+        >
+
+
+            <button
+                id="nextPage"
+                disabled
+            >
                 Continue →
             </button>
 
+
+
+
+            <button
+                id="resetProcess"
+                class="danger-button reset-button"
+            >
+                Reset
+            </button>
+
+
+
         </div>
 
+
+
+
     </div>
+
 
 </section>
 
 
 
-    <section class="panel">
 
-        <h2>
-            Cash Collected
-        </h2>
+
+
+
+
+
+<section class="panel results-panel">
+
+
+
+
+
+    <div 
+        class="report-column"
+    >
+
+
+        <h3>
+            Card Tips
+        </h3>
+
+
+        <div id="cardSalesTables">
+
+            <!-- Card tip tables render here -->
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <div 
+        class="report-column"
+    >
+
+
+        <h3>
+            Cash Collection
+        </h3>
+
 
         <div id="cashCollectedTables">
 
@@ -128,51 +234,73 @@
 
         </div>
 
-    </section>
+
+    </div>
 
 
 
-    <section class="panel continue-panel">
 
-        <div class="bottom-buttons">
 
-            <button
-                id="resetProcess"
-                class="danger-button"
-            >
-                Reset Process
-            </button>
-
-            <button id="nextPage">
-
-                Continue →
-
-            </button>
-
-        </div>
-
-    </section>
+</section>
 
 
 
-    <section class="panel debug-panel">
 
-        <button id="debugObjects">
 
-            Debug Objects
 
-        </button>
 
-        <pre id="debugOutput"></pre>
 
-    </section>
+
+<section class="debug-panel">
+
+
+    <button 
+        id="debugObjects"
+    >
+
+        Debug Objects
+
+    </button>
+
+
+
+
+    <pre id="debugOutput"></pre>
+
+
+
+</section>
+
+
+
+
+
 
 </main>
 
 
+
+
+
+
+<footer>
+
+    HotTips • Toast Inputs
+
+</footer>
+
+
+
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
+
 <script type="module" src="./app.js"></script>
+
+
 
 </body>
 
