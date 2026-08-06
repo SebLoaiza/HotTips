@@ -22,41 +22,53 @@ export function renderDateSelector(
 
     div.innerHTML = `
 
-        <h3>
-            View Dates
-        </h3>
+
+        <div class="date-header">
+
+            <h3>
+                View Dates
+            </h3>
+
+        </div>
 
 
-        <button data-range="all">
-            Full Week
-        </button>
+
+        <div class="date-controls">
 
 
-        <button data-range="first3">
-            First 3 Days
-        </button>
+            <label>
+
+                Start:
+
+                <select id="startDate">
+
+                </select>
+
+            </label>
 
 
-        <hr>
+
+            <label>
+
+                End:
+
+                <select id="endDate">
+
+                </select>
+
+            </label>
 
 
-        <label>
-            Start:
-            <select id="startDate">
-            </select>
-        </label>
+
+            <button id="applyDates">
+
+                Apply
+
+            </button>
 
 
-        <label>
-            End:
-            <select id="endDate">
-            </select>
-        </label>
+        </div>
 
-
-        <button id="applyDates">
-            Apply
-        </button>
 
     `;
 
@@ -75,9 +87,11 @@ export function renderDateSelector(
 
 
 
+
     // =========================
     // BUILD DATE OPTIONS
     // =========================
+
 
     for (
         const day of days
@@ -93,6 +107,7 @@ export function renderDateSelector(
         `;
 
 
+
         end.innerHTML += `
 
             <option value="${day}">
@@ -106,16 +121,16 @@ export function renderDateSelector(
 
 
 
+
+
     // =========================
-    // INITIAL DISPLAY
+    // DEFAULT FULL RANGE
     // =========================
-    //
-    // Match ResultsSession's
-    // initial full week filter.
-    //
+
 
     const fullWeek =
-        resultsSession.getDateRanges()
+        resultsSession
+            .getDateRanges()
             .full_week;
 
 
@@ -129,81 +144,11 @@ export function renderDateSelector(
 
 
 
-    // =========================
-    // RANGE BUTTONS
-    // =========================
-
-
-    div.querySelector(
-        "[data-range='all']"
-    )
-    .onclick = () => {
-
-
-        resultsSession.resetFilter();
-
-
-        const range =
-            resultsSession.getDateRanges()
-                .full_week;
-
-
-
-        start.value =
-            range.start;
-
-
-        end.value =
-            range.end;
-
-
-
-        renderResults();
-
-
-    };
-
-
-
-
-    div.querySelector(
-        "[data-range='first3']"
-    )
-    .onclick = () => {
-
-
-        const range =
-            resultsSession.getDateRanges()
-                .first_three_days;
-
-
-
-        resultsSession.filterByDates(
-            range.start,
-            range.end
-        );
-
-
-
-        start.value =
-            range.start;
-
-
-        end.value =
-            range.end;
-
-
-
-        renderResults();
-
-
-    };
-
 
 
 
     // =========================
-    // MANUAL APPLY
+    // APPLY BUTTON
     // =========================
 
 
@@ -223,6 +168,7 @@ export function renderDateSelector(
 
 
     };
+
 
 
 

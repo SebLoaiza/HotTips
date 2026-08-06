@@ -29,12 +29,21 @@
 <main>
 
 
-<header>
+<header class="app-header">
 
 
-    <h1>
-        Employee Results
-    </h1>
+    <div class="header-title">
+
+        <h1>
+            Employee Results
+        </h1>
+
+        <p>
+            Tip distribution summary and payroll breakdown
+        </p>
+
+    </div>
+
 
 
 
@@ -42,43 +51,39 @@
 
 
         <button id="backButton">
-
             Back
-
         </button>
 
 
 
         <button id="printButton">
-
             Print Summary
-
         </button>
 
 
 
         <button id="exportCSVButton">
-
             Export CSV
-
         </button>
 
 
 
         <button id="saveButton">
-
             Save History
-
         </button>
+
 
 
         <button id="payrollSummaryButton">
             Payroll Summary
         </button>
 
+
+
         <button id="loadButton">
             Load History
         </button>
+
 
 
         <input
@@ -87,8 +92,6 @@
             accept=".json"
             hidden
         >
-
-
 
 
     </div>
@@ -100,19 +103,13 @@
 
 
 
-<div id="dateSelector">
+<section id="dateSelector">
 
-</div>
-
-
+</section>
 
 
 
-<!--
-    Printable summary only.
-    Hidden normally.
-    Visible during print.
--->
+
 
 <section id="printSummary">
 
