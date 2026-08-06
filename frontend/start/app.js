@@ -54,6 +54,8 @@ if (shiftInput) {
 
         shiftUploaded = true;
 
+        shiftCard.classList.add("completed");
+
         updateContinueButton();
 
         rebuildMealBlocks();
@@ -78,6 +80,8 @@ if (orderInput) {
         );
 
         orderUploaded = true;
+
+        orderCard.classList.add("completed");
 
         updateContinueButton();
 
@@ -105,6 +109,8 @@ if (paymentInput) {
 
         paymentUploaded = true;
 
+        paymentCard.classList.add("completed");
+
         updateContinueButton();
 
         rebuildMealBlocks();
@@ -113,6 +119,18 @@ if (paymentInput) {
 
 }
 
+
+if (currentMealBlocks.length){
+    shiftCard?.classList.add("completed");
+}
+
+if (currentOrders.length){
+    orderCard?.classList.add("completed");
+}
+
+if (currentPayments.length){
+    paymentCard?.classList.add("completed");
+}
 
 
 function rebuildMealBlocks() {
@@ -289,3 +307,7 @@ function updateContinueButton() {
         );
 
 }
+
+const shiftCard = document.getElementById("shiftCard");
+const orderCard = document.getElementById("orderCard");
+const paymentCard = document.getElementById("paymentCard");

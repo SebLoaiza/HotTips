@@ -11,12 +11,13 @@
 
 
     <title>
-        Tip Distribution Tool - Distribution
+        HotTips - Tip Distribution
     </title>
 
 
     <link rel="stylesheet"
           href="./style.css">
+
 
 </head>
 
@@ -25,43 +26,125 @@
 <body>
 
 
-<header>
+<header class="app-header">
 
-    <h1>
-        Tip Distribution Tool
-    </h1>
 
-    
+    <img
+        src="logo.png"
+        class="logo"
+    >
+
+
+
+    <div class="header-text">
+
+
+        <h1>
+            HotTips
+        </h1>
+
+
+        <p>
+            Tip Distribution
+        </p>
+
+
+    </div>
+
 
 </header>
 
-<!-- ====================================== -->
-<!-- TOP NAVIGATION -->
-<!-- ====================================== -->
-
-<section class="panel top-navigation">
-
-    <button id="topBackButton">
-
-        ← Back
-
-    </button>
 
 
-    <button id="topContinueButton">
 
-        Continue →
 
-    </button>
+<main>
+
+
+
+
+
+<!-- =========================
+     TOP NAVIGATION
+========================= -->
+
+
+<section class="panel workflow-panel">
+
+
+    <h2>
+        Tip Distribution
+    </h2>
+
+
+    <p class="page-description">
+
+        Review each meal block, verify employee distributions,
+        and calculate final payouts.
+
+    </p>
+
+
+
+
+
+    <div class="process-flow">
+
+
+
+        <div class="continue-step">
+
+
+            <button
+                id="topBackButton"
+            >
+
+                ← Back
+
+            </button>
+
+
+        </div>
+
+
+
+
+
+        <div class="upload-card">
+
+
+            <button
+                id="topContinueButton"
+            >
+
+                Continue →
+
+            </button>
+
+
+        </div>
+
+
+
+
+    </div>
+
+
 
 </section>
 
 
 
 
-<!-- ====================================== -->
-<!-- DISTRIBUTION -->
-<!-- ====================================== -->
+
+
+
+
+
+<!-- =========================
+     DISTRIBUTION
+========================= -->
+
 
 <section class="panel">
 
@@ -71,31 +154,37 @@
     </h2>
 
 
-    <p>
+
+    <p class="page-description">
+
         Review each meal block before calculating the final
         employee payouts.
+
     </p>
 
 
 
-    <!-- ================================ -->
-    <!-- DAY TABS -->
-    <!-- ================================ -->
+
+
 
     <div
         id="dayTabs"
-        class="day-tabs">
+        class="day-tabs"
+    >
+
+
     </div>
 
 
 
 
-    <!-- ================================ -->
-    <!-- ACTIVE DAY CONTENT -->
-    <!-- ================================ -->
+
 
     <div
-        id="distributionTables">
+        id="distributionTables"
+    >
+
+
     </div>
 
 
@@ -107,11 +196,15 @@
 
 
 
-<!-- ====================================== -->
-<!-- DEBUG -->
-<!-- ====================================== -->
 
-<section class="panel">
+
+
+<!-- =========================
+     DEBUG
+========================= -->
+
+
+<section class="panel debug-panel">
 
 
     <h2>
@@ -120,7 +213,10 @@
 
 
 
-    <button id="debugObjects">
+
+    <button
+        id="debugObjects"
+    >
 
         Show Distribution Object
 
@@ -128,7 +224,9 @@
 
 
 
+
     <pre id="debugOutput"></pre>
+
 
 
 </section>
@@ -139,14 +237,20 @@
 
 
 
-<!-- ====================================== -->
-<!-- NAVIGATION -->
-<!-- ====================================== -->
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
 
 <section class="panel navigation-panel">
 
 
-    <button id="backButton">
+
+    <button
+        id="backButton"
+    >
 
         ← Back
 
@@ -155,11 +259,15 @@
 
 
 
-    <button id="continueButton">
+
+    <button
+        id="continueButton"
+    >
 
         Continue →
 
     </button>
+
 
 
 
@@ -169,10 +277,26 @@
 
 
 
+</main>
+
+
+
+
+
+
+
+<footer>
+
+    HotTips • Tip Distribution
+
+</footer>
+
+
+
+
 
 
 <script
-
     type="module"
     src="./app.js">
 

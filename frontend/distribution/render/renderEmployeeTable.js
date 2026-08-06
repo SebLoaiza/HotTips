@@ -165,7 +165,7 @@ export function renderEmployeeTable(
                     ${formatMoney(employee.cash_drop)}
                 </td>
 
-                <td>
+                <td class="${employee.cash_remaining < 0 ? 'negative-cash' : ''}">
                     ${formatMoney(employee.cash_remaining)}
                 </td>
 

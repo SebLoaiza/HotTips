@@ -3,14 +3,15 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>
-HotTips - Tip Distribution
-</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="./style.css">
+    <title>
+        HotTips - Tip Distribution
+    </title>
+
+    <link rel="stylesheet" href="./style.css">
 
 </head>
 
@@ -19,7 +20,6 @@ HotTips - Tip Distribution
 
 
 <header class="app-header">
-
 
     <img
         src="logo.png"
@@ -39,9 +39,7 @@ HotTips - Tip Distribution
 
     </div>
 
-
 </header>
-
 
 
 
@@ -49,78 +47,100 @@ HotTips - Tip Distribution
 
 
 
-<!-- =========================
-     PROCESS NAVIGATION
-========================= -->
+<section class="panel workflow-panel">
 
 
-<section class="panel workflow">
+    <h2>
+        Tip Distribution Workflow
+    </h2>
 
 
-    <button
-        id="backButton"
-        class="nav-button"
-    >
-        ← Back
-    </button>
+    <p class="page-description">
+
+        Enter cash drops, configure employee tip points,
+        and review the final tip distribution summary.
+
+    </p>
 
 
 
-
-    <div class="steps">
+    <div class="workflow">
 
 
         <button
-            class="step active"
-            data-tab="inputTab"
+            id="backButton"
+            class="nav-button"
         >
 
-            1.
-            Inputs
+            ← Back
 
         </button>
 
 
 
+
+        <div class="steps">
+
+
+            <button
+                class="step active"
+                data-tab="inputTab"
+            >
+
+                1.
+                Inputs
+
+            </button>
+
+
+
+
+            <button
+                class="step"
+                data-tab="employeeTab"
+            >
+
+                2.
+                Employee Config
+
+            </button>
+
+
+
+
+            <button
+                class="step"
+                data-tab="summaryTab"
+            >
+
+                3.
+                Summary
+
+            </button>
+
+
+
+        </div>
+
+
+
+
+
         <button
-            class="step"
-            data-tab="employeeTab"
+            id="continueButton"
+            class="nav-button"
         >
 
-            2.
-            Employee Config
+            Continue →
 
         </button>
 
-
-
-        <button
-            class="step"
-            data-tab="summaryTab"
-        >
-
-            3.
-            Summary
-
-        </button>
 
 
     </div>
 
 
 
-
-    <button
-        id="continueButton"
-        class="nav-button"
-    >
-
-        Continue →
-
-    </button>
-
-
-
 </section>
 
 
@@ -128,62 +148,70 @@ HotTips - Tip Distribution
 
 
 
-<!-- =========================
-     INPUTS
-========================= -->
-
-
 <section
-id="inputTab"
-class="tab-page active"
+    id="inputTab"
+    class="tab-page active"
 >
 
 
-<section class="panel">
-
-
-<h2>
-Cash Drop Entry
-</h2>
-
-
-<p>
-
-Enter the amount of cash each employee turned in.
-
-</p>
-
-
-<div id="cashDropTables"></div>
-
-
-</section>
-
-
-
-
 
 <section class="panel">
 
 
-<h2>
-Card Tips
-</h2>
+    <h2>
+        Cash Drop Entry
+    </h2>
 
 
-<p>
 
-Review calculated card tips.
+    <p class="page-description">
 
-</p>
+        Enter the amount of cash each employee turned in.
+
+    </p>
 
 
-<div id="cardSalesTables"></div>
+
+    <div id="cashDropTables">
+
+    </div>
+
 
 
 </section>
 
 
+
+
+
+
+<section class="panel">
+
+
+    <h2>
+        Card Tips
+    </h2>
+
+
+
+    <p class="page-description">
+
+        Review calculated card tips.
+
+    </p>
+
+
+
+    <div id="cardSalesTables">
+
+    </div>
+
+
+
+</section>
+
+
+
 </section>
 
 
@@ -192,14 +220,11 @@ Review calculated card tips.
 
 
 
-<!-- =========================
-     EMPLOYEE CONFIG
-========================= -->
 
 
 <section
-id="employeeTab"
-class="tab-page"
+    id="employeeTab"
+    class="tab-page"
 >
 
 
@@ -210,15 +235,22 @@ class="tab-page"
 <section class="panel">
 
 
-<h2>
-Employee Tip Points
-</h2>
+    <h2>
+        Employee Tip Points
+    </h2>
 
 
-<div id="employeePoints"></div>
+
+    <div id="employeePoints">
+
+    </div>
+
 
 
 </section>
+
+
+
 
 
 
@@ -226,15 +258,20 @@ Employee Tip Points
 <section class="panel">
 
 
-<h2>
-Trainee Assignments
-</h2>
+    <h2>
+        Trainee Assignments
+    </h2>
 
 
-<div id="traineeAssignments"></div>
+
+    <div id="traineeAssignments">
+
+    </div>
+
 
 
 </section>
+
 
 
 
@@ -249,32 +286,36 @@ Trainee Assignments
 
 
 
-<!-- =========================
-     SUMMARY
-========================= -->
 
 
 <section
-id="summaryTab"
-class="tab-page"
+    id="summaryTab"
+    class="tab-page"
 >
+
 
 
 <section class="panel">
 
 
-<h2>
-Final Summary
-</h2>
+    <h2>
+        Final Summary
+    </h2>
 
 
-<div id="cashTipSummary"></div>
+
+    <div id="cashTipSummary">
+
+    </div>
+
 
 
 </section>
 
 
+
 </section>
+
 
 
 
@@ -284,10 +325,24 @@ Final Summary
 
 
 
+
+
+<footer>
+
+    HotTips • Tip Distribution Workflow
+
+</footer>
+
+
+
+
+
 <script type="module" src="./tabs.js"></script>
+
 <script type="module" src="./app.js"></script>
 
 
 </body>
+
 
 </html>
