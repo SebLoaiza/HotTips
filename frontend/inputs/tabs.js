@@ -1,56 +1,99 @@
-const tabButtons =
-    document.querySelectorAll(".tab-button");
+const steps =
+document.querySelectorAll(".step");
 
 
-const tabPages =
-    document.querySelectorAll(".tab-page");
+const pages =
+document.querySelectorAll(".tab-page");
 
 
-
-tabButtons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const target =
-                button.dataset.tab;
+let current = 0;
 
 
 
-            tabButtons.forEach(btn => {
+function showPage(index)
+{
 
-                btn.classList.remove(
-                    "active"
-                );
-
-            });
+    current = index;
 
 
-
-            tabPages.forEach(page => {
-
-                page.classList.remove(
-                    "active"
-                );
-
-            });
-
-
-
-            button.classList.add(
-                "active"
-            );
-
-
-
-            document
-                .getElementById(target)
-                .classList.add(
-                    "active"
-                );
-
-        }
+    steps.forEach(
+        step =>
+        step.classList.remove("active")
     );
 
+
+    pages.forEach(
+        page =>
+        page.classList.remove("active")
+    );
+
+
+
+    steps[index]
+        .classList
+        .add("active");
+
+
+
+    document
+    .getElementById(
+        steps[index].dataset.tab
+    )
+    .classList
+    .add("active");
+
+
+}
+
+
+
+
+steps.forEach(
+(step,index)=>{
+
+
+    step.onclick = ()=>{
+
+        showPage(index);
+
+    };
+
+
 });
+
+
+
+document
+.getElementById("continueButton")
+.onclick = ()=>{
+
+
+    if(current < steps.length-1)
+    {
+
+        showPage(
+            current+1
+        );
+
+    }
+
+};
+
+
+
+document
+.getElementById("backButton")
+.onclick = ()=>{
+
+
+    if(current > 0)
+    {
+
+        showPage(
+            current-1
+        );
+
+    }
+
+
+};

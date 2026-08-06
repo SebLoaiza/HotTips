@@ -62,9 +62,12 @@ function validateInputs() {
 
     let valid = true;
 
+
     for (const block of currentMealBlocks) {
 
+
         for (const employee of block.employees) {
+
 
             if (
                 !employee.role
@@ -76,31 +79,60 @@ function validateInputs() {
 
             }
 
+
             const hasTrainer =
                 employee.trainer_employee_id != null;
+
 
             const noTrainer =
                 employee.no_trainer === true;
 
-            if (!hasTrainer && !noTrainer) {
+
+            if (
+                !hasTrainer &&
+                !noTrainer
+            ) {
 
                 valid = false;
 
             }
 
+
         }
 
     }
 
+
+
     if (continueButton) {
 
-        continueButton.disabled = !valid;
+
+        continueButton.disabled =
+            !valid;
+
+
+
+        if (valid) {
+
+            continueButton.classList.add(
+                "ready"
+            );
+
+        }
+
+        else {
+
+            continueButton.classList.remove(
+                "ready"
+            );
+
+        }
+
 
     }
 
+
 }
-
-
 
 // =========================
 // REFRESH UI
@@ -190,7 +222,7 @@ if (continueButton) {
             saveState();
 
             window.location.href =
-            "../results/results.html";
+            "../distribution/distribution.html";
 
         }
     );
@@ -231,7 +263,7 @@ document
 
 
         window.location.href =
-            "../results/results.html";
+            "../distribution/distribution.html";
 
     }
 );

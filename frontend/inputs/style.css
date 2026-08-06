@@ -1,13 +1,18 @@
 /* =========================
-   Global
+   GLOBAL
 ========================= */
 
+
 * {
+
     box-sizing:border-box;
+
 }
 
 
+
 :root {
+
 
     --background:#0f1020;
 
@@ -39,40 +44,55 @@
 
 
 
+
+
 body {
+
 
     margin:0;
 
     padding:30px;
+
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
 
+
     background:var(--background);
 
     color:var(--text);
 
+
 }
 
 
+
+
 main {
+
 
     max-width:1300px;
 
     margin:auto;
 
+
 }
 
 
 
+
+
+
+
 /* =========================
-   Header + Logo
+   HEADER
 ========================= */
 
 
 .app-header {
+
 
     display:flex;
 
@@ -82,21 +102,22 @@ main {
 
     gap:25px;
 
-    margin-bottom:30px;
+
+    margin-bottom:45px;
+
 
 }
 
 
 
+
 .logo {
+
 
     width:120px;
 
-    max-width:30%;
-
     height:auto;
 
-    display:block;
 
 }
 
@@ -104,7 +125,9 @@ main {
 
 .header-text {
 
+
     text-align:left;
+
 
 }
 
@@ -112,11 +135,13 @@ main {
 
 .header-text h1 {
 
+
     margin:0;
 
-    font-size:34px;
-
     color:var(--cyan);
+
+    font-size:36px;
+
 
 }
 
@@ -124,24 +149,31 @@ main {
 
 .header-text p {
 
-    margin:5px 0 0;
+
+    margin-top:8px;
+
+    color:var(--muted);
 
     font-size:18px;
 
-    color:var(--muted);
 
 }
 
 
 
+
+
+
 /* =========================
-   Headings
+   TEXT
 ========================= */
 
 
 h1 {
 
+
     color:var(--cyan);
+
 
 }
 
@@ -149,9 +181,11 @@ h1 {
 
 h2 {
 
+
     color:var(--gold);
 
-    margin-bottom:15px;
+    margin-bottom:20px;
+
 
 }
 
@@ -159,7 +193,9 @@ h2 {
 
 h3 {
 
+
     color:var(--cyan);
+
 
 }
 
@@ -167,97 +203,425 @@ h3 {
 
 p {
 
+
     color:var(--muted);
+
+    line-height:1.7;
+
 
 }
 
 
 
+
+
+
+
+
 /* =========================
-   Panels
+   PANELS
 ========================= */
 
 
-.panel,
-.cash-grid-section,
-.distribution-meal,
-.money-summary,
-.employee-table {
+.panel {
+
 
     background:var(--section);
 
-    border:1px solid var(--border);
 
-    padding:25px;
+    border:
 
-    margin-bottom:25px;
+        1px solid
 
-    border-radius:4px;
+        var(--border);
+
+
+    padding:32px;
+
+
+    margin-bottom:35px;
+
+
+    border-radius:6px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   WORKFLOW BAR
+========================= */
+
+
+.workflow {
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:space-between;
+
+
+    gap:20px;
+
+
+    position:sticky;
+
+
+    top:20px;
+
+
+    z-index:20;
+
+
+}
+
+
+
+
+
+
+.steps {
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    flex:1;
+
+
+    gap:12px;
+
+
+}
+
+
+
+
+
+
+.step {
+
+
+    background:var(--section-dark);
+
+
+    color:var(--muted);
+
+
+    border:
+
+        1px solid
+
+        var(--border);
+
+
+    padding:
+
+        14px
+
+        24px;
+
+
+    border-radius:6px;
+
+
+    cursor:pointer;
+
+
+    font-size:15px;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+
+.step:hover {
+
+
+    border-color:var(--cyan);
+
+
+    color:white;
+
+
+}
+
+
+
+
+
+.step.active {
+
+
+    background:var(--pink);
+
+
+    color:white;
+
+
+    border-color:var(--pink);
+
 
 }
 
 
 
 /* =========================
-   Buttons
+   BUTTONS
 ========================= */
 
 
 button {
 
+
     background:var(--pink);
+
 
     color:white;
 
+
     border:none;
 
-    padding:10px 20px;
 
-    border-radius:3px;
+    padding:
 
-    font-size:15px;
+        12px
+
+        22px;
+
+
+    border-radius:5px;
+
 
     cursor:pointer;
 
+
+    font-size:15px;
+
+
+    transition:.3s;
+
+
 }
+
 
 
 
 button:hover {
 
+
     background:var(--pink-hover);
 
+
+}
+
+
+
+
+
+.nav-button {
+
+
+    min-width:120px;
+
+
 }
 
 
 
-.navigation-panel {
 
-    display:flex;
 
-    justify-content:space-between;
+/* Disabled navigation buttons */
+
+.nav-button:disabled {
+
+
+    background:var(--section-dark);
+
+
+    color:var(--muted);
+
+
+    border:
+
+        1px solid
+
+        var(--border);
+
+
+    opacity:.7;
+
+
+    cursor:not-allowed;
+
+
+    box-shadow:none;
+
+
+    filter:grayscale(80%);
+
 
 }
+
+
+
+
+
+/* Ready navigation buttons */
+
+.nav-button.ready {
+
+
+    background:var(--pink);
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+.nav-button.ready:hover {
+
+
+    background:var(--pink-hover);
+
+
+}
+
+
+
+
+
+@keyframes readyPulse {
+
+
+    0% {
+
+
+        box-shadow:
+
+
+            0 0 8px var(--cyan);
+
+
+    }
+
+
+
+    50% {
+
+
+        box-shadow:
+
+
+            0 0 22px var(--cyan),
+
+
+            0 0 35px var(--pink);
+
+
+    }
+
+
+
+    100% {
+
+
+        box-shadow:
+
+
+            0 0 8px var(--cyan);
+
+
+    }
+
+
+}
+
 
 
 
 /* =========================
-   Inputs
+   TAB PAGES
+========================= */
+
+
+.tab-page {
+
+
+    display:none;
+
+
+}
+
+
+
+.tab-page.active {
+
+
+    display:block;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   INPUTS
 ========================= */
 
 
 input,
 select {
 
+
     background:var(--input);
+
 
     color:white;
 
-    border:1px solid var(--border);
 
-    padding:8px 10px;
+    border:
 
-    border-radius:3px;
+        1px solid
+
+        var(--border);
+
+
+    padding:
+
+        10px;
+
+
+    border-radius:5px;
+
 
 }
 
@@ -266,27 +630,34 @@ select {
 input:focus,
 select:focus {
 
+
     outline:none;
 
+
     border-color:var(--cyan);
+
 
 }
 
 
 
+
+
+
+
 /* =========================
-   Tables
+   TABLES
 ========================= */
 
 
-.config-table,
-.summary-table,
-.money-summary table,
-.employee-table table {
+table {
+
 
     width:100%;
 
+
     border-collapse:collapse;
+
 
 }
 
@@ -294,9 +665,12 @@ select:focus {
 
 th {
 
+
     background:#252942;
 
+
     color:var(--gold);
+
 
 }
 
@@ -304,7 +678,9 @@ th {
 
 td {
 
+
     background:var(--output);
+
 
 }
 
@@ -313,130 +689,163 @@ td {
 th,
 td {
 
-    border:1px solid var(--border);
 
-    padding:12px;
+    border:
 
-}
+        1px solid
+
+        var(--border);
 
 
+    padding:15px;
 
-.summary-table th,
-.summary-table td,
-.money-summary th,
-.money-summary td {
-
-    text-align:center;
 
 }
+
+
+
+
 
 
 
 /* =========================
-   Cash Grid
+   CASH GRID
 ========================= */
 
 
 .cash-grid {
 
+
     display:grid;
 
+
     grid-template-columns:
-        190px repeat(var(--columns),150px);
+
+        190px
+
+        repeat(var(--columns),150px);
+
 
     overflow-x:auto;
 
-    border:1px solid var(--border);
+
+    border:
+
+        1px solid
+
+        var(--border);
+
 
 }
+
 
 
 
 .grid-header {
 
+
     background:#252942;
+
 
     color:var(--gold);
 
+
     display:flex;
+
 
     align-items:center;
 
+
     justify-content:center;
 
+
 }
+
 
 
 
 .employee-cell {
 
+
     background:var(--section-dark);
+
 
     color:var(--cyan);
 
-}
-
-
-
-.disabled-cell {
-
-    background:#151724;
-
-    color:#777;
 
 }
+
+
+
+
+.cash-grid-cell {
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    gap:8px;
+
+
+    padding:12px;
+
+
+}
+
 
 
 
 .cash-grid-cell:hover {
 
+
     background:#252942;
 
+
 }
+
+
+
+
+.cash-drop-input {
+
+
+    width:90px;
+
+
+    height:36px;
+
+
+    text-align:center;
+
+
+}
+
+
+
 
 
 
 /* =========================
-   Trainees
-========================= */
-
-
-.trainee-meal-section {
-
-    background:var(--section-dark);
-
-    border-left:4px solid var(--cyan);
-
-    padding:20px;
-
-}
-
-
-
-.trainee-config-card {
-
-    background:var(--output);
-
-    border:1px solid var(--border);
-
-    padding:12px;
-
-}
-
-
-
-/* =========================
-   Drop Status
+   DROP STATUS
 ========================= */
 
 
 .cash-drop-input.drop-low {
 
+
     background:#3b2025;
 
     border-color:#ff6b81;
 
-    color:#ffb3bd;
 
 }
 
@@ -444,11 +853,11 @@ td {
 
 .cash-drop-input.drop-high {
 
+
     background:#15352d;
 
     border-color:#4ade80;
 
-    color:#bbf7d0;
 
 }
 
@@ -456,26 +865,116 @@ td {
 
 .cash-drop-input.drop-equal {
 
+
     background:var(--input);
 
-    border-color:var(--border);
 
 }
 
 
 
+
+
+
+
 /* =========================
-   Debug
+   CONFIG SECTIONS
+========================= */
+
+
+.config-grid {
+
+
+    display:grid;
+
+
+    grid-template-columns:
+
+        repeat(2,1fr);
+
+
+    gap:30px;
+
+
+}
+
+
+
+
+
+.trainee-meal-section {
+
+
+    background:var(--section-dark);
+
+
+    border-left:
+
+        4px solid
+
+        var(--cyan);
+
+
+    padding:25px;
+
+
+    margin-bottom:20px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   DEBUG
 ========================= */
 
 
 pre {
 
+
     background:#090b14;
+
 
     color:#e8e8e8;
 
-    border:1px solid var(--border);
+
+    border:
+
+        1px solid
+
+        var(--border);
+
+
+    padding:20px;
+
+
+    overflow:auto;
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   FOOTER / MOBILE
+========================= */
+
+
+@media(max-width:900px){
+
+
+
+body {
 
     padding:15px;
 
@@ -483,396 +982,68 @@ pre {
 
 
 
-/* =========================
-   Responsive
-========================= */
-
-
-@media(max-width:900px){
-
-    body {
-
-        padding:15px;
-
-    }
-
-
-    .app-header {
-
-        flex-direction:column;
-
-        text-align:center;
-
-    }
-
-
-    .header-text {
-
-        text-align:center;
-
-    }
-
-
-    .config-grid {
-
-        grid-template-columns:1fr;
-
-    }
-
-
-    .navigation-panel {
-
-        flex-direction:column;
-
-        gap:12px;
-
-    }
-
-}
-
-/* =========================
-   Vertical Spacing Upgrade
-========================= */
-
-
-/* Header spacing */
 .app-header {
 
-    margin-bottom:45px;
-
-}
-
-
-/* Main sections */
-.panel,
-.cash-grid-section,
-.distribution-meal,
-.money-summary,
-.employee-table {
-
-    padding:32px;
-
-    margin-bottom:35px;
-
-}
-
-
-
-/* Headings */
-h1 {
-
-    margin-bottom:10px;
-
-}
-
-
-h2 {
-
-    margin-bottom:22px;
-
-}
-
-
-h3 {
-
-    margin-bottom:18px;
-
-}
-
-
-
-/* Paragraph spacing */
-p {
-
-    margin-top:10px;
-
-    line-height:1.7;
-
-}
-
-
-
-/* Tabs */
-.tabs {
-
-    margin-bottom:35px;
-
-    gap:14px;
-
-}
-
-
-
-.tab-button {
-
-    padding:14px 26px;
-
-}
-
-
-
-/* Tables */
-.config-table th,
-.config-table td,
-.summary-table th,
-.summary-table td,
-.money-summary th,
-.money-summary td,
-.employee-table th,
-.employee-table td {
-
-    padding:16px;
-
-}
-
-
-
-/* Config sections */
-.config-grid {
-
-    gap:30px;
-
-}
-
-
-
-/* Cash grid */
-.cash-grid-section h3 {
-
-    margin-bottom:24px;
-
-}
-
-
-.cash-grid-cell {
-
-    padding:18px;
-
-    gap:12px;
-
-}
-
-
-
-/* Trainee cards */
-.trainee-meal-section {
-
-    padding:25px;
-
-    margin-bottom:20px;
-
-}
-
-
-
-.trainee-config-card {
-
-    padding:16px;
-
-    margin-top:14px;
-
-}
-
-
-
-/* Employee tables */
-.employee-table h3 {
-
-    margin-bottom:20px;
-
-}
-
-
-
-/* Navigation buttons */
-.navigation-panel {
-
-    margin-top:30px;
-
-}
-
-
-
-/* Inputs inside forms */
-input,
-select {
-
-    height:42px;
-
-}
-
-
-
-/* Mobile adjustment */
-@media(max-width:900px){
-
-    .panel,
-    .cash-grid-section,
-    .distribution-meal,
-    .money-summary,
-    .employee-table {
-
-        padding:22px;
-
-        margin-bottom:25px;
-
-    }
-
-}
-
-/* =========================
-   Cash Grid Cells
-========================= */
-
-.cash-grid-cell {
-
-    display:flex;
 
     flex-direction:column;
 
-    justify-content:center;
-
-    align-items:center;
-
-    gap:6px;
-
-    padding:8px;
-
-    min-width:0;
-
-    overflow:hidden;
 
 }
 
 
 
-.cash-grid-cell:hover {
+.header-text {
 
-    background:#252942;
-
-}
-
-
-
-.cash-drop-input {
-
-    width:100%;
-
-    max-width:90px;
-
-    height:34px;
-
-    padding:4px;
 
     text-align:center;
 
-    font-size:14px;
-
-    box-sizing:border-box;
 
 }
 
 
 
-.cash-grid-cell span {
 
-    font-size:12px;
+.workflow {
 
-    color:var(--muted);
 
-    white-space:nowrap;
+    flex-direction:column;
 
-}
 
-/* =========================
-   Tab Navigation Fix
-========================= */
+    align-items:stretch;
 
-.tabs {
-
-    display:flex;
-
-    gap:10px;
-
-    margin-bottom:25px;
 
 }
 
 
 
-.tab-button {
+.steps {
 
-    display:block;
 
-    border:1px solid var(--border);
+    flex-direction:column;
 
-    background:var(--section);
-
-    color:var(--text);
-
-    padding:12px 22px;
-
-    border-radius:4px;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-    transition:.2s;
 
 }
 
 
 
-.tab-button:hover {
+.config-grid {
 
-    background:#252942;
 
-    border-color:var(--cyan);
+    grid-template-columns:1fr;
+
 
 }
 
 
 
-.tab-button.active {
+.nav-button {
 
-    background:var(--pink);
 
-    color:white;
+    width:100%;
 
-    border-color:var(--pink);
 
 }
 
 
-
-.tab-page {
-
-    display:none;
-
-}
-
-
-
-.tab-page.active {
-
-    display:block;
-
-}
-
-/* =========================
-   TOP NAVIGATION
-========================= */
-
-
-.top-navigation {
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:15px;
-
-    margin-bottom:25px;
 
 }

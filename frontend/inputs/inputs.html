@@ -3,218 +3,290 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Tip Distribution Tool - Inputs
-    </title>
+<title>
+HotTips - Tip Distribution
+</title>
 
-    <link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./style.css">
 
 </head>
 
+
 <body>
+
 
 <header class="app-header">
 
-    <img src="logo.png" class="logo">
+
+    <img
+        src="logo.png"
+        class="logo"
+    >
+
 
     <div class="header-text">
 
-        <h1>Tip Distribution Tool</h1>
+        <h1>
+            HotTips
+        </h1>
+
+        <p>
+            Tip Distribution Workflow
+        </p>
 
     </div>
 
+
 </header>
 
-<!-- ====================================== -->
-<!-- TOP NAVIGATION -->
-<!-- ====================================== -->
-
-<section class="panel top-navigation">
-
-    <button id="topBackButton">
-
-        ← Back
-
-    </button>
 
 
-    <button id="topContinueButton">
-
-        Continue →
-
-    </button>
-
-</section>
 
 <main>
 
 
-<!-- Tabs -->
 
-<div class="tabs">
+<!-- =========================
+     PROCESS NAVIGATION
+========================= -->
 
-    <button class="tab-button active" data-tab="inputTab">
-        Inputs
+
+<section class="panel workflow">
+
+
+    <button
+        id="backButton"
+        class="nav-button"
+    >
+        ← Back
     </button>
 
-    <button class="tab-button" data-tab="employeeTab">
-        Employee Config
-    </button>
-
-    <button class="tab-button" data-tab="summaryTab">
-        Summaries
-    </button>
-
-</div>
 
 
 
-<!-- Inputs -->
+    <div class="steps">
 
-<div id="inputTab" class="tab-page active">
 
-    <section class="panel">
+        <button
+            class="step active"
+            data-tab="inputTab"
+        >
 
-        <h2>
-            Cash Drop Entry
-        </h2>
+            1.
+            Inputs
 
-        <p>
-            Enter the amount of cash each employee turned in for each meal block.
-        </p>
-
-        <div id="cashDropTables"></div>
-
-    </section>
+        </button>
 
 
 
-    <section class="panel">
+        <button
+            class="step"
+            data-tab="employeeTab"
+        >
 
-        <h2>
-            Card Tips
-        </h2>
+            2.
+            Employee Config
 
-        <p>
-            Review card tips and gratuity earned from card payments.
-        </p>
-
-        <div id="cardSalesTables"></div>
-
-    </section>
-
-</div>
+        </button>
 
 
 
+        <button
+            class="step"
+            data-tab="summaryTab"
+        >
 
-<!-- Employee Config -->
+            3.
+            Summary
 
-<div id="employeeTab" class="tab-page">
+        </button>
 
-    <div class="config-grid">
-
-        <section class="panel config-card">
-
-            <h2>
-                Employee Tip Points
-            </h2>
-
-            <p class="section-description">
-                Adjust each employee's share weight in the tip pool.
-            </p>
-
-            <div id="employeePoints"></div>
-
-        </section>
-
-
-
-        <section class="panel config-card">
-
-            <h2>
-                Trainee Assignments
-            </h2>
-
-            <p class="section-description">
-                Assign each trainee's tips to the employee receiving credit.
-            </p>
-
-            <div id="traineeAssignments"></div>
-
-        </section>
 
     </div>
 
 
 
-    <section class="panel debug-panel">
 
-        <h2>
-            Debug Objects
-        </h2>
+    <button
+        id="continueButton"
+        class="nav-button"
+    >
 
-        <button id="debugObjects">
-            Show Current Objects
-        </button>
-
-        <pre id="debugOutput"></pre>
-
-    </section>
-
-</div>
-
-
-
-
-<!-- Summaries -->
-
-<div id="summaryTab" class="tab-page">
-
-    <section class="panel">
-
-        <h2>
-            Cash Tip Summary
-        </h2>
-
-        <p>
-            Review calculated cash tips by day.
-        </p>
-
-        <div id="cashSummaryDays"></div>
-
-        <div id="cashTipSummary"></div>
-
-    </section>
-
-</div>
-
-
-
-
-<!-- Navigation -->
-
-<section class="panel navigation-panel">
-
-    <button id="backButton">
-        ← Back
-    </button>
-
-    <button id="continueButton">
         Continue →
+
     </button>
+
+
 
 </section>
+
+
+
+
+
+
+<!-- =========================
+     INPUTS
+========================= -->
+
+
+<section
+id="inputTab"
+class="tab-page active"
+>
+
+
+<section class="panel">
+
+
+<h2>
+Cash Drop Entry
+</h2>
+
+
+<p>
+
+Enter the amount of cash each employee turned in.
+
+</p>
+
+
+<div id="cashDropTables"></div>
+
+
+</section>
+
+
+
+
+
+<section class="panel">
+
+
+<h2>
+Card Tips
+</h2>
+
+
+<p>
+
+Review calculated card tips.
+
+</p>
+
+
+<div id="cardSalesTables"></div>
+
+
+</section>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+     EMPLOYEE CONFIG
+========================= -->
+
+
+<section
+id="employeeTab"
+class="tab-page"
+>
+
+
+<div class="config-grid">
+
+
+
+<section class="panel">
+
+
+<h2>
+Employee Tip Points
+</h2>
+
+
+<div id="employeePoints"></div>
+
+
+</section>
+
+
+
+
+<section class="panel">
+
+
+<h2>
+Trainee Assignments
+</h2>
+
+
+<div id="traineeAssignments"></div>
+
+
+</section>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+     SUMMARY
+========================= -->
+
+
+<section
+id="summaryTab"
+class="tab-page"
+>
+
+
+<section class="panel">
+
+
+<h2>
+Final Summary
+</h2>
+
+
+<div id="cashTipSummary"></div>
+
+
+</section>
+
+
+</section>
+
+
+
 
 
 </main>
 
 
+
 <script type="module" src="./tabs.js"></script>
 <script type="module" src="./app.js"></script>
+
 
 </body>
 
