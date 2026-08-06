@@ -36,15 +36,15 @@ export function renderResultsTable(
                 Name
             </th>
 
-            <th data-sort="cash_payout">
+            <th data-sort="original_cash_tips">
                 Cash Tips
             </th>
 
-            <th data-sort="card_payout">
+            <th data-sort="original_card_tips">
                 Card Tips
             </th>
 
-            <th data-sort="total_payout">
+            <th data-sort="original_tips">
                 Total Tips
             </th>
 
@@ -94,6 +94,27 @@ export function renderResultsTable(
 
 
 
+
+    function originalTips(
+        employee
+    ) {
+
+        return (
+
+            (employee.original_cash_tips || 0)
+
+            +
+
+            (employee.original_card_tips || 0)
+
+        );
+
+    }
+
+
+
+
+
     function tipsPerHour(
         employee
     ) {
@@ -109,8 +130,38 @@ export function renderResultsTable(
 
 
         return (
-            employee.total_payout /
+            originalTips(employee)
+            /
             employee.hours
+        );
+
+
+    }
+
+
+
+
+
+    function avgTipPerOrder(
+        employee
+    ) {
+
+
+        if (
+            employee.order_count <= 0
+        ) {
+
+            return 0;
+
+        }
+
+
+        return (
+
+            originalTips(employee)
+            /
+            employee.order_count
+
         );
 
 
@@ -194,7 +245,7 @@ export function renderResultsTable(
             <td>
 
                 ${formatMoney(
-                    employee.cash_payout
+                    employee.original_cash_tips
                 )}
 
                 <br>
@@ -222,7 +273,7 @@ export function renderResultsTable(
             <td>
 
                 ${formatMoney(
-                    employee.card_payout
+                    employee.original_card_tips
                 )}
 
                 <br>
@@ -250,7 +301,7 @@ export function renderResultsTable(
             <td>
 
                 ${formatMoney(
-                    employee.total_payout
+                    originalTips(employee)
                 )}
 
             </td>
@@ -322,7 +373,9 @@ export function renderResultsTable(
             <td>
 
                 ${formatMoney(
-                    employee.avg_tip_per_order
+                    avgTipPerOrder(
+                        employee
+                    )
                 )}
 
             </td>
@@ -382,6 +435,23 @@ export function renderResultsTable(
 
 
 
+
+                if (
+                    key === "original_tips"
+                ) {
+
+                    A =
+                        originalTips(a);
+
+
+                    B =
+                        originalTips(b);
+
+                }
+
+
+
+
                 if (
                     key === "tips_per_hour"
                 ) {
@@ -394,6 +464,23 @@ export function renderResultsTable(
                         tipsPerHour(b);
 
                 }
+
+
+
+
+                if (
+                    key === "avg_tip_per_order"
+                ) {
+
+                    A =
+                        avgTipPerOrder(a);
+
+
+                    B =
+                        avgTipPerOrder(b);
+
+                }
+
 
 
 

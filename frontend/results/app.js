@@ -57,6 +57,11 @@ import {
 from "./render/renderSpecialOrders.js";
 
 
+import {
+    exportPayrollSummaryCSV
+}
+from "./logic/exportPayrollSummaryCSV.js";
+
 // =================================
 // LOAD CURRENT HISTORY
 // =================================
@@ -539,3 +544,23 @@ if(backButton) {
     };
 
 }
+
+document
+.getElementById(
+    "payrollSummaryButton"
+)
+?.addEventListener(
+    "click",
+    () => {
+
+        const employees =
+            compileResults(
+                resultsSession.filtered_distribution
+            );
+
+        exportPayrollSummaryCSV(
+            employees
+        );
+
+    }
+);

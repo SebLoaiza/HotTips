@@ -31,22 +31,12 @@ const mealBlocks =
 
 if (mealBlocks.length === 0) {
 
-    alert(
-        "No data found."
-    );
+    alert("No data found.");
 
     window.location.href =
         "../start/start.html";
 
 }
-
-
-
-console.log(
-    "MEAL BLOCKS",
-    mealBlocks
-);
-
 
 
 
@@ -60,12 +50,6 @@ const tipDistribution =
     );
 
 
-console.log(
-    "TIP DISTRIBUTION OBJECT",
-    tipDistribution
-);
-
-
 
 
 // =========================
@@ -74,35 +58,44 @@ console.log(
 
 function recalculateDistribution() {
 
-
     for (const mealBlock of tipDistribution) {
-
 
         rebuildDistributionPools(
             mealBlock
         );
 
-
         calculateRoleRatios(
             mealBlock
         );
-
 
         distributeTips(
             mealBlock
         );
 
-
         distributePools(
             mealBlock
         );
 
-
     }
-
 
 }
 
+
+
+// =========================
+// SAVE RESULTS
+// =========================
+
+function saveTipDistribution() {
+
+    sessionStorage.setItem(
+        "tipDistribution",
+        JSON.stringify(
+            tipDistribution
+        )
+    );
+
+}
 
 
 
@@ -112,18 +105,14 @@ function recalculateDistribution() {
 
 function refreshUI() {
 
-
     recalculateDistribution();
-
 
     renderDistribution(
         tipDistribution,
         refreshUI
     );
 
-
 }
-
 
 
 
@@ -141,9 +130,7 @@ document.addEventListener(
                 "tip-point-input"
             )
         ) {
-
             return;
-
         }
 
 
@@ -190,16 +177,8 @@ document.addEventListener(
 
 
         if (!mealBlock) {
-
-            console.warn(
-                "Meal block not found:",
-                mealBlockId
-            );
-
             return;
-
         }
-
 
 
 
@@ -212,16 +191,8 @@ document.addEventListener(
 
 
         if (!employee) {
-
-            console.warn(
-                "Employee not found:",
-                employeeId
-            );
-
             return;
-
         }
-
 
 
 
@@ -234,27 +205,23 @@ document.addEventListener(
             mealBlock
         );
 
-
         calculateRoleRatios(
             mealBlock
         );
 
-
         distributeTips(
             mealBlock
         );
-
 
         distributePools(
             mealBlock
         );
 
 
-
         refreshUI();
+
     }
 );
-
 
 
 
@@ -269,63 +236,25 @@ document
     "click",
     () => {
 
-
         const output =
             document.getElementById(
                 "debugOutput"
             );
 
 
+        if (output) {
 
-        if (!output) {
-
-            return;
+            output.textContent =
+                JSON.stringify(
+                    tipDistribution,
+                    null,
+                    2
+                );
 
         }
 
-
-
-        output.textContent =
-            JSON.stringify(
-                tipDistribution,
-                null,
-                2
-            );
-
-
     }
 );
-
-
-
-
-
-// =========================
-// RESULTS
-// =========================
-
-document
-.getElementById("resultsButton")
-?.addEventListener(
-    "click",
-    () => {
-
-
-        sessionStorage.setItem(
-            "tipDistribution",
-            JSON.stringify(
-                tipDistribution
-            )
-        );
-
-
-        window.location.href =
-            "../results/results.html";
-
-
-    }
-);
-
 
 
 
@@ -334,25 +263,57 @@ document
 // NAVIGATION
 // =========================
 
+function goToResults() {
+
+    saveTipDistribution();
+
+    window.location.href =
+        "../results/results.html";
+
+}
+
+
+
+document
+.getElementById("resultsButton")
+?.addEventListener(
+    "click",
+    goToResults
+);
+
+
+
+document
+.getElementById("continueButton")
+?.addEventListener(
+    "click",
+    goToResults
+);
+
+
+
+document
+.getElementById("topContinueButton")
+?.addEventListener(
+    "click",
+    goToResults
+);
+
+
+
 document
 .getElementById("backButton")
 ?.addEventListener(
     "click",
     () => {
 
-
         window.location.href =
             "../inputs/inputs.html";
-
 
     }
 );
 
 
-
-// =========================
-// TOP NAVIGATION
-// =========================
 
 document
 .getElementById("topBackButton")
@@ -365,52 +326,6 @@ document
 
     }
 );
-
-
-
-document
-.getElementById("topContinueButton")
-?.addEventListener(
-    "click",
-    () => {
-
-        sessionStorage.setItem(
-            "tipDistribution",
-            JSON.stringify(
-                tipDistribution
-            )
-        );
-
-
-        window.location.href =
-            "../results/results.html";
-
-    }
-);
-
-
-document
-.getElementById("continueButton")
-?.addEventListener(
-    "click",
-    () => {
-
-
-        sessionStorage.setItem(
-            "tipDistribution",
-            JSON.stringify(
-                tipDistribution
-            )
-        );
-
-
-        window.location.href =
-            "../results/results.html";
-
-
-    }
-);
-
 
 
 
