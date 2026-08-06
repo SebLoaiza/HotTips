@@ -52,9 +52,43 @@ export function compileResults(
 
 
             // =====================
-            // Money Generated
+            // MONEY GENERATED
             // =====================
 
+
+            // Original tips
+
+            result.original_cash_tips +=
+                employee.cash_tips ?? 0;
+
+
+            result.original_card_tips +=
+                employee.card_tips ?? 0;
+
+
+            result.original_tips =
+                result.original_cash_tips +
+                result.original_card_tips;
+
+
+
+            // Sales
+
+            result.cash_sales +=
+                employee.cash_sales ?? 0;
+
+
+            result.card_sales +=
+                employee.card_sales ?? 0;
+
+
+            result.total_sales =
+                result.cash_sales +
+                result.card_sales;
+
+
+
+            // Kept after distribution
 
             result.cash_kept +=
                 employee.cash_kept ?? 0;
@@ -65,13 +99,14 @@ export function compileResults(
 
 
 
+            // Pool received
+
             result.pool_cash +=
                 employee.pool_cash_received ?? 0;
 
 
             result.pool_card +=
                 employee.pool_card_received ?? 0;
-
 
 
             // =====================
@@ -211,11 +246,10 @@ export function compileResults(
         employee.avg_sales_per_hour =
             employee.hours > 0
                 ?
-                employee.sales /
+                employee.total_sales /
                 employee.hours
                 :
                 0;
-
 
 
         employee.avg_orders_per_hour =

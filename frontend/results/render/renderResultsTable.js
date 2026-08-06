@@ -36,51 +36,49 @@ export function renderResultsTable(
                 Name
             </th>
 
-
-            <th>
-                Cash
+            <th data-sort="cash_payout">
+                Cash Tips
             </th>
 
-
-            <th>
-                Card
+            <th data-sort="card_payout">
+                Card Tips
             </th>
-
 
             <th data-sort="total_payout">
-                Total
+                Total Tips
             </th>
 
-
-            <th data-sort="sales">
-                Sales
+            <th data-sort="cash_sales">
+                Cash Sales
             </th>
 
+            <th data-sort="card_sales">
+                Card Sales
+            </th>
 
-            <th data-sort="sales_per_hour">
+            <th data-sort="total_sales">
+                Total Sales
+            </th>
+
+            <th data-sort="avg_sales_per_hour">
                 Sales / Hr
             </th>
 
-
-            <th data-sort="orders_per_hour">
+            <th data-sort="avg_orders_per_hour">
                 Orders / Hr
             </th>
-
 
             <th data-sort="tips_per_hour">
                 Tips / Hr
             </th>
 
-
             <th data-sort="avg_tip_per_order">
                 Avg Tip / Order
             </th>
 
-
         </tr>
 
     </thead>
-
 
     <tbody></tbody>
 
@@ -96,135 +94,24 @@ export function renderResultsTable(
 
 
 
-    // =========================
-    // Training Calculations
-    // =========================
-
-
-    function getTrainingTransfers(
+    function tipsPerHour(
         employee
     ) {
 
 
-        const transfers =
-            employee.tips_sent_to_trainers ?? [];
-
-
-        let sentCash = 0;
-
-        let sentCard = 0;
-
-
-        for (
-            const transfer of transfers
+        if (
+            employee.hours <= 0
         ) {
 
-
-            sentCash +=
-                transfer.cash_amount ?? 0;
-
-
-            sentCard +=
-                transfer.card_amount ?? 0;
-
+            return 0;
 
         }
 
 
-
-        return {
-
-            cash:
-                sentCash,
-
-
-            card:
-                sentCard
-
-
-        };
-
-
-    }
-
-
-
-
-    function getTrainingReceived(
-        employee
-    ) {
-
-
-        return {
-
-            cash:
-                employee.training_cash_received ?? 0,
-
-
-            card:
-                employee.training_card_received ?? 0
-
-        };
-
-
-    }
-
-
-
-
-    function getMoneyBreakdown(
-        employee
-    ) {
-
-
-        const received =
-            getTrainingReceived(
-                employee
-            );
-
-
-        return {
-
-
-            cash:
-
-
-                (
-                    employee.cash_payout ?? 0
-                )
-                +
-                received.cash,
-
-
-
-            card:
-
-
-                (
-                    employee.card_payout ?? 0
-                )
-                +
-                received.card,
-
-
-            total:
-
-
-                (
-                    employee.cash_payout ?? 0
-                )
-                +
-                (
-                    employee.card_payout ?? 0
-                )
-                +
-                received.cash
-                +
-                received.card
-
-
-
-        };
+        return (
+            employee.total_payout /
+            employee.hours
+        );
 
 
     }
@@ -233,111 +120,13 @@ export function renderResultsTable(
 
 
 
-    function calculateStats(
+    function renderTrainerInfo(
         employee
     ) {
-
-
-        const hours =
-            (
-                employee.worked_minutes ?? 0
-            )
-            /
-            60;
-
-
-
-        return {
-
-
-            sales_per_hour:
-
-                hours > 0
-
-                    ?
-
-                    employee.sales /
-                    hours
-
-                    :
-
-                    0,
-
-
-
-            orders_per_hour:
-
-                hours > 0
-
-                    ?
-
-                    employee.order_count /
-                    hours
-
-                    :
-
-                    0,
-
-
-
-            tips_per_hour:
-
-                hours > 0
-
-                    ?
-
-                    (
-                        getMoneyBreakdown(employee)
-                            .total
-                    )
-                    /
-                    hours
-
-                    :
-
-                    0,
-
-
-
-            avg_tip_per_order:
-
-                employee.order_count > 0
-
-                    ?
-
-                    (
-                        getMoneyBreakdown(employee)
-                            .total
-                    )
-                    /
-                    employee.order_count
-
-                    :
-
-                    0
-
-
-        };
-
-
-    }
-
-
-
-
-
-    function buildTrainerSentNote(
-        employee
-    ) {
-
-
-        const transfers =
-            employee.tips_sent_to_trainers ?? [];
-
 
 
         if (
-            transfers.length === 0
+            employee.tips_sent_to_trainers.length === 0
         ) {
 
             return "";
@@ -346,66 +135,18 @@ export function renderResultsTable(
 
 
 
-        let html = `
+        return `
 
             <br>
 
-            <small style="
-                color:red;
-                font-weight:bold;
-            ">
-                Sent:
+            <small class="trainer-note">
+
+                Sent to trainers:
+                ${employee.tips_sent_to_trainers.length}
+
             </small>
 
         `;
-
-
-
-        for (
-            const transfer of transfers
-        ) {
-
-
-            html += `
-
-                <br>
-
-                <small style="
-                    color:red;
-                ">
-
-                    ➡ ${transfer.trainer_name}
-
-                    <br>
-
-                    ${transfer.date}
-                    -
-                    ${transfer.meal}
-
-                    <br>
-
-                    Cash:
-                    ${formatMoney(
-                        transfer.cash_amount
-                    )}
-
-                    <br>
-
-                    Card:
-                    ${formatMoney(
-                        transfer.card_amount
-                    )}
-
-                </small>
-
-            `;
-
-
-        }
-
-
-
-        return html;
 
 
     }
@@ -428,27 +169,6 @@ export function renderResultsTable(
         ) {
 
 
-            const stats =
-                calculateStats(
-                    employee
-                );
-
-
-
-            const money =
-                getMoneyBreakdown(
-                    employee
-                );
-
-
-
-            const received =
-                getTrainingReceived(
-                    employee
-                );
-
-
-
             const row =
                 document.createElement(
                     "tr"
@@ -459,138 +179,153 @@ export function renderResultsTable(
             row.innerHTML = `
 
 
-                <td>
+            <td>
 
-                    ${employee.name}
+                ${employee.name}
 
-                    ${buildTrainerSentNote(
+                ${renderTrainerInfo(
+                    employee
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.cash_payout
+                )}
+
+                <br>
+
+                <small>
+
+                    Kept:
+                    ${formatMoney(
+                        employee.cash_kept
+                    )}
+
+                    <br>
+
+                    Pool:
+                    ${formatMoney(
+                        employee.pool_cash
+                    )}
+
+                </small>
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.card_payout
+                )}
+
+                <br>
+
+                <small>
+
+                    Kept:
+                    ${formatMoney(
+                        employee.card_kept
+                    )}
+
+                    <br>
+
+                    Pool:
+                    ${formatMoney(
+                        employee.pool_card
+                    )}
+
+                </small>
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.total_payout
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.cash_sales
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.card_sales
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.total_sales
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    employee.avg_sales_per_hour
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatNumber(
+                    employee.avg_orders_per_hour
+                )}
+
+            </td>
+
+
+
+            <td>
+
+                ${formatMoney(
+                    tipsPerHour(
                         employee
-                    )}
+                    )
+                )}
 
-                </td>
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        money.cash
-                    )}
-
-                    <br>
-
-                    <small>
-
-                        Base:
-                        ${formatMoney(
-                            employee.cash_payout
-                        )}
-
-                        <br>
-
-                        From Trainees:
-                        ${formatMoney(
-                            received.cash
-                        )}
-
-                    </small>
-
-                </td>
+            </td>
 
 
 
+            <td>
 
-                <td>
+                ${formatMoney(
+                    employee.avg_tip_per_order
+                )}
 
-                    ${formatMoney(
-                        money.card
-                    )}
-
-                    <br>
-
-                    <small>
-
-                        Base:
-                        ${formatMoney(
-                            employee.card_payout
-                        )}
-
-                        <br>
-
-                        From Trainees:
-                        ${formatMoney(
-                            received.card
-                        )}
-
-                    </small>
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        money.total
-                    )}
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        employee.sales
-                    )}
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        stats.sales_per_hour
-                    )}
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatNumber(
-                        stats.orders_per_hour
-                    )}
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        stats.tips_per_hour
-                    )}
-
-                </td>
-
-
-
-
-                <td>
-
-                    ${formatMoney(
-                        stats.avg_tip_per_order
-                    )}
-
-                </td>
+            </td>
 
 
             `;
@@ -638,64 +373,25 @@ export function renderResultsTable(
             (a,b) => {
 
 
-                let A;
+                let A =
+                    a[key] ?? 0;
 
-                let B;
+
+                let B =
+                    b[key] ?? 0;
 
 
 
                 if (
-
-                    key === "sales_per_hour"
-
-                    ||
-
-                    key === "orders_per_hour"
-
-                    ||
-
                     key === "tips_per_hour"
-
-                    ||
-
-                    key === "avg_tip_per_order"
-
                 ) {
 
-
-                    const statsA =
-                        calculateStats(
-                            a
-                        );
-
-
-                    const statsB =
-                        calculateStats(
-                            b
-                        );
-
-
-
                     A =
-                        statsA[key];
+                        tipsPerHour(a);
 
 
                     B =
-                        statsB[key];
-
-
-                }
-
-                else {
-
-
-                    A =
-                        a[key] ?? 0;
-
-
-                    B =
-                        b[key] ?? 0;
-
+                        tipsPerHour(b);
 
                 }
 
@@ -715,7 +411,6 @@ export function renderResultsTable(
                         :
 
                         B.localeCompare(A);
-
 
                 }
 
@@ -769,14 +464,13 @@ export function renderResultsTable(
 
                     currentSort.direction =
                         currentSort.direction === "asc"
-                            ?
-                            "desc"
-                            :
-                            "asc";
+                        ?
+                        "desc"
+                        :
+                        "asc";
 
 
                 }
-
                 else {
 
 

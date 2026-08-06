@@ -61,9 +61,17 @@ export class EmployeeResult {
         // SALES / PERFORMANCE
         // =====================
 
-        this.sales = 0;
+
+        this.cash_sales = 0;
+
+        this.card_sales = 0;
+
+        this.total_sales = 0;
+
+
 
         this.order_count = 0;
+
 
 
 

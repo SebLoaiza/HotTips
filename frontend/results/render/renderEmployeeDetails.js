@@ -23,12 +23,11 @@ export function renderEmployeeDetails(
 
 
     // =========================
-    // Trainee Transfers
+    // Tips Sent To Trainers
     // =========================
 
     if (
-        employee.tips_sent_to_trainers
-        &&
+        employee.tips_sent_to_trainers &&
         employee.tips_sent_to_trainers.length > 0
     ) {
 
@@ -38,7 +37,7 @@ export function renderEmployeeDetails(
             <hr>
 
             <h3>
-                Tips Sent To Trainer
+                Tips Sent To Trainers
             </h3>
 
         `;
@@ -50,12 +49,22 @@ export function renderEmployeeDetails(
         ) {
 
 
+            const total =
+                (
+                    transfer.cash_amount ?? 0
+                )
+                +
+                (
+                    transfer.card_amount ?? 0
+                );
+
+
+
             trainerSection += `
 
                 <p>
 
-                    ➡ 
-                    ${transfer.trainer_name}
+                    ➡ ${transfer.trainer_name}
 
                     <br>
 
@@ -65,9 +74,23 @@ export function renderEmployeeDetails(
 
                     <br>
 
-                    Sent:
+                    Cash:
                     ${formatMoney(
-                        transfer.amount
+                        transfer.cash_amount
+                    )}
+
+                    <br>
+
+                    Card:
+                    ${formatMoney(
+                        transfer.card_amount
+                    )}
+
+                    <br>
+
+                    Total Sent:
+                    ${formatMoney(
+                        total
                     )}
 
                 </p>
@@ -83,12 +106,25 @@ export function renderEmployeeDetails(
 
 
 
+
     // =========================
-    // Trainer Received Tips
+    // Training Received
     // =========================
 
+
+    const trainingTotal =
+        (
+            employee.training_cash_received ?? 0
+        )
+        +
+        (
+            employee.training_card_received ?? 0
+        );
+
+
+
     if (
-        employee.training_tips_received > 0
+        trainingTotal > 0
     ) {
 
 
@@ -103,9 +139,23 @@ export function renderEmployeeDetails(
 
             <p>
 
-                Received:
+                Cash:
                 ${formatMoney(
-                    employee.training_tips_received
+                    employee.training_cash_received
+                )}
+
+                <br>
+
+                Card:
+                ${formatMoney(
+                    employee.training_card_received
+                )}
+
+                <br>
+
+                Total:
+                ${formatMoney(
+                    trainingTotal
                 )}
 
             </p>
@@ -117,6 +167,12 @@ export function renderEmployeeDetails(
 
 
 
+
+    // =========================
+    // Tip Breakdown
+    // =========================
+
+
     div.innerHTML = `
 
 
@@ -126,29 +182,146 @@ export function renderEmployeeDetails(
 
 
 
+    <hr>
+
+
+    <h3>
+        Original Tips Generated
+    </h3>
+
+
     <p>
+
+        Cash Tips:
+        ${formatMoney(
+            employee.original_cash_tips
+        )}
+
+        <br>
+
+        Card Tips:
+        ${formatMoney(
+            employee.original_card_tips
+        )}
+
+        <br>
+
+        Total Generated:
+        ${formatMoney(
+            employee.original_tips
+        )}
+
+    </p>
+
+
+
+    <hr>
+
+
+
+    <h3>
+        Tip Distribution
+    </h3>
+
+
+    <p>
+
+        Cash Kept:
+        ${formatMoney(
+            employee.cash_kept
+        )}
+
+        <br>
+
+        Card Kept:
+        ${formatMoney(
+            employee.card_kept
+        )}
+
+        <br>
+
+        Pool Cash Received:
+        ${formatMoney(
+            employee.pool_cash
+        )}
+
+        <br>
+
+        Pool Card Received:
+        ${formatMoney(
+            employee.pool_card
+        )}
+
+    </p>
+
+
+
+
+    <hr>
+
+
+
+    <h3>
+        Final Tips
+    </h3>
+
+
+    <p>
+
         Cash:
         ${formatMoney(
             employee.cash_payout
         )}
-    </p>
 
+        <br>
 
-
-    <p>
         Card:
         ${formatMoney(
             employee.card_payout
         )}
-    </p>
 
+        <br>
 
-
-    <p>
         Total:
         ${formatMoney(
             employee.total_payout
         )}
+
+    </p>
+
+
+
+
+    <hr>
+
+
+
+    <h3>
+        Sales
+    </h3>
+
+
+    <p>
+
+        Cash Sales:
+        ${formatMoney(
+            employee.cash_sales
+        )}
+
+        <br>
+
+        Card Sales:
+        ${formatMoney(
+            employee.card_sales
+        )}
+
+        <br>
+
+        Total Sales:
+        ${formatMoney(
+            employee.total_sales
+        )}
+
     </p>
 
 
@@ -157,31 +330,42 @@ export function renderEmployeeDetails(
 
 
 
+
     <hr>
 
 
 
+    <h3>
+        Performance
+    </h3>
+
+
     <p>
+
         Orders:
         ${employee.order_count}
-    </p>
 
+        <br>
 
-
-    <p>
-        Sales:
-        ${formatMoney(
-            employee.sales
-        )}
-    </p>
-
-
-
-    <p>
         Hours:
         ${formatHours(
             employee.worked_minutes
         )}
+
+        <br>
+
+        Sales / Hour:
+        ${formatMoney(
+            employee.avg_sales_per_hour
+        )}
+
+        <br>
+
+        Avg Tip / Order:
+        ${formatMoney(
+            employee.avg_tip_per_order
+        )}
+
     </p>
 
 
