@@ -4,12 +4,10 @@ import {
 from "../utils/formatters.js";
 
 
-
 export function renderPrintSummary(
     employees,
     distribution
 ) {
-
 
     const container =
         document.createElement(
@@ -26,6 +24,7 @@ export function renderPrintSummary(
     // DATE RANGE
     // =========================
 
+
     const dates =
         [
             ...new Set(
@@ -36,10 +35,8 @@ export function renderPrintSummary(
         ];
 
 
-
     const startDate =
         dates[0] || "";
-
 
 
     const endDate =
@@ -47,22 +44,16 @@ export function renderPrintSummary(
 
 
 
-
-
     // =========================
     // QUALIFIED EMPLOYEES
     // =========================
-    //
-    // Only employees with enough
-    // sales and hours qualify
-    // for percentage rankings.
-    //
+
 
     const qualifiedEmployees =
         employees.filter(
             employee =>
 
-                employee.total_sales >= 25000
+                employee.total_sales >= 250
 
                 &&
 
@@ -72,48 +63,51 @@ export function renderPrintSummary(
 
 
 
-
-
     // =========================
     // TOP SALES
     // =========================
 
+
     const topSales =
-        [...employees]
+        [
+            ...employees
+        ]
         .sort(
-            (a,b)=>
-                b.total_sales - a.total_sales
+            (a,b) =>
+                b.total_sales -
+                a.total_sales
         )
-        .slice(0,5);
-
-
+        .slice(
+            0,
+            5
+        );
 
 
 
     // =========================
     // TOP TIP %
     // =========================
-    //
-    // Based on original tips
-    // generated from sales.
-    //
-    // Not final distributed payout.
-    //
+
 
     const topTips =
-        [...qualifiedEmployees]
+        [
+            ...qualifiedEmployees
+        ]
         .sort(
-            (a,b)=>{
+            (a,b) => {
 
 
                 const tipA =
                     a.total_sales > 0
                         ?
+
                         (
                             a.original_tips /
                             a.total_sales
                         )
+
                         :
+
                         0;
 
 
@@ -121,11 +115,14 @@ export function renderPrintSummary(
                 const tipB =
                     b.total_sales > 0
                         ?
+
                         (
                             b.original_tips /
                             b.total_sales
                         )
+
                         :
+
                         0;
 
 
@@ -134,9 +131,10 @@ export function renderPrintSummary(
 
             }
         )
-        .slice(0,5);
-
-
+        .slice(
+            0,
+            5
+        );
 
 
 
@@ -144,75 +142,131 @@ export function renderPrintSummary(
     // TOP TIPS / HOUR
     // =========================
 
+
     const topTipsPerHour =
-        [...qualifiedEmployees]
+        [
+            ...qualifiedEmployees
+        ]
         .sort(
-            (a,b)=>{
+            (a,b) => {
+
+
+                const hoursA =
+                    a.worked_minutes / 60;
+
+
+                const hoursB =
+                    b.worked_minutes / 60;
+
 
 
                 const tipsA =
-                    a.original_tips /
-                    (
-                        a.worked_minutes / 60
-                    );
+                    hoursA > 0
+                        ?
+                        a.original_tips / hoursA
+                        :
+                        0;
 
 
 
                 const tipsB =
-                    b.original_tips /
-                    (
-                        b.worked_minutes / 60
-                    );
+                    hoursB > 0
+                        ?
+                        b.original_tips / hoursB
+                        :
+                        0;
 
 
 
                 return tipsB - tipsA;
 
+
             }
         )
-        .slice(0,5);
+        .slice(
+            0,
+            5
+        );
 
 
 
 
+    // =========================
+    // HTML
+    // =========================
 
 
     container.innerHTML = `
 
 
-        <h2>
-            Tip Summary
-        </h2>
+        <header class="printHeader">
 
 
-        <h4>
-            ${startDate}
-            -
-            ${endDate}
-        </h4>
+            <img
+
+                src="./assets/logo.png"
+
+                class="printLogo"
+
+            >
+
+
+        </header>
 
 
 
 
-        <div class="printColumns">
+        <section class="reportTitle">
 
 
-            <div>
+            <h1>
+                Tip Summary
+            </h1>
 
-                <h3>
+
+            <p>
+
+                ${startDate}
+
+                -
+
+                ${endDate}
+
+            </p>
+
+
+        </section>
+
+
+
+
+
+        <section class="printResults">
+
+
+
+            <div class="resultSection">
+
+
+                <h2>
                     Top 5 Sales
-                </h3>
+                </h2>
+
 
 
                 <ol>
+
 
                 ${
                     topSales.map(
                         employee => `
 
+
                         <li>
 
+
                             ${employee.name}
+
 
                             -
 
@@ -220,13 +274,18 @@ export function renderPrintSummary(
                                 employee.total_sales
                             )}
 
+
                         </li>
 
+
                         `
-                    ).join("")
+                    )
+                    .join("")
                 }
 
+
                 </ol>
+
 
             </div>
 
@@ -234,19 +293,27 @@ export function renderPrintSummary(
 
 
 
-            <div>
 
-                <h3>
+
+            <div class="resultSection">
+
+
+                <h2>
                     Top 5 Tip %
-                </h3>
+                </h2>
 
 
-                <small>
+
+                <p class="criteria">
+
                     Minimum $250 sales + 2 hours worked
-                </small>
+
+                </p>
+
 
 
                 <ol>
+
 
                 ${
                     topTips.map(
@@ -254,38 +321,53 @@ export function renderPrintSummary(
 
 
                             const percent =
+
                                 employee.total_sales > 0
-                                    ?
-                                    (
-                                        employee.original_tips /
-                                        employee.total_sales
-                                    )
-                                    * 100
-                                    :
-                                    0;
+
+                                ?
+
+                                (
+                                    employee.original_tips /
+                                    employee.total_sales
+                                )
+                                *
+                                100
+
+                                :
+
+                                0;
 
 
 
                             return `
 
+
                             <li>
+
 
                                 ${employee.name}
 
+
                                 -
+
 
                                 ${percent.toFixed(2)}%
 
+
                             </li>
+
 
                             `;
 
 
                         }
-                    ).join("")
+                    )
+                    .join("")
                 }
 
+
                 </ol>
+
 
             </div>
 
@@ -293,61 +375,96 @@ export function renderPrintSummary(
 
 
 
-            <div>
 
-                <h3>
+
+
+            <div class="resultSection">
+
+
+                <h2>
                     Top 5 Tips / Hour
-                </h3>
+                </h2>
 
 
-                <small>
+
+                <p class="criteria">
+
                     Minimum $250 sales + 2 hours worked
-                </small>
+
+                </p>
+
+
 
 
                 <ol>
+
 
                 ${
                     topTipsPerHour.map(
                         employee => {
 
 
+                            const hours =
+
+                                employee.worked_minutes / 60;
+
+
+
                             const hourly =
+
+                                hours > 0
+
+                                ?
+
                                 employee.original_tips /
-                                (
-                                    employee.worked_minutes / 60
-                                );
+                                hours
+
+                                :
+
+                                0;
 
 
 
                             return `
 
+
                             <li>
+
 
                                 ${employee.name}
 
+
                                 -
+
 
                                 ${formatMoney(
                                     hourly
                                 )}
+
                                 / hr
+
 
                             </li>
 
+
                             `;
 
+
                         }
-                    ).join("")
+                    )
+                    .join("")
                 }
 
+
                 </ol>
+
+
 
             </div>
 
 
 
-        </div>
+        </section>
 
 
     `;
@@ -355,6 +472,5 @@ export function renderPrintSummary(
 
 
     return container;
-
 
 }
