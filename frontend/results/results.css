@@ -1,12 +1,25 @@
+html,
+body {
+
+    margin:0;
+    padding:0;
+
+    width:100%;
+
+}
+
+
 /* =========================
    GLOBAL
 ========================= */
 
-*{
-    box-sizing:border-box;
+
+
+* {
+    box-sizing: border-box;
 }
 
-:root{
+:root {
 
     --background:#0b1220;
     --background-light:#101a2e;
@@ -30,12 +43,11 @@
 }
 
 
-
 /* =========================
    BODY
 ========================= */
 
-body{
+body {
 
     margin:0;
     min-height:100vh;
@@ -49,7 +61,6 @@ body{
     color:var(--text);
 
     background:
-
         radial-gradient(
             circle at top right,
             rgba(233,66,163,.08),
@@ -67,20 +78,37 @@ body{
             var(--background-light),
             var(--background)
         );
+}
+
+
+main {
+
+    width:100%;
+
+    max-width:none;
+
+    margin:0;
+
+    padding:0;
 
 }
 
 
+#dateSelector,
+#printSummary,
+#resultsContainer,
+#employeeDetails{
 
-main{
+    margin-left:70px;
 
-    max-width:1600px;
-    margin:auto;
-    padding:35px 70px;
+    margin-right:70px;
 
 }
 
 
+/* =========================
+   HEADER
+========================= */
 
 /* =========================
    HEADER
@@ -88,17 +116,21 @@ main{
 
 .app-header{
 
+    width:100%;
+
+    height:88px;
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     gap:25px;
 
     padding:0 36px;
 
-    height:88px;
-
-    margin-bottom:25px;
+    margin:0;
 
     background:
         rgba(11,18,32,.9);
@@ -107,8 +139,7 @@ main{
 
 }
 
-
-.brand{
+.brand {
 
     display:flex;
 
@@ -118,8 +149,7 @@ main{
 
 }
 
-
-.logo{
+.logo {
 
     width:75px;
 
@@ -129,8 +159,7 @@ main{
 
 }
 
-
-.header-text h1{
+.header-text h1 {
 
     margin:0;
 
@@ -138,24 +167,51 @@ main{
 
 }
 
-
-.header-text p{
+.header-text p {
 
     margin:5px 0 0;
+
+    color:var(--muted);
+
+}
+
+.headerButtons {
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+}
+
+
+/* =========================
+   SPACE BELOW HEADER
+========================= */
+
+#dateSelector {
+    margin-top:35px;
+}
+
 
 /* =========================
    BUTTONS
 ========================= */
 
-.headerButtons{
+.headerButtons {
 
     display:flex;
     flex-wrap:wrap;
+    justify-content:flex-end;
     gap:10px;
 
 }
 
-button{
+
+button {
 
     height:42px;
     padding:0 16px;
@@ -176,7 +232,8 @@ button{
 
 }
 
-button:hover{
+
+button:hover {
 
     background:var(--surface-hover);
 
@@ -184,30 +241,33 @@ button:hover{
 
 }
 
-#backButton{
+
+#backButton {
 
     background:var(--pink);
+
     border-color:var(--pink);
 
 }
 
-#backButton:hover{
+
+#backButton:hover {
 
     background:var(--pink-hover);
 
 }
 
 
-
 /* =========================
    DATE BAR
 ========================= */
 
-#dateSelector{
+#dateSelector {
 
     background:var(--surface);
 
     border:1px solid var(--border);
+
     border-bottom:none;
 
     border-radius:10px 10px 0 0;
@@ -216,8 +276,9 @@ button:hover{
 
 }
 
+
 input,
-select{
+select {
 
     background:var(--surface);
 
@@ -231,21 +292,22 @@ select{
 
 }
 
+
 input:focus,
-select:focus{
+select:focus {
 
     outline:none;
+
     border-color:var(--cyan);
 
 }
-
 
 
 /* =========================
    RESULTS TABLE
 ========================= */
 
-#resultsContainer{
+#resultsContainer {
 
     background:var(--surface);
 
@@ -263,24 +325,24 @@ select:focus{
 }
 
 
-
-#resultsContainer table{
+#resultsContainer table {
 
     width:100%;
+
     min-width:1200px;
 
     border-collapse:separate;
+
     border-spacing:0;
 
 }
-
 
 
 /* =========================
    TABLE HEADER
 ========================= */
 
-#resultsContainer th{
+#resultsContainer th {
 
     position:sticky;
 
@@ -307,42 +369,37 @@ select:focus{
 }
 
 
-
 /* =========================
    TABLE BODY
 ========================= */
 
-#resultsContainer td{
+#resultsContainer td {
 
     padding:15px;
 
     border-bottom:
         1px solid rgba(255,255,255,.05);
 
-    transition:
-        background .15s;
+    transition:background .15s;
 
 }
 
 
-
-/* alternating rows */
-
-#resultsContainer tbody tr:nth-child(odd) td{
+#resultsContainer tbody tr:nth-child(odd) td {
 
     background:rgba(249,243,99,.035);
 
 }
 
-#resultsContainer tbody tr:nth-child(even) td{
+
+#resultsContainer tbody tr:nth-child(even) td {
 
     background:rgba(139,231,255,.045);
 
 }
 
 
-
-#resultsContainer tbody tr:hover td{
+#resultsContainer tbody tr:hover td {
 
     background:
         rgba(233,66,163,.12);
@@ -350,151 +407,107 @@ select:focus{
 }
 
 
-
-#resultsContainer tbody tr{
+#resultsContainer tbody tr {
 
     cursor:pointer;
 
 }
 
 
-
-/* =========================
-   COLUMN COLORS
-========================= */
-
-#resultsContainer td:first-child{
+#resultsContainer td:first-child {
 
     color:var(--cyan);
+
     font-weight:700;
 
 }
 
-.money{
+
+.money {
 
     color:var(--success);
+
     font-weight:700;
 
 }
 
-.analytics{
+
+.analytics {
 
     color:var(--muted);
 
 }
-
-
-.headerButtons{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    justify-content:flex-end;
-
-    gap:10px;
-
-}
-
-
-
 /* =========================
    EMPLOYEE DETAILS
 ========================= */
 
-.employeeDetailsRow td{
+.employeeDetailsRow td {
+
     padding:30px;
+
     background:var(--surface-hover);
+
 }
 
-.employeeDetail{
+
+.employeeDetail {
+
     display:flex;
+
     flex-direction:column;
+
     gap:24px;
+
 }
 
-.employeeSummary{
+
+.employeeSummary {
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     padding-bottom:18px;
 
     border-bottom:1px solid var(--border);
+
 }
 
-.employeeSummary h2{
+
+.employeeSummary h2 {
+
     margin:0;
+
     font-size:28px;
+
 }
 
-.employeeSummary .total{
+
+.employeeSummary .total {
+
     text-align:right;
+
 }
 
-.employeeSummary .amount{
+
+.employeeSummary .amount {
+
     font-size:30px;
+
     font-weight:700;
+
     color:var(--success);
+
 }
-
-.detailGrid{
-    display:grid;
-
-    grid-template-columns:
-        repeat(auto-fit,minmax(260px,1fr));
-
-    gap:20px;
-}
-
-.detailCard{
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:10px;
-
-    padding:20px;
-}
-
-.detailCard h3{
-    margin:0 0 14px;
-    color:var(--yellow);
-    font-size:16px;
-}
-
-.detailRow{
-    display:flex;
-    justify-content:space-between;
-
-    padding:7px 0;
-
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.detailRow:last-child{
-    border-bottom:none;
-}
-
-.detailLabel{
-    color:var(--muted);
-}
-
-.detailValue{
-    font-weight:600;
-}
-
-.detailValue.money{
-    color:var(--success);
-}
-
 
 
 /* =========================
    DETAIL GRID
 ========================= */
 
-.detailGrid{
+.detailGrid {
 
     display:grid;
 
@@ -506,15 +519,13 @@ select:focus{
 }
 
 
-
 /* =========================
    DETAIL CARDS
 ========================= */
 
-.detailCard{
+.detailCard {
 
     background:
-
         linear-gradient(
             180deg,
             rgba(255,255,255,.03),
@@ -531,7 +542,8 @@ select:focus{
 
 }
 
-.detailCard:hover{
+
+.detailCard:hover {
 
     transform:translateY(-2px);
 
@@ -540,8 +552,7 @@ select:focus{
 }
 
 
-
-.detailCard h3{
+.detailCard h3 {
 
     margin:0 0 14px;
 
@@ -552,8 +563,7 @@ select:focus{
 }
 
 
-
-.detailCard p{
+.detailCard p {
 
     margin:8px 0 3px;
 
@@ -564,8 +574,7 @@ select:focus{
 }
 
 
-
-.detailCard span{
+.detailCard span {
 
     display:block;
 
@@ -580,12 +589,54 @@ select:focus{
 }
 
 
+.detailRow {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:7px 0;
+
+    border-bottom:
+
+        1px solid rgba(255,255,255,.05);
+
+}
+
+
+.detailRow:last-child {
+
+    border-bottom:none;
+
+}
+
+
+.detailLabel {
+
+    color:var(--muted);
+
+}
+
+
+.detailValue {
+
+    font-weight:600;
+
+}
+
+
+.detailValue.money {
+
+    color:var(--success);
+
+}
+
 
 /* =========================
    TRAINER SECTION
 ========================= */
 
-.trainerSection{
+.trainerSection {
 
     margin-top:22px;
 
@@ -595,7 +646,8 @@ select:focus{
 
 }
 
-.trainerSection h3{
+
+.trainerSection h3 {
 
     margin-top:0;
 
@@ -603,7 +655,8 @@ select:focus{
 
 }
 
-.trainerSection p{
+
+.trainerSection p {
 
     margin:12px 0;
 
@@ -614,33 +667,36 @@ select:focus{
 }
 
 
-
 /* =========================
    PRINT
 ========================= */
 
-#printSummary{
+#printSummary {
 
     display:none;
 
 }
 
-@media print{
 
-    body{
+@media print {
+
+    body {
 
         background:white;
+
         color:black;
 
     }
 
-    body > main > *{
+
+    body > main > * {
 
         display:none;
 
     }
 
-    #printSummary{
+
+    #printSummary {
 
         display:block;
 
@@ -649,39 +705,44 @@ select:focus{
 }
 
 
-
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:900px){
+@media(max-width:900px) {
 
-    main{
+
+    main {
 
         padding:24px 18px;
 
     }
 
-    .app-header{
+
+    .app-header {
 
         flex-direction:column;
+
         align-items:flex-start;
 
     }
 
-    .headerButtons{
+
+    .headerButtons {
 
         width:100%;
 
     }
 
-    button{
+
+    button {
 
         flex:1;
 
     }
 
-    .detailGrid{
+
+    .detailGrid {
 
         grid-template-columns:1fr;
 
