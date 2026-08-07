@@ -7,7 +7,8 @@ export function exportPayrollSummaryCSV(
         [
             "Employee",
             "Sales",
-            "Take Home"
+            "Card Take Home",
+            "Cash Take Home"
         ]
 
     ];
@@ -27,18 +28,47 @@ export function exportPayrollSummaryCSV(
         const employee of sorted
     ) {
 
+
+        const cardTakeHome =
+            (
+                employee.card_kept ?? 0
+            )
+            +
+            (
+                employee.pool_card_received ?? 0
+            );
+
+
+
+        const cashTakeHome =
+            (
+                employee.cash_kept ?? 0
+            )
+            +
+            (
+                employee.pool_cash_received ?? 0
+            );
+
+
+
         rows.push([
 
             `"${employee.name}"`,
+
 
             (
                 (employee.card_sales || 0)
                 / 100
             ).toFixed(2),
 
+
             (
-                (employee.total_payout || 0)
-                / 100
+                cardTakeHome / 100
+            ).toFixed(2),
+
+
+            (
+                cashTakeHome / 100
             ).toFixed(2)
 
         ]);
@@ -59,7 +89,8 @@ export function exportPayrollSummaryCSV(
         new Blob(
             [csv],
             {
-                type: "text/csv;charset=utf-8;"
+                type:
+                    "text/csv;charset=utf-8;"
             }
         );
 

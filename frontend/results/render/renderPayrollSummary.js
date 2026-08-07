@@ -33,7 +33,9 @@ export function renderPayrollSummary(
             Payroll Summary
         </h2>
 
+
         <table class="summaryTable">
+
 
             <thead>
 
@@ -43,29 +45,43 @@ export function renderPayrollSummary(
                         Employee
                     </th>
 
+
                     <th>
                         Sales
                     </th>
 
+
                     <th>
-                        Take Home
+                        Card Take Home
                     </th>
+
+
+                    <th>
+                        Cash Take Home
+                    </th>
+
 
                 </tr>
 
             </thead>
 
+
+
             <tbody>
+
 
                 ${sorted.map(employee => `
 
                     <tr>
+
 
                         <td>
 
                             ${employee.name}
 
                         </td>
+
+
 
                         <td>
 
@@ -75,23 +91,59 @@ export function renderPayrollSummary(
 
                         </td>
 
+
+
                         <td>
 
                             ${formatMoney(
-                                employee.total_payout
+
+                                (
+                                    employee.card_kept ?? 0
+                                )
+                                +
+                                (
+                                    employee.pool_card_received ?? 0
+                                )
+
                             )}
 
                         </td>
 
+
+
+                        <td>
+
+                            ${formatMoney(
+
+                                (
+                                    employee.cash_kept ?? 0
+                                )
+                                +
+                                (
+                                    employee.pool_cash_received ?? 0
+                                )
+
+                            )}
+
+                        </td>
+
+
+
                     </tr>
+
 
                 `).join("")}
 
+
+
             </tbody>
+
 
         </table>
 
+
     `;
+
 
     return container;
 
