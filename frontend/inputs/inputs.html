@@ -3,15 +3,14 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+HotTips - Tip Distribution
+</title>
 
-    <title>
-        HotTips - Tip Distribution
-    </title>
-
-    <link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./style.css">
 
 </head>
 
@@ -20,6 +19,7 @@
 
 
 <header class="app-header">
+
 
     <img
         src="logo.png"
@@ -39,7 +39,9 @@
 
     </div>
 
+
 </header>
+
 
 
 
@@ -47,97 +49,75 @@
 
 
 
-<section class="panel workflow-panel">
+<!-- =========================
+     PROCESS NAVIGATION
+========================= -->
 
 
-    <h2>
-        Tip Distribution Workflow
-    </h2>
+<section class="panel workflow">
 
 
-    <p class="page-description">
+    <button
+        id="backButton"
+        class="nav-button"
+    >
+        ← Back
+    </button>
 
-        Enter cash drops, configure employee tip points,
-        and review the final tip distribution summary.
-
-    </p>
 
 
 
-    <div class="workflow">
+    <div class="steps">
 
 
         <button
-            id="backButton"
-            class="nav-button"
+            class="step active"
+            data-tab="inputTab"
         >
 
-            ← Back
+            1.
+            Inputs
 
         </button>
 
 
 
+        <button
+            class="step"
+            data-tab="employeeTab"
+        >
 
-        <div class="steps">
+            2.
+            Employee Config
 
-
-            <button
-                class="step active"
-                data-tab="inputTab"
-            >
-
-                1.
-                Inputs
-
-            </button>
-
-
-
-
-            <button
-                class="step"
-                data-tab="employeeTab"
-            >
-
-                2.
-                Employee Config
-
-            </button>
-
-
-
-
-            <button
-                class="step"
-                data-tab="summaryTab"
-            >
-
-                3.
-                Summary
-
-            </button>
-
-
-
-        </div>
-
-
+        </button>
 
 
 
         <button
-            id="continueButton"
-            class="nav-button"
+            class="step"
+            data-tab="summaryTab"
         >
 
-            Continue →
+            3.
+            Summary
 
         </button>
-
 
 
     </div>
+
+
+
+
+    <button
+        id="continueButton"
+        class="nav-button"
+    >
+
+        Continue →
+
+    </button>
 
 
 
@@ -148,38 +128,36 @@
 
 
 
+<!-- =========================
+     INPUTS
+========================= -->
+
+
 <section
-    id="inputTab"
-    class="tab-page active"
+id="inputTab"
+class="tab-page active"
 >
 
 
-
 <section class="panel">
 
 
-    <h2>
-        Cash Drop Entry
-    </h2>
+<h2>
+Cash Drop Entry
+</h2>
 
 
+<p>
 
-    <p class="page-description">
+Enter the amount of cash each employee turned in.
 
-        Enter the amount of cash each employee turned in.
-
-    </p>
-
+</p>
 
 
-    <div id="cashDropTables">
-
-    </div>
-
+<div id="cashDropTables"></div>
 
 
 </section>
-
 
 
 
@@ -188,28 +166,22 @@
 <section class="panel">
 
 
-    <h2>
-        Card Tips
-    </h2>
+<h2>
+Card Tips
+</h2>
 
 
+<p>
 
-    <p class="page-description">
+Review calculated card tips.
 
-        Review calculated card tips.
-
-    </p>
-
+</p>
 
 
-    <div id="cardSalesTables">
-
-    </div>
-
+<div id="cardSalesTables"></div>
 
 
 </section>
-
 
 
 </section>
@@ -220,11 +192,14 @@
 
 
 
+<!-- =========================
+     EMPLOYEE CONFIG
+========================= -->
 
 
 <section
-    id="employeeTab"
-    class="tab-page"
+id="employeeTab"
+class="tab-page"
 >
 
 
@@ -235,22 +210,15 @@
 <section class="panel">
 
 
-    <h2>
-        Employee Tip Points
-    </h2>
+<h2>
+Employee Tip Points
+</h2>
 
 
-
-    <div id="employeePoints">
-
-    </div>
-
+<div id="employeePoints"></div>
 
 
 </section>
-
-
-
 
 
 
@@ -258,20 +226,15 @@
 <section class="panel">
 
 
-    <h2>
-        Trainee Assignments
-    </h2>
+<h2>
+Trainee Assignments
+</h2>
 
 
-
-    <div id="traineeAssignments">
-
-    </div>
-
+<div id="traineeAssignments"></div>
 
 
 </section>
-
 
 
 
@@ -286,36 +249,32 @@
 
 
 
+<!-- =========================
+     SUMMARY
+========================= -->
 
 
 <section
-    id="summaryTab"
-    class="tab-page"
+id="summaryTab"
+class="tab-page"
 >
-
 
 
 <section class="panel">
 
 
-    <h2>
-        Final Summary
-    </h2>
+<h2>
+Final Summary
+</h2>
 
 
-
-    <div id="cashTipSummary">
-
-    </div>
-
+<div id="cashTipSummary"></div>
 
 
 </section>
 
 
-
 </section>
-
 
 
 
@@ -325,24 +284,10 @@
 
 
 
-
-
-<footer>
-
-    HotTips • Tip Distribution Workflow
-
-</footer>
-
-
-
-
-
 <script type="module" src="./tabs.js"></script>
-
 <script type="module" src="./app.js"></script>
 
 
 </body>
-
 
 </html>

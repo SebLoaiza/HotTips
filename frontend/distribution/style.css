@@ -595,10 +595,9 @@ button:hover{
     padding:8px;
 
 
-    background:var(--surface);
+    background:#f4f7ff;
 
-
-    color:var(--text);
+    color:#111827;
 
 
     border:

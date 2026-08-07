@@ -63,8 +63,6 @@ export function renderEmployeeTable(
 
                     <th>Net Card</th>
 
-                    <th>Cash Sold</th>
-
                     <th>Cash Drop</th>
 
                     <th>Cash Remaining</th>
@@ -94,10 +92,6 @@ export function renderEmployeeTable(
                     `
 
                     <th>Shift</th>
-
-                    <th>Worked</th>
-
-                    <th>Breaks</th>
 
                     <th>Tip Points</th>
 
@@ -155,10 +149,6 @@ export function renderEmployeeTable(
 
                 <td>
                     ${formatMoney(employee.card_after_fee)}
-                </td>
-
-                <td>
-                    ${formatMoney(employee.cash_sold)}
                 </td>
 
                 <td>
@@ -261,14 +251,6 @@ export function renderEmployeeTable(
                     ${formatTime(employee.meal_start)}
                     -
                     ${formatTime(employee.meal_end)}
-                </td>
-
-                <td>
-                    ${employee.worked_minutes} mins
-                </td>
-
-                <td>
-                    ${renderBreaks(employee.breaks)}
                 </td>
 
                 <td>
