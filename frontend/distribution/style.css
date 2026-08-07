@@ -227,6 +227,19 @@ main{
 }
 
 
+.sticky-nav{
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: rgba(11, 18, 32, 0.96);
+    backdrop-filter: blur(8px);
+
+    padding: 12px 0;
+
+}
+
 
 .continue-step,
 .upload-card{
