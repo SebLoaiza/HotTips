@@ -191,8 +191,8 @@ function renderMealGrid(
                 grid.appendChild(
                     createCell(
                         "-",
-                        "disabled-cell"
-                    )
+                        "cash-grid-cell disabled-cell"
+)
                 );
 
 

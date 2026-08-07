@@ -113,9 +113,7 @@ main{
 HEADER
 ========================= */
 
-
 .app-header{
-
 
     display:flex;
 
@@ -123,50 +121,71 @@ HEADER
 
     align-items:center;
 
-
     gap:25px;
 
+    padding:0 36px;
 
-    padding-bottom:18px;
+    height:88px;
 
+    margin-bottom:25px;
 
-    margin-bottom:15px;
+    background:
+        rgba(11,18,32,.9);
 
-
-    border-bottom:
-
-        1px solid
-
-        var(--border);
-
+    border-bottom:1px solid var(--border);
 
 }
 
 
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
 
 
-.header-title h1{
+.logo{
 
+    width:75px;
+
+    height:75px;
+
+    object-fit:contain;
+
+}
+
+
+.header-text h1{
 
     margin:0;
 
-
-    font-size:34px;
+    font-size:24px;
 
 }
 
 
+.header-text p{
 
-
-.header-title p{
-
-
-    margin:
-
-        8px 0 0;
-
+    margin:5px 0 0;
 
     color:var(--muted);
+
+}
+
+
+.headerButtons{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:flex-end;
+
+    gap:10px;
 
 }
 
