@@ -162,27 +162,11 @@ function refreshUI() {
 }
 
 
-
 function saveState() {
 
     sessionStorage.setItem(
         "mealBlocks",
         JSON.stringify(currentMealBlocks)
-    );
-
-    sessionStorage.setItem(
-        "mealParticipations",
-        JSON.stringify(currentMealParticipations)
-    );
-
-    sessionStorage.setItem(
-        "orders",
-        JSON.stringify(currentOrders)
-    );
-
-    sessionStorage.setItem(
-        "payments",
-        JSON.stringify(currentPayments)
     );
 
 }

@@ -48,15 +48,21 @@ export function renderPrintSummary(
 
 
 
+
     // =========================
     // QUALIFIED EMPLOYEES
     // =========================
+    //
+    // Only employees with enough
+    // sales and hours qualify
+    // for percentage rankings.
+    //
 
     const qualifiedEmployees =
         employees.filter(
             employee =>
 
-                employee.sales >= 25000
+                employee.total_sales >= 25000
 
                 &&
 
@@ -76,7 +82,7 @@ export function renderPrintSummary(
         [...employees]
         .sort(
             (a,b)=>
-                b.sales - a.sales
+                b.total_sales - a.total_sales
         )
         .slice(0,5);
 
@@ -87,6 +93,12 @@ export function renderPrintSummary(
     // =========================
     // TOP TIP %
     // =========================
+    //
+    // Based on original tips
+    // generated from sales.
+    //
+    // Not final distributed payout.
+    //
 
     const topTips =
         [...qualifiedEmployees]
@@ -95,18 +107,30 @@ export function renderPrintSummary(
 
 
                 const tipA =
-                    a.total_payout /
-                    a.sales;
+                    a.total_sales > 0
+                        ?
+                        (
+                            a.original_tips /
+                            a.total_sales
+                        )
+                        :
+                        0;
 
 
 
                 const tipB =
-                    b.total_payout /
-                    b.sales;
+                    b.total_sales > 0
+                        ?
+                        (
+                            b.original_tips /
+                            b.total_sales
+                        )
+                        :
+                        0;
 
 
 
-                return tipB-tipA;
+                return tipB - tipA;
 
             }
         )
@@ -127,7 +151,7 @@ export function renderPrintSummary(
 
 
                 const tipsA =
-                    a.total_payout /
+                    a.original_tips /
                     (
                         a.worked_minutes / 60
                     );
@@ -135,7 +159,7 @@ export function renderPrintSummary(
 
 
                 const tipsB =
-                    b.total_payout /
+                    b.original_tips /
                     (
                         b.worked_minutes / 60
                     );
@@ -193,7 +217,7 @@ export function renderPrintSummary(
                             -
 
                             ${formatMoney(
-                                employee.sales
+                                employee.total_sales
                             )}
 
                         </li>
@@ -205,6 +229,7 @@ export function renderPrintSummary(
                 </ol>
 
             </div>
+
 
 
 
@@ -229,11 +254,15 @@ export function renderPrintSummary(
 
 
                             const percent =
-                                (
-                                    employee.total_payout /
-                                    employee.sales
-                                )
-                                *100;
+                                employee.total_sales > 0
+                                    ?
+                                    (
+                                        employee.original_tips /
+                                        employee.total_sales
+                                    )
+                                    * 100
+                                    :
+                                    0;
 
 
 
@@ -284,7 +313,7 @@ export function renderPrintSummary(
 
 
                             const hourly =
-                                employee.total_payout /
+                                employee.original_tips /
                                 (
                                     employee.worked_minutes / 60
                                 );
