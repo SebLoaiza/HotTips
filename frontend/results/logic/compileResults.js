@@ -1,7 +1,7 @@
 import {
     EmployeeResult
 }
-from "../model/employeeResult.js";
+from "../model/EmployeeResult.js";
 
 
 

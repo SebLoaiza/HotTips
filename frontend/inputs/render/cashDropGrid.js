@@ -103,7 +103,7 @@ function renderMealGrid(
 
 
     grid.style.gridTemplateColumns =
-        `180px repeat(${blocks.length},150px)`;
+        `190px repeat(${blocks.length},150px)`;
 
 
 
@@ -332,49 +332,33 @@ function createCashCell(
 
 
 
+input.addEventListener(
+    "change",
+    () => {
 
-    input.addEventListener(
-        "change",
-        () => {
-
-            saveCashDrop(
-                employee,
-                input
-            );
-
-
-            updateColor(
-                input,
-                employee
-            );
+        saveCashDrop(
+            employee,
+            input
+        );
 
 
-            const grid =
-                cell.closest(
-                    ".cash-grid"
-                );
+        updateColor(
+            input,
+            employee
+        );
 
 
-            if (grid) {
-
-                pendingCashFocus =
-                    getNextPosition(
-                        grid,
-                        input
-                    );
-
-            }
+        // save data only
+        sessionStorage.setItem(
+            "mealBlocks",
+            JSON.stringify(
+                currentMealBlocks
+            )
+        );
 
 
-
-            refreshUI();
-
-
-            restoreCashFocus();
-
-        }
-    );
-
+    }
+);
 
 
 

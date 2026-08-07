@@ -203,14 +203,26 @@ main{
 .sticky-nav {
 
     position: sticky;
-    top: 0;
-    z-index: 1000;
 
-    background: rgba(11, 18, 32, 0.96);
-    backdrop-filter: blur(8px);
+    top:0;
 
-    padding: 0;
-    border-bottom: 1px solid var(--border);
+    z-index:1000;
+
+
+    background:
+
+        rgba(11,18,32,.98);
+
+
+    backdrop-filter:
+
+        blur(8px);
+
+
+    border-bottom:
+
+        1px solid var(--border);
+
 
 }
 
@@ -371,7 +383,6 @@ button:hover{
 
 
 
-
 /* =========================
    MEAL BLOCK
 ========================= */
@@ -381,44 +392,67 @@ button:hover{
 
     margin-bottom:35px;
 
-    padding:25px;
-
+    padding:0 25px 25px;
 
     background:var(--surface-hover);
 
-
     border-left:
-
         4px solid
-
         var(--cyan);
 
-
 }
-
 
 
 .meal-block h2{
 
-    color:var(--yellow);
+    position:sticky;
+
+    top:65px;
+
+    z-index:900;
+
+
+    margin:
+
+        0 -25px 25px;
+
+
+    padding:
+
+        18px 25px;
+
+
+    background:
+
+        var(--surface-hover);
+
+
+    color:
+
+        var(--yellow);
+
 
     font-size:24px;
 
+
     border-bottom:
 
-        1px solid
-
-        var(--border);
+        1px solid var(--border);
 
 
-    padding-bottom:10px;
+    box-shadow:
+
+        0 8px 15px rgba(0,0,0,.25);
 
 }
 
 
 
+.meal-block:first-child h2{
 
+    margin-top:0;
 
+}
 
 
 /* =========================
