@@ -65,23 +65,15 @@ export function renderEmployeeTable(
 
                     <th>Cash Drop</th>
 
-                    <th>Cash Remaining</th>
+                    <th>Cash Tips</th>
 
-                    <th>Server Card</th>
+                    <th>Server Tips</th>
 
-                    <th>BOH Card</th>
+                    <th>BOH Tips</th>
 
-                    <th>Busser Card</th>
+                    <th>Busser Tips</th>
 
-                    <th>Host Card</th>
-
-                    <th>Server Cash</th>
-
-                    <th>BOH Cash</th>
-
-                    <th>Busser Cash</th>
-
-                    <th>Host Cash</th>
+                    <th>Host Tips</th>
 
                     <th>Total Kept</th>
 
@@ -161,49 +153,25 @@ export function renderEmployeeTable(
 
                 <td>
                     ${formatMoney(
-                        employee.server_card_contribution
+                        employee.server_card_contribution + employee.server_cash_contribution
                     )}
                 </td>
 
                 <td>
                     ${formatMoney(
-                        employee.boh_card_contribution
+                        employee.boh_card_contribution + employee.boh_cash_contribution
                     )}
                 </td>
 
                 <td>
                     ${formatMoney(
-                        employee.busser_card_contribution
+                        employee.busser_card_contribution + employee.busser_cash_contribution
                     )}
                 </td>
 
                 <td>
                     ${formatMoney(
-                        employee.host_card_contribution
-                    )}
-                </td>
-
-                <td>
-                    ${formatMoney(
-                        employee.server_cash_contribution
-                    )}
-                </td>
-
-                <td>
-                    ${formatMoney(
-                        employee.boh_cash_contribution
-                    )}
-                </td>
-
-                <td>
-                    ${formatMoney(
-                        employee.busser_cash_contribution
-                    )}
-                </td>
-
-                <td>
-                    ${formatMoney(
-                        employee.host_cash_contribution
+                        employee.host_card_contribution + employee.host_cash_contribution
                     )}
                 </td>
 
