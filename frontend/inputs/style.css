@@ -667,14 +667,14 @@ td{
 
 .cash-grid-cell:nth-child(even){
 
-    background:rgba(139,231,255,.05);
+    background:rgba(105, 153, 164, 0.1);
 
 }
 
 
 .cash-grid-cell:nth-child(odd){
 
-    background:rgba(249,243,99,.05);
+    background:rgba(238, 241, 241, 0.1);
 
 }
 
@@ -687,7 +687,7 @@ td{
 
 .cash-drop-input.drop-low{
 
-    background:#3b2025;
+    background:#741010;
 
 }
 
@@ -695,7 +695,7 @@ td{
 
 .cash-drop-input.drop-high{
 
-    background:#15352d;
+    background:#1f6734;
 
 }
 

@@ -59,11 +59,7 @@ export function renderEmployeeTable(
 
                     `
 
-                    <th>Card Tips</th>
-
-                    <th>Net Card</th>
-
-                    <th>Cash Drop</th>
+                    <th>Net Card Tips</th>
 
                     <th>Cash Tips</th>
 
@@ -136,15 +132,7 @@ export function renderEmployeeTable(
                 </td>
 
                 <td>
-                    ${formatMoney(employee.card_tips)}
-                </td>
-
-                <td>
                     ${formatMoney(employee.card_after_fee)}
-                </td>
-
-                <td>
-                    ${formatMoney(employee.cash_drop)}
                 </td>
 
                 <td class="${employee.cash_remaining < 0 ? 'negative-cash' : ''}">
