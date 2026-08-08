@@ -3,153 +3,65 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>HotTips</title>
+    <title>HotTips</title>
 
-<link rel="stylesheet" href="./style.css">
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
 
 </head>
 
-
 <body>
 
+<main class="landing">
 
-<header class="topbar">
+    <section class="hero">
 
-    <div class="brand">
+        <img
+            src="./logo.png"
+            alt="HotTips Logo"
+            class="logo"
+        >
 
-        <img src="./logo.png"
-             class="logo">
+        <h1>
+            Restaurant Tip Distribution
+        </h1>
 
-        <span>
-            HotTips
-        </span>
+        <p>
+            Import shift reports, calculate employee
+            tip distributions, and prepare payroll exports.
+        </p>
 
-    </div>
+        <div class="actions">
 
+            <button id="newProcessButton">
+                Start New Process
+            </button>
 
-    <nav>
+            <button id="historyButton">
+                View History
+            </button>
 
-        <a href="#">
-            Dashboard
-        </a>
+            <button id="userGuideButton">
+                User Guide
+            </button>
 
-        <a href="#">
-            History
-        </a>
+        </div>
 
-        <a href="#">
-            Settings
-        </a>
-
-    </nav>
-
-
-</header>
-
-
-
-<main class="workspace">
-
-
-<section class="intro">
-
-
-<h1>
-Restaurant Tip Distribution
-</h1>
-
-
-<p>
-Import shift reports, calculate employee
-tip distributions, and prepare payroll exports.
-</p>
-
-
-
-<div class="actions">
-
-    <button id="newProcessButton">
-        Start New Process
-    </button>
-
-
-    <button id="historyButton">
-        View History
-    </button>
-
-</div>
-
-
-</section>
-
-
-
-<section class="tools">
-
-
-<div class="tool">
-
-<h3>
-Import Reports
-</h3>
-
-<p>
-Upload Toast exports and shift data.
-</p>
-
-</div>
-
-
-
-<div class="tool">
-
-<h3>
-Tip Calculation
-</h3>
-
-<p>
-Automatically distribute tips based on rules.
-</p>
-
-</div>
-
-
-
-<div class="tool">
-
-<h3>
-Payroll Export
-</h3>
-
-<p>
-Generate payroll-ready reports.
-</p>
-
-</div>
-
-
-</section>
-
-
+    </section>
 
 </main>
 
 
-
-<footer>
-
-HotTips © 2026
-
-</footer>
-
-
 <script type="module" src="./app.js"></script>
-
 
 </body>
 

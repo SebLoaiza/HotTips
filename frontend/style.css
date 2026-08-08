@@ -1,307 +1,312 @@
-*{box-sizing:border-box}
+/* =========================
+   Global
+========================= */
 
-:root{
-    --background:#0b1220;
-    --background-light:#101a2e;
-    --surface:#131d33;
-    --surface-hover:#192640;
-    --border:#263754;
-    --border-light:#3a4d70;
-    --text:#f4f7ff;
-    --muted:#98a8c4;
-    --pink:#E942A3;
-    --pink-hover:#f15bb3;
-    --yellow:#F9F363;
-    --cyan:#8be7ff;
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: #09070d;
+    --bg-purple: #1a1433;
+    --bg-magenta: #5d1f52;
+
+    --surface: #171327;
+    --surface-hover: #211b37;
+
+    --border: #37304f;
+    --border-light: #51486f;
+
+    --text: #f5f5f7;
+    --muted: #bdb9cc;
+
+    --cyan: #9beeff;
+    --pink: #ff2e97;
+    --pink-hover: #ff55aa;
+    --gold: #ffc857;
 }
 
 
-body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    font-family:Inter,"Segoe UI",Arial,sans-serif;
-    color:var(--text);
+/* =========================
+   Body
+========================= */
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: var(--text);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
     background:
-        radial-gradient(circle at top right,rgba(233,66,163,.08),transparent 35%),
-        radial-gradient(circle at bottom left,rgba(249,243,99,.05),transparent 30%),
-        linear-gradient(180deg,var(--background-light),var(--background));
+        radial-gradient(
+            circle at top left,
+            rgba(255, 46, 151, .30),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at top right,
+            rgba(120, 90, 255, .20),
+            transparent 40%
+        ),
+
+        linear-gradient(
+            180deg,
+            var(--bg-magenta),
+            var(--bg-purple) 38%,
+            var(--bg-dark) 100%
+        );
 }
 
 
-.topbar{
-    height:88px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 36px;
-    background:rgba(11,18,32,.9);
-    border-bottom:1px solid var(--border);
-    backdrop-filter:blur(12px);
+/* =========================
+   Landing Page
+========================= */
+
+.landing {
+    width: 100%;
+
+    max-width: 1000px;
+
+    padding: 40px 25px;
 }
 
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    font-size:24px;
-    font-weight:700;
-}
+/* =========================
+   Hero
+========================= */
 
-.logo{
-    width:100px;
-    height:100px;
-    object-fit:contain;
-}
+.hero {
+    text-align: center;
 
-.brand span{
-    color:var(--text);
+    padding: 40px;
 }
 
 
-nav{
-    display:flex;
-    gap:32px;
-}
+/* =========================
+   Logo
+========================= */
 
-nav a{
-    color:var(--muted);
-    text-decoration:none;
-    font-size:14px;
-    transition:.2s;
-}
+.logo {
+    width: 550px;
 
-nav a:hover{
-    color:var(--yellow);
-}
+    max-width: 90vw;
 
+    height: auto;
 
-.workspace{
-    flex:1;
-    padding:70px 90px;
-}
+    display: block;
 
+    margin: 0 auto 35px;
 
-.intro{
-    max-width:720px;
-}
-
-.intro h1{
-    margin:0;
-    font-size:52px;
-    font-weight:750;
-    letter-spacing:-1.5px;
-}
-
-.intro h1::after{
-    content:"";
-    display:block;
-    width:60px;
-    height:4px;
-    margin-top:18px;
-    background:var(--pink);
-}
-
-.intro p{
-    margin-top:28px;
-    max-width:600px;
-    color:var(--muted);
-    font-size:19px;
-    line-height:1.7;
+    filter:
+        drop-shadow(
+            0 0 10px rgba(255, 46, 151, .25)
+        )
+        drop-shadow(
+            0 0 14px rgba(155, 238, 255, .20)
+        );
 }
 
 
-.actions{
-    display:flex;
-    gap:14px;
-    margin-top:32px;
+/* =========================
+   Heading
+========================= */
+
+.hero h1 {
+    margin: 0;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+    color: var(--cyan);
 }
 
 
-button{
-    height:44px;
-    padding:0 24px;
-    border-radius:6px;
-    border:1px solid var(--border);
-    background:var(--surface);
-    color:var(--text);
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.2s;
-}
+/* =========================
+   Description
+========================= */
 
-button:hover{
-    background:var(--surface-hover);
-    border-color:var(--border-light);
-}
+.hero p {
+    max-width: 650px;
 
+    margin: 20px auto 0;
 
-#newProcessButton{
-    background:var(--pink);
-    border-color:var(--pink);
-    color:white;
-}
+    color: var(--muted);
 
-#newProcessButton:hover{
-    background:var(--pink-hover);
-    box-shadow:0 0 20px rgba(233,66,163,.25);
+    font-size: 18px;
+
+    line-height: 1.7;
 }
 
 
-#historyButton{
-    background:transparent;
-}
+/* =========================
+   Buttons
+========================= */
 
-#historyButton:hover{
-    color:var(--pink);
-    border-color:var(--pink);
-}
+.actions {
+    display: flex;
 
+    justify-content: center;
 
-.tools{
-    margin-top:90px;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    border-block:1px solid var(--border);
-}
+    align-items: center;
 
+    gap: 14px;
 
-.tool{
-    padding:32px 26px;
-    border-right:1px solid var(--border);
-}
+    margin-top: 35px;
 
-.tool:last-child{
-    border:0;
-}
-
-.tool h3{
-    margin:0 0 12px;
-    font-size:17px;
-}
-
-.tool p{
-    margin:0;
-    color:var(--muted);
-    font-size:14px;
-}
-
-.tool:nth-child(1) h3{color:var(--yellow)}
-.tool:nth-child(2) h3{color:var(--pink)}
-.tool:nth-child(3) h3{color:var(--cyan)}
-
-
-.process-complete{
-    border-color:var(--cyan);
-    background:rgba(139,231,255,.06);
-}
-
-.continue-complete{
-    background:var(--pink);
-    border-color:var(--pink);
-    color:white;
+    flex-wrap: wrap;
 }
 
 
-input,
-select,
-textarea{
-    width:100%;
-    padding:10px 12px;
-    background:var(--surface);
-    color:var(--text);
-    border:1px solid var(--border);
-    border-radius:6px;
-}
+button {
+    min-width: 170px;
 
-input:focus,
-select:focus,
-textarea:focus{
-    outline:none;
-    border-color:var(--cyan);
-}
+    height: 48px;
 
+    padding: 0 24px;
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:var(--surface);
-    border:1px solid var(--border);
-}
+    border-radius: 8px;
 
-thead{
-    background:#192640;
-}
+    border: 1px solid var(--border-light);
 
-th{
-    padding:12px;
-    color:var(--yellow);
-    text-align:left;
-}
+    background: var(--surface);
 
-td{
-    padding:12px;
-    border-bottom:1px solid var(--border);
-}
+    color: var(--text);
 
-tbody tr:hover{
-    background:rgba(233,66,163,.04);
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        border-color .2s,
+        color .2s,
+        transform .2s,
+        box-shadow .2s;
 }
 
 
-footer{
-    height:48px;
-    display:flex;
-    align-items:center;
-    padding:0 36px;
-    color:var(--muted);
-    font-size:13px;
-    border-top:1px solid var(--border);
+button:hover {
+    background: var(--surface-hover);
+
+    border-color: var(--cyan);
+
+    color: var(--cyan);
+
+    transform: translateY(-2px);
 }
 
 
-::-webkit-scrollbar{
-    width:10px;
+/* =========================
+   Start New Process
+========================= */
+
+#newProcessButton {
+    background: var(--pink);
+
+    border-color: var(--pink);
+
+    color: white;
 }
 
-::-webkit-scrollbar-track{
-    background:#0b1220;
+
+#newProcessButton:hover {
+    background: var(--pink-hover);
+
+    border-color: var(--pink-hover);
+
+    color: white;
+
+    box-shadow:
+        0 6px 20px rgba(255, 46, 151, .20);
 }
 
-::-webkit-scrollbar-thumb{
-    background:#334766;
-    border-radius:10px;
+
+/* =========================
+   View History
+========================= */
+
+#historyButton:hover {
+    border-color: var(--gold);
+
+    color: var(--gold);
 }
 
 
-@media(max-width:850px){
+/* =========================
+   Settings
+========================= */
 
-    .workspace{
-        padding:40px 25px;
+#settingsButton:hover {
+    border-color: var(--cyan);
+
+    color: var(--cyan);
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 700px) {
+
+    .landing {
+        padding: 20px;
     }
 
-    .intro h1{
-        font-size:38px;
+
+    .hero {
+        padding: 20px 10px;
     }
 
-    .tools{
-        grid-template-columns:1fr;
+
+    .logo {
+        width: 400px;
+
+        max-width: 90vw;
+
+        margin-bottom: 25px;
     }
 
-    .tool{
-        border-right:0;
-        border-bottom:1px solid var(--border);
+
+    .hero h1 {
+        font-size: 32px;
     }
 
-    nav{
-        display:none;
+
+    .hero p {
+        font-size: 16px;
     }
 
-    .logo{
-        width:58px;
-        height:58px;
+
+    .actions {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+
+    button {
+        width: 100%;
+
+        max-width: 320px;
     }
 }
