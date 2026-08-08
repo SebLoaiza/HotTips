@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>HotTips User Guide</title>
+
+    <link
+        rel="stylesheet"
+        href="./user-guide.css"
+    >
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <a
+            href="../index.html"
+            class="brand-link"
+        >
+
+            <img
+                src="../logo.png"
+                alt="HotTips Logo"
+                class="logo"
+            >
+
+            <span>
+                HotTips
+            </span>
+
+        </a>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <a
+            class="back-link"
+            href="../index.html"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="guide-layout">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            User Guide
+        </div>
+
+
+        <label class="search">
+
+            <span>
+                ⌕
+            </span>
+
+            <input
+                id="guideSearch"
+                type="search"
+                placeholder="Search guide..."
+            >
+
+        </label>
+
+
+        <nav id="guideNav">
+
+            <a href="#installing">
+                Installing HotTips
+            </a>
+
+            <a href="#home-page">
+                Home Page
+            </a>
+
+            <a href="#toast-inputs">
+                Toast Inputs
+            </a>
+
+            <a href="#exporting-orders">
+                Orders CSV
+            </a>
+
+            <a href="#exporting-payments">
+                Payments CSV
+            </a>
+
+            <a href="#exporting-shifts">
+                Shifts CSV
+            </a>
+
+            <a href="#uploading-files">
+                Uploading CSV Files
+            </a>
+
+            <a href="#manual-inputs">
+                Manual Inputs
+            </a>
+
+            <a href="#cash-drops">
+                Cash Drops
+            </a>
+
+            <a href="#employee-config">
+                Employee Config
+            </a>
+
+            <a href="#summary">
+                Summary
+            </a>
+
+            <a href="#tip-distribution">
+                Tip Distribution
+            </a>
+
+            <a href="#roles">
+                Distribution Roles
+            </a>
+
+            <a href="#results">
+                Final Results
+            </a>
+
+            <a href="#saving">
+                Saving & Loading
+            </a>
+
+            <a href="#completion">
+                Completion
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="content">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-logo">
+
+                <img
+                    src="../logo.png"
+                    alt="HotTips Logo"
+                >
+
+            </div>
+
+
+            <div>
+
+                <p class="eyebrow">
+                    HOT TIPS USER MANUAL
+                </p>
+
+                <h1>
+                    HotTips User Guide
+                </h1>
+
+                <p class="hero-copy">
+
+                    Everything you need to install HotTips,
+                    import Toast reports, configure employees,
+                    distribute tips, and review payroll results.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK START -->
+
+        <div class="notice">
+
+            <strong>
+                Quick start:
+            </strong>
+
+            Download the latest release, import the three
+            Toast CSV files using the same date range,
+            complete Manual Inputs, review Tip Distribution,
+            and confirm the Final Results.
+
+        </div>
+
+
+        <!-- =========================
+             INSTALLING
+        ========================== -->
+
+        <section
+            id="installing"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                01
+            </span>
+
+            <h2>
+                Installing HotTips
+            </h2>
+
+            <h3>
+                Download the Installer
+            </h3>
+
+            <p>
+
+                The HotTips installer is available through the
+                official HotTips GitHub repository. Follow the
+                instructions below to download and install
+                the application.
+
+            </p>
+
+
+            <div class="step-card">
+
+                <span class="step">
+                    1
+                </span>
+
+                <div>
+
+                    <h4>
+                        Open the HotTips GitHub Page
+                    </h4>
+
+                    <ol>
+
+                        <li>
+                            Open an internet browser on your computer.
+                        </li>
+
+                        <li>
+                            Click the address bar.
+                        </li>
+
+                        <li>
+
+                            Enter
+
+                            <a
+                                href="https://github.com/SebLoaiza/HotTips"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                github.com/SebLoaiza/HotTips
+                            </a>
+
+                        </li>
+
+                        <li>
+                            Press <strong>Enter</strong>.
+                        </li>
+
+                    </ol>
+
+                    <p>
+
+                        The HotTips GitHub page contains the
+                        application files and latest software
+                        versions.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <span class="step">
+                    2
+                </span>
+
+                <div>
+
+                    <h4>
+                        Find the Latest Release
+                    </h4>
+
+                    <ol>
+
+                        <li>
+                            Locate the
+                            <strong>Releases</strong>
+                            section on the right side of the GitHub page.
+                        </li>
+
+                        <li>
+                            Click the latest available release.
+                        </li>
+
+                    </ol>
+
+                    <div class="code-pill">
+                        HotTips v1.0.0
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <span class="step">
+                    3
+                </span>
+
+                <div>
+
+                    <h4>
+                        Download the Installer
+                    </h4>
+
+                    <ol>
+
+                        <li>
+                            Scroll to <strong>Assets</strong>.
+                        </li>
+
+                        <li>
+                            Locate
+                            <strong>HotTips.Setup.1.0.0.exe</strong>.
+                        </li>
+
+                        <li>
+                            Click the installer and wait for
+                            the download to complete.
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <span class="step">
+                    4
+                </span>
+
+                <div>
+
+                    <h4>
+                        Run and Install
+                    </h4>
+
+                    <ol>
+
+                        <li>
+                            Open your Downloads folder.
+                        </li>
+
+                        <li>
+                            Double-click
+                            <strong>HotTips Setup.exe</strong>.
+                        </li>
+
+                        <li>
+                            If Windows shows a security warning,
+                            select <strong>More Info</strong>,
+                            then <strong>Run Anyway</strong>.
+                        </li>
+
+                        <li>
+                            Wait while the application installs.
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <span class="step">
+                    5
+                </span>
+
+                <div>
+
+                    <h4>
+                        Open HotTips
+                    </h4>
+
+                    <p>
+
+                        Use the desktop shortcut or search for
+                        <strong>HotTips</strong> in the Windows
+                        Start Menu.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="warning">
+
+                <strong>
+                    Troubleshooting:
+                </strong>
+
+                If the installer does not open, verify that
+                the download completed, download it again,
+                or restart the computer. If Windows blocks
+                the installer, select
+                <strong>More Info → Run Anyway</strong>.
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             HOME PAGE
+        ========================== -->
+
+        <section
+            id="home-page"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                02
+            </span>
+
+            <h2>
+                Home Page
+            </h2>
+
+            <p>
+
+                After opening HotTips, you will be greeted
+                by the Home Page.
+
+            </p>
+
+
+            <div class="feature-grid">
+
+                <div class="feature">
+
+                    <span class="feature-icon pink">
+                        →
+                    </span>
+
+                    <h3>
+                        Start New Process
+                    </h3>
+
+                    <p>
+
+                        Begins a new tip calculation and
+                        opens the Toast Inputs page.
+
+                    </p>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-icon gold">
+                        ↺
+                    </span>
+
+                    <h3>
+                        View History
+                    </h3>
+
+                    <p>
+
+                        Opens the Results page where previous
+                        processes can be loaded.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TOAST INPUTS
+        ========================== -->
+
+        <section
+            id="toast-inputs"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                03
+            </span>
+
+            <h2>
+                Toast Inputs
+            </h2>
+
+            <p>
+
+                The Toast Inputs page is where the required
+                Toast data files are uploaded. HotTips requires
+                three CSV files:
+
+            </p>
+
+
+            <div class="file-grid">
+
+                <div class="file-card">
+
+                    <strong>
+                        01
+                    </strong>
+
+                    <span>
+                        Shifts CSV
+                    </span>
+
+                </div>
+
+
+                <div class="file-card">
+
+                    <strong>
+                        02
+                    </strong>
+
+                    <span>
+                        Orders CSV
+                    </span>
+
+                </div>
+
+
+                <div class="file-card">
+
+                    <strong>
+                        03
+                    </strong>
+
+                    <span>
+                        Payments CSV
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="important">
+
+                <strong>
+                    Important:
+                </strong>
+
+                All three files must use the same date range.
+                Different date ranges may result in missing
+                employees, incorrect sales, or inaccurate
+                tip calculations.
+
+            </div>
+
+
+            <h3>
+                Exporting CSV Files from Toast
+            </h3>
+
+            <p>
+
+                Before downloading any files, set the desired
+                date range, apply it, and use the same date
+                range for all three reports.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             ORDERS
+        ========================== -->
+
+        <section
+            id="exporting-orders"
+            class="guide-section compact-section"
+        >
+
+            <h2>
+                Downloading the Orders CSV
+            </h2>
+
+            <ol class="numbered-list">
+
+                <li>
+                    In Toast, select
+                    <strong>Reports → Sales → Orders</strong>.
+                </li>
+
+                <li>
+                    Select the date dropdown.
+                </li>
+
+                <li>
+                    Choose <strong>Custom Date</strong>.
+                </li>
+
+                <li>
+                    Enter the beginning and ending dates.
+                </li>
+
+                <li>
+                    Click <strong>Update</strong>.
+                </li>
+
+                <li>
+                    Export the report.
+                </li>
+
+            </ol>
+
+
+            <div class="file-name">
+                OrderDetails_YYYY_MM_DD-YYYY_MM_DD.csv
+            </div>
+
+
+            <p>
+
+                This file is the
+                <strong>Orders CSV</strong>.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             PAYMENTS
+        ========================== -->
+
+        <section
+            id="exporting-payments"
+            class="guide-section compact-section"
+        >
+
+            <h2>
+                Downloading the Payments CSV
+            </h2>
+
+            <ol class="numbered-list">
+
+                <li>
+                    Navigate to
+                    <strong>
+                        Reports → Payments → Payments
+                    </strong>.
+                </li>
+
+                <li>
+                    Confirm the date range matches the
+                    Orders report.
+                </li>
+
+                <li>
+                    Apply the report.
+                </li>
+
+                <li>
+                    Export the CSV file.
+                </li>
+
+            </ol>
+
+
+            <div class="file-name">
+                PaymentDetails_YYYY_MM_DD-YYYY_MM_DD.csv
+            </div>
+
+
+            <p>
+
+                This file is the
+                <strong>Payments CSV</strong>.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             SHIFTS
+        ========================== -->
+
+        <section
+            id="exporting-shifts"
+            class="guide-section compact-section"
+        >
+
+            <h2>
+                Downloading the Shifts CSV
+            </h2>
+
+            <ol class="numbered-list">
+
+                <li>
+                    Navigate to
+                    <strong>
+                        Reports → Labor → Time Entry Management
+                    </strong>.
+                </li>
+
+                <li>
+                    Confirm the date range matches the
+                    Orders and Payments reports.
+                </li>
+
+                <li>
+                    Apply the report.
+                </li>
+
+                <li>
+                    Export the CSV file.
+                </li>
+
+            </ol>
+
+
+            <div class="file-name">
+                Shifts_Closed_YYYY_MM_DD-YYYY_MM_DD.csv
+            </div>
+
+
+            <p>
+
+                This file is the
+                <strong>Shifts CSV</strong>.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             UPLOADING FILES
+        ========================== -->
+
+        <section
+            id="uploading-files"
+            class="guide-section"
+        >
+
+            <h2>
+                Uploading CSV Files into HotTips
+            </h2>
+
+            <p>
+
+                Return to the Toast Inputs page and upload
+                each file into the matching section.
+
+            </p>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Toast File
+                        </th>
+
+                        <th>
+                            HotTips Upload
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Shifts CSV
+                        </td>
+
+                        <td>
+                            Shifts CSV
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Orders CSV
+                        </td>
+
+                        <td>
+                            Orders CSV
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Payments CSV
+                        </td>
+
+                        <td>
+                            Payments CSV
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <div class="checklist">
+
+                <div>
+                    ✓ A green checkmark appears when a file is accepted.
+                </div>
+
+                <div>
+                    ✓ Tables begin populating below the upload areas.
+                </div>
+
+                <div>
+                    ✓ Verify the correct CSV was selected if tables do not populate.
+                </div>
+
+            </div>
+
+
+            <h3>
+                Completing Toast Inputs
+            </h3>
+
+            <ol>
+
+                <li>
+                    Confirm all three files have green checkmarks.
+                </li>
+
+                <li>
+                    Verify the dates are correct.
+                </li>
+
+                <li>
+                    Click <strong>Continue</strong>.
+                </li>
+
+            </ol>
+
+
+            <p>
+                HotTips will move to the Manual Inputs page.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             MANUAL INPUTS
+        ========================== -->
+
+        <section
+            id="manual-inputs"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                04
+            </span>
+
+            <h2>
+                Manual Inputs
+            </h2>
+
+            <p>
+
+                The Manual Inputs page contains three tabs:
+
+            </p>
+
+
+            <div class="tabs-preview">
+
+                <span>
+                    Cash Drops
+                </span>
+
+                <span>
+                    Employee Config
+                </span>
+
+                <span>
+                    Summary
+                </span>
+
+            </div>
+
+
+            <div class="important">
+
+                <strong>
+                    Important:
+                </strong>
+
+                Complete the tabs in this order.
+                Cash Drops must be completed before
+                Employee Config.
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CASH DROPS
+        ========================== -->
+
+        <section
+            id="cash-drops"
+            class="guide-section"
+        >
+
+            <h2>
+                Cash Drops
+            </h2>
+
+            <h3>
+                Purpose
+            </h3>
+
+            <p>
+
+                Enter the amount of cash collected for
+                each employee and shift.
+
+            </p>
+
+
+            <div class="meal-grid">
+
+                <div>
+                    Breakfast
+                </div>
+
+                <div>
+                    Lunch
+                </div>
+
+                <div>
+                    Dinner
+                </div>
+
+            </div>
+
+
+            <h3>
+                Entering Cash Drops
+            </h3>
+
+            <p>
+
+                Enter the collected cash amount into the
+                appropriate employee and shift. Press
+                <strong>Enter</strong> to move downward and
+                <strong>Tab</strong> to move right.
+
+            </p>
+
+
+            <h3>
+                Cash Drop Warnings
+            </h3>
+
+
+            <div class="legend">
+
+                <div>
+
+                    <span class="swatch red"></span>
+
+                    <strong>
+                        Red:
+                    </strong>
+
+                    below expected amount
+
+                </div>
+
+
+                <div>
+
+                    <span class="swatch gray"></span>
+
+                    <strong>
+                        Grey:
+                    </strong>
+
+                    matches expected sales
+
+                </div>
+
+
+                <div>
+
+                    <span class="swatch green"></span>
+
+                    <strong>
+                        Green:
+                    </strong>
+
+                    exceeds expected sales and indicates
+                    cash tips
+
+                </div>
+
+            </div>
+
+
+            <p>
+
+                Red cells are warnings only.
+                HotTips will not prevent you from continuing.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             EMPLOYEE CONFIG
+        ========================== -->
+
+        <section
+            id="employee-config"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                05
+            </span>
+
+            <h2>
+                Employee Config
+            </h2>
+
+            <p>
+
+                After all cash drops have been entered,
+                move to <strong>Employee Config</strong>.
+                This section controls employee tip settings.
+
+            </p>
+
+
+            <h3>
+                Employee Tip Points
+            </h3>
+
+            <p>
+
+                The Tip Point system determines each
+                employee's default tip weighting.
+                A value of <strong>1.0</strong> means the
+                employee receives 100% of their assigned
+                point value. These values become the
+                default points for the week.
+
+            </p>
+
+
+            <h3>
+                Assigning Trainers
+            </h3>
+
+            <ol>
+
+                <li>
+                    Locate the employee.
+                </li>
+
+                <li>
+                    Open the trainer dropdown.
+                </li>
+
+                <li>
+                    Select the correct trainer.
+                </li>
+
+            </ol>
+
+
+            <p>
+
+                Every trainee must have a trainer assigned
+                before continuing.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+
+        <section
+            id="summary"
+            class="guide-section"
+        >
+
+            <h2>
+                Summary
+            </h2>
+
+            <p>
+                Before continuing, review the Summary tab
+                and confirm:
+            </p>
+
+
+            <div class="checklist">
+
+                <div>
+                    ✓ Cash drops are correct.
+                </div>
+
+                <div>
+                    ✓ Employees are correct.
+                </div>
+
+                <div>
+                    ✓ Trainer assignments are complete.
+                </div>
+
+                <div>
+                    ✓ Tip points look correct.
+                </div>
+
+            </div>
+
+
+            <p>
+
+                After reviewing, click
+                <strong>Continue</strong>
+                to move to Tip Distribution.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             TIP DISTRIBUTION
+        ========================== -->
+
+        <section
+            id="tip-distribution"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                06
+            </span>
+
+            <h2>
+                Tip Distribution
+            </h2>
+
+            <p>
+
+                The Tip Distribution page is where
+                employee roles and meal block-specific
+                settings are reviewed.
+
+            </p>
+
+
+            <div class="info-grid">
+
+                <div>
+
+                    <strong>
+                        Day
+                    </strong>
+
+                    <span>
+                        Each day of the process
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Meal
+                    </strong>
+
+                    <span>
+                        Breakfast, Lunch, Dinner
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Role
+                    </strong>
+
+                    <span>
+                        Employee distribution role
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <h3>
+                Editing Distribution Information
+            </h3>
+
+
+            <h4>
+                Meal Block Tip Points
+            </h4>
+
+            <p>
+
+                Employee points can be adjusted for
+                individual meal blocks.
+
+                For example:
+
+                Monday Breakfast 1 point,
+                Monday Lunch 0.75 points,
+                Monday Dinner 1 point.
+
+                Changes only apply to that specific
+                meal block.
+
+            </p>
+
+
+            <h4>
+                Distribution Roles
+            </h4>
+
+
+            <div class="role-grid">
+
+                <div>
+                    <strong>Tip Owner</strong>
+                </div>
+
+                <div>
+                    <strong>Server</strong>
+                </div>
+
+                <div>
+                    <strong>Busser</strong>
+                </div>
+
+                <div>
+                    <strong>Host</strong>
+                </div>
+
+                <div>
+                    <strong>BOH</strong>
+                </div>
+
+                <div>
+                    <strong>Other</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ROLES
+        ========================== -->
+
+        <section
+            id="roles"
+            class="guide-section"
+        >
+
+            <h2>
+                Distribution Roles Explained
+            </h2>
+
+
+            <div class="role-list">
+
+                <div>
+
+                    <strong>
+                        Server
+                    </strong>
+
+                    <span>
+                        Receives from the server tip pool.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Busser
+                    </strong>
+
+                    <span>
+                        Receives from the busser tip pool.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Host
+                    </strong>
+
+                    <span>
+                        Receives from the host tip pool.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        BOH
+                    </strong>
+
+                    <span>
+                        Back of House employees,
+                        such as line cooks, prep cooks,
+                        and dishwashers.
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Other
+                    </strong>
+
+                    <span>
+                        Used for employees who should not
+                        receive tips. Employees assigned to
+                        Other receive $0 from tip pools.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <h3>
+                Reviewing Tip Owners
+            </h3>
+
+            <p>
+
+                At the top of each meal block are the
+                Tip Owners. This section displays:
+
+            </p>
+
+
+            <div class="checklist">
+
+                <div>
+                    • Employee name
+                </div>
+
+                <div>
+                    • Card tips
+                </div>
+
+                <div>
+                    • Cash tips
+                </div>
+
+                <div>
+                    • Pool distributions
+                </div>
+
+                <div>
+                    • Total kept
+                </div>
+
+            </div>
+
+
+            <p>
+
+                <strong>
+                    Total Kept
+                </strong>
+                represents the employee's final amount
+                after distributions.
+
+            </p>
+
+
+            <h3>
+                Completing Tip Distribution
+            </h3>
+
+            <p>
+
+                After all roles and points have been
+                reviewed, click <strong>Continue</strong>
+                to calculate the final results.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             RESULTS
+        ========================== -->
+
+        <section
+            id="results"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                07
+            </span>
+
+            <h2>
+                Final Results
+            </h2>
+
+            <p>
+
+                The Final Results page displays the
+                completed tip calculations and
+                Payroll Summary.
+
+            </p>
+
+
+            <h3>
+                Payroll Summary
+            </h3>
+
+            <p>
+                Review:
+            </p>
+
+
+            <div class="checklist">
+
+                <div>
+                    ✓ Employee name
+                </div>
+
+                <div>
+                    ✓ Total tips
+                </div>
+
+                <div>
+                    ✓ Cash tips
+                </div>
+
+                <div>
+                    ✓ Card tips
+                </div>
+
+                <div>
+                    ✓ Final payout
+                </div>
+
+            </div>
+
+
+            <h3>
+                Sorting Results
+            </h3>
+
+            <p>
+
+                Click any column header to sort.
+                Click once for ascending order and again
+                for descending order. For example,
+                clicking <strong>Name</strong> sorts
+                employees alphabetically.
+
+            </p>
+
+
+            <h3>
+                Exporting Results
+            </h3>
+
+
+            <div class="feature-grid two">
+
+                <div class="feature">
+
+                    <span class="feature-icon gold">
+                        ▣
+                    </span>
+
+                    <h3>
+                        Print Summary
+                    </h3>
+
+                    <p>
+
+                        Creates a printable summary showing
+                        important payout information.
+
+                    </p>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-icon pink">
+                        ↓
+                    </span>
+
+                    <h3>
+                        Export Info CSV
+                    </h3>
+
+                    <p>
+
+                        Exports the results into a CSV file
+                        for future review.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SAVING
+        ========================== -->
+
+        <section
+            id="saving"
+            class="guide-section"
+        >
+
+            <span class="section-number">
+                08
+            </span>
+
+            <h2>
+                Saving and Loading Processes
+            </h2>
+
+            <p>
+
+                HotTips allows completed processes to be
+                saved for later review.
+
+            </p>
+
+
+            <h3>
+                Saving a Process
+            </h3>
+
+            <p>
+                Saving stores:
+            </p>
+
+
+            <div class="checklist">
+
+                <div>
+                    ✓ Imported Toast data
+                </div>
+
+                <div>
+                    ✓ Cash drops
+                </div>
+
+                <div>
+                    ✓ Employee settings
+                </div>
+
+                <div>
+                    ✓ Trainer assignments
+                </div>
+
+                <div>
+                    ✓ Tip distributions
+                </div>
+
+                <div>
+                    ✓ Final calculations
+                </div>
+
+            </div>
+
+
+            <p>
+
+                To save a process, complete the process
+                and click <strong>Save</strong>.
+
+            </p>
+
+
+            <h3>
+                Loading Previous Processes
+            </h3>
+
+            <ol>
+
+                <li>
+                    Select <strong>Load History</strong>.
+                </li>
+
+                <li>
+                    Choose the saved process.
+                </li>
+
+            </ol>
+
+
+            <p>
+
+                HotTips will restore the previous
+                information so it can be reviewed or edited.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             COMPLETION
+        ========================== -->
+
+        <section
+            id="completion"
+            class="completion"
+        >
+
+            <div class="completion-icon">
+                ✓
+            </div>
+
+
+            <div>
+
+                <p class="eyebrow">
+                    PROCESS COMPLETE
+                </p>
+
+                <h2>
+                    You're ready for payroll.
+                </h2>
+
+                <p>
+
+                    Review the Payroll Summary, confirm that
+                    all information is correct, and the
+                    HotTips process is complete.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script src="./user-guide.js"></script>
+
+</body>
+
+</html>
+```

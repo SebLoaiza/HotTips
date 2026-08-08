@@ -19,5 +19,5 @@ historyButton.onclick = () => {
 
 
 userGuideButton.onclick = () => {
-    window.location.href = "./UserGuide.pdf";
+    window.location.href = "./userguide/userguide.html";
 };
