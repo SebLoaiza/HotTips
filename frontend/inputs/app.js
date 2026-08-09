@@ -3,7 +3,7 @@ import { renderTraineeAssignments } from "./render/renderTraineeAssignments.js";
 import { renderEmployeePoints } from "./render/renderEmployeePoints.js";
 import { renderCashTipSummary } from "./render/renderCashTipSummary.js";
 import { calculateCashTips } from "./logic/calculateCashTips.js";
-
+import { renderCashDropList } from "./render/renderCashDropList.js";
 
 // =========================
 // LOAD DATA
@@ -145,7 +145,7 @@ function refreshUI() {
     );
 
 
-    renderCashDropTables(
+    renderCashDropList(
         currentMealBlocks,
         refreshUI
     );

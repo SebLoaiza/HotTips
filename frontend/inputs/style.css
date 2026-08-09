@@ -1172,3 +1172,255 @@ footer{
 
 
 }
+/* =========================
+   CASH DROP LIST
+========================= */
+
+#cashDropTables {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+/* =========================
+   DAY
+========================= */
+
+.cash-day-wrapper {
+    width: 100%;
+    background: var(--section);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+/* =========================
+   DATE HEADER
+========================= */
+
+.cash-day-title {
+    margin: 0;
+    padding: 14px 18px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: var(--cyan);
+
+    background: var(--section-dark);
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+/* =========================
+   MEAL BLOCK
+========================= */
+
+.cash-meal-block {
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+}
+
+.cash-meal-block:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================
+   MEAL HEADER
+========================= */
+
+.cash-meal-header {
+    padding: 10px 18px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: var(--pink);
+
+    background: var(--output);
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+/* =========================
+   EMPLOYEE ROW
+========================= */
+
+.cash-drop-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(180px, 1fr)
+        minmax(300px, 1fr);
+
+    align-items: center;
+
+    min-height: 64px;
+
+    padding: 8px 18px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: var(--section);
+}
+
+.cash-drop-row:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================
+   EMPLOYEE NAME
+========================= */
+
+.cash-drop-employee {
+    font-size: 15px;
+    font-weight: 600;
+
+    color: white;
+}
+
+
+/* =========================
+   DROP AREA
+========================= */
+
+.cash-drop-input-wrapper {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+}
+
+
+/* =========================
+   DROP LABEL
+========================= */
+
+.cash-drop-input-wrapper label {
+    min-width: 38px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--cyan);
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.cash-drop-input {
+    width: 130px;
+
+    padding: 9px 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid var(--border);
+
+    background: var(--input);
+
+    color: white;
+
+    font-size: 14px;
+
+    text-align: right;
+
+    outline: none;
+
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
+}
+
+
+/* =========================
+   INPUT FOCUS
+========================= */
+
+.cash-drop-input:focus {
+    border-color: var(--pink);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(255, 46, 151, 0.15);
+}
+
+
+/* =========================
+   SALES
+========================= */
+
+.cash-drop-sales {
+    font-size: 13px;
+
+    color: #aaa;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   DROP COLORS
+========================= */
+
+.cash-drop-input.drop-low {
+    border-color: #ff5c5c;
+}
+
+.cash-drop-input.drop-high {
+    border-color: #62d98b;
+}
+
+.cash-drop-input.drop-equal {
+    border-color: var(--cyan);
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.cash-drop-row:hover {
+    background: var(--section-dark);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .cash-drop-row {
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+
+        padding: 12px 14px;
+    }
+
+    .cash-drop-input-wrapper {
+        justify-content: flex-start;
+    }
+
+    .cash-day-title {
+        padding: 12px 14px;
+    }
+
+    .cash-meal-header {
+        padding: 9px 14px;
+    }
+
+}
