@@ -1,9 +1,13 @@
+import {
+    formatMoney,
+    formatNumber
+} from "../utils/formatters.js";
+
 export function exportTipDistributionCSV(
     tipDistribution
 ) {
 
     const rows = [];
-
 
     // =========================
     // DATE / TIME
@@ -11,7 +15,6 @@ export function exportTipDistributionCSV(
 
     const now =
         new Date();
-
 
     const dateTime =
         `${String(
@@ -50,11 +53,25 @@ export function exportTipDistributionCSV(
         "Employee ID",
         "Role",
 
-        "Sales",
+        // -------------------------
+        // SALES
+        // -------------------------
+
+        "Cash Sales",
+        "Card Sales",
+        "Total Sales",
+
+        // -------------------------
+        // ORIGINAL TIPS
+        // -------------------------
 
         "Original Cash Tips",
         "Original Card Tips",
         "Original Total Tips",
+
+        // -------------------------
+        // DISTRIBUTION
+        // -------------------------
 
         "Cash Kept",
         "Card Kept",
@@ -66,8 +83,21 @@ export function exportTipDistributionCSV(
         "Card Payout",
         "Total Payout",
 
-        "Worked Minutes",
+        // -------------------------
+        // STATS
+        // -------------------------
 
+        "Sales / Hr",
+        "Orders / Hr",
+        "Tips / Hr",
+        "Avg Tip / Order",
+
+        // -------------------------
+        // WORK
+        // -------------------------
+
+        "Worked Minutes",
+        "Hours",
         "Orders"
 
     ]);
@@ -85,24 +115,61 @@ export function exportTipDistributionCSV(
             const employee of block.employees
         ) {
 
+            // =========================
+            // SALES
+            // =========================
+
+            const cashSales =
+                employee.cash_sales ?? 0;
+
+            const cardSales =
+                employee.card_sales ?? 0;
+
+            const totalSales =
+                cashSales +
+                cardSales;
+
+
+            // =========================
+            // ORIGINAL TIPS
+            // =========================
+
+            const cashTips =
+                employee.cash_tips ?? 0;
+
+            const cardTips =
+                employee.card_tips ?? 0;
+
+            const totalOriginalTips =
+                cashTips +
+                cardTips;
+
+
+            // =========================
+            // DISTRIBUTION
+            // =========================
+
+            const cashKept =
+                employee.cash_kept ?? 0;
+
+            const cardKept =
+                employee.card_kept ?? 0;
+
+            const poolCashReceived =
+                employee.pool_cash_received ?? 0;
+
+            const poolCardReceived =
+                employee.pool_card_received ?? 0;
+
+
             const cashPayout =
-                (
-                    employee.cash_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_cash_received ?? 0
-                );
+                cashKept +
+                poolCashReceived;
 
 
             const cardPayout =
-                (
-                    employee.card_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_card_received ?? 0
-                );
+                cardKept +
+                poolCardReceived;
 
 
             const totalPayout =
@@ -110,15 +177,63 @@ export function exportTipDistributionCSV(
                 cardPayout;
 
 
-            const totalOriginalTips =
+            // =========================
+            // WORK TIME
+            // =========================
+
+            const workedMinutes =
+                employee.worked_minutes ?? 0;
+
+            const hours =
+                employee.hours ??
                 (
-                    employee.cash_tips ?? 0
-                )
-                +
-                (
-                    employee.card_tips ?? 0
+                    workedMinutes / 60
                 );
 
+
+            // =========================
+            // STATS
+            // =========================
+
+            const salesPerHour =
+                hours > 0
+                    ?
+                    totalSales / hours
+                    :
+                    0;
+
+
+            const orders =
+                employee.order_count ?? 0;
+
+
+            const ordersPerHour =
+                hours > 0
+                    ?
+                    orders / hours
+                    :
+                    0;
+
+
+            const tipsPerHour =
+                hours > 0
+                    ?
+                    totalOriginalTips / hours
+                    :
+                    0;
+
+
+            const avgTipPerOrder =
+                orders > 0
+                    ?
+                    totalOriginalTips / orders
+                    :
+                    0;
+
+
+            // =========================
+            // ADD ROW
+            // =========================
 
             rows.push([
 
@@ -126,44 +241,107 @@ export function exportTipDistributionCSV(
 
                 block.meal,
 
-
                 employee.name,
 
                 employee.employee_id,
 
                 employee.role,
 
+                // -------------------------
+                // SALES
+                // -------------------------
 
-                employee.order_sales ?? 0,
+                formatMoney(
+                    cashSales
+                ),
 
+                formatMoney(
+                    cardSales
+                ),
 
-                employee.cash_tips ?? 0,
+                formatMoney(
+                    totalSales
+                ),
 
-                employee.card_tips ?? 0,
+                // -------------------------
+                // ORIGINAL TIPS
+                // -------------------------
 
-                totalOriginalTips,
+                formatMoney(
+                    cashTips
+                ),
 
+                formatMoney(
+                    cardTips
+                ),
 
-                employee.cash_kept ?? 0,
+                formatMoney(
+                    totalOriginalTips
+                ),
 
-                employee.card_kept ?? 0,
+                // -------------------------
+                // DISTRIBUTION
+                // -------------------------
 
+                formatMoney(
+                    cashKept
+                ),
 
-                employee.pool_cash_received ?? 0,
+                formatMoney(
+                    cardKept
+                ),
 
-                employee.pool_card_received ?? 0,
+                formatMoney(
+                    poolCashReceived
+                ),
 
+                formatMoney(
+                    poolCardReceived
+                ),
 
-                cashPayout,
+                formatMoney(
+                    cashPayout
+                ),
 
-                cardPayout,
+                formatMoney(
+                    cardPayout
+                ),
 
-                totalPayout,
+                formatMoney(
+                    totalPayout
+                ),
 
+                // -------------------------
+                // STATS
+                // -------------------------
 
-                employee.worked_minutes ?? 0,
+                formatMoney(
+                    salesPerHour
+                ),
 
-                employee.order_count ?? 0
+                formatNumber(
+                    ordersPerHour
+                ),
+
+                formatMoney(
+                    tipsPerHour
+                ),
+
+                formatMoney(
+                    avgTipPerOrder
+                ),
+
+                // -------------------------
+                // WORK
+                // -------------------------
+
+                workedMinutes,
+
+                formatNumber(
+                    hours
+                ),
+
+                orders
 
             ]);
 

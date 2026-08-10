@@ -1375,3 +1375,69 @@ footer {
     }
 
 }
+/* =========================
+   TRAINEE NO TRAINER BUTTON
+========================= */
+
+.trainee-no-trainer-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 10px 0 14px 0;
+
+    padding: 9px 16px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: var(--input);
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.1s ease;
+
+}
+
+
+.trainee-no-trainer-button:hover {
+
+    background: var(--section-dark);
+
+    border-color: var(--pink);
+
+}
+
+
+.trainee-no-trainer-button:active {
+
+    transform: scale(0.97);
+
+}
+
+.cash-drop-table-row.cash-drop-row-selected {
+    background: var(--input);
+    box-shadow: inset 0 0 0 2px var(--cyan);
+}
+
+.cash-drop-table-row.cash-drop-row-selected {
+    background: rgba(155, 238, 255, 0.10);
+    box-shadow: inset 0 0 0 2px var(--cyan);
+}
+
+.cash-drop-table-row.cash-drop-row-selected td {
+    background: transparent;
+}

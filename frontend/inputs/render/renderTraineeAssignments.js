@@ -31,9 +31,11 @@ export function renderTraineeAssignments(
                 continue;
             }
 
-            if (!traineeMap.has(
-                employee.employee_id
-            )) {
+            if (
+                !traineeMap.has(
+                    employee.employee_id
+                )
+            ) {
 
                 traineeMap.set(
                     employee.employee_id,
@@ -44,8 +46,11 @@ export function renderTraineeAssignments(
                             employee.employee_id
                     }
                 );
+
             }
+
         }
+
     }
 
 
@@ -76,7 +81,10 @@ export function renderTraineeAssignments(
        TRAINEE
     ========================= */
 
-    for (const trainee of traineeMap.values()) {
+    for (
+        const trainee of
+        traineeMap.values()
+    ) {
 
         output.appendChild(
             createTraineeTable(
@@ -86,7 +94,9 @@ export function renderTraineeAssignments(
                 refreshUI
             )
         );
+
     }
+
 }
 
 
@@ -124,6 +134,66 @@ function createTraineeTable(
     `;
 
     section.appendChild(title);
+
+
+    /* =========================
+       SET ALL NO TRAINER BUTTON
+    ========================= */
+
+    const noTrainerButton =
+        document.createElement("button");
+
+    noTrainerButton.type =
+        "button";
+
+    noTrainerButton.className =
+        "trainee-no-trainer-button";
+
+    noTrainerButton.textContent =
+        "Set All to No Trainer";
+
+
+    noTrainerButton.addEventListener(
+        "click",
+        () => {
+
+            for (const block of mealBlocks) {
+
+                const traineeInBlock =
+                    block.employees.find(
+                        employee =>
+                            employee.employee_id ===
+                            trainee.employee_id
+                    );
+
+                if (!traineeInBlock) {
+                    continue;
+                }
+
+
+                traineeInBlock.no_trainer =
+                    true;
+
+                traineeInBlock
+                    .trainer_employee_id =
+                    null;
+
+                traineeInBlock
+                    .trainer_employee_name =
+                    "";
+
+            }
+
+
+            refreshUI();
+
+        }
+    );
+
+
+    section.appendChild(
+        noTrainerButton
+    );
 
 
     /* =========================
@@ -173,12 +243,20 @@ function createTraineeTable(
         th.className =
             "trainee-date-header";
 
-        headerRow.appendChild(th);
+        headerRow.appendChild(
+            th
+        );
+
     }
 
 
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+    thead.appendChild(
+        headerRow
+    );
+
+    table.appendChild(
+        thead
+    );
 
 
     /* =========================
@@ -231,19 +309,31 @@ function createTraineeTable(
                     refreshUI
                 );
 
-            row.appendChild(cell);
+            row.appendChild(
+                cell
+            );
+
         }
 
 
-        tbody.appendChild(row);
+        tbody.appendChild(
+            row
+        );
+
     }
 
 
-    table.appendChild(tbody);
+    table.appendChild(
+        tbody
+    );
 
-    section.appendChild(table);
+    section.appendChild(
+        table
+    );
+
 
     return section;
+
 }
 
 
@@ -295,6 +385,7 @@ function createAssignmentCell(
             "—";
 
         return cell;
+
     }
 
 
@@ -320,6 +411,7 @@ function createAssignmentCell(
             "—";
 
         return cell;
+
     }
 
 
@@ -341,6 +433,7 @@ function createAssignmentCell(
                     employee.employee_id !==
                         trainee.employee_id
                 );
+
             }
         );
 
@@ -361,7 +454,8 @@ function createAssignmentCell(
     const blank =
         document.createElement("option");
 
-    blank.value = "";
+    blank.value =
+        "";
 
     blank.textContent =
         "-- Select --";
@@ -403,6 +497,7 @@ function createAssignmentCell(
         select.appendChild(
             option
         );
+
     }
 
 
@@ -457,6 +552,7 @@ function createAssignmentCell(
                 refreshUI();
 
                 return;
+
             }
 
 
@@ -495,17 +591,22 @@ function createAssignmentCell(
                 traineeInBlock
                     .trainer_employee_name =
                     "";
+
             }
 
 
             refreshUI();
+
         }
     );
 
 
-    cell.appendChild(select);
+    cell.appendChild(
+        select
+    );
 
     return cell;
+
 }
 
 
@@ -528,7 +629,9 @@ function formatDate(date) {
             parsed.getTime()
         )
     ) {
+
         return value;
+
     }
 
     return (
@@ -542,4 +645,5 @@ function formatDate(date) {
         "/" +
         parsed.getFullYear()
     );
+
 }

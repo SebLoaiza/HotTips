@@ -13,14 +13,12 @@ export function exportPayrollSummaryCSV(
 
     ];
 
-
     // =========================
     // DATE / TIME
     // =========================
 
     const now =
         new Date();
-
 
     const dateTime =
         `${String(
@@ -45,7 +43,6 @@ export function exportPayrollSummaryCSV(
             now.getSeconds()
         ).padStart(2, "0")}`;
 
-
     // =========================
     // SORT EMPLOYEES
     // =========================
@@ -59,7 +56,6 @@ export function exportPayrollSummaryCSV(
                 )
         );
 
-
     // =========================
     // BUILD ROWS
     // =========================
@@ -67,6 +63,14 @@ export function exportPayrollSummaryCSV(
     for (
         const employee of sorted
     ) {
+
+        // =========================
+        // CARD TAKE HOME
+        // =========================
+        //
+        // Card remains accurate
+        // to the nearest cent.
+        //
 
         const cardTakeHome =
             (
@@ -78,6 +82,14 @@ export function exportPayrollSummaryCSV(
             );
 
 
+        // =========================
+        // CASH TAKE HOME
+        // =========================
+        //
+        // Cash is rounded to the
+        // nearest whole dollar.
+        //
+
         const cashTakeHome =
             (
                 employee.cash_kept ?? 0
@@ -88,22 +100,39 @@ export function exportPayrollSummaryCSV(
             );
 
 
+        const roundedCashTakeHome =
+            Math.round(
+                cashTakeHome / 100
+            );
+
+
+        // =========================
+        // ADD ROW
+        // =========================
+
         rows.push([
 
             `"${employee.name}"`,
+
+            // Sales — cents
 
             (
                 (employee.card_sales || 0)
                 / 100
             ).toFixed(2),
 
+
+            // Card Take Home — cents
+
             (
                 cardTakeHome / 100
             ).toFixed(2),
 
-            (
-                cashTakeHome / 100
-            ).toFixed(2)
+
+            // Cash Take Home —
+            // nearest whole dollar
+
+            roundedCashTakeHome.toString()
 
         ]);
 

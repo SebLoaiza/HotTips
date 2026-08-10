@@ -60,9 +60,7 @@ export function renderCashDropList(
                 );
 
             if (dateA - dateB !== 0) {
-
                 return dateA - dateB;
-
             }
 
             return (
@@ -312,6 +310,39 @@ function createRow(
         employee
     );
 
+ // =========================
+// SELECT ALL + HIGHLIGHT ROW
+// =========================
+//
+// Clicking into the input:
+// - Selects the entire value
+// - Highlights the entire row
+//
+
+input.addEventListener(
+    "focus",
+    () => {
+
+        input.select();
+
+        row.classList.add(
+            "cash-drop-row-selected"
+        );
+
+    }
+);
+
+input.addEventListener(
+    "blur",
+    () => {
+
+        row.classList.remove(
+            "cash-drop-row-selected"
+        );
+
+    }
+);
+
     // =========================
     // LIVE INPUT
     // =========================
@@ -375,68 +406,111 @@ function createRow(
     );
 
     // =========================
-    // ENTER → NEXT ROW
+    // ENTER / SHIFT + ENTER
     // =========================
+    //
+    // Enter:
+    //     Move DOWN
+    //
+    // Shift + Enter:
+    //     Move UP
+    //
 
-// =========================
-// ENTER → NEXT ROW
-// =========================
+    input.addEventListener(
+        "keydown",
+        event => {
 
-input.addEventListener(
-    "keydown",
-    event => {
+            if (event.key !== "Enter") {
+                return;
+            }
 
-        if (event.key !== "Enter") {
-            return;
-        }
+            event.preventDefault();
 
-        event.preventDefault();
+            // =========================
+            // SAVE CURRENT VALUE
+            // =========================
 
-        // Save current value
-        saveCashDrop(
-            employee,
-            input
-        );
-
-        // Find all current inputs
-        const inputs =
-            Array.from(
-                document.querySelectorAll(
-                    "#cashDropTables .cash-drop-input"
-                )
+            saveCashDrop(
+                employee,
+                input
             );
 
-        const currentIndex =
-            inputs.indexOf(input);
+            // =========================
+            // FIND CURRENT INPUTS
+            // =========================
 
-        const nextIndex =
-            currentIndex + 1;
+            const inputs =
+                Array.from(
+                    document.querySelectorAll(
+                        "#cashDropTables .cash-drop-input"
+                    )
+                );
 
-        // Refresh the UI
-        if (refreshUI) {
-            refreshUI();
+            const currentIndex =
+                inputs.indexOf(
+                    input
+                );
+
+            // =========================
+            // DETERMINE DIRECTION
+            // =========================
+
+            let nextIndex;
+
+            if (event.shiftKey) {
+
+                // Shift + Enter
+                // Move UP
+
+                nextIndex =
+                    currentIndex - 1;
+
+            }
+
+            else {
+
+                // Enter
+                // Move DOWN
+
+                nextIndex =
+                    currentIndex + 1;
+
+            }
+
+            // =========================
+            // REFRESH UI
+            // =========================
+
+            if (refreshUI) {
+                refreshUI();
+            }
+
+            // =========================
+            // FIND NEW INPUT
+            // =========================
+
+            const newInputs =
+                Array.from(
+                    document.querySelectorAll(
+                        "#cashDropTables .cash-drop-input"
+                    )
+                );
+
+            const next =
+                newInputs[
+                    nextIndex
+                ];
+
+            if (next) {
+
+                next.focus();
+
+                next.select();
+
+            }
+
         }
-
-        // After refresh, find the newly-created inputs
-        const newInputs =
-            Array.from(
-                document.querySelectorAll(
-                    "#cashDropTables .cash-drop-input"
-                )
-            );
-
-        const next =
-            newInputs[nextIndex];
-
-        if (next) {
-
-            next.focus();
-            next.select();
-
-        }
-
-    }
-);  
+    );
 
     return row;
 
