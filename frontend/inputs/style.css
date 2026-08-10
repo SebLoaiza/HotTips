@@ -1,42 +1,38 @@
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #0b1220;
+    --background-light: #101a2e;
+
+    --surface: #131d33;
+    --surface-hover: #192640;
+
+    --border: #263754;
+    --border-light: #3a4d70;
+
+    --text: #f4f7ff;
+    --muted: #98a8c4;
+
+    --pink: #E942A3;
+    --pink-hover: #f15bb3;
+
+    --yellow: #F9F363;
+    --cyan: #8be7ff;
 }
 
 
-:root{
+/* =========================================================
+   GLOBAL
+========================================================= */
 
-    --background:#0b1220;
-    --background-light:#101a2e;
+body {
+    margin: 0;
+    min-height: 100vh;
 
-    --surface:#131d33;
-    --surface-hover:#192640;
-
-    --border:#263754;
-    --border-light:#3a4d70;
-
-    --text:#f4f7ff;
-    --muted:#98a8c4;
-
-    --pink:#E942A3;
-    --pink-hover:#f15bb3;
-
-    --yellow:#F9F363;
-    --cyan:#8be7ff;
-
-}
-
-
-
-
-body{
-
-    margin:0;
-
-    min-height:100vh;
-
-    display:flex;
-
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
 
     font-family:
         Inter,
@@ -44,1165 +40,551 @@ body{
         Arial,
         sans-serif;
 
-    color:var(--text);
-
+    color: var(--text);
 
     background:
-
         radial-gradient(
             circle at top right,
-            rgba(233,66,163,.08),
+            rgba(233, 66, 163, .08),
             transparent 35%
         ),
-
         radial-gradient(
             circle at bottom left,
-            rgba(249,243,99,.05),
+            rgba(249, 243, 99, .05),
             transparent 30%
         ),
-
         linear-gradient(
             180deg,
             var(--background-light),
             var(--background)
         );
-
 }
 
 
-
-
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
+.app-header {
+    height: 88px;
 
-.app-header{
+    display: flex;
+    align-items: center;
 
-    height:88px;
+    gap: 16px;
 
-    display:flex;
+    padding: 0 36px;
 
-    align-items:center;
+    background: rgba(11, 18, 32, .9);
 
-    gap:16px;
+    border-bottom: 1px solid var(--border);
+}
 
-    padding:0 36px;
+.logo {
+    width: 75px;
+    height: 75px;
 
-    background:
-        rgba(11,18,32,.9);
+    object-fit: contain;
+}
 
-    border-bottom:1px solid var(--border);
+.header-text h1 {
+    margin: 0;
+    font-size: 24px;
+}
 
+.header-text p {
+    margin: 5px 0 0;
+
+    color: var(--muted);
 }
 
 
-.logo{
-
-    width:75px;
-
-    height:75px;
-
-    object-fit:contain;
-
-}
-
-
-.header-text h1{
-
-    margin:0;
-
-    font-size:24px;
-
-}
-
-
-.header-text p{
-
-    margin:5px 0 0;
-
-    color:var(--muted);
-
-}
-
-
-
-
-
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
+main {
+    flex: 1;
 
-main{
+    padding: 70px 90px;
+}
 
-    flex:1;
+.panel {
+    background: transparent;
 
-    padding:70px 90px;
+    margin-bottom: 40px;
+}
 
+.panel h2 {
+    margin: 0 0 15px;
+
+    font-size: 32px;
+}
+
+.page-description {
+    max-width: 650px;
+
+    margin-bottom: 35px;
+
+    color: var(--muted);
+
+    font-size: 18px;
+    line-height: 1.6;
 }
 
 
-
-.panel{
-
-    background:transparent;
-
-    margin-bottom:40px;
-
-}
-
-
-
-.panel h2{
-
-    margin:0 0 15px;
-
-    font-size:32px;
-
-}
-
-
-
-
-.page-description{
-
-    max-width:650px;
-
-    margin-bottom:35px;
-
-    color:var(--muted);
-
-    font-size:18px;
-
-    line-height:1.6;
-
-}
-
-
-
-
-
-
-/* =========================
+/* =========================================================
    WORKFLOW
-========================= */
+========================================================= */
 
-
-.workflow-panel{
-
-    margin-bottom:50px;
-
+.workflow-panel {
+    margin-bottom: 50px;
 }
 
-
-
-.workflow{
-
-    display:grid;
+.workflow {
+    display: grid;
 
     grid-template-columns:
-
         160px
         1fr
         160px;
 
+    border-block: 1px solid var(--border);
 
-    border-block:1px solid var(--border);
-
-}
-
-
-
-
-.steps{
-
-    display:flex;
-
-}
-
-
-
-
-.step,
-.nav-button{
-
-
-    width:100%;
-
-    height:44px;
-
-    border-radius:6px;
-
-    border:1px solid var(--border);
-
-    background:var(--surface);
-
-    color:var(--text);
-
-    font-weight:600;
-
-    cursor:pointer;
-
-}
-
-
-
-
-.step{
-
-    height:auto;
-
-    min-height:80px;
-
-    border-radius:0;
-
-    border-top:none;
-
-    border-bottom:none;
-
-    border-left:none;
-
-}
-
-
-
-
-.step:hover,
-.nav-button:hover{
-
-    background:var(--surface-hover);
-
-}
-
-
-
-
-.step.active{
-
-    background:
-
-        rgba(233,66,163,.12);
-
-    color:var(--pink);
-
-    border-color:var(--pink);
-
-}
-
-
-
-
-
-.nav-button{
-
-    margin:18px;
-
-    width:auto;
-
-}
-
-
-
-
-#continueButton{
-
-    background:var(--pink);
-
-    border-color:var(--pink);
-
-}
-
-
-
-
-#continueButton:hover{
-
-    background:var(--pink-hover);
-
-}
-
-
-
-/* =========================
-   STICKY WORKFLOW NAVIGATION
-========================= */
-
-.workflow {
     position: sticky;
+
     top: 0;
+
     z-index: 1000;
 
     background: var(--background);
+
     padding: 10px 0;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.steps {
+    display: flex;
+}
+
+.step,
+.nav-button {
+    width: 100%;
+    height: 44px;
+
+    border-radius: 6px;
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.step {
+    height: auto;
+    min-height: 80px;
+
+    border-radius: 0;
+
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+}
+
+.step:hover,
+.nav-button:hover {
+    background: var(--surface-hover);
+}
+
+.step.active {
+    background:
+        rgba(233, 66, 163, .12);
+
+    color: var(--pink);
+
+    border-color: var(--pink);
+}
+
+.nav-button {
+    margin: 18px;
+
+    width: auto;
+}
+
+#continueButton {
+    background: var(--pink);
+
+    border-color: var(--pink);
+}
+
+#continueButton:hover {
+    background: var(--pink-hover);
 }
 
 
-
-/* =========================
+/* =========================================================
    TABS
-========================= */
+========================================================= */
 
+.tab-page {
+    display: none;
+}
 
-.tab-page{
+.tab-page.active {
+    display: block;
+}
 
-    display:none;
+.tab-page {
+    background: var(--surface);
 
+    border: 1px solid var(--border);
+
+    padding: 32px;
+
+    border-radius: 10px;
+
+    margin-bottom: 40px;
+}
+
+.tab-page .panel {
+    background: transparent;
+
+    border: none;
+
+    padding: 0;
 }
 
 
-
-.tab-page.active{
-
-    display:block;
-
-}
-
-
-
-/* =========================
-   TABS BACKGROUND
-========================= */
-
-.tab-page{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    padding:32px;
-
-    border-radius:10px;
-
-    margin-bottom:40px;
-
-}
-
-
-/* =========================
-   PANELS
-========================= */
-
-.tab-page .panel{
-
-    background:transparent;
-
-    border:none;
-
-    padding:0;
-
-}
-
-
-
-
-
-/* =========================
+/* =========================================================
    CONFIG
-========================= */
+========================================================= */
 
-
-.config-grid{
-
-    display:grid;
+.config-grid {
+    display: grid;
 
     grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
-        repeat(2,minmax(0,1fr));
-
-
-    gap:40px;
-
+    gap: 40px;
 }
 
 
-
-
-
-
-/* =========================
+/* =========================================================
    INPUTS
-========================= */
-
+========================================================= */
 
 input,
-select{
+select {
+    background: var(--surface);
 
+    color: var(--text);
 
-    background:var(--surface);
+    border: 1px solid var(--border);
 
-    color:var(--text);
+    padding: 10px 12px;
 
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-    padding:
-
-        10px 12px;
-
-
-    border-radius:6px;
-
-
+    border-radius: 6px;
 }
-
-
-
 
 input:focus,
-select:focus{
+select:focus {
+    outline: none;
 
-    outline:none;
-
-    border-color:var(--cyan);
-
+    border-color: var(--cyan);
 }
 
 
-
-
-
-
-/* =========================
+/* =========================================================
    BUTTONS
-========================= */
+========================================================= */
 
+button {
+    transition: .2s;
+}
 
-button{
+button:disabled {
+    opacity: .45;
 
-    transition:.2s;
-
+    cursor: not-allowed;
 }
 
 
+/* =========================================================
+   STANDARD TABLES
+========================================================= */
 
-button:disabled{
+table {
+    width: 100%;
 
-    opacity:.45;
-
-    cursor:not-allowed;
-
+    border-collapse: collapse;
 }
 
+th {
+    background: var(--surface-hover);
 
-
-
-
-
-/* =========================
-   TABLES
-========================= */
-
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
+    color: var(--yellow);
 }
 
-
-
-th{
-
-    background:var(--surface-hover);
-
-    color:var(--yellow);
-
+td {
+    background: var(--surface);
 }
-
-
-
-td{
-
-    background:var(--surface);
-
-}
-
-
 
 th,
-td{
+td {
+    border: 1px solid var(--border);
 
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-    padding:15px;
-
+    padding: 15px;
 }
 
 
-/* =========================
-   EMPTY / DISABLED CELLS
-========================= */
+/* =========================================================
+   DISABLED CELLS
+========================================================= */
 
 .disabled-cell {
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display: flex;
 
-    min-height:90px;
+    align-items: center;
+    justify-content: center;
 
-    background:rgba(139,231,255,.08);
-    color:var(--muted);
+    min-height: 90px;
 
-    border:1px solid var(--border);
+    background:
+        rgba(139, 231, 255, .08);
 
-    font-weight:600;
+    color: var(--muted);
+
+    border: 1px solid var(--border);
+
+    font-weight: 600;
 }
 
 
-/* =========================
+/* =========================================================
    CASH GRID
-========================= */
-
+========================================================= */
 
 .cash-grid-wrapper {
+    overflow: auto;
 
-    overflow:auto;
+    max-height: 600px;
 
-    max-height:600px;
+    border: 1px solid var(--border);
 
-    border:1px solid var(--border);
+    background: var(--surface);
 
-    background:var(--surface);
-
-    margin-bottom:40px;
-
+    margin-bottom: 40px;
 }
-
-
 
 .cash-grid {
+    display: grid;
 
+    width: max-content;
 
-    display:grid;
-
-
-    width:max-content;
-
-
-    min-width:100%;
-
-
-    border-collapse:collapse;
-
-
+    min-width: 100%;
 }
 
 
-
-
-
-/* =========================
-   GRID HEADER (DATES)
-========================= */
-
+/* =========================================================
+   CASH GRID HEADER
+========================================================= */
 
 .grid-header {
+    position: sticky;
 
+    top: 0;
 
-    position:sticky;
+    z-index: 20;
 
-    top:0;
+    height: 55px;
 
-    z-index:20;
+    background: var(--surface-hover);
 
+    color: var(--yellow);
 
-    height:55px;
+    font-weight: 700;
 
+    display: flex;
 
-    background:
+    align-items: center;
+    justify-content: center;
 
-        var(--surface-hover);
-
-
-    color:
-
-        var(--yellow);
-
-
-    font-weight:700;
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    justify-content:center;
-
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
+    border: 1px solid var(--border);
 }
 
 
-
-
-
-
-
-/* =========================
+/* =========================================================
    EMPLOYEE COLUMN
-========================= */
-
+========================================================= */
 
 .employee-cell {
+    position: sticky;
 
+    left: 0;
 
-    position:sticky;
+    z-index: 10;
 
+    min-width: 190px;
 
-    left:0;
+    background: var(--surface);
 
+    color: var(--cyan);
 
-    z-index:10;
+    font-weight: 700;
 
+    display: flex;
 
-    min-width:190px;
+    align-items: center;
 
+    padding: 15px;
 
-    background:
-
-        var(--surface);
-
-
-    color:
-
-        var(--cyan);
-
-
-    font-weight:700;
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    padding:
-
-        15px;
-
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
+    border: 1px solid var(--border);
 }
 
 
-
-
-
-
-
-/* =========================
-   TOP LEFT CORNER
-========================= */
-
+/* =========================================================
+   TOP LEFT CASH GRID CORNER
+========================================================= */
 
 .cash-grid > .grid-header:first-child {
+    position: sticky;
 
+    top: 0;
+    left: 0;
 
-    position:sticky;
+    z-index: 30;
 
-
-    top:0;
-
-
-    left:0;
-
-
-    z-index:30;
-
-
-    background:
-
-        var(--surface-hover);
-
-
+    background: var(--surface-hover);
 }
 
 
-
-
-
-
-
-/* =========================
+/* =========================================================
    CASH CELLS
-========================= */
-
-
-.cash-grid-cell {
-
-
-    min-height:90px;
-
-
-    padding:12px;
-
-
-    display:flex;
-
-
-    flex-direction:column;
-
-
-    align-items:center;
-
-
-    justify-content:center;
-
-
-    gap:8px;
-
-
-    background:
-
-        var(--surface);
-
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-}
-
-
-
-
-
-
-.cash-grid-cell:hover {
-
-
-    background:
-
-        rgba(233,66,163,.05);
-
-
-}
-
-
-
-
-
-
-
-
-/* =========================
-   INPUT
-========================= */
-
-
-.cash-drop-input {
-
-
-    width:90px;
-
-
-    height:36px;
-
-
-    text-align:center;
-
-
-    background:
-
-        var(--surface);
-
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-}
-
-
-
-
-
-
-.cash-drop-input:placeholder-shown {
-
-
-    background:
-
-        rgba(249,243,99,.12);
-
-
-}
-
-
-
-
-
-
-
-
-/* =========================
-   EMPTY CELLS
-========================= */
-
-
-.disabled-cell {
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    justify-content:center;
-
-
-    min-height:90px;
-
-
-    background:
-
-        rgba(139,231,255,.08);
-
-
-    color:
-
-        var(--muted);
-
-
-    font-weight:600;
-
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-}
-
-
-
-
-
-
-
-/* =========================
-   STATUS COLORS
-========================= */
-
-
-.cash-drop-input.drop-low {
-
-
-    background:#741010;
-
-
-}
-
-
-
-
-
-.cash-drop-input.drop-high {
-
-
-    background:#1f6734;
-
-
-}
-
-
-
-
-
-.cash-drop-input.drop-equal {
-
-
-    background:
-
-        var(--surface);
-
-
-}
-
-
-
-
-/* =========================
-   EMPTY CASH GRID CELLS
-========================= */
+========================================================= */
 
 .cash-grid-cell {
     min-height: 90px;
-    background: rgba(255,255,255,.05);
+
+    padding: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: rgba(255, 255, 255, .05);
+
     border: 1px solid var(--border);
 }
 
-/* Empty cells still get a visible background */
+.cash-grid-cell:hover {
+    background:
+        rgba(233, 66, 163, .05);
+}
+
 .cash-grid-cell:empty {
-    background: rgba(139,231,255,.08);
-}
-
-/* Empty cells containing empty inputs */
-.cash-grid-cell:has(input[value=""]),
-.cash-grid-cell:has(input:not(:focus):placeholder-shown) {
-    background: rgba(249,243,99,.08);
+    background:
+        rgba(139, 231, 255, .08);
 }
 
 
+/* =========================================================
+   CASH DROP INPUT
+========================================================= */
 
-/* =========================
-   STATUS COLORS
-========================= */
+.cash-drop-input {
+    width: 130px;
 
+    height: 36px;
 
-.cash-drop-input.drop-low{
+    padding: 9px 10px;
 
-    background:#741010;
+    border-radius: 6px;
 
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: white;
+
+    font-size: 14px;
+
+    text-align: right;
+
+    outline: none;
+
+    transition:
+        border-color .15s,
+        box-shadow .15s;
+}
+
+.cash-drop-input:focus {
+    border-color: var(--pink);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(255, 46, 151, .15);
+}
+
+.cash-drop-input.drop-low {
+    background: #741010;
+
+    border-color: #ff5c5c;
+}
+
+.cash-drop-input.drop-high {
+    background: #1f6734;
+
+    border-color: #62d98b;
+}
+
+.cash-drop-input.drop-equal {
+    background: var(--surface);
+
+    border-color: var(--cyan);
 }
 
 
-
-.cash-drop-input.drop-high{
-
-    background:#1f6734;
-
-}
-
-
-
-.cash-drop-input.drop-equal{
-
-    background:var(--surface);
-
-}
-
-
-
-
-
-/* =========================
-   TRAINEES
-========================= */
-
-
-.trainee-meal-section{
-
-    background:var(--surface-hover);
-
-    border-left:
-
-        4px solid
-
-        var(--cyan);
-
-
-    padding:25px;
-
-    margin-bottom:20px;
-
-}
-
-
-
-
-
-
-
-/* =========================
-   DEBUG
-========================= */
-
-
-pre{
-
-    padding:20px;
-
-    background:var(--surface);
-
-    border:
-
-        1px solid
-
-        var(--border);
-
-
-    overflow:auto;
-
-}
-
-
-
-
-
-/* =========================
-   FOOTER
-========================= */
-
-
-footer{
-
-    height:48px;
-
-    display:flex;
-
-    align-items:center;
-
-    padding:0 36px;
-
-    color:var(--muted);
-
-    font-size:13px;
-
-    border-top:1px solid var(--border);
-
-}
-
-
-
-
-
-
-/* =========================
-   MOBILE
-========================= */
-
-
-@media(max-width:1100px){
-
-
-    .config-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-}
-
-
-
-
-
-@media(max-width:850px){
-
-
-    main{
-
-        padding:40px 25px;
-
-    }
-
-
-
-    .workflow{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-
-    .steps{
-
-        flex-direction:column;
-
-    }
-
-
-
-    .step{
-
-        border-right:none;
-
-        border-bottom:1px solid var(--border);
-
-    }
-
-
-
-    .app-header{
-
-        padding:0 20px;
-
-    }
-
-
-
-    .logo{
-
-        width:60px;
-
-        height:60px;
-
-    }
-
-
-}
-/* =========================
+/* =========================================================
    CASH DROP LIST
-========================= */
+========================================================= */
 
 #cashDropTables {
     width: 100%;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 24px;
 }
 
-
-/* =========================
-   DAY
-========================= */
-
 .cash-day-wrapper {
     width: 100%;
-    background: var(--section);
+
+    background: var(--surface);
+
     border: 1px solid var(--border);
+
     border-radius: 12px;
+
     overflow: hidden;
 }
 
-
-/* =========================
-   DATE HEADER
-========================= */
-
 .cash-day-title {
     margin: 0;
+
     padding: 14px 18px;
 
     font-size: 18px;
@@ -1210,29 +592,20 @@ footer{
 
     color: var(--cyan);
 
-    background: var(--section-dark);
+    background: var(--surface-hover);
 
     border-bottom: 1px solid var(--border);
 }
 
-
-/* =========================
-   MEAL BLOCK
-========================= */
-
 .cash-meal-block {
     width: 100%;
+
     border-bottom: 1px solid var(--border);
 }
 
 .cash-meal-block:last-child {
     border-bottom: none;
 }
-
-
-/* =========================
-   MEAL HEADER
-========================= */
 
 .cash-meal-header {
     padding: 10px 18px;
@@ -1242,15 +615,10 @@ footer{
 
     color: var(--pink);
 
-    background: var(--output);
+    background: var(--surface-hover);
 
     border-bottom: 1px solid var(--border);
 }
-
-
-/* =========================
-   EMPLOYEE ROW
-========================= */
 
 .cash-drop-row {
     display: grid;
@@ -1267,29 +635,24 @@ footer{
 
     border-bottom: 1px solid var(--border);
 
-    background: var(--section);
+    background: var(--surface);
 }
 
 .cash-drop-row:last-child {
     border-bottom: none;
 }
 
-
-/* =========================
-   EMPLOYEE NAME
-========================= */
+.cash-drop-row:hover {
+    background: var(--surface-hover);
+}
 
 .cash-drop-employee {
     font-size: 15px;
+
     font-weight: 600;
 
     color: white;
 }
-
-
-/* =========================
-   DROP AREA
-========================= */
 
 .cash-drop-input-wrapper {
     display: flex;
@@ -1301,105 +664,428 @@ footer{
     gap: 12px;
 }
 
-
-/* =========================
-   DROP LABEL
-========================= */
-
 .cash-drop-input-wrapper label {
     min-width: 38px;
 
     font-size: 13px;
+
     font-weight: 600;
 
     color: var(--cyan);
 }
 
-
-/* =========================
-   INPUT
-========================= */
-
-.cash-drop-input {
-    width: 130px;
-
-    padding: 9px 10px;
-
-    border-radius: 6px;
-
-    border: 1px solid var(--border);
-
-    background: var(--input);
-
-    color: white;
-
-    font-size: 14px;
-
-    text-align: right;
-
-    outline: none;
-
-    transition:
-        border-color 0.15s,
-        box-shadow 0.15s;
-}
-
-
-/* =========================
-   INPUT FOCUS
-========================= */
-
-.cash-drop-input:focus {
-    border-color: var(--pink);
-
-    box-shadow:
-        0 0 0 2px
-        rgba(255, 46, 151, 0.15);
-}
-
-
-/* =========================
-   SALES
-========================= */
-
 .cash-drop-sales {
     font-size: 13px;
 
-    color: #aaa;
+    color: var(--muted);
 
     white-space: nowrap;
 }
 
 
-/* =========================
-   DROP COLORS
-========================= */
+/* =========================================================
+   EMPLOYEE TIP POINTS
+========================================================= */
 
-.cash-drop-input.drop-low {
-    border-color: #ff5c5c;
+#employeePoints {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
 }
 
-.cash-drop-input.drop-high {
-    border-color: #62d98b;
+.points-role-section {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: var(--surface);
 }
 
-.cash-drop-input.drop-equal {
-    border-color: var(--cyan);
+.points-role-header {
+    padding: 13px 18px;
+
+    background: var(--surface-hover);
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--yellow);
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+.points-table {
+    width: 100%;
+
+    margin: 0;
+}
+
+.points-table th {
+    background: var(--surface-hover);
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-align: left;
+
+    padding: 11px 16px;
+}
+
+.points-table td {
+    padding: 12px 16px;
+}
+
+.points-table .points-employee-name {
+    color: var(--text);
+
+    font-weight: 600;
+}
+
+.points-table td:last-child,
+.points-table th:last-child {
+    width: 150px;
+
+    text-align: center;
+}
+
+.points-input {
+    width: 90px;
+
+    padding: 8px 10px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.points-table tbody tr:hover td {
+    background: var(--surface-hover);
 }
 
 
-/* =========================
-   HOVER
-========================= */
+/* =========================================================
+   TRAINEE ASSIGNMENTS
+========================================================= */
 
-.cash-drop-row:hover {
-    background: var(--section-dark);
+#traineeAssignments {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+}
+
+.trainee-table-section {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: var(--surface);
+
+    overflow: hidden;
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   TRAINEE HEADER
+========================================================= */
+
+.trainee-table-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px 18px;
+
+    background: var(--surface-hover);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.trainee-table-name {
+    color: var(--text);
+
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+.trainee-table-role {
+    color: var(--cyan);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TRAINEE TABLE WRAPPER
+========================================================= */
+
+.trainee-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+/* =========================================================
+   TRAINEE TABLE
+========================================================= */
+
+.trainee-assignment-table {
+    width: 100%;
+
+    min-width: 650px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.trainee-assignment-table th,
+.trainee-assignment-table td {
+    border: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   TRAINEE HEADER ROW
+========================================================= */
+
+.trainee-assignment-table thead th {
+    height: 48px;
+
+    background: var(--surface-hover);
+
+    color: var(--yellow);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+.trainee-meal-header {
+    width: 130px;
+
+    text-align: left !important;
+
+    padding-left: 16px !important;
+
+    position: sticky;
+
+    left: 0;
+
+    z-index: 3;
+}
+
+.trainee-date-header {
+    min-width: 145px;
+}
+
+
+/* =========================================================
+   TRAINEE MEAL ROW HEADERS
+========================================================= */
+
+.trainee-meal-cell {
+    width: 130px;
+
+    padding: 13px 16px;
+
+    background: var(--surface-hover);
+
+    color: var(--cyan);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    position: sticky;
+
+    left: 0;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   TRAINEE ASSIGNMENT CELLS
+========================================================= */
+
+.trainee-assignment-cell {
+    height: 72px;
+
+    padding: 8px;
+
+    background: var(--surface);
+
+    text-align: center;
+
+    vertical-align: middle;
+}
+
+.trainee-assignment-cell:hover {
+    background:
+        rgba(233, 66, 163, .05);
+}
+
+
+/* =========================================================
+   TRAINEE SELECT
+========================================================= */
+
+.assignment-select {
+    width: 100%;
+
+    max-width: 180px;
+
+    height: 38px;
+
+    padding: 7px 10px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TRAINEE EMPTY CELLS
+========================================================= */
+
+.trainee-assignment-cell.no-meal,
+.trainee-assignment-cell.not-working {
+    background:
+        rgba(139, 231, 255, .04);
+
+    color: var(--muted);
+
+    font-size: 18px;
+}
+
+.trainee-assignment-cell.no-meal:hover,
+.trainee-assignment-cell.not-working:hover {
+    background:
+        rgba(139, 231, 255, .04);
+}
+
+
+/* =========================================================
+   TRAINEE OLD CARD STYLES
+========================================================= */
+
+.trainee-meal-section {
+    display: none;
+}
+
+
+/* =========================================================
+   DEBUG
+========================================================= */
+
+pre {
+    padding: 20px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    overflow: auto;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 36px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    main {
+        padding: 40px 25px;
+    }
+
+    .workflow {
+        grid-template-columns: 1fr;
+    }
+
+    .steps {
+        flex-direction: column;
+    }
+
+    .step {
+        border-right: none;
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+    .app-header {
+        padding: 0 20px;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+
+}
+
 
 @media (max-width: 700px) {
 
@@ -1423,4 +1109,167 @@ footer{
         padding: 9px 14px;
     }
 
+    .trainee-table-title {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+
+        padding: 12px 14px;
+    }
+
+    .trainee-assignment-table {
+        min-width: 600px;
+    }
+
+    .trainee-meal-header,
+    .trainee-meal-cell {
+        width: 110px;
+    }
+
+    .points-table th,
+    .points-table td {
+        padding: 10px 12px;
+    }
+
+}
+
+/* =========================
+   EMPLOYEE POINTS
+========================= */
+
+.employee-points-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+/* Main table header */
+
+.employee-points-table thead th {
+    background: var(--surface-hover);
+    color: var(--yellow);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.employee-points-table thead th:last-child {
+    width: 150px;
+    text-align: center;
+}
+
+/* =========================
+   ROLE HEADER
+========================= */
+
+.employee-points-role-row td {
+    padding: 10px 16px;
+
+    background:
+        rgba(139, 231, 255, .08);
+
+    color: var(--cyan);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: .08em;
+
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+/* =========================
+   EMPLOYEE ROW
+========================= */
+
+.employee-points-row td {
+    padding: 12px 16px;
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 14px;
+}
+
+.employee-points-row:last-child td {
+    border-bottom: none;
+}
+
+/* Employee name */
+
+.employee-points-row td:first-child {
+    font-weight: 600;
+}
+
+/* =========================
+   POINT INPUT
+========================= */
+
+.employee-points-row td:last-child {
+    text-align: center;
+}
+
+.employee-points-table .points-input {
+    width: 85px;
+    height: 36px;
+
+    padding: 6px 10px;
+
+    text-align: center;
+
+    background: var(--background);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.employee-points-table .points-input:focus {
+    border-color: var(--cyan);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(139, 231, 255, .12);
+}
+
+/* =========================
+   HOVER
+========================= */
+
+.employee-points-row:hover td {
+    background: var(--surface-hover);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .employee-points-table thead th,
+    .employee-points-row td,
+    .employee-points-role-row td {
+        padding: 10px 12px;
+    }
+
+    .employee-points-table .points-input {
+        width: 70px;
+    }
 }

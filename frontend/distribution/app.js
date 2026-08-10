@@ -29,6 +29,34 @@ const mealBlocks =
 
 
 
+console.log(
+    "=============================="
+);
+
+console.log(
+    "MEAL BLOCKS IMPORTED FROM INPUTS"
+);
+
+console.log(
+    "=============================="
+);
+
+console.log(
+    mealBlocks
+);
+
+console.log(
+    "RAW MEAL BLOCK JSON:"
+);
+
+console.log(
+    JSON.stringify(
+        mealBlocks,
+        null,
+        2
+    )
+);
+
 if (mealBlocks.length === 0) {
 
     alert("No data found.");
