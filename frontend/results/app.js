@@ -17,6 +17,12 @@ from "./render/renderResultsTable.js";
 
 
 import {
+    renderStats
+}
+from "./render/renderStats.js";
+
+
+import {
     renderEmployeeDetails
 }
 from "./render/renderEmployeeDetails.js";
@@ -51,6 +57,7 @@ import {
 }
 from "./logic/loadTipDistributionJSON.js";
 
+
 import {
     renderSpecialOrders
 }
@@ -61,6 +68,7 @@ import {
     exportPayrollSummaryCSV
 }
 from "./logic/exportPayrollSummaryCSV.js";
+
 
 // =================================
 // LOAD CURRENT HISTORY
@@ -74,14 +82,10 @@ let tipDistribution =
     ) || [];
 
 
-
 const resultsSession =
     new ResultsSession(
         tipDistribution
     );
-
-
-
 
 
 // =================================
@@ -136,7 +140,23 @@ const historyInput =
     );
 
 
+const summaryButton =
+    document.getElementById(
+        "summaryButton"
+    );
 
+
+const resultsButton =
+    document.getElementById(
+        "resultsButton"
+    );
+
+
+// =================================
+// CURRENT VIEW
+// =================================
+
+let currentView = "results";
 
 
 // =================================
@@ -148,10 +168,8 @@ function openEmployee(
     employee
 ) {
 
-
     const existing =
         row.nextElementSibling;
-
 
 
     if (
@@ -168,7 +186,6 @@ function openEmployee(
     }
 
 
-
     const detailsRow =
         document.createElement(
             "tr"
@@ -179,15 +196,23 @@ function openEmployee(
         "employeeDetailsRow";
 
 
-
     const cell =
         document.createElement(
             "td"
         );
 
 
-    cell.colSpan = 10;
+    /*
+        The simple Results table only has
+        four columns now:
 
+        Name
+        Cash
+        Card
+        Total
+    */
+
+    cell.colSpan = 4;
 
 
     cell.appendChild(
@@ -195,7 +220,6 @@ function openEmployee(
             employee
         )
     );
-
 
 
     detailsRow.appendChild(
@@ -210,14 +234,13 @@ function openEmployee(
 }
 
 
-
-
-
 // =================================
-// RENDER
+// RENDER RESULTS VIEW
 // =================================
 
 function renderResults() {
+
+    currentView = "results";
 
 
     resultsContainer.innerHTML =
@@ -228,10 +251,8 @@ function renderResults() {
         "";
 
 
-
     const filtered =
         resultsSession.filtered_distribution;
-
 
 
     const employees =
@@ -240,6 +261,7 @@ function renderResults() {
         );
 
 
+    // Employee results table
 
     resultsContainer.appendChild(
 
@@ -251,6 +273,18 @@ function renderResults() {
     );
 
 
+    // Special orders
+
+    resultsContainer.appendChild(
+
+        renderSpecialOrders(
+            filtered
+        )
+
+    );
+
+
+    // Print summary
 
     printContainer.appendChild(
 
@@ -262,233 +296,385 @@ function renderResults() {
     );
 
 
-
-    resultsContainer.appendChild(
-    renderSpecialOrders(
-        filtered
-    )
-);
+    updateViewButtons();
 
 }
 
 
+// =================================
+// RENDER STATS VIEW
+// =================================
 
+function renderStatsPage() {
+
+    currentView = "stats";
+
+
+    resultsContainer.innerHTML =
+        "";
+
+
+    printContainer.innerHTML =
+        "";
+
+
+    const filtered =
+        resultsSession.filtered_distribution;
+
+
+    const employees =
+        compileResults(
+            filtered
+        );
+
+
+    resultsContainer.appendChild(
+
+        renderStats(
+            employees,
+            filtered
+        )
+
+    );
+
+
+    updateViewButtons();
+
+}
+
+
+// =================================
+// UPDATE TOGGLE BUTTONS
+// =================================
+
+function updateViewButtons() {
+
+    if (
+        resultsButton
+    ) {
+
+        resultsButton.classList.toggle(
+            "active",
+            currentView === "results"
+        );
+
+    }
+
+
+    if (
+        summaryButton
+    ) {
+
+        summaryButton.classList.toggle(
+            "active",
+            currentView === "stats"
+        );
+
+    }
+
+}
 
 
 // =================================
 // DATE SELECTOR
 // =================================
 
-dateContainer.appendChild(
+if (
+    dateContainer
+) {
 
-    renderDateSelector(
-        resultsSession,
-        renderResults
-    )
+    dateContainer.appendChild(
 
-);
+        renderDateSelector(
+            resultsSession,
+            () => {
+
+                if (
+                    currentView === "stats"
+                ) {
+
+                    renderStatsPage();
+
+                }
+                else {
+
+                    renderResults();
+
+                }
+
+            }
+        )
+
+    );
+
+}
 
 
+// =================================
+// RESULTS / STATS TOGGLE
+// =================================
 
+if (
+    resultsButton
+) {
+
+    resultsButton.onclick =
+        () => {
+
+            renderResults();
+
+        };
+
+}
+
+
+if (
+    summaryButton
+) {
+
+    summaryButton.onclick =
+        () => {
+
+            renderStatsPage();
+
+        };
+
+}
 
 
 // =================================
 // EXPORT CSV
 // =================================
 
-if(exportCSVButton) {
-
+if (
+    exportCSVButton
+) {
 
     exportCSVButton.onclick =
-    () => {
+        () => {
 
+            exportTipDistributionCSV(
 
-        exportTipDistributionCSV(
-            resultsSession.filtered_distribution
-        );
+                resultsSession
+                    .filtered_distribution
 
+            );
 
-    };
+        };
 
 }
-
-
-
 
 
 // =================================
 // SAVE JSON
 // =================================
 
-if(saveButton) {
-
+if (
+    saveButton
+) {
 
     saveButton.onclick =
-    () => {
+        () => {
 
+            saveTipDistributionJSON(
+                tipDistribution
+            );
 
-        saveTipDistributionJSON(
-            tipDistribution
-        );
-
-
-    };
+        };
 
 }
-
-
-
 
 
 // =================================
 // IMPORT JSON HISTORY
 // =================================
 
-if(loadButton) {
-
+if (
+    loadButton
+) {
 
     loadButton.onclick =
-    () => {
+        () => {
 
-        historyInput.click();
+            historyInput.click();
 
-    };
+        };
 
 }
 
 
-
-
-
-if(historyInput) {
-
+if (
+    historyInput
+) {
 
     historyInput.onchange =
-    async(event)=>{
+        async (event) => {
+
+            const file =
+                event.target.files[0];
 
 
-        const file =
-            event.target.files[0];
+            if (
+                !file
+            ) {
+
+                return;
+
+            }
 
 
-        if(!file)
-            return;
+            try {
+
+                const imported =
+                    await loadTipDistributionJSON(
+                        file
+                    );
 
 
-
-        try {
-
-
-            const imported =
-                await loadTipDistributionJSON(
-                    file
-                );
-
-
-
-            const existing =
-                JSON.parse(
-                    sessionStorage.getItem(
-                        "tipDistribution"
-                    )
-                ) || [];
-
-
-
-            const incoming =
-                imported.tipDistribution || [];
-
-
-
-            const merged =
-                Array.from(
-
-                    new Map(
-
-                        [
-                            ...existing,
-                            ...incoming
-
-                        ]
-
-                        .map(
-                            block => [
-                                block.id,
-                                block
-                            ]
+                const existing =
+                    JSON.parse(
+                        sessionStorage.getItem(
+                            "tipDistribution"
                         )
+                    ) || [];
 
+
+                const incoming =
+                    imported.tipDistribution || [];
+
+
+                const merged =
+                    Array.from(
+
+                        new Map(
+
+                            [
+                                ...existing,
+                                ...incoming
+                            ]
+
+                            .map(
+                                block => [
+
+                                    block.id,
+
+                                    block
+
+                                ]
+                            )
+
+                        ).values()
+
+                    );
+
+
+                sessionStorage.setItem(
+
+                    "tipDistribution",
+
+                    JSON.stringify(
+                        merged
                     )
-                    .values()
 
                 );
 
 
-
-            sessionStorage.setItem(
-
-                "tipDistribution",
-
-                JSON.stringify(
-                    merged
-                )
-
-            );
+                alert(
+                    `Imported ${incoming.length} meal blocks. Total history: ${merged.length}`
+                );
 
 
+                location.reload();
 
-            alert(
-                `Imported ${incoming.length} meal blocks. Total history: ${merged.length}`
-            );
-
-
-
-            location.reload();
-
-
-        }
-        catch(error) {
-
-
-            console.error(
+            }
+            catch (
                 error
-            );
+            ) {
+
+                console.error(
+                    error
+                );
 
 
-            alert(
-                "Invalid HotTips JSON history file"
-            );
+                alert(
+                    "Invalid HotTips JSON history file"
+                );
 
+            }
 
-        }
-
-
-    };
+        };
 
 }
-
-
-
 
 
 // =================================
 // PRINT
 // =================================
 
-if(printButton) {
-
+if (
+    printButton
+) {
 
     printButton.onclick =
-    () => {
+        () => {
 
-        window.print();
+            window.print();
 
-    };
+        };
 
 }
 
 
+// =================================
+// PAYROLL SUMMARY
+// =================================
 
+document
+    .getElementById(
+        "payrollSummaryButton"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            const employees =
+                compileResults(
+                    resultsSession
+                        .filtered_distribution
+                );
+
+
+            exportPayrollSummaryCSV(
+                employees
+            );
+
+        }
+    );
+
+
+// =================================
+// BACK BUTTON
+// =================================
+
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
+
+
+if (
+    backButton
+) {
+
+    backButton.onclick =
+        () => {
+
+            window.location.href =
+                "../distribution/distribution.html";
+
+        };
+
+}
 
 
 // =================================
@@ -496,9 +682,6 @@ if(printButton) {
 // =================================
 
 renderResults();
-
-
-
 
 
 // =================================
@@ -517,50 +700,11 @@ window.RENDER_RESULTS =
     renderResults;
 
 
+window.RENDER_STATS =
+    renderStatsPage;
+
 
 console.log(
     "TIP DISTRIBUTION",
     tipDistribution
-);
-
-// =================================
-// BACK BUTTON
-// =================================
-
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-
-if(backButton) {
-
-    backButton.onclick =
-    () => {
-
-        window.location.href =
-            "../distribution/distribution.html";
-
-    };
-
-}
-
-document
-.getElementById(
-    "payrollSummaryButton"
-)
-?.addEventListener(
-    "click",
-    () => {
-
-        const employees =
-            compileResults(
-                resultsSession.filtered_distribution
-            );
-
-        exportPayrollSummaryCSV(
-            employees
-        );
-
-    }
 );

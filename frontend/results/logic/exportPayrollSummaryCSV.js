@@ -14,6 +14,42 @@ export function exportPayrollSummaryCSV(
     ];
 
 
+    // =========================
+    // DATE / TIME
+    // =========================
+
+    const now =
+        new Date();
+
+
+    const dateTime =
+        `${String(
+            now.getMonth() + 1
+        ).padStart(2, "0")}-` +
+
+        `${String(
+            now.getDate()
+        ).padStart(2, "0")}-` +
+
+        `${now.getFullYear()} ` +
+
+        `${String(
+            now.getHours()
+        ).padStart(2, "0")}` +
+
+        `${String(
+            now.getMinutes()
+        ).padStart(2, "0")}` +
+
+        `${String(
+            now.getSeconds()
+        ).padStart(2, "0")}`;
+
+
+    // =========================
+    // SORT EMPLOYEES
+    // =========================
+
     const sorted =
         [...employees]
         .sort(
@@ -24,10 +60,13 @@ export function exportPayrollSummaryCSV(
         );
 
 
+    // =========================
+    // BUILD ROWS
+    // =========================
+
     for (
         const employee of sorted
     ) {
-
 
         const cardTakeHome =
             (
@@ -37,7 +76,6 @@ export function exportPayrollSummaryCSV(
             (
                 employee.pool_card_received ?? 0
             );
-
 
 
         const cashTakeHome =
@@ -50,22 +88,18 @@ export function exportPayrollSummaryCSV(
             );
 
 
-
         rows.push([
 
             `"${employee.name}"`,
-
 
             (
                 (employee.card_sales || 0)
                 / 100
             ).toFixed(2),
 
-
             (
                 cardTakeHome / 100
             ).toFixed(2),
-
 
             (
                 cashTakeHome / 100
@@ -75,6 +109,10 @@ export function exportPayrollSummaryCSV(
 
     }
 
+
+    // =========================
+    // CREATE CSV
+    // =========================
 
     const csv =
         rows
@@ -95,6 +133,10 @@ export function exportPayrollSummaryCSV(
         );
 
 
+    // =========================
+    // DOWNLOAD
+    // =========================
+
     const url =
         URL.createObjectURL(
             blob
@@ -112,7 +154,7 @@ export function exportPayrollSummaryCSV(
 
 
     link.download =
-        "Payroll Summary.csv";
+        `Payroll Summary - ${dateTime}.csv`;
 
 
     document.body.appendChild(

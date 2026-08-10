@@ -1,9 +1,7 @@
 import {
-    formatMoney,
-    formatNumber
+    formatMoney
 }
-from "../utils/formatters.js";
-
+from "./formatters.js";
 
 
 export function renderResultsTable(
@@ -13,10 +11,9 @@ export function renderResultsTable(
 
 
     let currentSort = {
-        key: null,
+        key: "name",
         direction: "asc"
     };
-
 
 
     const table =
@@ -25,65 +22,35 @@ export function renderResultsTable(
         );
 
 
-
     table.innerHTML = `
 
-    <thead>
+        <thead>
 
-        <tr>
+            <tr>
 
-            <th data-sort="name">
-                Name
-            </th>
+                <th data-sort="name">
+                    Employee
+                </th>
 
-            <th data-sort="original_cash_tips">
-                Cash Tips
-            </th>
+                <th data-sort="cash">
+                    Cash
+                </th>
 
-            <th data-sort="original_card_tips">
-                Card Tips
-            </th>
+                <th data-sort="card">
+                    Card
+                </th>
 
-            <th data-sort="original_tips">
-                Total Tips
-            </th>
+                <th data-sort="total">
+                    Total
+                </th>
 
-            <th data-sort="cash_sales">
-                Cash Sales
-            </th>
+            </tr>
 
-            <th data-sort="card_sales">
-                Card Sales
-            </th>
+        </thead>
 
-            <th data-sort="total_sales">
-                Total Sales
-            </th>
-
-            <th data-sort="avg_sales_per_hour">
-                Sales / Hr
-            </th>
-
-            <th data-sort="avg_orders_per_hour">
-                Orders / Hr
-            </th>
-
-            <th data-sort="tips_per_hour">
-                Tips / Hr
-            </th>
-
-            <th data-sort="avg_tip_per_order">
-                Avg Tip / Order
-            </th>
-
-        </tr>
-
-    </thead>
-
-    <tbody></tbody>
+        <tbody></tbody>
 
     `;
-
 
 
     const body =
@@ -92,131 +59,270 @@ export function renderResultsTable(
         );
 
 
+    // =========================
+    // CASH ROUNDING
+    // =========================
+
+    function roundedCash(
+        employee
+    ) {
+
+        const cash =
+            employee.cash_kept ?? 0;
+
+        return (
+            Math.round(
+                cash / 100
+            ) * 100
+        );
+
+    }
 
 
+    // =========================
+    // CARD
+    // =========================
 
-    function originalTips(
+    function cardAmount(
         employee
     ) {
 
         return (
+            employee.card_kept ?? 0
+        );
 
-            (employee.original_cash_tips || 0)
+    }
 
+
+    // =========================
+    // TOTAL
+    // =========================
+
+    function totalAmount(
+        employee
+    ) {
+
+        return (
+            roundedCash(employee)
             +
-
-            (employee.original_card_tips || 0)
-
+            cardAmount(employee)
         );
 
     }
 
 
+    // =========================
+    // LAST NAME
+    // =========================
 
-
-
-    function tipsPerHour(
+    function lastName(
         employee
     ) {
 
+        const name =
+            String(
+                employee.name ?? ""
+            )
+            .trim();
 
-        if (
-            employee.hours <= 0
-        ) {
 
-            return 0;
-
-        }
+        const parts =
+            name.split(/\s+/);
 
 
         return (
-            originalTips(employee)
-            /
-            employee.hours
+            parts.length > 0
+                ?
+                parts[parts.length - 1]
+                :
+                ""
+        );
+
+    }
+
+
+    // =========================
+    // SORT
+    // =========================
+
+    function sortEmployees(
+        key
+    ) {
+
+        const sorted =
+            [
+                ...employees
+            ];
+
+
+        sorted.sort(
+            (a, b) => {
+
+                let A;
+                let B;
+
+
+                // -------------------------
+                // NAME
+                // -------------------------
+
+                if (
+                    key === "name"
+                ) {
+
+                    A =
+                        lastName(a)
+                        .toLowerCase();
+
+                    B =
+                        lastName(b)
+                        .toLowerCase();
+
+
+                    const result =
+                        A.localeCompare(
+                            B
+                        );
+
+
+                    if (
+                        result !== 0
+                    ) {
+
+                        return (
+                            currentSort.direction === "asc"
+                                ?
+                                result
+                                :
+                                -result
+                        );
+
+                    }
+
+
+                    // Same last name:
+                    // sort by full name
+
+                    A =
+                        String(
+                            a.name ?? ""
+                        )
+                        .toLowerCase();
+
+                    B =
+                        String(
+                            b.name ?? ""
+                        )
+                        .toLowerCase();
+
+                }
+
+
+                // -------------------------
+                // CASH
+                // -------------------------
+
+                else if (
+                    key === "cash"
+                ) {
+
+                    A =
+                        roundedCash(a);
+
+                    B =
+                        roundedCash(b);
+
+                }
+
+
+                // -------------------------
+                // CARD
+                // -------------------------
+
+                else if (
+                    key === "card"
+                ) {
+
+                    A =
+                        cardAmount(a);
+
+                    B =
+                        cardAmount(b);
+
+                }
+
+
+                // -------------------------
+                // TOTAL
+                // -------------------------
+
+                else if (
+                    key === "total"
+                ) {
+
+                    A =
+                        totalAmount(a);
+
+                    B =
+                        totalAmount(b);
+
+                }
+
+
+                // -------------------------
+                // STRING SORT
+                // -------------------------
+
+                if (
+                    typeof A === "string"
+                ) {
+
+                    return (
+                        currentSort.direction === "asc"
+                            ?
+                            A.localeCompare(B)
+                            :
+                            B.localeCompare(A)
+                    );
+
+                }
+
+
+                // -------------------------
+                // NUMBER SORT
+                // -------------------------
+
+                return (
+                    currentSort.direction === "asc"
+                        ?
+                        A - B
+                        :
+                        B - A
+                );
+
+            }
         );
 
 
-    }
-
-
-
-
-
-    function avgTipPerOrder(
-        employee
-    ) {
-
-
-        if (
-            employee.order_count <= 0
-        ) {
-
-            return 0;
-
-        }
-
-
-        return (
-
-            originalTips(employee)
-            /
-            employee.order_count
-
-        );
-
+        return sorted;
 
     }
 
 
-
-
-
-    function renderTrainerInfo(
-        employee
-    ) {
-
-
-        if (
-            employee.tips_sent_to_trainers.length === 0
-        ) {
-
-            return "";
-
-        }
-
-
-
-        return `
-
-            <br>
-
-            <small class="trainer-note">
-
-                Sent to trainers:
-                ${employee.tips_sent_to_trainers.length}
-
-            </small>
-
-        `;
-
-
-    }
-
-
-
-
+    // =========================
+    // RENDER ROWS
+    // =========================
 
     function renderRows(
         list
     ) {
 
-
         body.innerHTML = "";
 
 
-
         for (
-            const employee of list
+            const employee
+            of list
         ) {
 
 
@@ -226,372 +332,138 @@ export function renderResultsTable(
                 );
 
 
+            const cash =
+                roundedCash(
+                    employee
+                );
+
+
+            const card =
+                cardAmount(
+                    employee
+                );
+
+
+            const total =
+                totalAmount(
+                    employee
+                );
+
 
             row.innerHTML = `
 
+                <td>
+                    ${employee.name}
+                </td>
 
-            <td>
-
-                ${employee.name}
-
-                ${renderTrainerInfo(
-                    employee
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.original_cash_tips
-                )}
-
-                <br>
-
-                <small>
-
-                    Kept:
+                <td>
                     ${formatMoney(
-                        employee.cash_kept
+                        cash
                     )}
+                </td>
 
-                    <br>
-
-                    Pool:
+                <td>
                     ${formatMoney(
-                        employee.pool_cash
+                        card
                     )}
+                </td>
 
-                </small>
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.original_card_tips
-                )}
-
-                <br>
-
-                <small>
-
-                    Kept:
-                    ${formatMoney(
-                        employee.card_kept
-                    )}
-
-                    <br>
-
-                    Pool:
-                    ${formatMoney(
-                        employee.pool_card
-                    )}
-
-                </small>
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    originalTips(employee)
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.cash_sales
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.card_sales
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.total_sales
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    employee.avg_sales_per_hour
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatNumber(
-                    employee.avg_orders_per_hour
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    tipsPerHour(
-                        employee
-                    )
-                )}
-
-            </td>
-
-
-
-            <td>
-
-                ${formatMoney(
-                    avgTipPerOrder(
-                        employee
-                    )
-                )}
-
-            </td>
-
+                <td>
+                    <strong>
+                        ${formatMoney(
+                            total
+                        )}
+                    </strong>
+                </td>
 
             `;
 
 
-
             row.onclick = () => {
 
-                clickHandler(
-                    row,
-                    employee
-                );
+                if (clickHandler) {
+
+                    clickHandler(
+                        row,
+                        employee
+                    );
+
+                }
 
             };
-
 
 
             body.appendChild(
                 row
             );
 
-
         }
-
 
     }
 
 
+    // =========================
+    // SORT HEADERS
+    // =========================
+
+    table
+        .querySelectorAll(
+            "th[data-sort]"
+        )
+        .forEach(
+            header => {
+
+                header.onclick = () => {
+
+                    const key =
+                        header.dataset.sort;
 
 
+                    if (
+                        currentSort.key === key
+                    ) {
 
-    function sortEmployees(
-        key
-    ) {
+                        currentSort.direction =
+                            currentSort.direction === "asc"
+                                ?
+                                "desc"
+                                :
+                                "asc";
 
+                    }
 
-        const sorted =
-            [
-                ...employees
-            ];
+                    else {
 
+                        currentSort.key =
+                            key;
 
+                        currentSort.direction =
+                            "asc";
 
-        sorted.sort(
-            (a,b) => {
-
-
-                let A =
-                    a[key] ?? 0;
-
-
-                let B =
-                    b[key] ?? 0;
-
+                    }
 
 
+                    renderRows(
+                        sortEmployees(
+                            key
+                        )
+                    );
 
-                if (
-                    key === "original_tips"
-                ) {
-
-                    A =
-                        originalTips(a);
-
-
-                    B =
-                        originalTips(b);
-
-                }
-
-
-
-
-                if (
-                    key === "tips_per_hour"
-                ) {
-
-                    A =
-                        tipsPerHour(a);
-
-
-                    B =
-                        tipsPerHour(b);
-
-                }
-
-
-
-
-                if (
-                    key === "avg_tip_per_order"
-                ) {
-
-                    A =
-                        avgTipPerOrder(a);
-
-
-                    B =
-                        avgTipPerOrder(b);
-
-                }
-
-
-
-
-                if (
-                    typeof A === "string"
-                ) {
-
-
-                    return currentSort.direction === "asc"
-
-                        ?
-
-                        A.localeCompare(B)
-
-                        :
-
-                        B.localeCompare(A);
-
-                }
-
-
-
-                return currentSort.direction === "asc"
-
-                    ?
-
-                    A - B
-
-                    :
-
-                    B - A;
-
+                };
 
             }
         );
 
 
-
-        return sorted;
-
-
-    }
-
-
-
-
-
-    table
-    .querySelectorAll(
-        "th[data-sort]"
-    )
-    .forEach(
-        header => {
-
-
-            header.onclick = () => {
-
-
-                const key =
-                    header.dataset.sort;
-
-
-
-                if (
-                    currentSort.key === key
-                ) {
-
-
-                    currentSort.direction =
-                        currentSort.direction === "asc"
-                        ?
-                        "desc"
-                        :
-                        "asc";
-
-
-                }
-                else {
-
-
-                    currentSort.key =
-                        key;
-
-
-                    currentSort.direction =
-                        "asc";
-
-
-                }
-
-
-
-                renderRows(
-                    sortEmployees(
-                        key
-                    )
-                );
-
-
-            };
-
-
-        }
-    );
-
-
+    // =========================
+    // INITIAL SORT
+    // =========================
 
     renderRows(
-        employees
+        sortEmployees(
+            "name"
+        )
     );
-
 
 
     return table;

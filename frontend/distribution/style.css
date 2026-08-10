@@ -1,42 +1,44 @@
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
 
-:root{
+:root {
 
-    --background:#0b1220;
-    --background-light:#101a2e;
+    --background: #0b1220;
+    --background-light: #101a2e;
 
-    --surface:#131d33;
-    --surface-hover:#192640;
+    --surface: #131d33;
+    --surface-hover: #192640;
 
-    --border:#263754;
-    --border-light:#3a4d70;
+    --border: #263754;
+    --border-light: #3a4d70;
 
-    --text:#f4f7ff;
-    --muted:#98a8c4;
+    --text: #f4f7ff;
+    --muted: #98a8c4;
 
-    --pink:#E942A3;
-    --pink-hover:#f15bb3;
+    --pink: #E942A3;
+    --pink-hover: #f15bb3;
 
-    --yellow:#F9F363;
-    --cyan:#8be7ff;
+    --yellow: #F9F363;
+    --cyan: #8be7ff;
 
 }
 
 
+/* =========================
+   BODY
+========================= */
 
+body {
 
-body{
+    margin: 0;
 
-    margin:0;
+    min-height: 100vh;
 
-    min-height:100vh;
+    display: flex;
 
-    display:flex;
-
-    flex-direction:column;
+    flex-direction: column;
 
     font-family:
         Inter,
@@ -44,21 +46,19 @@ body{
         Arial,
         sans-serif;
 
-
-    color:var(--text);
-
+    color: var(--text);
 
     background:
 
         radial-gradient(
             circle at top right,
-            rgba(233,66,163,.08),
+            rgba(233, 66, 163, .08),
             transparent 35%
         ),
 
         radial-gradient(
             circle at bottom left,
-            rgba(249,243,99,.05),
+            rgba(249, 243, 99, .05),
             transparent 30%
         ),
 
@@ -71,129 +71,114 @@ body{
 }
 
 
-
-
-
 /* =========================
    HEADER
 ========================= */
 
+.app-header {
 
-.app-header{
+    height: 88px;
 
-    height:88px;
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    gap: 16px;
 
-    gap:16px;
-
-    padding:0 36px;
+    padding: 0 36px;
 
     background:
-        rgba(11,18,32,.9);
+        rgba(11, 18, 32, .9);
 
-
-    border-bottom:1px solid var(--border);
-
-}
-
-
-
-.logo{
-
-    width:75px;
-
-    height:75px;
-
-    object-fit:contain;
+    border-bottom:
+        1px solid
+        var(--border);
 
 }
 
 
+.logo {
 
-.header-text h1{
+    width: 75px;
 
-    margin:0;
+    height: 75px;
 
-    font-size:24px;
-
-}
-
-
-
-.header-text p{
-
-    margin:5px 0 0;
-
-    color:var(--muted);
+    object-fit: contain;
 
 }
 
 
+.header-text h1 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+}
 
 
+.header-text p {
+
+    margin: 5px 0 0;
+
+    color: var(--muted);
+
+}
 
 
 /* =========================
    MAIN
 ========================= */
 
+main {
 
-main{
+    flex: 1;
 
-    flex:1;
-
-    padding:70px 90px;
-
-}
-
-
-
-.panel{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    padding:32px;
-
-    margin-bottom:40px;
-
-    border-radius:10px;
+    padding: 70px 90px;
 
 }
 
 
+.panel {
 
-.panel h2{
+    background: var(--surface);
 
-    margin:0 0 15px;
+    border:
+        1px solid
+        var(--border);
 
-    font-size:32px;
+    padding: 32px;
 
-}
+    margin-bottom: 40px;
 
-
-
-.page-description{
-
-    max-width:650px;
-
-    margin-bottom:35px;
-
-    color:var(--muted);
-
-    font-size:18px;
-
-    line-height:1.6;
+    border-radius: 10px;
 
 }
 
 
+.panel h2 {
+
+    margin:
+        0 0 15px;
+
+    font-size: 32px;
+
+}
 
 
+.page-description {
+
+    max-width: 650px;
+
+    margin-bottom: 35px;
+
+    color: var(--muted);
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+}
 
 
 /* =========================
@@ -204,36 +189,34 @@ main{
 
     position: sticky;
 
-    top:0;
+    top: 0;
 
-    z-index:1000;
-
+    z-index: 1000;
 
     background:
-
-        rgba(11,18,32,.98);
-
+        rgba(11, 18, 32, .98);
 
     backdrop-filter:
-
         blur(8px);
 
-
     border-bottom:
-
-        1px solid var(--border);
-
+        1px solid
+        var(--border);
 
 }
 
 
 .process-flow {
 
-    display:grid;
+    display: grid;
 
-    grid-template-columns: repeat(2, minmax(0,1fr));
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    gap:0;
+    gap: 0;
 
 }
 
@@ -241,9 +224,12 @@ main{
 .continue-step,
 .upload-card {
 
-    padding:12px 26px;
+    padding:
+        12px 26px;
 
-    border-right:1px solid var(--border);
+    border-right:
+        1px solid
+        var(--border);
 
 }
 
@@ -251,7 +237,7 @@ main{
 .continue-step:last-child,
 .upload-card:last-child {
 
-    border-right:none;
+    border-right: none;
 
 }
 
@@ -260,141 +246,140 @@ main{
 .upload-card:hover {
 
     background:
-        rgba(233,66,163,.04);
+        rgba(233, 66, 163, .04);
 
 }
 
+
+/* =========================
+   BUTTONS
+========================= */
 
 button {
 
-    width:100%;
+    width: 100%;
 
-    height:44px;
+    height: 44px;
 
-    border-radius:6px;
+    border-radius: 6px;
 
-    border:1px solid var(--border);
+    border:
+        1px solid
+        var(--border);
 
-    background:var(--surface);
+    background:
+        var(--surface);
 
-    color:var(--text);
+    color:
+        var(--text);
 
-    font-weight:600;
+    font-weight: 600;
 
-    cursor:pointer;
-
-}
-
-
-
-button:hover{
-
-    background:var(--surface-hover);
+    cursor: pointer;
 
 }
 
+
+button:hover {
+
+    background:
+        var(--surface-hover);
+
+}
 
 
 #topContinueButton,
-#continueButton{
+#continueButton {
 
-    background:var(--pink);
+    background:
+        var(--pink);
 
-    border-color:var(--pink);
+    border-color:
+        var(--pink);
 
 }
-
 
 
 #topContinueButton:hover,
-#continueButton:hover{
+#continueButton:hover {
 
-    background:var(--pink-hover);
-
-}
-
-
-
-
-
-
-.navigation-panel{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:20px;
+    background:
+        var(--pink-hover);
 
 }
 
 
+.navigation-panel {
 
+    display: grid;
 
+    grid-template-columns:
+        1fr 1fr;
 
+    gap: 20px;
+
+}
 
 
 /* =========================
    DAY TABS
 ========================= */
 
+.day-tabs {
 
-.day-tabs{
+    display: flex;
 
-    display:flex;
+    gap: 12px;
 
-    gap:12px;
+    flex-wrap: wrap;
 
-    flex-wrap:wrap;
-
-    margin-bottom:30px;
-
-}
-
-
-
-.day-tabs button{
-
-    width:auto;
-
-    padding:12px 22px;
+    margin-bottom: 30px;
 
 }
 
 
+.day-tabs button {
 
-.day-tabs button:hover{
+    width: auto;
 
-    border-color:var(--cyan);
-
-}
-
-
-
-.day-tabs button.active{
-
-    background:var(--pink);
-
-    border-color:var(--pink);
+    padding:
+        12px 22px;
 
 }
 
 
+.day-tabs button:hover {
 
+    border-color:
+        var(--cyan);
+
+}
+
+
+.day-tabs button.active {
+
+    background:
+        var(--pink);
+
+    border-color:
+        var(--pink);
+
+}
 
 
 /* =========================
    MEAL BLOCK
 ========================= */
 
+.meal-block {
 
-.meal-block{
+    margin-bottom: 35px;
 
-    margin-bottom:35px;
+    padding:
+        0 25px 25px;
 
-    padding:0 25px 25px;
-
-    background:var(--surface-hover);
+    background:
+        var(--surface-hover);
 
     border-left:
         4px solid
@@ -403,54 +388,42 @@ button:hover{
 }
 
 
-.meal-block h2{
+.meal-block h2 {
 
-    position:sticky;
+    position: sticky;
 
-    top:65px;
+    top: 65px;
 
-    z-index:900;
-
+    z-index: 900;
 
     margin:
-
         0 -25px 25px;
 
-
     padding:
-
         18px 25px;
 
-
     background:
-
         var(--surface-hover);
 
-
     color:
-
         var(--yellow);
 
-
-    font-size:24px;
-
+    font-size: 24px;
 
     border-bottom:
-
-        1px solid var(--border);
-
+        1px solid
+        var(--border);
 
     box-shadow:
-
-        0 8px 15px rgba(0,0,0,.25);
+        0 8px 15px
+        rgba(0, 0, 0, .25);
 
 }
 
 
+.meal-block:first-child h2 {
 
-.meal-block:first-child h2{
-
-    margin-top:0;
+    margin-top: 0;
 
 }
 
@@ -459,331 +432,496 @@ button:hover{
    MONEY SUMMARY
 ========================= */
 
+.money-summary {
 
-.money-summary{
-
-    display:grid;
+    display: grid;
 
     grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(180px, 1fr)
+        );
 
-        repeat(auto-fit,minmax(180px,1fr));
+    gap: 20px;
 
-
-    gap:20px;
-
-    margin-bottom:25px;
-
-}
-
-
-
-.money-card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    padding:20px;
-
-    border-radius:10px;
+    margin-bottom: 25px;
 
 }
 
 
+.money-card {
 
-.money-card h3{
+    background:
+        var(--surface);
 
-    margin:0 0 10px;
+    border:
+        1px solid
+        var(--border);
 
-    color:var(--yellow);
+    padding: 20px;
 
-    font-size:15px;
-
-}
-
-
-
-.money-card p{
-
-    margin:0;
-
-    color:var(--text);
-
-    font-size:24px;
-
-    font-weight:700;
+    border-radius: 10px;
 
 }
 
 
+.money-card h3 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        var(--yellow);
+
+    font-size: 15px;
+
+}
 
 
+.money-card p {
 
+    margin: 0;
+
+    color:
+        var(--text);
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+}
 
 
 /* =========================
-   TABLES
+   EMPLOYEE TABLES
 ========================= */
 
+.employee-table {
 
-.employee-table{
+    overflow-x: auto;
 
-    overflow-x:auto;
-
-    background:var(--surface);
+    background:
+        var(--surface);
 
     border:
-
         1px solid
-
         var(--border);
 
-
-    border-radius:10px;
-
-}
-
-
-
-.employee-table h3{
-
-    margin:20px;
-
-    color:var(--cyan);
+    border-radius: 10px;
 
 }
 
 
+.employee-table h3 {
 
-.employee-table table{
+    margin: 20px;
 
-    width:100%;
-
-    min-width:700px;
-
-    border-collapse:collapse;
+    color:
+        var(--cyan);
 
 }
 
 
+.employee-table table {
 
-.employee-table th{
+    width: 100%;
 
-    background:var(--surface-hover);
+    min-width: 700px;
 
-    color:var(--yellow);
+    border-collapse:
+        collapse;
+
+}
+
+
+.employee-table th {
+
+    background:
+        var(--surface-hover);
+
+    color:
+        var(--yellow);
 
 }
 
 
+.employee-table td {
 
-.employee-table td{
-
-    background:var(--surface);
+    background:
+        var(--surface);
 
 }
-
 
 
 .employee-table th,
-.employee-table td{
+.employee-table td {
 
-    padding:15px;
+    padding: 15px;
 
-    text-align:left;
+    text-align: left;
 
-    white-space:nowrap;
+    white-space: nowrap;
 
     border-bottom:
-
         1px solid
-
         var(--border);
 
 }
 
 
-
-.employee-table tr:hover td{
+.employee-table tr:hover td {
 
     background:
-
-        rgba(233,66,163,.05);
+        rgba(233, 66, 163, .05);
 
 }
 
 
+/* =========================
+   POOL SUMMARY
+========================= */
+
+.pool-summary {
+
+    margin-top: 30px;
+
+    padding: 24px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
+
+}
 
 
+.pool-summary h3 {
+
+    margin:
+        0 0 20px;
+
+    color:
+        var(--cyan);
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================
+   POOL SUMMARY GRID
+========================= */
+
+.pool-summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(180px, 1fr)
+        );
+
+    gap: 16px;
+
+}
+
+
+/* =========================
+   POOL CARDS
+========================= */
+
+.pool-card {
+
+    padding: 18px;
+
+    background:
+        var(--surface-hover);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 8px;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease;
+
+}
+
+
+.pool-card:hover {
+
+    background:
+        #202d47;
+
+    border-color:
+        var(--border-light);
+
+}
+
+
+.pool-card-label {
+
+    margin-bottom: 8px;
+
+    color:
+        var(--muted);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing: .05em;
+
+}
+
+
+.pool-card-value {
+
+    color:
+        var(--text);
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================
+   CARD POOL
+========================= */
+
+.pool-card.card-pool {
+
+    border-left:
+        3px solid
+        var(--cyan);
+
+}
+
+
+/* =========================
+   CASH POOL
+========================= */
+
+.pool-card.cash-pool {
+
+    border-left:
+        3px solid
+        var(--yellow);
+
+}
+
+
+/* =========================
+   TOTAL POOL
+========================= */
+
+.pool-card.total {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface-hover),
+            var(--surface)
+        );
+
+    border-color:
+        var(--pink);
+
+}
+
+
+.pool-card.total .pool-card-value {
+
+    color:
+        var(--pink);
+
+}
+
+
+/* =========================
+   POOL TABLES
+========================= */
+
+.pool-summary table {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+.pool-summary th {
+
+    padding:
+        14px 16px;
+
+    background:
+        var(--surface-hover);
+
+    color:
+        var(--yellow);
+
+    text-align:
+        left;
+
+    font-size: 14px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.pool-summary td {
+
+    padding:
+        14px 16px;
+
+    background:
+        var(--surface);
+
+    color:
+        var(--text);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.pool-summary tr:hover td {
+
+    background:
+        rgba(233, 66, 163, .04);
+
+}
+
+
+/* =========================
+   POOL SECTION TITLES
+========================= */
+
+.pool-section-title {
+
+    margin:
+        28px 0 12px;
+
+    color:
+        var(--cyan);
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
 
 
 /* =========================
    INPUTS
 ========================= */
 
+.tip-point-input {
 
-.tip-point-input{
+    width: 70px;
 
-    width:70px;
+    padding: 8px;
 
-    padding:8px;
+    background:
+        #f4f7ff;
 
-
-    background:#f4f7ff;
-
-    color:#111827;
-
+    color:
+        #111827;
 
     border:
-
         1px solid
-
         var(--border);
 
-
-    border-radius:6px;
-
-}
-
-
-
-.tip-point-input:focus{
-
-    outline:none;
-
-    border-color:var(--cyan);
+    border-radius: 6px;
 
 }
 
 
+.tip-point-input:focus {
 
+    outline: none;
 
+    border-color:
+        var(--cyan);
+
+}
 
 
 /* =========================
    DEBUG
 ========================= */
 
+.debug-panel button {
 
-.debug-panel button{
-
-    margin-bottom:20px;
+    margin-bottom: 20px;
 
 }
 
 
+pre {
 
-pre{
+    padding: 20px;
 
-    padding:20px;
-
-    background:var(--background);
+    background:
+        var(--background);
 
     border:
-
         1px solid
-
         var(--border);
 
+    overflow: auto;
 
-    overflow:auto;
-
-    color:var(--text);
+    color:
+        var(--text);
 
 }
-
-
-
-
 
 
 /* =========================
    FOOTER
 ========================= */
 
+footer {
 
-footer{
+    height: 48px;
 
-    height:48px;
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    padding:
+        0 36px;
 
-    padding:0 36px;
+    color:
+        var(--muted);
 
+    font-size: 13px;
 
-    color:var(--muted);
-
-
-    font-size:13px;
-
-
-    border-top:1px solid var(--border);
-
-}
-
-
-
-
-
-
-/* =========================
-   MOBILE
-========================= */
-
-
-@media(max-width:900px){
-
-
-    main{
-
-        padding:40px 25px;
-
-    }
-
-
-
-    .app-header{
-
-        padding:0 20px;
-
-    }
-
-
-
-    .logo{
-
-        width:60px;
-
-        height:60px;
-
-    }
-
-
-
-    .process-flow{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-
-    .navigation-panel{
-
-        grid-template-columns:1fr;
-
-    }
-
-
-
-    .panel{
-
-        padding:22px;
-
-    }
-
+    border-top:
+        1px solid
+        var(--border);
 
 }
 
@@ -793,7 +931,197 @@ footer{
 ========================= */
 
 .negative-cash {
-    color: #ff5c5c;
-    background: rgba(255, 92, 92, 0.12) !important;
+
+    color:
+        #ff5c5c;
+
+    background:
+        rgba(
+            255,
+            92,
+            92,
+            .12
+        ) !important;
+
     font-weight: 700;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 900px) {
+
+    main {
+
+        padding:
+            40px 25px;
+
+    }
+
+
+    .app-header {
+
+        padding:
+            0 20px;
+
+    }
+
+
+    .logo {
+
+        width: 60px;
+
+        height: 60px;
+
+    }
+
+
+    .process-flow {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .navigation-panel {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .panel {
+
+        padding: 22px;
+
+    }
+
+
+    .pool-summary-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}
+
+
+@media(max-width: 600px) {
+
+    .pool-summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+/* =========================
+   POOL SUMMARY
+========================= */
+
+.money-summary {
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 0 auto 30px;
+
+    padding: 18px 0;
+
+    background: var(--surface);
+
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.money-summary table {
+    width: auto;
+    min-width: 520px;
+    max-width: 650px;
+
+    border-collapse: collapse;
+
+    background: transparent;
+}
+
+.money-summary th {
+    padding: 12px 28px;
+
+    background: var(--surface-hover);
+
+    color: var(--yellow);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+.money-summary td {
+    padding: 11px 28px;
+
+    color: var(--text);
+
+    text-align: center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+.money-summary td:first-child {
+    text-align: left;
+
+    font-weight: 600;
+
+    color: var(--cyan);
+}
+
+.money-summary tr:last-child td {
+    border-bottom: none;
+}
+
+.money-summary tbody tr:hover td {
+    background:
+        rgba(233, 66, 163, 0.05);
+}
+
+.money-summary td:nth-child(2),
+.money-summary td:nth-child(3) {
+    font-weight: 600;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .money-summary {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .money-summary table {
+        min-width: 450px;
+    }
+
+    .money-summary th,
+    .money-summary td {
+        padding: 10px 18px;
+    }
 }

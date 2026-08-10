@@ -202,14 +202,6 @@ export function renderPrintSummary(
         <header class="printHeader">
 
 
-            <img
-
-                src="./assets/logo.png"
-
-                class="printLogo"
-
-            >
-
 
         </header>
 

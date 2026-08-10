@@ -2,9 +2,39 @@ export function exportTipDistributionCSV(
     tipDistribution
 ) {
 
-
     const rows = [];
 
+
+    // =========================
+    // DATE / TIME
+    // =========================
+
+    const now =
+        new Date();
+
+
+    const dateTime =
+        `${String(
+            now.getMonth() + 1
+        ).padStart(2, "0")}-` +
+
+        `${String(
+            now.getDate()
+        ).padStart(2, "0")}-` +
+
+        `${now.getFullYear()} ` +
+
+        `${String(
+            now.getHours()
+        ).padStart(2, "0")}` +
+
+        `${String(
+            now.getMinutes()
+        ).padStart(2, "0")}` +
+
+        `${String(
+            now.getSeconds()
+        ).padStart(2, "0")}`;
 
 
     // =========================
@@ -43,9 +73,6 @@ export function exportTipDistributionCSV(
     ]);
 
 
-
-
-
     // =========================
     // BUILD ROWS
     // =========================
@@ -54,10 +81,43 @@ export function exportTipDistributionCSV(
         const block of tipDistribution
     ) {
 
-
         for (
             const employee of block.employees
         ) {
+
+            const cashPayout =
+                (
+                    employee.cash_kept ?? 0
+                )
+                +
+                (
+                    employee.pool_cash_received ?? 0
+                );
+
+
+            const cardPayout =
+                (
+                    employee.card_kept ?? 0
+                )
+                +
+                (
+                    employee.pool_card_received ?? 0
+                );
+
+
+            const totalPayout =
+                cashPayout +
+                cardPayout;
+
+
+            const totalOriginalTips =
+                (
+                    employee.cash_tips ?? 0
+                )
+                +
+                (
+                    employee.card_tips ?? 0
+                );
 
 
             rows.push([
@@ -77,17 +137,11 @@ export function exportTipDistributionCSV(
                 employee.order_sales ?? 0,
 
 
-
                 employee.cash_tips ?? 0,
 
                 employee.card_tips ?? 0,
 
-                (
-                    (employee.cash_tips ?? 0)
-                    +
-                    (employee.card_tips ?? 0)
-                ),
-
+                totalOriginalTips,
 
 
                 employee.cash_kept ?? 0,
@@ -95,80 +149,39 @@ export function exportTipDistributionCSV(
                 employee.card_kept ?? 0,
 
 
-
                 employee.pool_cash_received ?? 0,
 
                 employee.pool_card_received ?? 0,
 
 
+                cashPayout,
 
-                (
-                    employee.cash_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_cash_received ?? 0
-                ),
+                cardPayout,
 
-
-                (
-                    employee.card_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_card_received ?? 0
-                ),
-
-
-
-                (
-                    employee.cash_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_cash_received ?? 0
-                )
-                +
-                (
-                    employee.card_kept ?? 0
-                )
-                +
-                (
-                    employee.pool_card_received ?? 0
-                ),
-
+                totalPayout,
 
 
                 employee.worked_minutes ?? 0,
 
-
                 employee.order_count ?? 0
-
 
             ]);
 
-
-
         }
-
 
     }
 
 
-
-
+    // =========================
+    // DOWNLOAD
+    // =========================
 
     downloadCSV(
         rows,
-        "HotTips_Distribution_History.csv"
+        `HotTips Distribution History - ${dateTime}.csv`
     );
 
-
 }
-
-
-
-
 
 
 // =========================
@@ -180,7 +193,6 @@ function downloadCSV(
     filename
 ) {
 
-
     const csv =
         rows
         .map(
@@ -188,13 +200,16 @@ function downloadCSV(
                 row
                 .map(
                     value =>
-                        `"${String(value ?? "")
-                        .replaceAll('"','""')}"`
+                        `"${String(
+                            value ?? ""
+                        ).replaceAll(
+                            '"',
+                            '""'
+                        )}"`
                 )
                 .join(",")
         )
         .join("\n");
-
 
 
     const blob =
@@ -204,17 +219,15 @@ function downloadCSV(
             ],
             {
                 type:
-                "text/csv"
+                    "text/csv;charset=utf-8;"
             }
         );
-
 
 
     const url =
         URL.createObjectURL(
             blob
         );
-
 
 
     const link =
@@ -229,7 +242,6 @@ function downloadCSV(
 
     link.download =
         filename;
-
 
 
     document.body.appendChild(

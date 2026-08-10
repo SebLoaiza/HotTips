@@ -292,6 +292,20 @@ function updateContinueButton() {
 
 }
 
+
+
+document
+    .getElementById("backButton")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "../index.html";
+
+        }
+    );
+
 const shiftCard = document.getElementById("shiftCard");
 const orderCard = document.getElementById("orderCard");
 const paymentCard = document.getElementById("paymentCard");
