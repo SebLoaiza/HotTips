@@ -18,6 +18,30 @@ historyButton.onclick = () => {
 };
 
 
-userGuideButton.onclick = () => {
-    window.location.href = "./userguide/userguide.html";
-};
+
+if (userGuideButton) {
+    userGuideButton.onclick =
+        () => {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                "./HotTips-User-Manual.pdf";
+
+            link.download =
+                "HotTips-User-Manual.pdf";
+
+            document.body.appendChild(
+                link
+            );
+
+            link.click();
+
+            link.remove();
+
+        };
+
+}

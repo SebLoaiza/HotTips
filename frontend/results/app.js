@@ -484,7 +484,6 @@ if (
 
 }
 
-
 // =================================
 // IMPORT JSON HISTORY
 // =================================
@@ -512,7 +511,6 @@ if (
 
             const file =
                 event.target.files[0];
-
 
             if (
                 !file
@@ -543,48 +541,186 @@ if (
                     imported.tipDistribution || [];
 
 
-                const merged =
-                    Array.from(
+                // =================================
+                // FIND OVERLAPPING MEAL BLOCKS
+                // =================================
 
-                        new Map(
-
-                            [
-                                ...existing,
-                                ...incoming
-                            ]
-
-                            .map(
-                                block => [
-
-                                    block.id,
-
-                                    block
-
-                                ]
-                            )
-
-                        ).values()
-
+                const existingKeys =
+                    new Set(
+                        existing.map(
+                            block =>
+                                `${block.date}|${block.meal}`
+                        )
                     );
 
 
+                const conflicts =
+                    incoming.filter(
+                        block =>
+                            existingKeys.has(
+                                `${block.date}|${block.meal}`
+                            )
+                    );
+
+
+                // =================================
+                // NO CONFLICTS
+                // =================================
+
+                if (
+                    conflicts.length === 0
+                ) {
+
+                    const merged = [
+                        ...existing,
+                        ...incoming
+                    ];
+
+
+                    sessionStorage.setItem(
+                        "tipDistribution",
+                        JSON.stringify(
+                            merged
+                        )
+                    );
+
+
+                    alert(
+                        `Imported ${incoming.length} meal blocks. Total history: ${merged.length}`
+                    );
+
+
+                    location.reload();
+
+                    return;
+
+                }
+
+
+                // =================================
+                // BUILD CONFLICT MESSAGE
+                // =================================
+
+                const conflictText =
+                    conflicts
+                        .map(
+                            block =>
+                                `${block.date} — ${block.meal}`
+                        )
+                        .join(
+                            "\n"
+                        );
+
+
+                const useNew =
+                    confirm(
+                        `Some meal blocks already exist:\n\n` +
+                        conflictText +
+                        `\n\n` +
+                        `OK = Replace the existing blocks with the new ones\n` +
+                        `Cancel = Keep the existing blocks`
+                    );
+
+
+                // =================================
+                // KEEP EXISTING
+                // =================================
+
+                if (
+                    !useNew
+                ) {
+
+                    const conflictKeys =
+                        new Set(
+                            conflicts.map(
+                                block =>
+                                    `${block.date}|${block.meal}`
+                            )
+                        );
+
+
+                    const newOnly =
+                        incoming.filter(
+                            block =>
+                                !conflictKeys.has(
+                                    `${block.date}|${block.meal}`
+                                )
+                        );
+
+
+                    const merged = [
+                        ...existing,
+                        ...newOnly
+                    ];
+
+
+                    sessionStorage.setItem(
+                        "tipDistribution",
+                        JSON.stringify(
+                            merged
+                        )
+                    );
+
+
+                    alert(
+                        `Import complete.\n\n` +
+                        `Kept existing overlapping meal blocks.\n` +
+                        `Added ${newOnly.length} new meal blocks.`
+                    );
+
+
+                    location.reload();
+
+                    return;
+
+                }
+
+
+                // =================================
+                // USE NEW
+                // =================================
+
+                const conflictKeys =
+                    new Set(
+                        conflicts.map(
+                            block =>
+                                `${block.date}|${block.meal}`
+                        )
+                    );
+
+
+                const existingWithoutConflicts =
+                    existing.filter(
+                        block =>
+                            !conflictKeys.has(
+                                `${block.date}|${block.meal}`
+                            )
+                    );
+
+
+                const merged = [
+                    ...existingWithoutConflicts,
+                    ...incoming
+                ];
+
+
                 sessionStorage.setItem(
-
                     "tipDistribution",
-
                     JSON.stringify(
                         merged
                     )
-
                 );
 
 
                 alert(
-                    `Imported ${incoming.length} meal blocks. Total history: ${merged.length}`
+                    `Import complete.\n\n` +
+                    `Replaced ${conflicts.length} overlapping meal blocks.\n` +
+                    `Added ${incoming.length - conflicts.length} new meal blocks.`
                 );
 
 
                 location.reload();
+
 
             }
             catch (

@@ -1,4 +1,3 @@
-import { renderCashDropTables } from "./render/cashDropGrid.js";
 import { renderTraineeAssignments } from "./render/renderTraineeAssignments.js";
 import { renderEmployeePoints } from "./render/renderEmployeePoints.js";
 import { renderCashTipSummary } from "./render/renderCashTipSummary.js";
@@ -16,7 +15,6 @@ const currentMealBlocks =
         )
     ) || [];
 
-
 if (currentMealBlocks.length === 0) {
 
     alert(
@@ -28,8 +26,6 @@ if (currentMealBlocks.length === 0) {
 
 }
 
-
-
 // =========================
 // DOM
 // =========================
@@ -39,20 +35,15 @@ const backButton =
         "backButton"
     );
 
-
 const continueButton =
     document.getElementById(
         "continueButton"
     );
 
-
 const debugButton =
     document.getElementById(
         "debugObjects"
     );
-
-
-
 
 // =========================
 // VALIDATION
@@ -62,31 +53,29 @@ function validateInputs() {
 
     let valid = true;
 
-
     for (const block of currentMealBlocks) {
-
 
         for (const employee of block.employees) {
 
+            const role =
+                String(
+                    employee.role || ""
+                )
+                .toLowerCase();
 
             if (
-                !employee.role
-                    .toLowerCase()
-                    .includes("trainee")
+                !role.includes("trainee")
             ) {
 
                 continue;
 
             }
 
-
             const hasTrainer =
                 employee.trainer_employee_id != null;
 
-
             const noTrainer =
                 employee.no_trainer === true;
-
 
             if (
                 !hasTrainer &&
@@ -97,40 +86,21 @@ function validateInputs() {
 
             }
 
-
         }
 
     }
 
-
-
     if (continueButton) {
-
 
         continueButton.disabled =
             !valid;
 
-
-
-        if (valid) {
-
-            continueButton.classList.add(
-                "ready"
-            );
-
-        }
-
-        else {
-
-            continueButton.classList.remove(
-                "ready"
-            );
-
-        }
-
+        continueButton.classList.toggle(
+            "ready",
+            valid
+        );
 
     }
-
 
 }
 
@@ -144,35 +114,28 @@ function refreshUI() {
         currentMealBlocks
     );
 
-
     renderCashDropList(
         currentMealBlocks,
         refreshUI
     );
-
 
     renderTraineeAssignments(
         currentMealBlocks,
         refreshUI
     );
 
-
     renderEmployeePoints(
         currentMealBlocks,
         refreshUI
     );
 
-
     renderCashTipSummary(
         currentMealBlocks
     );
 
-
     validateInputs();
 
 }
-
-
 
 // =========================
 // SAVE STATE
@@ -188,8 +151,6 @@ export function saveState() {
     );
 
 }
-
-
 
 // =========================
 // NAVIGATION
@@ -211,8 +172,6 @@ if (backButton) {
 
 }
 
-
-
 if (continueButton) {
 
     continueButton.addEventListener(
@@ -222,52 +181,44 @@ if (continueButton) {
             saveState();
 
             window.location.href =
-            "../distribution/distribution.html";
+                "../distribution/distribution.html";
 
         }
     );
 
 }
 
-
 // =========================
 // TOP NAVIGATION
 // =========================
 
 document
-.getElementById("topBackButton")
-?.addEventListener(
-    "click",
-    () => {
+    .getElementById("topBackButton")
+    ?.addEventListener(
+        "click",
+        () => {
 
-        window.location.href =
+            saveState();
+
+            window.location.href =
                 "../start/start.html";
 
-    }
-);
-
-
+        }
+    );
 
 document
-.getElementById("topContinueButton")
-?.addEventListener(
-    "click",
-    () => {
+    .getElementById("topContinueButton")
+    ?.addEventListener(
+        "click",
+        () => {
 
-        sessionStorage.setItem(
-            "tipDistribution",
-            JSON.stringify(
-                tipDistribution
-            )
-        );
+            saveState();
 
+            window.location.href =
+                "../distribution/distribution.html";
 
-        window.location.href =
-            "../distribution/distribution.html";
-
-    }
-);
-
+        }
+    );
 
 // =========================
 // DEBUG
@@ -284,11 +235,9 @@ if (debugButton) {
                     "debugOutput"
                 );
 
-
             if (!output) {
                 return;
             }
-
 
             output.textContent =
                 JSON.stringify(
@@ -304,8 +253,6 @@ if (debugButton) {
     );
 
 }
-
-
 
 // =========================
 // INITIAL RENDER

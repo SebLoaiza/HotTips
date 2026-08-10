@@ -2,16 +2,22 @@ export function renderCashDropList(
     mealBlocks,
     refreshUI
 ) {
-    const output =
-        document.getElementById("cashDropTables");
 
-    if (!output) return;
+    const output =
+        document.getElementById(
+            "cashDropTables"
+        );
+
+    if (!output) {
+        return;
+    }
 
     output.innerHTML = "";
 
     const rows = [];
 
     for (const block of mealBlocks) {
+
         for (const employee of block.employees) {
 
             // Hide BOH employees
@@ -23,65 +29,92 @@ export function renderCashDropList(
                 block,
                 employee
             });
+
         }
+
     }
 
-    // Sort by date, then Breakfast → Lunch → Dinner
+    // =========================
+    // SORT
+    // =========================
+
     const mealOrder = {
         Breakfast: 0,
         Lunch: 1,
         Dinner: 2
     };
 
-    rows.sort((a, b) => {
-        const dateA = new Date(
-            a.block.day_key || a.block.date
-        );
+    rows.sort(
+        (a, b) => {
 
-        const dateB = new Date(
-            b.block.day_key || b.block.date
-        );
+            const dateA =
+                new Date(
+                    a.block.day_key ||
+                    a.block.date
+                );
 
-        if (dateA - dateB !== 0) {
-            return dateA - dateB;
+            const dateB =
+                new Date(
+                    b.block.day_key ||
+                    b.block.date
+                );
+
+            if (dateA - dateB !== 0) {
+
+                return dateA - dateB;
+
+            }
+
+            return (
+                (mealOrder[a.block.meal] ?? 99) -
+                (mealOrder[b.block.meal] ?? 99)
+            );
+
         }
-
-        return (
-            (mealOrder[a.block.meal] ?? 99) -
-            (mealOrder[b.block.meal] ?? 99)
-        );
-    });
+    );
 
     output.appendChild(
-        createTable(rows, refreshUI)
+        createTable(
+            rows,
+            refreshUI
+        )
     );
+
 }
 
-
-/* =========================
-   BOH FILTER
-========================= */
+// =========================
+// BOH FILTER
+// =========================
 
 function isBOH(role) {
+
     const value =
-        String(role || "")
-            .toLowerCase()
-            .trim();
+        String(
+            role || ""
+        )
+        .toLowerCase()
+        .trim();
 
     return (
         value.includes("cook") ||
         value.includes("dishwasher")
     );
+
 }
 
+// =========================
+// CREATE TABLE
+// =========================
 
-/* =========================
-   CREATE TABLE
-========================= */
+function createTable(
+    rows,
+    refreshUI
+) {
 
-function createTable(rows, refreshUI) {
     const table =
-        document.createElement("table");
+        document.createElement(
+            "table"
+        );
 
     table.className =
         "cash-drop-table";
@@ -96,135 +129,192 @@ function createTable(rows, refreshUI) {
     ];
 
     const thead =
-        document.createElement("thead");
+        document.createElement(
+            "thead"
+        );
 
     const headerRow =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
 
     for (const text of headers) {
+
         const th =
-            document.createElement("th");
+            document.createElement(
+                "th"
+            );
 
-        th.textContent = text;
+        th.textContent =
+            text;
 
-        headerRow.appendChild(th);
+        headerRow.appendChild(
+            th
+        );
+
     }
 
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+    thead.appendChild(
+        headerRow
+    );
 
+    table.appendChild(
+        thead
+    );
 
     const tbody =
-        document.createElement("tbody");
-
-    rows.forEach((rowData, index) => {
-        tbody.appendChild(
-            createRow(
-                rowData,
-                index,
-                refreshUI
-            )
+        document.createElement(
+            "tbody"
         );
-    });
 
-    table.appendChild(tbody);
+    rows.forEach(
+        (rowData, index) => {
+
+            tbody.appendChild(
+                createRow(
+                    rowData,
+                    index,
+                    refreshUI
+                )
+            );
+
+        }
+    );
+
+    table.appendChild(
+        tbody
+    );
 
     return table;
+
 }
 
-
-/* =========================
-   CREATE ROW
-========================= */
+// =========================
+// CREATE ROW
+// =========================
 
 function createRow(
     { block, employee },
     index,
     refreshUI
 ) {
+
     const row =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
 
     row.className =
         "cash-drop-table-row";
 
+    // =========================
+    // DATE
+    // =========================
 
-    // Date
     addCell(
         row,
         "cash-drop-date",
-        formatDate(block.date)
+        formatDate(
+            block.date
+        )
     );
 
+    // =========================
+    // MEAL
+    // =========================
 
-    // Meal
     addCell(
         row,
         "cash-drop-meal",
         block.meal
     );
 
+    // =========================
+    // EMPLOYEE
+    // =========================
 
-    // Employee
     addCell(
         row,
         "cash-drop-employee",
         employee.name
     );
 
+    // =========================
+    // ROLE
+    // =========================
 
-    // Role
     addCell(
         row,
         "cash-drop-role",
         employee.role || ""
     );
 
+    // =========================
+    // CASH DROP
+    // =========================
 
-    // Cash Drop
     const dropCell =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
     dropCell.className =
         "cash-drop-value-cell";
 
     const input =
-        document.createElement("input");
+        document.createElement(
+            "input"
+        );
 
     input.className =
         "cash-drop-input";
 
-    input.type = "number";
-    input.min = "0";
-    input.step = "0.01";
+    input.type =
+        "number";
 
-    input.value = (
-        (employee.cash_drop || 0) / 100
-    ).toFixed(2);
+    input.min =
+        "0";
 
-    input.dataset.row = index;
+    input.step =
+        "0.01";
 
-    dropCell.appendChild(input);
-    row.appendChild(dropCell);
+    input.value =
+        (
+            (employee.cash_drop || 0) /
+            100
+        ).toFixed(2);
 
+    input.dataset.row =
+        index;
 
-    // Cash Sales
+    dropCell.appendChild(
+        input
+    );
+
+    row.appendChild(
+        dropCell
+    );
+
+    // =========================
+    // CASH SALES
+    // =========================
+
     addCell(
         row,
         "cash-drop-sales",
-        money(employee.cash_sales)
+        money(
+            employee.cash_sales
+        )
     );
-
 
     updateColor(
         input,
         employee
     );
 
-
-    /* =========================
-       LIVE INPUT
-    ========================= */
+    // =========================
+    // LIVE INPUT
+    // =========================
 
     input.addEventListener(
         "input",
@@ -232,7 +322,11 @@ function createRow(
 
             const value =
                 Math.round(
-                    (Number(input.value) || 0) * 100
+                    (
+                        Number(
+                            input.value
+                        ) || 0
+                    ) * 100
                 );
 
             input.className =
@@ -241,13 +335,13 @@ function createRow(
                     value,
                     employee.cash_sales
                 );
+
         }
     );
 
-
-    /* =========================
-       SAVE
-    ========================= */
+    // =========================
+    // SAVE
+    // =========================
 
     input.addEventListener(
         "change",
@@ -263,126 +357,170 @@ function createRow(
                 employee
             );
 
-            sessionStorage.setItem(
-                "mealBlocks",
-                JSON.stringify(
-                    currentMealBlocks
+            /*
+             * DO NOT save to sessionStorage
+             * here.
+             *
+             * currentMealBlocks in app.js
+             * contains this same employee object.
+             */
+
+            if (refreshUI) {
+
+                refreshUI();
+
+            }
+
+        }
+    );
+
+    // =========================
+    // ENTER → NEXT ROW
+    // =========================
+
+// =========================
+// ENTER → NEXT ROW
+// =========================
+
+input.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        event.preventDefault();
+
+        // Save current value
+        saveCashDrop(
+            employee,
+            input
+        );
+
+        // Find all current inputs
+        const inputs =
+            Array.from(
+                document.querySelectorAll(
+                    "#cashDropTables .cash-drop-input"
                 )
             );
 
-            if (refreshUI) {
-                refreshUI();
-            }
+        const currentIndex =
+            inputs.indexOf(input);
+
+        const nextIndex =
+            currentIndex + 1;
+
+        // Refresh the UI
+        if (refreshUI) {
+            refreshUI();
         }
-    );
 
-
-    /* =========================
-       ENTER → NEXT ROW
-    ========================= */
-
-    input.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key !== "Enter") {
-                return;
-            }
-
-            event.preventDefault();
-
-            saveCashDrop(
-                employee,
-                input
+        // After refresh, find the newly-created inputs
+        const newInputs =
+            Array.from(
+                document.querySelectorAll(
+                    "#cashDropTables .cash-drop-input"
+                )
             );
 
-            const inputs =
-                Array.from(
-                    document.querySelectorAll(
-                        "#cashDropTables .cash-drop-input"
-                    )
-                );
+        const next =
+            newInputs[nextIndex];
 
-            const currentIndex =
-                inputs.indexOf(input);
+        if (next) {
 
-            const next =
-                inputs[currentIndex + 1];
+            next.focus();
+            next.select();
 
-            if (next) {
-                next.focus();
-                next.select();
-            }
         }
-    );
 
+    }
+);  
 
     return row;
+
 }
 
-
-/* =========================
-   ADD CELL
-========================= */
+// =========================
+// ADD CELL
+// =========================
 
 function addCell(
     row,
     className,
     text
 ) {
+
     const cell =
-        document.createElement("td");
+        document.createElement(
+            "td"
+        );
 
-    cell.className = className;
-    cell.textContent = text;
+    cell.className =
+        className;
 
-    row.appendChild(cell);
+    cell.textContent =
+        text;
+
+    row.appendChild(
+        cell
+    );
+
 }
 
-
-/* =========================
-   UPDATE COLOR
-========================= */
+// =========================
+// UPDATE COLOR
+// =========================
 
 function updateColor(
     input,
     employee
 ) {
+
     input.className =
         "cash-drop-input " +
         getDropClass(
             employee.cash_drop,
             employee.cash_sales
         );
-}
 
+}
 
 function getDropClass(
     drop,
     sales
 ) {
+
     if (drop < sales) {
+
         return "drop-low";
+
     }
 
     if (drop > sales) {
+
         return "drop-high";
+
     }
 
     return "drop-equal";
+
 }
 
-
-/* =========================
-   SAVE CASH DROP
-========================= */
+// =========================
+// SAVE CASH DROP
+// =========================
 
 function saveCashDrop(
     employee,
     input
 ) {
+
     const dollars =
-        Number(input.value) || 0;
+        Number(
+            input.value
+        ) || 0;
 
     const cents =
         Math.round(
@@ -393,19 +531,26 @@ function saveCashDrop(
         cents;
 
     input.value =
-        (cents / 100).toFixed(2);
+        (
+            cents / 100
+        ).toFixed(2);
+
 }
 
-
-/* =========================
-   FORMAT DATE
-========================= */
+// =========================
+// FORMAT DATE
+// =========================
 
 function formatDate(date) {
-    if (!date) return "";
+
+    if (!date) {
+        return "";
+    }
 
     const value =
-        String(date).trim();
+        String(
+            date
+        ).trim();
 
     const match =
         value.match(
@@ -413,6 +558,7 @@ function formatDate(date) {
         );
 
     if (match) {
+
         return (
             match[1].padStart(2, "0") +
             "/" +
@@ -420,17 +566,22 @@ function formatDate(date) {
             "/" +
             match[3]
         );
+
     }
 
     const parsed =
-        new Date(date);
+        new Date(
+            date
+        );
 
     if (
         Number.isNaN(
             parsed.getTime()
         )
     ) {
+
         return value;
+
     }
 
     return (
@@ -444,15 +595,18 @@ function formatDate(date) {
         "/" +
         parsed.getFullYear()
     );
+
 }
 
-
-/* =========================
-   MONEY
-========================= */
+// =========================
+// MONEY
+// =========================
 
 function money(cents) {
+
     return `$${(
-        (Number(cents) || 0) / 100
+        (Number(cents) || 0) /
+        100
     ).toFixed(2)}`;
+
 }
