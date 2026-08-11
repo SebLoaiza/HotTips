@@ -1,26 +1,21 @@
-
 import {
     formatMoney,
     formatNumber
 } from "../utils/formatters.js";
 
-
 export function renderStats(
     employees
 ) {
-
 
     let currentSort = {
         key: null,
         direction: "asc"
     };
 
-
     const table =
         document.createElement(
             "table"
         );
-
 
     table.innerHTML = `
 
@@ -78,36 +73,35 @@ export function renderStats(
 
         <tbody></tbody>
 
-    `;
+        <tfoot></tfoot>
 
+    `;
 
     const body =
         table.querySelector(
             "tbody"
         );
 
+    const footer =
+        table.querySelector(
+            "tfoot"
+        );
 
     // =========================
     // HELPERS
     // =========================
-
 
     function originalTips(
         employee
     ) {
 
         return (
-
             (employee.original_cash_tips || 0)
-
             +
-
             (employee.original_card_tips || 0)
-
         );
 
     }
-
 
     function tipsPerHour(
         employee
@@ -122,7 +116,6 @@ export function renderStats(
 
         }
 
-
         return (
             originalTips(employee)
             /
@@ -130,7 +123,6 @@ export function renderStats(
         );
 
     }
-
 
     function avgTipPerOrder(
         employee
@@ -145,7 +137,6 @@ export function renderStats(
 
         }
 
-
         return (
             originalTips(employee)
             /
@@ -154,18 +145,196 @@ export function renderStats(
 
     }
 
+    // =========================
+    // OVERALL TOTALS
+    // =========================
+
+    function calculateTotals() {
+
+        let cashTips = 0;
+        let cardTips = 0;
+
+        let cashSales = 0;
+        let cardSales = 0;
+        let totalSales = 0;
+
+        let totalHours = 0;
+        let totalOrders = 0;
+
+        for (
+            const employee of employees
+        ) {
+
+            cashTips +=
+                Number(
+                    employee.original_cash_tips
+                ) || 0;
+
+            cardTips +=
+                Number(
+                    employee.original_card_tips
+                ) || 0;
+
+            cashSales +=
+                Number(
+                    employee.cash_sales
+                ) || 0;
+
+            cardSales +=
+                Number(
+                    employee.card_sales
+                ) || 0;
+
+            totalSales +=
+                Number(
+                    employee.total_sales
+                ) || 0;
+
+            totalHours +=
+                Number(
+                    employee.hours
+                ) || 0;
+
+            totalOrders +=
+                Number(
+                    employee.order_count
+                ) || 0;
+
+        }
+
+        const totalTips =
+            cashTips +
+            cardTips;
+
+        const salesPerHour =
+            totalHours > 0
+                ? totalSales / totalHours
+                : 0;
+
+        const ordersPerHour =
+            totalHours > 0
+                ? totalOrders / totalHours
+                : 0;
+
+        const tipsPerHourTotal =
+            totalHours > 0
+                ? totalTips / totalHours
+                : 0;
+
+        const avgTipPerOrder =
+            totalOrders > 0
+                ? totalTips / totalOrders
+                : 0;
+
+        return {
+            cashTips,
+            cardTips,
+            totalTips,
+            cashSales,
+            cardSales,
+            totalSales,
+            totalHours,
+            totalOrders,
+            salesPerHour,
+            ordersPerHour,
+            tipsPerHourTotal,
+            avgTipPerOrder
+        };
+
+    }
+
+    // =========================
+    // RENDER TOTAL ROW
+    // =========================
+
+    function renderTotals() {
+
+        const totals =
+            calculateTotals();
+
+        footer.innerHTML = `
+
+            <tr class="stats-total-row">
+
+                <th>
+                    Total
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.cashTips
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.cardTips
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.totalTips
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.cashSales
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.cardSales
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.totalSales
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.salesPerHour
+                    )}
+                </th>
+
+                <th>
+                    ${formatNumber(
+                        totals.ordersPerHour
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.tipsPerHourTotal
+                    )}
+                </th>
+
+                <th>
+                    ${formatMoney(
+                        totals.avgTipPerOrder
+                    )}
+                </th>
+
+            </tr>
+
+        `;
+
+    }
 
     // =========================
     // RENDER ROWS
     // =========================
-
 
     function renderRows(
         list
     ) {
 
         body.innerHTML = "";
-
 
         for (
             const employee of list
@@ -175,7 +344,6 @@ export function renderStats(
                 document.createElement(
                     "tr"
                 );
-
 
             row.innerHTML = `
 
@@ -245,20 +413,21 @@ export function renderStats(
 
             `;
 
-
             body.appendChild(
                 row
             );
 
         }
 
-    }
+        // Keep totals at the bottom
+        // regardless of sorting.
+        renderTotals();
 
+    }
 
     // =========================
     // SORT
     // =========================
-
 
     function sortEmployees(
         key
@@ -269,13 +438,11 @@ export function renderStats(
                 ...employees
             ];
 
-
         sorted.sort(
             (a, b) => {
 
                 let A;
                 let B;
-
 
                 // -------------------------
                 // NAME
@@ -290,7 +457,6 @@ export function renderStats(
 
                     B =
                         b.name || "";
-
 
                     return currentSort.direction === "asc"
 
@@ -307,7 +473,6 @@ export function renderStats(
                         );
 
                 }
-
 
                 // -------------------------
                 // CALCULATED VALUES
@@ -359,7 +524,6 @@ export function renderStats(
 
                 }
 
-
                 // -------------------------
                 // NUMERIC SORT
                 // -------------------------
@@ -377,16 +541,13 @@ export function renderStats(
             }
         );
 
-
         return sorted;
 
     }
 
-
     // =========================
     // HEADER CLICK
     // =========================
-
 
     table
         .querySelectorAll(
@@ -401,7 +562,6 @@ export function renderStats(
                         const key =
                             header.dataset.sort;
 
-
                         if (
                             currentSort.key === key
                         ) {
@@ -409,13 +569,13 @@ export function renderStats(
                             currentSort.direction =
                                 currentSort.direction === "asc"
 
-                                ?
+                                    ?
 
-                                "desc"
+                                    "desc"
 
-                                :
+                                    :
 
-                                "asc";
+                                    "asc";
 
                         }
 
@@ -429,7 +589,6 @@ export function renderStats(
 
                         }
 
-
                         renderRows(
                             sortEmployees(
                                 key
@@ -441,12 +600,10 @@ export function renderStats(
             }
         );
 
-
     // =========================
     // INITIAL SORT
     // LAST NAME
     // =========================
-
 
     const initial =
         [...employees].sort(
@@ -466,12 +623,10 @@ export function renderStats(
                         .slice(-1)[0]
                         .toLowerCase();
 
-
                 const result =
                     lastNameA.localeCompare(
                         lastNameB
                     );
-
 
                 if (
                     result !== 0
@@ -480,7 +635,6 @@ export function renderStats(
                     return result;
 
                 }
-
 
                 return (
                     a.name || ""
@@ -491,13 +645,10 @@ export function renderStats(
             }
         );
 
-
     renderRows(
         initial
     );
 
-
     return table;
 
 }
-
