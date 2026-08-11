@@ -1,8 +1,20 @@
 export function assignOrdersToEmployees(mealBlocks) {
 
+
+    let totalOrders = 0;
+    let assignedOrders = 0;
+    let skippedOnlineOrders = 0;
+    let unassignedOrders = 0;
+
+
     for (const block of mealBlocks) {
 
-        // Reset employee orders and totals
+
+        // =================================================
+        // RESET EMPLOYEE ORDERS AND TOTALS
+        // =================================================
+
+
         for (const employee of block.employees) {
 
             employee.orders = [];
@@ -16,35 +28,73 @@ export function assignOrdersToEmployees(mealBlocks) {
         }
 
 
-        // Match each order to its server
+        // =================================================
+        // MATCH EACH ORDER TO ITS SERVER
+        // =================================================
+
+
         for (const order of block.orders) {
 
-            // Skip online orders
+
+            totalOrders++;
+
+
+            // =================================================
+            // SKIP ONLINE ORDERS
+            // =================================================
+
+
             if (
                 order.source === "Online" ||
                 order.server === "DEFAULT ONLINE ORDERING"
             ) {
+
+                skippedOnlineOrders++;
+
                 continue;
+
             }
 
 
             const server =
-                normalizeName(order.server);
+                normalizeName(
+                    order.server
+                );
 
 
             let found = false;
 
 
+            // =================================================
+            // FIND EMPLOYEE
+            // =================================================
+
+
             for (const employee of block.employees) {
 
-                if (employee.normalized_name !== server) {
+
+                // Normalize the employee name HERE
+                const employeeName =
+                    normalizeName(
+                        employee.name
+                    );
+
+
+                if (
+                    employeeName !== server
+                ) {
                     continue;
                 }
 
 
-                employee.orders.push(order);
+                employee.orders.push(
+                    order
+                );
 
-                employee.order_sales += order.amount;
+
+                employee.order_sales +=
+                    order.amount;
+
 
                 employee.card_tips +=
                     order.tip +
@@ -53,57 +103,74 @@ export function assignOrdersToEmployees(mealBlocks) {
 
                 found = true;
 
+
+                assignedOrders++;
+
+
                 break;
 
             }
 
 
+            // =================================================
+            // ORDER COULD NOT BE ASSIGNED
+            // =================================================
+
+
             if (!found) {
 
-                console.group(
-                    "%c🚨 ORDER NOT ASSIGNED TO EMPLOYEE 🚨",
-                    "color:red;font-size:20px;font-weight:bold;"
-                );
+
+                unassignedOrders++;
+
 
                 console.error(
-                    "Order server did not match any employee in this meal block."
+                    "🚨🚨🚨 ORDER HAS NO EMPLOYEE 🚨🚨🚨"
                 );
 
-                console.log(
-                    "Order:",
-                    order
+
+                console.error(
+                    "Order ID:",
+                    order.order_id
                 );
 
-                console.log(
-                    "Meal Block:",
-                    {
-                        meal: block.meal,
-                        date: block.date
-                    }
+
+                console.error(
+                    "Order #:",
+                    order.order_number
                 );
 
-                console.log(
-                    "Server From Order:",
+
+                console.error(
+                    "Server:",
                     order.server
                 );
 
-                console.log(
+
+                console.error(
                     "Normalized Server:",
                     server
                 );
 
-                console.log(
-                    "Available Employees:",
+
+                console.error(
+                    "Meal:",
+                    block.meal
+                );
+
+
+                console.error(
+                    "Date:",
+                    block.date
+                );
+
+
+                console.error(
+                    "Employees in this meal block:",
                     block.employees.map(
-                        e => e.name
+                        employee =>
+                            employee.name
                     )
                 );
-
-                console.trace(
-                    "Assignment stack trace"
-                );
-
-                console.groupEnd();
 
             }
 
@@ -111,13 +178,85 @@ export function assignOrdersToEmployees(mealBlocks) {
 
     }
 
+
+    // =================================================
+    // SUMMARY
+    // =================================================
+
+
+    console.log("");
+
+    console.log(
+        "========================================"
+    );
+
+    console.log(
+        "   ORDER → EMPLOYEE ASSIGNMENT SUMMARY"
+    );
+
+    console.log(
+        "========================================"
+    );
+
+
+    console.log(
+        "Orders in meal blocks:",
+        totalOrders
+    );
+
+
+    console.log(
+        "Assigned to employees:",
+        assignedOrders
+    );
+
+
+    console.log(
+        "Online orders skipped:",
+        skippedOnlineOrders
+    );
+
+
+    console.log(
+        "Orders with no employee:",
+        unassignedOrders
+    );
+
+
+    // =================================================
+    // FINAL RESULT
+    // =================================================
+
+
+    if (unassignedOrders === 0) {
+
+        console.log(
+            "✅ All applicable orders were assigned."
+        );
+
+    } else {
+
+        console.error(
+            `❌ ${unassignedOrders} order(s) could not be assigned.`
+        );
+
+    }
+
+
+    console.log(
+        "========================================"
+    );
+
 }
 
 
-
+// =================================================
+// NORMALIZE NAME
+// =================================================
 
 
 function normalizeName(name) {
+
 
     if (!name) {
         return "";
@@ -125,19 +264,37 @@ function normalizeName(name) {
 
 
     name =
-        name
-        .trim()
-        .toUpperCase();
+        String(name)
+            .trim()
+            .toUpperCase()
+            .replace(/\s+/g, " ");
 
 
-    // Convert LAST, FIRST into FIRST LAST
+    // =================================================
+    // Convert LAST, FIRST
+    // into FIRST LAST
+    // =================================================
+
+
     if (name.includes(",")) {
+
 
         const parts =
             name.split(",");
 
 
-        return `${parts[1].trim()} ${parts[0].trim()}`;
+        const lastName =
+            parts[0].trim();
+
+
+        const firstName =
+            parts
+                .slice(1)
+                .join(" ")
+                .trim();
+
+
+        return `${firstName} ${lastName}`;
 
     }
 

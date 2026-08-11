@@ -1,33 +1,62 @@
-export function enrichOrdersWithPayments(orders, payments) {
+export function enrichOrdersWithPayments(
+    orders,
+    payments
+) {
 
     const orderMap = new Map();
 
+    // =================================================
+    // INDEX EVERY ORDER BY ORDER ID
+    // =================================================
 
-    // Index every order by ID
     for (const order of orders) {
 
         order.cash_payment = 0;
         order.card_payment = 0;
         order.other_payment = 0;
 
-        // Store every payment attached to this order
         order.payments = [];
 
-        orderMap.set(order.order_id, order);
+        orderMap.set(
+            order.order_id,
+            order
+        );
 
     }
 
 
-    // Attach each payment to its order
+    // =================================================
+    // TRACK RESULTS
+    // =================================================
+
+    let attachedCount = 0;
+    let unmatchedCount = 0;
+
+    const unmatchedPayments = [];
+
+
+    // =================================================
+    // ATTACH PAYMENTS TO ORDERS
+    // =================================================
+
     for (const payment of payments) {
 
-        const order = orderMap.get(payment.order_id);
+        const order =
+            orderMap.get(
+                payment.order_id
+            );
+
+
+        // =================================================
+        // NO MATCHING ORDER
+        // =================================================
 
         if (!order) {
 
-            console.log(
-                "No matching order:",
-                payment.payment_id
+            unmatchedCount++;
+
+            unmatchedPayments.push(
+                payment
             );
 
             continue;
@@ -35,58 +64,80 @@ export function enrichOrdersWithPayments(orders, payments) {
         }
 
 
-        // Keep the full payment object
-        order.payments.push(payment);
+        // =================================================
+        // PAYMENT SUCCESSFULLY ATTACHED
+        // =================================================
 
-
-        console.log(
-            "Payment:",
-            payment.payment_id,
-            payment.type,
-            payment.amount
+        order.payments.push(
+            payment
         );
 
+        attachedCount++;
 
-        switch (payment.type.trim().toUpperCase()) {
+
+        // =================================================
+        // CLASSIFY PAYMENT
+        // =================================================
+
+        const type =
+            String(
+                payment.type || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        switch (type) {
 
             case "CASH":
 
-                order.cash_payment += payment.amount;
-
-                console.log(" -> Cash");
+                order.cash_payment +=
+                    payment.amount;
 
                 break;
 
 
             case "CARD":
+
             case "CREDIT":
+
             case "CREDIT CARD":
 
-                order.card_payment += payment.amount;
-
-                console.log(" -> Card");
+                order.card_payment +=
+                    payment.amount;
 
                 break;
 
 
             case "OTHER":
 
-                order.other_payment += payment.amount;
-
-                console.log(" -> Other");
+                order.other_payment +=
+                    payment.amount;
 
                 break;
 
 
             default:
 
-                // Unknown payment types are treated as "Other"
-                order.other_payment += payment.amount;
+                console.error(
+                    "UNKNOWN PAYMENT TYPE",
+                    {
+                        paymentId:
+                            payment.payment_id,
 
-                console.log(
-                    " -> Unknown Type:",
-                    payment.type
+                        orderId:
+                            payment.order_id,
+
+                        type:
+                            payment.type,
+
+                        amount:
+                            payment.amount
+                    }
                 );
+
+                order.other_payment +=
+                    payment.amount;
 
                 break;
 
@@ -95,13 +146,75 @@ export function enrichOrdersWithPayments(orders, payments) {
     }
 
 
-    // Print a few orders for debugging
-    console.log("========== Orders ==========");
+    // =================================================
+    // SUMMARY
+    // =================================================
 
-    for (let i = 0; i < Math.min(10, orders.length); i++) {
+    console.log(
+        "========================================"
+    );
 
-        console.log(orders[i]);
+    console.log(
+        "PAYMENT ENRICHMENT SUMMARY"
+    );
+
+    console.log(
+        "========================================"
+    );
+
+    console.log(
+        "Orders:",
+        orders.length
+    );
+
+    console.log(
+        "Payments:",
+        payments.length
+    );
+
+    console.log(
+        "Attached:",
+        attachedCount
+    );
+
+    console.log(
+        "Unmatched:",
+        unmatchedCount
+    );
+
+    console.log(
+        "========================================"
+    );
+
+
+    // =================================================
+    // SHOW UNMATCHED PAYMENTS
+    // =================================================
+
+    if (unmatchedPayments.length > 0) {
+
+        console.error(
+            "UNMATCHED PAYMENTS:",
+            unmatchedPayments
+        );
+
+    } else {
+
+        console.log(
+            "All payments successfully attached."
+        );
 
     }
+
+
+    // =================================================
+    // RETURN RESULTS
+    // =================================================
+
+    return {
+        attachedCount,
+        unmatchedCount,
+        unmatchedPayments
+    };
 
 }
