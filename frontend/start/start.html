@@ -5,11 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Toast Inputs</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
 
 </head>
 
@@ -19,9 +25,10 @@
 
 <header class="app-header">
 
-    <img 
-        src="logo.png" 
+    <img
+        src="logo.png"
         class="logo"
+        alt="HotTips"
     >
 
 
@@ -41,208 +48,272 @@
 
 
 
-
-
 <main>
 
 
+    <!-- =================================================
+         TOAST INPUTS
+    ================================================== -->
 
-<section class="panel process-panel">
-
-
-    <h2>
-        Toast Inputs
-    </h2>
+    <section class="panel process-panel">
 
 
-    <p class="page-description">
-
-        Upload your shift, order, and payment CSV files to automatically
-        calculate employee tips, cash collected, and daily tip distribution.
-
-    </p>
+        <h2>
+            Toast Inputs
+        </h2>
 
 
+        <p class="page-description">
+
+            Upload your shift, order, and payment CSV files
+            to automatically calculate employee tips,
+            cash collected, and daily tip distribution.
+
+        </p>
 
 
 
-    <div class="process-flow">
-
-        <div class="upload-card process-step" id="shiftCard">
-            <label for="shiftCsv">
-                Time Entry CSV
-            </label>
-
-            <input id="shiftCsv" type="file" accept=".csv">
-        </div>
+        <div class="process-flow">
 
 
-        <div class="flow-arrow">
-            →
-        </div>
+            <!-- SHIFT -->
 
-
-        <div class="upload-card process-step" id="orderCard">
-            <label for="orderCsv">
-                Order CSV
-            </label>
-
-            <input id="orderCsv" type="file" accept=".csv">
-        </div>
-
-
-        <div class="flow-arrow">
-            →
-        </div>
-
-
-        <div class="upload-card process-step" id="paymentCard">
-            <label for="paymentCsv">
-                Payment CSV
-            </label>
-
-            <input id="paymentCsv" type="file" accept=".csv">
-        </div>
-
-
-        <div class="flow-arrow">
-            →
-        </div>
-
-        <div class="continue-step">
-
-            <button
-                id="backButton"
-                class="back-button"
+            <div
+                class="upload-card process-step"
+                id="shiftCard"
             >
-                ← Back
-            </button>
 
-            <button
-                id="nextPage"
-                disabled
+                <label for="shiftCsv">
+
+                    Time Entry CSV
+
+                </label>
+
+
+                <input
+                    id="shiftCsv"
+                    type="file"
+                    accept=".csv"
+                >
+
+            </div>
+
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+
+            <!-- ORDERS -->
+
+            <div
+                class="upload-card process-step"
+                id="orderCard"
             >
-                Continue →
-            </button>
 
-            <button
-                id="resetProcess"
-                class="danger-button reset-button"
+                <label for="orderCsv">
+
+                    Order CSV
+
+                </label>
+
+
+                <input
+                    id="orderCsv"
+                    type="file"
+                    accept=".csv"
+                >
+
+            </div>
+
+
+
+            <div class="flow-arrow">
+                →
+            </div>
+
+
+
+            <!-- PAYMENTS -->
+
+            <div
+                class="upload-card process-step"
+                id="paymentCard"
             >
-                Reset
-            </button>
 
-        </div>
+                <label for="paymentCsv">
 
-    </div>
+                    Payment CSV
 
-
-    </div>
+                </label>
 
 
-</section>
+                <input
+                    id="paymentCsv"
+                    type="file"
+                    accept=".csv"
+                >
 
-
-
-
-
+            </div>
 
 
 
-
-<section class="panel results-panel">
-
-
-
-
-
-    <div 
-        class="report-column"
-    >   
-
-
-        <h3>
-            Card Tips
-        </h3>
-
-
-        <div id="cardSalesTables">
-
-            <!-- Card tip tables render here -->
-
-        </div>
-
-
-    </div>
+            <div class="flow-arrow">
+                →
+            </div>
 
 
 
+            <!-- BUTTONS -->
+
+            <div class="continue-step">
 
 
+                <button
+                    id="backButton"
+                    class="back-button"
+                >
+
+                    ← Back
+
+                </button>
 
 
-    <div 
-        class="report-column"
-    >
+                <button
+                    id="nextPage"
+                    disabled
+                >
+
+                    Continue →
+
+                </button>
 
 
-        <h3>
-            Cash Collection
-        </h3>
+                <button
+                    id="resetProcess"
+                    class="danger-button reset-button"
+                >
+
+                    Reset
+
+                </button>
 
 
-        <div id="cashCollectedTables">
+            </div>
 
-            <!-- Cash tables render here -->
 
         </div>
 
 
-    </div>
+    </section>
 
 
 
+    <!-- =================================================
+         MEAL BLOCK TOTALS
+    ================================================== -->
+
+    <section class="panel meal-block-totals-panel">
 
 
-</section>
+        <h2>
+            Meal Block Totals
+        </h2>
+
+
+        <p class="page-description">
+
+            Totals are calculated directly from the orders
+            attached to each meal block.
+
+        </p>
+
+
+        <div id="mealBlockTotals">
+
+            <!--
+                Breakfast, Lunch, and Dinner
+                totals are rendered here.
+            -->
+
+        </div>
+
+
+    </section>
 
 
 
+    <!-- =================================================
+         EXISTING RESULTS
+    ================================================== -->
+
+    <section class="panel results-panel">
+
+
+        <div class="report-column">
+
+
+            <h3>
+                Card Tips
+            </h3>
+
+
+            <div id="cardSalesTables">
+
+                <!-- Card tip tables render here -->
+
+            </div>
+
+
+        </div>
 
 
 
+        <div class="report-column">
+
+
+            <h3>
+                Cash Collection
+            </h3>
+
+
+            <div id="cashCollectedTables">
+
+                <!-- Cash tables render here -->
+
+            </div>
+
+
+        </div>
+
+
+    </section>
 
 
 
-<section class="debug-panel">
+    <!-- =================================================
+         DEBUG
+    ================================================== -->
+
+    <section class="debug-panel">
 
 
-    <button 
-        id="debugObjects"
-    >
+        <button id="debugObjects">
 
-        Debug Objects
+            Debug Objects
 
-    </button>
+        </button>
 
 
+        <pre id="debugOutput"></pre>
 
 
-    <pre id="debugOutput"></pre>
-
-
-
-</section>
-
-
-
-
+    </section>
 
 
 </main>
-
-
-
 
 
 
@@ -254,15 +325,15 @@
 
 
 
+<script
+    src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+></script>
 
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
-
-<script type="module" src="./app.js"></script>
-
+<script
+    type="module"
+    src="./app.js"
+></script>
 
 
 </body>
