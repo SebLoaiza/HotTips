@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -43,7 +44,6 @@
 
 </header>
 
-
 <main>
 
 <!-- =========================
@@ -77,9 +77,16 @@
 
         <button
             class="step"
+            data-tab="pointsTab"
+        >
+            3. Employee Tip Points
+        </button>
+
+        <button
+            class="step"
             data-tab="summaryTab"
         >
-            3. Summary
+            4. Summary
         </button>
 
     </div>
@@ -93,9 +100,8 @@
 
 </section>
 
-
 <!-- =========================
-     INPUTS
+     INPUTS — TAB 1
 ========================= -->
 
 <section
@@ -117,7 +123,6 @@
 
     </section>
 
-
     <section class="panel">
 
         <h2>
@@ -134,9 +139,8 @@
 
 </section>
 
-
 <!-- =========================
-     EMPLOYEE CONFIG
+     EMPLOYEE CONFIG — TAB 2
 ========================= -->
 
 <section
@@ -144,44 +148,41 @@
     class="tab-page"
 >
 
-    <div class="config-grid">
+    <section class="config-section trainee-config">
 
-        <!-- =========================
-             LEFT — TRAINEE ASSIGNMENTS
-        ========================= -->
+        <h2>
+            Trainee Assignments
+        </h2>
 
-        <section class="config-section trainee-config">
+        <div id="traineeAssignments"></div>
 
-            <h2>
-                Trainee Assignments
-            </h2>
-
-            <div id="traineeAssignments"></div>
-
-        </section>
-
-
-        <!-- =========================
-             RIGHT — EMPLOYEE POINTS
-        ========================= -->
-
-        <section class="config-section points-config">
-
-            <h2>
-                Employee Tip Points
-            </h2>
-
-            <div id="employeePoints"></div>
-
-        </section>
-
-    </div>
+    </section>
 
 </section>
 
+<!-- =========================
+     EMPLOYEE TIP POINTS — TAB 3
+========================= -->
+
+<section
+    id="pointsTab"
+    class="tab-page"
+>
+
+    <section class="config-section points-config">
+
+        <h2>
+            Employee Tip Points
+        </h2>
+
+        <div id="employeePoints"></div>
+
+    </section>
+
+</section>
 
 <!-- =========================
-     SUMMARY
+     SUMMARY — TAB 4
 ========================= -->
 
 <section
@@ -202,7 +203,6 @@
 </section>
 
 </main>
-
 
 <script
     type="module"
