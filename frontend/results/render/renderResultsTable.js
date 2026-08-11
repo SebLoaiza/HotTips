@@ -1,14 +1,12 @@
 import {
     formatMoney
-}
-from "./formatters.js";
+} from "./formatters.js";
 
 
 export function renderResultsTable(
     employees,
     clickHandler
 ) {
-
 
     let currentSort = {
         key: "name",
@@ -29,26 +27,74 @@ export function renderResultsTable(
             <tr>
 
                 <th data-sort="name">
+
                     Employee
+
                 </th>
+
 
                 <th data-sort="cash">
+
                     Cash
+
                 </th>
+
 
                 <th data-sort="card">
+
                     Card
+
                 </th>
 
+
                 <th data-sort="total">
+
                     Total
+
                 </th>
 
             </tr>
 
         </thead>
 
+
         <tbody></tbody>
+
+
+        <tfoot>
+
+            <tr class="resultsTotalsRow">
+
+                <th>
+
+                    Total
+
+                </th>
+
+
+                <th class="resultsCashTotal">
+
+                    $0.00
+
+                </th>
+
+
+                <th class="resultsCardTotal">
+
+                    $0.00
+
+                </th>
+
+
+                <th class="resultsGrandTotal">
+
+                    $0.00
+
+                </th>
+
+            </tr>
+
+        </tfoot>
 
     `;
 
@@ -59,16 +105,44 @@ export function renderResultsTable(
         );
 
 
+    const cashTotalCell =
+        table.querySelector(
+            ".resultsCashTotal"
+        );
+
+
+    const cardTotalCell =
+        table.querySelector(
+            ".resultsCardTotal"
+        );
+
+
+    const grandTotalCell =
+        table.querySelector(
+            ".resultsGrandTotal"
+        );
+
+
     // =========================
-    // CASH ROUNDING
+    // CASH
+    // KEPT + POOL
     // =========================
 
     function roundedCash(
         employee
     ) {
 
-        const cash =
+        const kept =
             employee.cash_kept ?? 0;
+
+
+        const pool =
+            employee.pool_cash ?? 0;
+
+
+        const cash =
+            kept + pool;
+
 
         return (
             Math.round(
@@ -81,14 +155,23 @@ export function renderResultsTable(
 
     // =========================
     // CARD
+    // KEPT + POOL
     // =========================
 
     function cardAmount(
         employee
     ) {
 
+        const kept =
+            employee.card_kept ?? 0;
+
+
+        const pool =
+            employee.pool_card ?? 0;
+
+
         return (
-            employee.card_kept ?? 0
+            kept + pool
         );
 
     }
@@ -96,6 +179,7 @@ export function renderResultsTable(
 
     // =========================
     // TOTAL
+    // CASH + CARD
     // =========================
 
     function totalAmount(
@@ -107,6 +191,61 @@ export function renderResultsTable(
             +
             cardAmount(employee)
         );
+
+    }
+
+
+    // =========================
+    // UPDATE TOTALS
+    // =========================
+
+    function renderTotals() {
+
+        let cashTotal = 0;
+
+        let cardTotal = 0;
+
+
+        for (
+            const employee
+            of employees
+        ) {
+
+            cashTotal +=
+                roundedCash(
+                    employee
+                );
+
+
+            cardTotal +=
+                cardAmount(
+                    employee
+                );
+
+        }
+
+
+        const grandTotal =
+            cashTotal +
+            cardTotal;
+
+
+        cashTotalCell.textContent =
+            formatMoney(
+                cashTotal
+            );
+
+
+        cardTotalCell.textContent =
+            formatMoney(
+                cardTotal
+            );
+
+
+        grandTotalCell.textContent =
+            formatMoney(
+                grandTotal
+            );
 
     }
 
@@ -159,6 +298,7 @@ export function renderResultsTable(
             (a, b) => {
 
                 let A;
+
                 let B;
 
 
@@ -173,6 +313,7 @@ export function renderResultsTable(
                     A =
                         lastName(a)
                         .toLowerCase();
+
 
                     B =
                         lastName(b)
@@ -209,6 +350,7 @@ export function renderResultsTable(
                         )
                         .toLowerCase();
 
+
                     B =
                         String(
                             b.name ?? ""
@@ -229,6 +371,7 @@ export function renderResultsTable(
                     A =
                         roundedCash(a);
 
+
                     B =
                         roundedCash(b);
 
@@ -246,6 +389,7 @@ export function renderResultsTable(
                     A =
                         cardAmount(a);
 
+
                     B =
                         cardAmount(b);
 
@@ -262,6 +406,7 @@ export function renderResultsTable(
 
                     A =
                         totalAmount(a);
+
 
                     B =
                         totalAmount(b);
@@ -325,7 +470,6 @@ export function renderResultsTable(
             of list
         ) {
 
-
             const row =
                 document.createElement(
                     "tr"
@@ -353,27 +497,40 @@ export function renderResultsTable(
             row.innerHTML = `
 
                 <td>
+
                     ${employee.name}
+
                 </td>
 
+
                 <td>
+
                     ${formatMoney(
                         cash
                     )}
+
                 </td>
 
+
                 <td>
+
                     ${formatMoney(
                         card
                     )}
+
                 </td>
 
+
                 <td>
+
                     <strong>
+
                         ${formatMoney(
                             total
                         )}
+
                     </strong>
+
                 </td>
 
             `;
@@ -432,10 +589,12 @@ export function renderResultsTable(
 
                     }
 
+
                     else {
 
                         currentSort.key =
                             key;
+
 
                         currentSort.direction =
                             "asc";
@@ -464,6 +623,13 @@ export function renderResultsTable(
             "name"
         )
     );
+
+
+    // =========================
+    // INITIAL TOTALS
+    // =========================
+
+    renderTotals();
 
 
     return table;

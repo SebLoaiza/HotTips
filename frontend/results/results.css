@@ -1103,3 +1103,57 @@ select:focus {
 
 
 }
+@media print {
+
+    /* Hide everything by default */
+
+    body * {
+
+        visibility: hidden !important;
+
+    }
+
+
+    /* Show only the print report */
+
+    .printSheet,
+    .printSheet * {
+
+        visibility: visible !important;
+
+    }
+
+
+    /* Move the print report to the top */
+
+    .printSheet {
+
+        position: absolute !important;
+
+        left: 0 !important;
+
+        top: 0 !important;
+
+        width: 100% !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+
+        background: white !important;
+
+    }
+
+
+    html,
+    body {
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+
+        background: white !important;
+
+    }
+
+}

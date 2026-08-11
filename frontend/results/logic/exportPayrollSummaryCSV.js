@@ -2,6 +2,7 @@ export function exportPayrollSummaryCSV(
     employees
 ) {
 
+
     const rows = [
 
         [
@@ -13,12 +14,14 @@ export function exportPayrollSummaryCSV(
 
     ];
 
+
     // =========================
     // DATE / TIME
     // =========================
 
     const now =
         new Date();
+
 
     const dateTime =
         `${String(
@@ -43,6 +46,7 @@ export function exportPayrollSummaryCSV(
             now.getSeconds()
         ).padStart(2, "0")}`;
 
+
     // =========================
     // SORT EMPLOYEES
     // =========================
@@ -56,6 +60,7 @@ export function exportPayrollSummaryCSV(
                 )
         );
 
+
     // =========================
     // BUILD ROWS
     // =========================
@@ -64,13 +69,11 @@ export function exportPayrollSummaryCSV(
         const employee of sorted
     ) {
 
+
         // =========================
         // CARD TAKE HOME
+        // KEPT + POOL
         // =========================
-        //
-        // Card remains accurate
-        // to the nearest cent.
-        //
 
         const cardTakeHome =
             (
@@ -78,17 +81,14 @@ export function exportPayrollSummaryCSV(
             )
             +
             (
-                employee.pool_card_received ?? 0
+                employee.pool_card ?? 0
             );
 
 
         // =========================
         // CASH TAKE HOME
+        // KEPT + POOL
         // =========================
-        //
-        // Cash is rounded to the
-        // nearest whole dollar.
-        //
 
         const cashTakeHome =
             (
@@ -96,9 +96,13 @@ export function exportPayrollSummaryCSV(
             )
             +
             (
-                employee.pool_cash_received ?? 0
+                employee.pool_cash ?? 0
             );
 
+
+        // =========================
+        // CASH ROUNDING
+        // =========================
 
         const roundedCashTakeHome =
             Math.round(
@@ -135,6 +139,7 @@ export function exportPayrollSummaryCSV(
             roundedCashTakeHome.toString()
 
         ]);
+
 
     }
 
@@ -202,5 +207,6 @@ export function exportPayrollSummaryCSV(
     URL.revokeObjectURL(
         url
     );
+
 
 }
