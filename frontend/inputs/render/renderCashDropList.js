@@ -88,7 +88,6 @@ if (!renderCashDropList.sortState) {
 // =========================
 // CREATE TABLE
 // =========================
-
 function createTable(
     rows,
     mealBlocks,
@@ -103,7 +102,6 @@ function createTable(
     table.className =
         "cash-drop-table";
 
-
     // =========================
     // MEAL ORDER
     // =========================
@@ -113,7 +111,6 @@ function createTable(
         Lunch: 1,
         Dinner: 2
     };
-
 
     // =========================
     // SORT ROWS
@@ -156,7 +153,6 @@ function createTable(
 
             }
 
-
             // =========================
             // MEAL
             // =========================
@@ -180,7 +176,6 @@ function createTable(
 
             }
 
-
             // =========================
             // EMPLOYEE
             // =========================
@@ -201,7 +196,6 @@ function createTable(
 
             }
 
-
             // =========================
             // ROLE
             // =========================
@@ -221,7 +215,6 @@ function createTable(
                     );
 
             }
-
 
             // =========================
             // CASH DROP
@@ -246,7 +239,6 @@ function createTable(
 
             }
 
-
             // =========================
             // CASH SALES
             // =========================
@@ -270,7 +262,6 @@ function createTable(
 
             }
 
-
             // =========================
             // SORT DIRECTION
             // =========================
@@ -284,7 +275,6 @@ function createTable(
 
         }
     );
-
 
     // =========================
     // HEADER
@@ -324,7 +314,6 @@ function createTable(
 
     ];
 
-
     const thead =
         document.createElement(
             "thead"
@@ -334,7 +323,6 @@ function createTable(
         document.createElement(
             "tr"
         );
-
 
     for (
         const header
@@ -351,7 +339,6 @@ function createTable(
 
         th.className =
             "sortable-header";
-
 
         // =========================
         // SORT INDICATOR
@@ -372,13 +359,12 @@ function createTable(
 
             th.classList.add(
                 sortState.direction ===
-                    "asc"
+                "asc"
                     ? "sort-ascending"
                     : "sort-descending"
             );
 
         }
-
 
         // =========================
         // CLICK TO SORT
@@ -388,11 +374,6 @@ function createTable(
             "click",
             () => {
 
-                /*
-                    Clicking the same
-                    column reverses it.
-                */
-
                 if (
                     sortState.column ===
                     header.column
@@ -400,16 +381,11 @@ function createTable(
 
                     sortState.direction =
                         sortState.direction ===
-                            "asc"
+                        "asc"
                             ? "desc"
                             : "asc";
 
                 }
-
-                /*
-                    Clicking a new column
-                    starts ascending.
-                */
 
                 else {
 
@@ -421,12 +397,6 @@ function createTable(
 
                 }
 
-
-                /*
-                    Re-render using
-                    the new sort.
-                */
-
                 renderCashDropList(
                     mealBlocks,
                     refreshUI
@@ -435,13 +405,11 @@ function createTable(
             }
         );
 
-
         headerRow.appendChild(
             th
         );
 
     }
-
 
     thead.appendChild(
         headerRow
@@ -450,7 +418,6 @@ function createTable(
     table.appendChild(
         thead
     );
-
 
     // =========================
     // BODY
@@ -461,9 +428,32 @@ function createTable(
             "tbody"
         );
 
+    // =========================
+    // TOTALS
+    // =========================
+
+    let totalCashDrop = 0;
+    let totalCashSales = 0;
+
+    // =========================
+    // EMPLOYEE ROWS
+    // =========================
 
     sortedRows.forEach(
         (rowData, index) => {
+
+            const employee =
+                rowData.employee;
+
+            totalCashDrop +=
+                Number(
+                    employee.cash_drop
+                ) || 0;
+
+            totalCashSales +=
+                Number(
+                    employee.cash_sales
+                ) || 0;
 
             tbody.appendChild(
                 createRow(
@@ -476,6 +466,62 @@ function createTable(
         }
     );
 
+    // =========================
+    // TOTAL ROW
+    // =========================
+
+    const totalRow =
+        document.createElement(
+            "tr"
+        );
+
+    totalRow.className =
+        "cash-drop-total-row";
+
+    // Empty Date cell
+    const totalLabelCell =
+        document.createElement(
+            "th"
+        );
+
+    totalLabelCell.textContent =
+        "TOTAL";
+
+    totalLabelCell.colSpan = 4;
+
+    totalRow.appendChild(
+        totalLabelCell
+    );
+
+    // Cash Drop total
+    const totalDropCell =
+        document.createElement(
+            "th"
+        );
+
+    totalDropCell.textContent =
+        money(totalCashDrop);
+
+    totalRow.appendChild(
+        totalDropCell
+    );
+
+    // Cash Sales total
+    const totalSalesCell =
+        document.createElement(
+            "th"
+        );
+
+    totalSalesCell.textContent =
+        money(totalCashSales);
+
+    totalRow.appendChild(
+        totalSalesCell
+    );
+
+    tbody.appendChild(
+        totalRow
+    );
 
     table.appendChild(
         tbody
@@ -484,8 +530,6 @@ function createTable(
     return table;
 
 }
-
-
 // =========================
 // CREATE ROW
 // =========================
