@@ -457,6 +457,39 @@ td {
 }
 
 
+
+/* =========================================================
+   CASH DROP TABLE — STICKY HEADERS
+   ========================================================= */
+
+.cash-drop-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.cash-drop-table thead th {
+    position: sticky;
+    top: 100px;
+    z-index: 10;
+
+    background: var(--surface-hover);
+    color: var(--yellow);
+
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+
+    padding: 11px 13px;
+
+    border-bottom: 1px solid var(--border);
+
+    white-space: nowrap;
+}
+
+
+
+
 /* =========================================================
    EMPLOYEE COLUMN
 ========================================================= */
@@ -1440,4 +1473,35 @@ footer {
 
 .cash-drop-table-row.cash-drop-row-selected td {
     background: transparent;
+}
+
+
+
+/* =========================
+   SORTABLE TABLE HEADERS
+========================= */
+
+.employee-points-table th.sortable-header {
+    cursor: pointer;
+    user-select: none;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.employee-points-table th.sortable-header:hover {
+    background-color: rgba(155, 238, 255, 0.10);
+}
+
+
+.cash-drop-table th.sortable-header {
+    cursor: pointer;
+    user-select: none;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.cash-drop-table th.sortable-header:hover {
+    background-color: rgba(155, 238, 255, 0.10);
 }
