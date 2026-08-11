@@ -12,6 +12,29 @@ export function renderEmployeePoints(
 
     output.innerHTML = "";
 
+    /* =========================
+       SORT STATE
+    ========================= */
+
+    /*
+        Keep the sort outside the
+        table-rendering logic so it
+        survives refreshUI() calls.
+    */
+
+    if (
+        !renderEmployeePoints.sortState
+    ) {
+
+        renderEmployeePoints.sortState = {
+            column: "role",
+            direction: "asc"
+        };
+
+    }
+
+    const sortState =
+        renderEmployeePoints.sortState;
 
     /* =========================
        COLLECT EMPLOYEES
@@ -19,29 +42,17 @@ export function renderEmployeePoints(
 
     const employees = new Map();
 
-
     for (const block of mealBlocks) {
 
         for (const employee of block.employees) {
-
-            /*
-                The same employee can appear
-                in multiple meal blocks.
-
-                We use employee ID + role so
-                different roles can have
-                different points.
-            */
 
             const role =
                 employee.distribution_role ||
                 employee.role ||
                 "Other";
 
-
             const key =
                 `${employee.employee_id}__${role}`;
-
 
             if (!employees.has(key)) {
 
@@ -56,75 +67,119 @@ export function renderEmployeePoints(
 
     }
 
-
     /* =========================
-       GROUP BY ROLE
+       CREATE EMPLOYEE LIST
     ========================= */
 
-    const groups = new Map();
+    const sortedEmployees =
+        Array.from(
+            employees.values()
+        );
 
+    /* =========================
+       SORT EMPLOYEES
+    ========================= */
 
-    for (const employee of employees.values()) {
+    sortedEmployees.sort(
+        (a, b) => {
 
-        const role =
-            employee.distribution_role ||
-            employee.role ||
-            "Other";
+            let comparison = 0;
 
+            /* =========================
+               ROLE SORT
+            ========================= */
 
-        if (!groups.has(role)) {
+            if (
+                sortState.column ===
+                "role"
+            ) {
 
-            groups.set(
-                role,
-                []
+                const roleA =
+                    String(
+                        a.distribution_role ||
+                        a.role ||
+                        "Other"
+                    ).toLowerCase();
+
+                const roleB =
+                    String(
+                        b.distribution_role ||
+                        b.role ||
+                        "Other"
+                    ).toLowerCase();
+
+                comparison =
+                    roleA.localeCompare(
+                        roleB
+                    );
+
+            }
+
+            /* =========================
+               NAME SORT
+            ========================= */
+
+            else if (
+                sortState.column ===
+                "name"
+            ) {
+
+                const nameA =
+                    String(
+                        a.name || ""
+                    );
+
+                const nameB =
+                    String(
+                        b.name || ""
+                    );
+
+                comparison =
+                    nameA.localeCompare(
+                        nameB
+                    );
+
+            }
+
+            /* =========================
+               POINT SORT
+            ========================= */
+
+            else if (
+                sortState.column ===
+                "point"
+            ) {
+
+                const pointA =
+                    Number(
+                        a.tip_points ?? 1
+                    );
+
+                const pointB =
+                    Number(
+                        b.tip_points ?? 1
+                    );
+
+                comparison =
+                    pointA -
+                    pointB;
+
+            }
+
+            /*
+                Apply ascending /
+                descending direction.
+            */
+
+            return (
+                sortState.direction ===
+                "asc"
+                    ? comparison
+                    : -comparison
             );
 
         }
-
-
-        groups
-            .get(role)
-            .push(employee);
-
-    }
-
-
-    /* =========================
-       SORT ROLES
-    ========================= */
-
-    const roleOrder = [
-        "server",
-        "boh",
-        "busser/runner",
-        "host",
-        "other"
-    ];
-
-
-    const sortedGroups =
-        [...groups.entries()].sort(
-            ([roleA], [roleB]) => {
-
-                const a =
-                    roleOrder.indexOf(
-                        String(roleA).toLowerCase()
-                    );
-
-                const b =
-                    roleOrder.indexOf(
-                        String(roleB).toLowerCase()
-                    );
-
-
-                return (
-                    (a === -1 ? 99 : a) -
-                    (b === -1 ? 99 : b)
-                );
-
-            }
-        );
-
+    );
 
     /* =========================
        CREATE TABLE
@@ -135,10 +190,8 @@ export function renderEmployeePoints(
             "table"
         );
 
-
     table.className =
         "config-table employee-points-table";
-
 
     /* =========================
        HEADER
@@ -149,19 +202,140 @@ export function renderEmployeePoints(
             "thead"
         );
 
+    const headerRow =
+        document.createElement(
+            "tr"
+        );
 
-    thead.innerHTML = `
-        <tr>
-            <th>Employee</th>
-            <th>Points</th>
-        </tr>
-    `;
+    /* =========================
+       CREATE HEADER
+    ========================= */
 
+    const headers = [
+        {
+            label: "Role",
+            column: "role"
+        },
+        {
+            label: "Employee Name",
+            column: "name"
+        },
+        {
+            label: "Point",
+            column: "point"
+        }
+    ];
+
+    for (
+        const header
+        of headers
+    ) {
+
+        const th =
+            document.createElement(
+                "th"
+            );
+
+        th.textContent =
+            header.label;
+
+        th.className =
+            "sortable-header";
+
+        /*
+            Add the current sort
+            direction to the header.
+        */
+
+        if (
+            sortState.column ===
+            header.column
+        ) {
+
+            th.classList.add(
+                sortState.direction ===
+                    "asc"
+                    ? "sort-ascending"
+                    : "sort-descending"
+            );
+
+            th.textContent =
+                `${header.label} ${
+                    sortState.direction ===
+                    "asc"
+                        ? "▲"
+                        : "▼"
+                }`;
+
+        }
+
+        /*
+            Make the header clickable.
+        */
+
+        th.addEventListener(
+            "click",
+            () => {
+
+                /*
+                    Clicking the same column
+                    reverses the direction.
+                */
+
+                if (
+                    sortState.column ===
+                    header.column
+                ) {
+
+                    sortState.direction =
+                        sortState.direction ===
+                            "asc"
+                            ? "desc"
+                            : "asc";
+
+                }
+
+                /*
+                    Clicking a new column
+                    starts ascending.
+                */
+
+                else {
+
+                    sortState.column =
+                        header.column;
+
+                    sortState.direction =
+                        "asc";
+
+                }
+
+                /*
+                    Re-render the table
+                    using the new sort.
+                */
+
+                renderEmployeePoints(
+                    mealBlocks,
+                    refreshUI
+                );
+
+            }
+        );
+
+        headerRow.appendChild(
+            th
+        );
+
+    }
+
+    thead.appendChild(
+        headerRow
+    );
 
     table.appendChild(
         thead
     );
-
 
     /* =========================
        BODY
@@ -172,213 +346,157 @@ export function renderEmployeePoints(
             "tbody"
         );
 
-
-    /* =========================
-       ROLE GROUPS
-    ========================= */
-
     for (
-        const [role, employeesInRole]
-        of sortedGroups
+        const employee
+        of sortedEmployees
     ) {
 
-        employeesInRole.sort(
-            (a, b) =>
-                a.name.localeCompare(
-                    b.name
-                )
-        );
+        const role =
+            employee.distribution_role ||
+            employee.role ||
+            "Other";
 
-
-        /* =========================
-           ROLE HEADER
-        ========================= */
-
-        const roleRow =
+        const row =
             document.createElement(
                 "tr"
             );
 
+        row.className =
+            "employee-points-row";
 
-        roleRow.className =
-            "employee-points-role-row";
+        row.innerHTML = `
+            <td>
+                ${formatRoleName(role)}
+            </td>
 
+            <td>
+                ${employee.name}
+            </td>
 
-        const roleCell =
-            document.createElement(
-                "td"
-            );
-
-
-        roleCell.colSpan = 2;
-
-
-        roleCell.textContent =
-            formatRoleName(role);
-
-
-        roleRow.appendChild(
-            roleCell
-        );
-
+            <td>
+                <input
+                    class="points-input"
+                    type="number"
+                    step="0.25"
+                    min="0"
+                    value="${employee.tip_points ?? 1}"
+                    data-employee-id="${employee.employee_id}"
+                    data-role="${role}"
+                >
+            </td>
+        `;
 
         tbody.appendChild(
-            roleRow
+            row
         );
 
-
-        /* =========================
-           EMPLOYEES
-        ========================= */
-
-        for (
-            const employee
-            of employeesInRole
-        ) {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            row.className =
-                "employee-points-row";
-
-
-            row.innerHTML = `
-                <td>
-                    ${employee.name}
-                </td>
-
-                <td>
-                    <input
-                        class="points-input"
-                        type="number"
-                        step="0.25"
-                        min="0"
-                        value="${employee.tip_points ?? 1}"
-                        data-employee-id="${employee.employee_id}"
-                        data-role="${role}"
-                    >
-                </td>
-            `;
-
-
-            tbody.appendChild(
-                row
-            );
-
-        }
-
     }
-
 
     table.appendChild(
         tbody
     );
 
-
     output.appendChild(
         table
     );
 
-
     /* =========================
-       POINT INPUT LISTENERS
+       GET POINT INPUTS
     ========================= */
 
-    table
-        .querySelectorAll(
-            ".points-input"
-        )
-        .forEach(input => {
+    const getPointInputs = () => {
+
+        return Array.from(
+            output.querySelectorAll(
+                ".points-input"
+            )
+        );
+
+    };
+
+    /* =========================
+       SAVE POINT
+    ========================= */
+
+    function savePoint(input) {
+
+        const employeeId =
+            input.dataset.employeeId;
+
+        const role =
+            input.dataset.role;
+
+        let value =
+            Number(
+                input.value
+            );
+
+        if (
+            Number.isNaN(value) ||
+            value < 0
+        ) {
+
+            value = 0;
+
+        }
+
+        input.value =
+            value;
+
+        /* =========================
+           UPDATE EVERY MEAL BLOCK
+        ========================= */
+
+        for (
+            const block
+            of mealBlocks
+        ) {
+
+            for (
+                const employee
+                of block.employees
+            ) {
+
+                const employeeRole =
+                    employee.distribution_role ||
+                    employee.role ||
+                    "Other";
+
+                if (
+                    String(
+                        employee.employee_id
+                    ) ===
+                        String(
+                            employeeId
+                        ) &&
+
+                    employeeRole ===
+                        role
+                ) {
+
+                    employee.tip_points =
+                        value;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /* =========================
+       CHANGE EVENTS
+    ========================= */
+
+    getPointInputs().forEach(
+        input => {
 
             input.addEventListener(
                 "change",
                 () => {
 
-                    const employeeId =
-                        input.dataset.employeeId;
-
-
-                    const role =
-                        input.dataset.role;
-
-
-                    let value =
-                        Number(
-                            input.value
-                        );
-
-
-                    if (
-                        Number.isNaN(value) ||
-                        value < 0
-                    ) {
-
-                        value = 0;
-
-                    }
-
-
-                    input.value =
-                        value;
-
-
-                    /* =========================
-                       UPDATE EVERY MEAL BLOCK
-                    ========================= */
-
-                    for (
-                        const block
-                        of mealBlocks
-                    ) {
-
-                        for (
-                            const employee
-                            of block.employees
-                        ) {
-
-                            const employeeRole =
-                                employee.distribution_role ||
-                                employee.role ||
-                                "Other";
-
-
-                            /*
-                                MATCH BOTH:
-
-                                1. Employee ID
-                                2. Role
-
-                                This is important because
-                                the same employee may appear
-                                with different roles.
-                            */
-
-                            if (
-                                employee.employee_id ===
-                                    employeeId &&
-
-                                employeeRole ===
-                                    role
-                            ) {
-
-                                employee.tip_points =
-                                    value;
-
-                            }
-
-                        }
-
-                    }
-
-
-                    /*
-                        Refresh the page/UI after
-                        updating the source mealBlocks.
-                    */
+                    savePoint(input);
 
                     if (refreshUI) {
 
@@ -389,10 +507,163 @@ export function renderEmployeePoints(
                 }
             );
 
-        });
+        }
+    );
+
+    /* =========================
+       KEYBOARD NAVIGATION
+    ========================= */
+
+    getPointInputs().forEach(
+        input => {
+
+            input.addEventListener(
+                "keydown",
+                event => {
+
+                    if (
+                        event.key !==
+                        "Enter"
+                    ) {
+
+                        return;
+
+                    }
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    /*
+                        Save current value.
+                    */
+
+                    savePoint(input);
+
+                    /*
+                        Find current inputs.
+                    */
+
+                    const inputs =
+                        getPointInputs();
+
+                    const currentIndex =
+                        inputs.indexOf(
+                            input
+                        );
+
+                    /*
+                        Enter =
+                        move down.
+
+                        Shift + Enter =
+                        move up.
+                    */
+
+                    const direction =
+                        event.shiftKey
+                            ? -1
+                            : 1;
+
+                    const nextIndex =
+                        currentIndex +
+                        direction;
+
+                    /*
+                        Stop at the top
+                        or bottom.
+                    */
+
+                    if (
+                        nextIndex < 0 ||
+                        nextIndex >=
+                            inputs.length
+                    ) {
+
+                        if (refreshUI) {
+
+                            refreshUI();
+
+                        }
+
+                        return;
+
+                    }
+
+                    /*
+                        Remember the
+                        destination employee.
+                    */
+
+                    const nextInput =
+                        inputs[
+                            nextIndex
+                        ];
+
+                    const nextEmployeeId =
+                        nextInput.dataset.employeeId;
+
+                    const nextRole =
+                        nextInput.dataset.role;
+
+                    /*
+                        Refresh the UI.
+                    */
+
+                    if (refreshUI) {
+
+                        refreshUI();
+
+                    }
+
+                    /*
+                        Find the same employee
+                        after refreshUI rebuilds
+                        the table.
+                    */
+
+                    requestAnimationFrame(
+                        () => {
+
+                            const newInputs =
+                                getPointInputs();
+
+                            const newInput =
+                                newInputs.find(
+                                    candidate =>
+
+                                        String(
+                                            candidate
+                                                .dataset
+                                                .employeeId
+                                        ) ===
+                                            String(
+                                                nextEmployeeId
+                                            ) &&
+
+                                        candidate
+                                            .dataset
+                                            .role ===
+                                            nextRole
+                                );
+
+                            if (newInput) {
+
+                                newInput.focus();
+
+                                newInput.select();
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
 
 }
-
 
 /* =========================
    ROLE DISPLAY NAME
@@ -403,22 +674,21 @@ function formatRoleName(role) {
     const names = {
 
         "server":
-            "Servers",
+            "Server",
 
         "boh":
             "BOH",
 
         "busser/runner":
-            "Bussers / Runners",
+            "Busser / Runner",
 
         "host":
-            "Hosts",
+            "Host",
 
         "other":
             "Other"
 
     };
-
 
     return (
         names[
