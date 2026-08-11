@@ -1492,3 +1492,16 @@ footer {
 .employee-points-table th.sortable-header:hover {
     background-color: rgba(155, 238, 255, 0.10);
 }
+
+
+.cash-drop-table th.sortable-header {
+    cursor: pointer;
+    user-select: none;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.cash-drop-table th.sortable-header:hover {
+    background-color: rgba(155, 238, 255, 0.10);
+}

@@ -34,51 +34,16 @@ export function renderCashDropList(
 
     }
 
-    // =========================
-    // SORT
-    // =========================
-
-    const mealOrder = {
-        Breakfast: 0,
-        Lunch: 1,
-        Dinner: 2
-    };
-
-    rows.sort(
-        (a, b) => {
-
-            const dateA =
-                new Date(
-                    a.block.day_key ||
-                    a.block.date
-                );
-
-            const dateB =
-                new Date(
-                    b.block.day_key ||
-                    b.block.date
-                );
-
-            if (dateA - dateB !== 0) {
-                return dateA - dateB;
-            }
-
-            return (
-                (mealOrder[a.block.meal] ?? 99) -
-                (mealOrder[b.block.meal] ?? 99)
-            );
-
-        }
-    );
-
     output.appendChild(
         createTable(
             rows,
+            mealBlocks,
             refreshUI
         )
     );
 
 }
+
 
 // =========================
 // BOH FILTER
@@ -100,12 +65,33 @@ function isBOH(role) {
 
 }
 
+
+// =========================
+// SORT STATE
+// =========================
+//
+// Stored outside the table so
+// refreshUI() does not reset
+// the user's selected sort.
+//
+
+if (!renderCashDropList.sortState) {
+
+    renderCashDropList.sortState = {
+        column: "date",
+        direction: "asc"
+    };
+
+}
+
+
 // =========================
 // CREATE TABLE
 // =========================
 
 function createTable(
     rows,
+    mealBlocks,
     refreshUI
 ) {
 
@@ -117,14 +103,227 @@ function createTable(
     table.className =
         "cash-drop-table";
 
+
+    // =========================
+    // MEAL ORDER
+    // =========================
+
+    const mealOrder = {
+        Breakfast: 0,
+        Lunch: 1,
+        Dinner: 2
+    };
+
+
+    // =========================
+    // SORT ROWS
+    // =========================
+
+    const sortState =
+        renderCashDropList.sortState;
+
+    const sortedRows =
+        [...rows];
+
+    sortedRows.sort(
+        (a, b) => {
+
+            let comparison = 0;
+
+            // =========================
+            // DATE
+            // =========================
+
+            if (
+                sortState.column ===
+                "date"
+            ) {
+
+                const dateA =
+                    new Date(
+                        a.block.day_key ||
+                        a.block.date
+                    );
+
+                const dateB =
+                    new Date(
+                        b.block.day_key ||
+                        b.block.date
+                    );
+
+                comparison =
+                    dateA - dateB;
+
+            }
+
+
+            // =========================
+            // MEAL
+            // =========================
+
+            else if (
+                sortState.column ===
+                "meal"
+            ) {
+
+                comparison =
+                    (
+                        mealOrder[
+                            a.block.meal
+                        ] ?? 99
+                    ) -
+                    (
+                        mealOrder[
+                            b.block.meal
+                        ] ?? 99
+                    );
+
+            }
+
+
+            // =========================
+            // EMPLOYEE
+            // =========================
+
+            else if (
+                sortState.column ===
+                "employee"
+            ) {
+
+                comparison =
+                    String(
+                        a.employee.name || ""
+                    ).localeCompare(
+                        String(
+                            b.employee.name || ""
+                        )
+                    );
+
+            }
+
+
+            // =========================
+            // ROLE
+            // =========================
+
+            else if (
+                sortState.column ===
+                "role"
+            ) {
+
+                comparison =
+                    String(
+                        a.employee.role || ""
+                    ).localeCompare(
+                        String(
+                            b.employee.role || ""
+                        )
+                    );
+
+            }
+
+
+            // =========================
+            // CASH DROP
+            // =========================
+
+            else if (
+                sortState.column ===
+                "cashDrop"
+            ) {
+
+                comparison =
+                    (
+                        Number(
+                            a.employee.cash_drop
+                        ) || 0
+                    ) -
+                    (
+                        Number(
+                            b.employee.cash_drop
+                        ) || 0
+                    );
+
+            }
+
+
+            // =========================
+            // CASH SALES
+            // =========================
+
+            else if (
+                sortState.column ===
+                "cashSales"
+            ) {
+
+                comparison =
+                    (
+                        Number(
+                            a.employee.cash_sales
+                        ) || 0
+                    ) -
+                    (
+                        Number(
+                            b.employee.cash_sales
+                        ) || 0
+                    );
+
+            }
+
+
+            // =========================
+            // SORT DIRECTION
+            // =========================
+
+            return (
+                sortState.direction ===
+                "asc"
+                    ? comparison
+                    : -comparison
+            );
+
+        }
+    );
+
+
+    // =========================
+    // HEADER
+    // =========================
+
     const headers = [
-        "Date",
-        "Meal",
-        "Employee",
-        "Role",
-        "Cash Drop",
-        "Cash Sales"
+
+        {
+            label: "Date",
+            column: "date"
+        },
+
+        {
+            label: "Meal",
+            column: "meal"
+        },
+
+        {
+            label: "Employee",
+            column: "employee"
+        },
+
+        {
+            label: "Role",
+            column: "role"
+        },
+
+        {
+            label: "Cash Drop",
+            column: "cashDrop"
+        },
+
+        {
+            label: "Cash Sales",
+            column: "cashSales"
+        }
+
     ];
+
 
     const thead =
         document.createElement(
@@ -136,7 +335,11 @@ function createTable(
             "tr"
         );
 
-    for (const text of headers) {
+
+    for (
+        const header
+        of headers
+    ) {
 
         const th =
             document.createElement(
@@ -144,13 +347,101 @@ function createTable(
             );
 
         th.textContent =
-            text;
+            header.label;
+
+        th.className =
+            "sortable-header";
+
+
+        // =========================
+        // SORT INDICATOR
+        // =========================
+
+        if (
+            sortState.column ===
+            header.column
+        ) {
+
+            th.textContent =
+                `${header.label} ${
+                    sortState.direction ===
+                    "asc"
+                        ? "▲"
+                        : "▼"
+                }`;
+
+            th.classList.add(
+                sortState.direction ===
+                    "asc"
+                    ? "sort-ascending"
+                    : "sort-descending"
+            );
+
+        }
+
+
+        // =========================
+        // CLICK TO SORT
+        // =========================
+
+        th.addEventListener(
+            "click",
+            () => {
+
+                /*
+                    Clicking the same
+                    column reverses it.
+                */
+
+                if (
+                    sortState.column ===
+                    header.column
+                ) {
+
+                    sortState.direction =
+                        sortState.direction ===
+                            "asc"
+                            ? "desc"
+                            : "asc";
+
+                }
+
+                /*
+                    Clicking a new column
+                    starts ascending.
+                */
+
+                else {
+
+                    sortState.column =
+                        header.column;
+
+                    sortState.direction =
+                        "asc";
+
+                }
+
+
+                /*
+                    Re-render using
+                    the new sort.
+                */
+
+                renderCashDropList(
+                    mealBlocks,
+                    refreshUI
+                );
+
+            }
+        );
+
 
         headerRow.appendChild(
             th
         );
 
     }
+
 
     thead.appendChild(
         headerRow
@@ -160,12 +451,18 @@ function createTable(
         thead
     );
 
+
+    // =========================
+    // BODY
+    // =========================
+
     const tbody =
         document.createElement(
             "tbody"
         );
 
-    rows.forEach(
+
+    sortedRows.forEach(
         (rowData, index) => {
 
             tbody.appendChild(
@@ -179,6 +476,7 @@ function createTable(
         }
     );
 
+
     table.appendChild(
         tbody
     );
@@ -186,6 +484,7 @@ function createTable(
     return table;
 
 }
+
 
 // =========================
 // CREATE ROW
@@ -205,6 +504,7 @@ function createRow(
     row.className =
         "cash-drop-table-row";
 
+
     // =========================
     // DATE
     // =========================
@@ -217,6 +517,7 @@ function createRow(
         )
     );
 
+
     // =========================
     // MEAL
     // =========================
@@ -226,6 +527,7 @@ function createRow(
         "cash-drop-meal",
         block.meal
     );
+
 
     // =========================
     // EMPLOYEE
@@ -237,6 +539,7 @@ function createRow(
         employee.name
     );
 
+
     // =========================
     // ROLE
     // =========================
@@ -246,6 +549,7 @@ function createRow(
         "cash-drop-role",
         employee.role || ""
     );
+
 
     // =========================
     // CASH DROP
@@ -258,6 +562,7 @@ function createRow(
 
     dropCell.className =
         "cash-drop-value-cell";
+
 
     const input =
         document.createElement(
@@ -282,8 +587,10 @@ function createRow(
             100
         ).toFixed(2);
 
+
     input.dataset.row =
         index;
+
 
     dropCell.appendChild(
         input
@@ -292,6 +599,7 @@ function createRow(
     row.appendChild(
         dropCell
     );
+
 
     // =========================
     // CASH SALES
@@ -305,43 +613,42 @@ function createRow(
         )
     );
 
+
     updateColor(
         input,
         employee
     );
 
- // =========================
-// SELECT ALL + HIGHLIGHT ROW
-// =========================
-//
-// Clicking into the input:
-// - Selects the entire value
-// - Highlights the entire row
-//
 
-input.addEventListener(
-    "focus",
-    () => {
+    // =========================
+    // SELECT ALL + HIGHLIGHT ROW
+    // =========================
 
-        input.select();
+    input.addEventListener(
+        "focus",
+        () => {
 
-        row.classList.add(
-            "cash-drop-row-selected"
-        );
+            input.select();
 
-    }
-);
+            row.classList.add(
+                "cash-drop-row-selected"
+            );
 
-input.addEventListener(
-    "blur",
-    () => {
+        }
+    );
 
-        row.classList.remove(
-            "cash-drop-row-selected"
-        );
 
-    }
-);
+    input.addEventListener(
+        "blur",
+        () => {
+
+            row.classList.remove(
+                "cash-drop-row-selected"
+            );
+
+        }
+    );
+
 
     // =========================
     // LIVE INPUT
@@ -370,6 +677,7 @@ input.addEventListener(
         }
     );
 
+
     // =========================
     // SAVE
     // =========================
@@ -388,14 +696,6 @@ input.addEventListener(
                 employee
             );
 
-            /*
-             * DO NOT save to sessionStorage
-             * here.
-             *
-             * currentMealBlocks in app.js
-             * contains this same employee object.
-             */
-
             if (refreshUI) {
 
                 refreshUI();
@@ -405,26 +705,27 @@ input.addEventListener(
         }
     );
 
+
     // =========================
     // ENTER / SHIFT + ENTER
     // =========================
-    //
-    // Enter:
-    //     Move DOWN
-    //
-    // Shift + Enter:
-    //     Move UP
-    //
 
     input.addEventListener(
         "keydown",
         event => {
 
-            if (event.key !== "Enter") {
+            if (
+                event.key !==
+                "Enter"
+            ) {
+
                 return;
+
             }
 
             event.preventDefault();
+            event.stopPropagation();
+
 
             // =========================
             // SAVE CURRENT VALUE
@@ -434,6 +735,7 @@ input.addEventListener(
                 employee,
                 input
             );
+
 
             // =========================
             // FIND CURRENT INPUTS
@@ -446,75 +748,118 @@ input.addEventListener(
                     )
                 );
 
+
             const currentIndex =
                 inputs.indexOf(
                     input
                 );
 
+
             // =========================
             // DETERMINE DIRECTION
             // =========================
 
-            let nextIndex;
+            const nextIndex =
+                event.shiftKey
+                    ? currentIndex - 1
+                    : currentIndex + 1;
 
-            if (event.shiftKey) {
 
-                // Shift + Enter
-                // Move UP
+            // =========================
+            // STOP AT TABLE EDGES
+            // =========================
 
-                nextIndex =
-                    currentIndex - 1;
+            if (
+                nextIndex < 0 ||
+                nextIndex >=
+                    inputs.length
+            ) {
+
+                if (refreshUI) {
+
+                    refreshUI();
+
+                }
+
+                return;
 
             }
 
-            else {
-
-                // Enter
-                // Move DOWN
-
-                nextIndex =
-                    currentIndex + 1;
-
-            }
 
             // =========================
-            // REFRESH UI
+            // REMEMBER NEXT EMPLOYEE
             // =========================
 
-            if (refreshUI) {
-                refreshUI();
-            }
-
-            // =========================
-            // FIND NEW INPUT
-            // =========================
-
-            const newInputs =
-                Array.from(
-                    document.querySelectorAll(
-                        "#cashDropTables .cash-drop-input"
-                    )
-                );
-
-            const next =
-                newInputs[
+            const nextInput =
+                inputs[
                     nextIndex
                 ];
 
-            if (next) {
 
-                next.focus();
+            const nextEmployeeId =
+                nextInput
+                    .closest("tr")
+                    ?.querySelector(
+                        ".cash-drop-input"
+                    )
+                    ?.dataset.row;
 
-                next.select();
+
+            /*
+                Refresh the application.
+
+                refreshUI() may rebuild
+                the table, so we cannot
+                keep the old DOM element.
+            */
+
+            if (refreshUI) {
+
+                refreshUI();
 
             }
+
+
+            // =========================
+            // FIND INPUT AFTER REFRESH
+            // =========================
+
+            requestAnimationFrame(
+                () => {
+
+                    const newInputs =
+                        Array.from(
+                            document.querySelectorAll(
+                                "#cashDropTables .cash-drop-input"
+                            )
+                        );
+
+
+                    const newInput =
+                        newInputs[
+                            nextIndex
+                        ];
+
+
+                    if (newInput) {
+
+                        newInput.focus();
+
+                        newInput.select();
+
+                    }
+
+                }
+            );
 
         }
     );
 
+
     return row;
 
 }
+
 
 // =========================
 // ADD CELL
@@ -543,6 +888,7 @@ function addCell(
 
 }
 
+
 // =========================
 // UPDATE COLOR
 // =========================
@@ -561,18 +907,23 @@ function updateColor(
 
 }
 
+
 function getDropClass(
     drop,
     sales
 ) {
 
-    if (drop < sales) {
+    if (
+        drop < sales
+    ) {
 
         return "drop-low";
 
     }
 
-    if (drop > sales) {
+    if (
+        drop > sales
+    ) {
 
         return "drop-high";
 
@@ -581,6 +932,7 @@ function getDropClass(
     return "drop-equal";
 
 }
+
 
 // =========================
 // SAVE CASH DROP
@@ -611,6 +963,7 @@ function saveCashDrop(
 
 }
 
+
 // =========================
 // FORMAT DATE
 // =========================
@@ -626,27 +979,37 @@ function formatDate(date) {
             date
         ).trim();
 
+
     const match =
         value.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
 
+
     if (match) {
 
         return (
-            match[1].padStart(2, "0") +
+            match[1].padStart(
+                2,
+                "0"
+            ) +
             "/" +
-            match[2].padStart(2, "0") +
+            match[2].padStart(
+                2,
+                "0"
+            ) +
             "/" +
             match[3]
         );
 
     }
 
+
     const parsed =
         new Date(
             date
         );
+
 
     if (
         Number.isNaN(
@@ -658,19 +1021,27 @@ function formatDate(date) {
 
     }
 
+
     return (
         String(
             parsed.getMonth() + 1
-        ).padStart(2, "0") +
+        ).padStart(
+            2,
+            "0"
+        ) +
         "/" +
         String(
             parsed.getDate()
-        ).padStart(2, "0") +
+        ).padStart(
+            2,
+            "0"
+        ) +
         "/" +
         parsed.getFullYear()
     );
 
 }
+
 
 // =========================
 // MONEY
