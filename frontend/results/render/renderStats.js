@@ -3,6 +3,7 @@ import {
     formatNumber
 } from "../utils/formatters.js";
 
+
 export function renderStats(
     employees
 ) {
@@ -12,10 +13,12 @@ export function renderStats(
         direction: "asc"
     };
 
+
     const table =
         document.createElement(
             "table"
         );
+
 
     table.innerHTML = `
 
@@ -79,24 +82,21 @@ export function renderStats(
 
         <tfoot></tfoot>
 
-<<<<<<< HEAD
-=======
     `;
 
->>>>>>> Final-test
+
     const body =
         table.querySelector(
             "tbody"
         );
 
-<<<<<<< HEAD
-=======
+
     const footer =
         table.querySelector(
             "tfoot"
         );
 
->>>>>>> Final-test
+
     // =========================
     // HELPERS
     // =========================
@@ -106,80 +106,92 @@ export function renderStats(
     ) {
 
         return (
-            (employee.original_cash_tips || 0)
+            (Number(employee.original_cash_tips) || 0)
             +
-            (employee.original_card_tips || 0)
+            (Number(employee.original_card_tips) || 0)
         );
 
     }
 
-<<<<<<< HEAD
+
     function cashToCardRatio(
         employee
     ) {
 
         const cash =
-            employee.original_cash_tips || 0;
+            Number(
+                employee.original_cash_tips
+            ) || 0;
+
 
         const card =
-            employee.original_card_tips || 0;
+            Number(
+                employee.original_card_tips
+            ) || 0;
+
 
         if (card <= 0) {
 
-            return cash > 0 ? Infinity : 0;
+            return cash > 0
+                ? Infinity
+                : 0;
 
         }
+
 
         return cash / card;
 
     }
 
-=======
->>>>>>> Final-test
+
     function tipsPerHour(
         employee
     ) {
 
-        if (
-            !employee.hours ||
-            employee.hours <= 0
-        ) {
+        const hours =
+            Number(
+                employee.hours
+            ) || 0;
 
+
+        if (hours <= 0) {
             return 0;
-
         }
+
 
         return (
             originalTips(employee)
             /
-            employee.hours
+            hours
         );
 
     }
+
 
     function avgTipPerOrder(
         employee
     ) {
 
-        if (
-            !employee.order_count ||
-            employee.order_count <= 0
-        ) {
+        const orders =
+            Number(
+                employee.order_count
+            ) || 0;
 
+
+        if (orders <= 0) {
             return 0;
-
         }
+
 
         return (
             originalTips(employee)
             /
-            employee.order_count
+            orders
         );
 
     }
 
-<<<<<<< HEAD
-=======
+
     // =========================
     // OVERALL TOTALS
     // =========================
@@ -196,6 +208,7 @@ export function renderStats(
         let totalHours = 0;
         let totalOrders = 0;
 
+
         for (
             const employee of employees
         ) {
@@ -205,30 +218,36 @@ export function renderStats(
                     employee.original_cash_tips
                 ) || 0;
 
+
             cardTips +=
                 Number(
                     employee.original_card_tips
                 ) || 0;
+
 
             cashSales +=
                 Number(
                     employee.cash_sales
                 ) || 0;
 
+
             cardSales +=
                 Number(
                     employee.card_sales
                 ) || 0;
+
 
             totalSales +=
                 Number(
                     employee.total_sales
                 ) || 0;
 
+
             totalHours +=
                 Number(
                     employee.hours
                 ) || 0;
+
 
             totalOrders +=
                 Number(
@@ -237,33 +256,48 @@ export function renderStats(
 
         }
 
+
         const totalTips =
             cashTips +
             cardTips;
+
+
+        const cashToCard =
+            cardTips > 0
+                ? cashTips / cardTips
+                : cashTips > 0
+                    ? Infinity
+                    : 0;
+
 
         const salesPerHour =
             totalHours > 0
                 ? totalSales / totalHours
                 : 0;
 
+
         const ordersPerHour =
             totalHours > 0
                 ? totalOrders / totalHours
                 : 0;
+
 
         const tipsPerHourTotal =
             totalHours > 0
                 ? totalTips / totalHours
                 : 0;
 
+
         const avgTipPerOrder =
             totalOrders > 0
                 ? totalTips / totalOrders
                 : 0;
 
+
         return {
             cashTips,
             cardTips,
+            cashToCard,
             totalTips,
             cashSales,
             cardSales,
@@ -278,6 +312,7 @@ export function renderStats(
 
     }
 
+
     // =========================
     // RENDER TOTAL ROW
     // =========================
@@ -286,6 +321,7 @@ export function renderStats(
 
         const totals =
             calculateTotals();
+
 
         footer.innerHTML = `
 
@@ -305,6 +341,14 @@ export function renderStats(
                     ${formatMoney(
                         totals.cardTips
                     )}
+                </th>
+
+                <th>
+                    ${
+                        totals.cashToCard === Infinity
+                            ? "∞"
+                            : totals.cashToCard.toFixed(2)
+                    }
                 </th>
 
                 <th>
@@ -361,7 +405,7 @@ export function renderStats(
 
     }
 
->>>>>>> Final-test
+
     // =========================
     // RENDER ROWS
     // =========================
@@ -372,6 +416,7 @@ export function renderStats(
 
         body.innerHTML = "";
 
+
         for (
             const employee of list
         ) {
@@ -381,14 +426,13 @@ export function renderStats(
                     "tr"
                 );
 
-<<<<<<< HEAD
+
             const ratio =
                 cashToCardRatio(
                     employee
                 );
 
-=======
->>>>>>> Final-test
+
             row.innerHTML = `
 
                 <td>
@@ -465,21 +509,21 @@ export function renderStats(
 
             `;
 
+
             body.appendChild(
                 row
             );
 
         }
 
+
         // Keep totals at the bottom
         // regardless of sorting.
         renderTotals();
 
-<<<<<<< HEAD
-=======
     }
 
->>>>>>> Final-test
+
     // =========================
     // SORT
     // =========================
@@ -493,11 +537,13 @@ export function renderStats(
                 ...employees
             ];
 
+
         sorted.sort(
             (a, b) => {
 
                 let A;
                 let B;
+
 
                 // -------------------------
                 // NAME
@@ -510,8 +556,10 @@ export function renderStats(
                     A =
                         a.name || "";
 
+
                     B =
                         b.name || "";
+
 
                     return currentSort.direction === "asc"
 
@@ -529,6 +577,7 @@ export function renderStats(
 
                 }
 
+
                 // -------------------------
                 // CALCULATED VALUES
                 // -------------------------
@@ -540,10 +589,12 @@ export function renderStats(
                     A =
                         originalTips(a);
 
+
                     B =
                         originalTips(b);
 
                 }
+
 
                 else if (
                     key === "tips_per_hour"
@@ -552,10 +603,12 @@ export function renderStats(
                     A =
                         tipsPerHour(a);
 
+
                     B =
                         tipsPerHour(b);
 
                 }
+
 
                 else if (
                     key === "avg_tip_per_order"
@@ -564,10 +617,12 @@ export function renderStats(
                     A =
                         avgTipPerOrder(a);
 
+
                     B =
                         avgTipPerOrder(b);
 
                 }
+
 
                 else if (
                     key === "cash_to_card_ratio"
@@ -576,20 +631,28 @@ export function renderStats(
                     A =
                         cashToCardRatio(a);
 
+
                     B =
                         cashToCardRatio(b);
 
                 }
 
+
                 else {
 
                     A =
-                        a[key] ?? 0;
+                        Number(
+                            a[key]
+                        ) || 0;
+
 
                     B =
-                        b[key] ?? 0;
+                        Number(
+                            b[key]
+                        ) || 0;
 
                 }
+
 
                 // -------------------------
                 // NUMERIC SORT
@@ -608,9 +671,11 @@ export function renderStats(
             }
         );
 
+
         return sorted;
 
     }
+
 
     // =========================
     // HEADER CLICK
@@ -629,6 +694,7 @@ export function renderStats(
                         const key =
                             header.dataset.sort;
 
+
                         if (
                             currentSort.key === key
                         ) {
@@ -646,6 +712,7 @@ export function renderStats(
 
                         }
 
+
                         else {
 
                             currentSort.key =
@@ -655,6 +722,7 @@ export function renderStats(
                                 "asc";
 
                         }
+
 
                         renderRows(
                             sortEmployees(
@@ -666,6 +734,7 @@ export function renderStats(
 
             }
         );
+
 
     // =========================
     // INITIAL SORT
@@ -683,6 +752,7 @@ export function renderStats(
                         .slice(-1)[0]
                         .toLowerCase();
 
+
                 const lastNameB =
                     (b.name || "")
                         .trim()
@@ -690,10 +760,12 @@ export function renderStats(
                         .slice(-1)[0]
                         .toLowerCase();
 
+
                 const result =
                     lastNameA.localeCompare(
                         lastNameB
                     );
+
 
                 if (
                     result !== 0
@@ -702,6 +774,7 @@ export function renderStats(
                     return result;
 
                 }
+
 
                 return (
                     a.name || ""
@@ -712,14 +785,12 @@ export function renderStats(
             }
         );
 
+
     renderRows(
         initial
     );
 
+
     return table;
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Final-test
