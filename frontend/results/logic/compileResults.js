@@ -71,7 +71,8 @@ export function compileResults(
                 result.original_card_tips;
 
 
-
+            result.cash_drop +=
+                employee.cash_drop ?? 0;
             // Sales
 
             result.cash_sales +=

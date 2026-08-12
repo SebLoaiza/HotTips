@@ -28,7 +28,7 @@ export class EmployeeResult {
 
         this.original_tips = 0;
 
-
+        this.cash_drop = 0;
 
         // =====================
         // DISTRIBUTED MONEY
