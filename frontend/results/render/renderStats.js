@@ -3,7 +3,6 @@ import {
     formatNumber
 } from "../utils/formatters.js";
 
-
 export function renderStats(
     employees
 ) {
@@ -14,12 +13,14 @@ export function renderStats(
         direction: "asc"
     };
 
+    // =================================================
+    // TABLE
+    // =================================================
 
     const table =
         document.createElement(
             "table"
         );
-
 
     table.innerHTML = `
 
@@ -36,7 +37,7 @@ export function renderStats(
                 </th>
 
                 <th data-sort="card_tips">
-                    Card Tips
+                    CC Tips ex fees
                 </th>
 
                 <th data-sort="cash_to_card_ratio">
@@ -83,32 +84,26 @@ export function renderStats(
 
         </thead>
 
-
         <tbody></tbody>
-
 
         <tfoot></tfoot>
 
     `;
-
 
     const body =
         table.querySelector(
             "tbody"
         );
 
-
     const footer =
         table.querySelector(
             "tfoot"
         );
 
-
     // =================================================
     // TIP VALUES
     // SAME VALUES USED BY PAYROLL SUMMARY
     // =================================================
-
 
     function cashTips(
         employee
@@ -134,7 +129,6 @@ export function renderStats(
 
     }
 
-
     function cardTips(
         employee
     ) {
@@ -159,6 +153,68 @@ export function renderStats(
 
     }
 
+    // =================================================
+    // GROSS CARD TIPS
+    // =================================================
+    //
+    // Tries to find the gross card-tip value before fees.
+    //
+    // If your compileResults data has one of these fields,
+    // it will use it:
+    //
+    //   employee.card_tips
+    //   employee.card_tip
+    //   employee.card_total
+    //   employee.gross_card_tips
+    //
+    // Otherwise it falls back to cardTips(employee).
+    //
+    // =================================================
+
+    function grossCardTips(
+        employee
+    ) {
+
+        const possibleValues = [
+
+            employee.gross_card_tips,
+
+            employee.card_tips,
+
+            employee.card_tip,
+
+            employee.card_total
+
+        ];
+
+        for (
+            const value
+            of possibleValues
+        ) {
+
+            if (
+                value !== undefined &&
+                value !== null &&
+                value !== ""
+            ) {
+
+                return (
+                    Number(value) || 0
+                );
+
+            }
+
+        }
+
+        return cardTips(
+            employee
+        );
+
+    }
+
+    // =================================================
+    // TOTAL TIPS
+    // =================================================
 
     function totalTips(
         employee
@@ -172,11 +228,9 @@ export function renderStats(
 
     }
 
-
     // =================================================
     // CASH TO CARD RATIO
     // =================================================
-
 
     function cashToCardRatio(
         employee
@@ -187,13 +241,15 @@ export function renderStats(
                 employee
             );
 
-
         const card =
             cardTips(
                 employee
             );
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         if (
             card <= 0
         ) {
@@ -204,16 +260,13 @@ export function renderStats(
 
         }
 
-
         return cash / card;
 
     }
 
-
     // =================================================
     // FORMAT CASH:CC RATIO
     // =================================================
-
 
     function formatCashToCardRatio(
         employee
@@ -224,7 +277,6 @@ export function renderStats(
                 employee
             );
 
-
         if (
             ratio === Infinity
         ) {
@@ -233,12 +285,10 @@ export function renderStats(
 
         }
 
-
         const percentage =
             Math.floor(
                 ratio * 100
             );
-
 
         if (
             percentage === 0
@@ -247,7 +297,6 @@ export function renderStats(
             return "0:1";
 
         }
-
 
         function gcd(
             a,
@@ -276,33 +325,27 @@ export function renderStats(
 
         }
 
-
         const divisor =
             gcd(
                 percentage,
                 100
             );
 
-
         const left =
             percentage /
             divisor;
-
 
         const right =
             100 /
             divisor;
 
-
         return `${left}:${right}`;
 
     }
 
-
     // =================================================
     // TIPS PER HOUR
     // =================================================
-
 
     function tipsPerHour(
         employee
@@ -313,7 +356,6 @@ export function renderStats(
                 employee.hours
             ) || 0;
 
-
         if (
             hours <= 0
         ) {
@@ -321,7 +363,6 @@ export function renderStats(
             return 0;
 
         }
-
 
         return (
             totalTips(employee)
@@ -331,11 +372,9 @@ export function renderStats(
 
     }
 
-
     // =================================================
     // AVG TIP PER ORDER
     // =================================================
-
 
     function avgTipPerOrder(
         employee
@@ -346,7 +385,6 @@ export function renderStats(
                 employee.order_count
             ) || 0;
 
-
         if (
             orders <= 0
         ) {
@@ -354,7 +392,6 @@ export function renderStats(
             return 0;
 
         }
-
 
         return (
             totalTips(employee)
@@ -364,11 +401,9 @@ export function renderStats(
 
     }
 
-
     // =================================================
     // OVERALL TOTALS
     // =================================================
-
 
     function calculateTotals() {
 
@@ -378,6 +413,10 @@ export function renderStats(
 
         let cardTipsTotal = 0;
 
+<<<<<<< Updated upstream
+=======
+        let grossCardTipsTotal = 0;
+>>>>>>> Stashed changes
 
         let cashSales = 0;
 
@@ -396,7 +435,6 @@ export function renderStats(
 
         let totalOrders = 0;
 
-
         for (
             const employee
             of employees
@@ -408,18 +446,22 @@ export function renderStats(
                     employee
                 );
 
-
             cardTipsTotal +=
                 cardTips(
                     employee
                 );
 
+            grossCardTipsTotal +=
+                grossCardTips(
+                    employee
+                );
 
             cashSales +=
                 Number(
                     employee.cash_sales
                 ) || 0;
 
+<<<<<<< Updated upstream
 
             cashDropTotal +=
                 Number(
@@ -427,23 +469,22 @@ export function renderStats(
                 ) || 0;
 
 
+=======
+>>>>>>> Stashed changes
             cardSales +=
                 Number(
                     employee.card_sales
                 ) || 0;
-
 
             totalSales +=
                 Number(
                     employee.total_sales
                 ) || 0;
 
-
             totalHours +=
                 Number(
                     employee.hours
                 ) || 0;
-
 
             totalOrders +=
                 Number(
@@ -452,11 +493,9 @@ export function renderStats(
 
         }
 
-
         const totalTips =
             cashTipsTotal +
             cardTipsTotal;
-
 
         const cashToCard =
             cardTipsTotal > 0
@@ -470,7 +509,6 @@ export function renderStats(
 
                     : 0;
 
-
         const salesPerHour =
             totalHours > 0
 
@@ -478,7 +516,6 @@ export function renderStats(
                     totalHours
 
                 : 0;
-
 
         const ordersPerHour =
             totalHours > 0
@@ -488,7 +525,6 @@ export function renderStats(
 
                 : 0;
 
-
         const tipsPerHourTotal =
             totalHours > 0
 
@@ -497,7 +533,6 @@ export function renderStats(
 
                 : 0;
 
-
         const avgTipPerOrder =
             totalOrders > 0
 
@@ -505,7 +540,6 @@ export function renderStats(
                     totalOrders
 
                 : 0;
-
 
         return {
 
@@ -516,6 +550,14 @@ export function renderStats(
             cardTips:
                 cardTipsTotal,
 
+<<<<<<< Updated upstream
+=======
+            grossCardTips:
+                grossCardTipsTotal,
+
+            cardTipsExcludingFees:
+                cardTipsTotal,
+>>>>>>> Stashed changes
 
             cashToCard,
 
@@ -557,18 +599,84 @@ export function renderStats(
 
     }
 
+    // =================================================
+    // TIP SUMMARY BOX
+    // =================================================
+
+    function renderTipSummary() {
+
+        const totals =
+            calculateTotals();
+
+        const summary =
+            document.createElement(
+                "div"
+            );
+
+        summary.className =
+            "stats-tip-summary";
+
+        summary.innerHTML = `
+
+            <div class="stats-tip-card">
+
+                <div class="stats-tip-label">
+                    Total Cash Tips
+                </div>
+
+                <div class="stats-tip-value">
+                    ${formatMoney(
+                        totals.cashTips
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="stats-tip-card">
+
+                <div class="stats-tip-label">
+                    Total Card Tips
+                </div>
+
+                <div class="stats-tip-value">
+                    ${formatMoney(
+                        totals.grossCardTips
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="stats-tip-card">
+
+                <div class="stats-tip-label">
+                    Card Tips Excluding Fees
+                </div>
+
+                <div class="stats-tip-value">
+                    ${formatMoney(
+                        totals.cardTipsExcludingFees
+                    )}
+                </div>
+
+            </div>
+
+        `;
+
+        return summary;
+
+    }
 
     // =================================================
     // TOTAL ROW
     // =================================================
-
 
     function renderTotals() {
 
 
         const totals =
             calculateTotals();
-
 
         footer.innerHTML = `
 
@@ -578,20 +686,17 @@ export function renderStats(
                     Total
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.cashTips
                     )}
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.cardTips
                     )}
                 </th>
-
 
                 <th>
                     ${
@@ -603,20 +708,17 @@ export function renderStats(
                     }
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.totalTips
                     )}
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.cashSales
                     )}
                 </th>
-
 
                 <th>
                     ${formatMoney(
@@ -631,13 +733,11 @@ export function renderStats(
                     )}
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.totalSales
                     )}
                 </th>
-
 
                 <th>
                     ${formatMoney(
@@ -645,20 +745,17 @@ export function renderStats(
                     )}
                 </th>
 
-
                 <th>
                     ${formatNumber(
                         totals.ordersPerHour
                     )}
                 </th>
 
-
                 <th>
                     ${formatMoney(
                         totals.tipsPerHourTotal
                     )}
                 </th>
-
 
                 <th>
                     ${formatMoney(
@@ -672,11 +769,9 @@ export function renderStats(
 
     }
 
-
     // =================================================
     // RENDER ROWS
     // =================================================
-
 
     function renderRows(
         list
@@ -684,7 +779,6 @@ export function renderStats(
 
 
         body.innerHTML = "";
-
 
         for (
             const employee
@@ -697,13 +791,11 @@ export function renderStats(
                     "tr"
                 );
 
-
             row.innerHTML = `
 
                 <td>
                     ${employee.name}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -713,7 +805,6 @@ export function renderStats(
                     )}
                 </td>
 
-
                 <td>
                     ${formatMoney(
                         cardTips(
@@ -722,13 +813,11 @@ export function renderStats(
                     )}
                 </td>
 
-
                 <td>
                     ${formatCashToCardRatio(
                         employee
                     )}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -738,13 +827,11 @@ export function renderStats(
                     )}
                 </td>
 
-
                 <td>
                     ${formatMoney(
                         employee.cash_sales || 0
                     )}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -759,13 +846,11 @@ export function renderStats(
                     )}
                 </td>
 
-
                 <td>
                     ${formatMoney(
                         employee.total_sales || 0
                     )}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -773,13 +858,11 @@ export function renderStats(
                     )}
                 </td>
 
-
                 <td>
                     ${formatNumber(
                         employee.avg_orders_per_hour || 0
                     )}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -788,7 +871,6 @@ export function renderStats(
                         )
                     )}
                 </td>
-
 
                 <td>
                     ${formatMoney(
@@ -800,23 +882,19 @@ export function renderStats(
 
             `;
 
-
             body.appendChild(
                 row
             );
 
         }
 
-
         renderTotals();
 
     }
 
-
     // =================================================
     // SORT
     // =================================================
-
 
     function sortEmployees(
         key
@@ -827,7 +905,6 @@ export function renderStats(
             [
                 ...employees
             ];
-
 
         sorted.sort(
             (
@@ -841,11 +918,15 @@ export function renderStats(
 
                 let B;
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // NAME
                 // =========================
 
+=======
+                // NAME
+>>>>>>> Stashed changes
 
                 if (
                     key === "name"
@@ -858,7 +939,6 @@ export function renderStats(
 
                     B =
                         b.name || "";
-
 
                     return (
                         currentSort.direction === "asc"
@@ -878,11 +958,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // CASH TIPS
                 // =========================
 
+=======
+                // CASH TIPS
+>>>>>>> Stashed changes
 
                 if (
                     key === "cash_tips"
@@ -902,11 +986,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // CARD TIPS
                 // =========================
 
+=======
+                // CARD TIPS
+>>>>>>> Stashed changes
 
                 else if (
                     key === "card_tips"
@@ -926,11 +1014,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // TOTAL TIPS
                 // =========================
 
+=======
+                // TOTAL TIPS
+>>>>>>> Stashed changes
 
                 else if (
                     key === "total_tips"
@@ -950,11 +1042,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // CASH:CARD
                 // =========================
 
+=======
+                // CASH:CARD
+>>>>>>> Stashed changes
 
                 else if (
                     key === "cash_to_card_ratio"
@@ -974,6 +1070,7 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // CASH DROP
@@ -1003,6 +1100,9 @@ export function renderStats(
                 // TIPS / HOUR
                 // =========================
 
+=======
+                // TIPS / HOUR
+>>>>>>> Stashed changes
 
                 else if (
                     key === "tips_per_hour"
@@ -1022,11 +1122,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // AVG TIP / ORDER
                 // =========================
 
+=======
+                // AVG TIP / ORDER
+>>>>>>> Stashed changes
 
                 else if (
                     key === "avg_tip_per_order"
@@ -1046,11 +1150,15 @@ export function renderStats(
 
                 }
 
+<<<<<<< Updated upstream
 
                 // =========================
                 // NORMAL NUMERIC VALUES
                 // =========================
 
+=======
+                // NORMAL NUMERIC VALUES
+>>>>>>> Stashed changes
 
                 else {
 
@@ -1060,14 +1168,12 @@ export function renderStats(
                             a[key]
                         ) || 0;
 
-
                     B =
                         Number(
                             b[key]
                         ) || 0;
 
                 }
-
 
                 return (
                     currentSort.direction === "asc"
@@ -1084,16 +1190,13 @@ export function renderStats(
             }
         );
 
-
         return sorted;
 
     }
 
-
     // =================================================
     // HEADER CLICK
     // =================================================
-
 
     table
         .querySelectorAll(
@@ -1109,7 +1212,6 @@ export function renderStats(
 
                         const key =
                             header.dataset.sort;
-
 
                         if (
                             currentSort.key === key
@@ -1142,7 +1244,6 @@ export function renderStats(
 
                         }
 
-
                         renderRows(
                             sortEmployees(
                                 key
@@ -1154,12 +1255,10 @@ export function renderStats(
             }
         );
 
-
     // =================================================
     // INITIAL SORT
     // LAST NAME
     // =================================================
-
 
     const initial =
         [...employees].sort(
@@ -1176,7 +1275,6 @@ export function renderStats(
                         .slice(-1)[0]
                         .toLowerCase();
 
-
                 const lastNameB =
                     (b.name || "")
                         .trim()
@@ -1184,12 +1282,10 @@ export function renderStats(
                         .slice(-1)[0]
                         .toLowerCase();
 
-
                 const result =
                     lastNameA.localeCompare(
                         lastNameB
                     );
-
 
                 if (
                     result !== 0
@@ -1198,7 +1294,6 @@ export function renderStats(
                     return result;
 
                 }
-
 
                 return (
                     a.name || ""
@@ -1209,12 +1304,34 @@ export function renderStats(
             }
         );
 
+    // =================================================
+    // INITIAL RENDER
+    // =================================================
 
     renderRows(
         initial
     );
 
+    // =================================================
+    // RETURN COMPLETE STATS VIEW
+    // =================================================
 
-    return table;
+    const container =
+        document.createElement(
+            "div"
+        );
+
+    container.className =
+        "stats-page";
+
+    container.appendChild(
+        renderTipSummary()
+    );
+
+    container.appendChild(
+        table
+    );
+
+    return container;
 
 }

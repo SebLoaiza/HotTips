@@ -1157,3 +1157,74 @@ select:focus {
     }
 
 }
+
+
+/* =================================
+   STATS TIP SUMMARY
+================================= */
+
+.stats-tip-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stats-tip-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.stats-tip-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-light);
+    transform: translateY(-2px);
+}
+
+.stats-tip-label {
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.stats-tip-value {
+    color: var(--cyan);
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+
+/* Individual card accents */
+
+.stats-tip-card:nth-child(1) .stats-tip-value {
+    color: var(--cyan);
+}
+
+.stats-tip-card:nth-child(2) .stats-tip-value {
+    color: var(--cyan);
+}
+
+.stats-tip-card:nth-child(3) .stats-tip-value {
+    color: var(--cyan);
+}
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .stats-tip-summary {
+        grid-template-columns: 1fr;
+    }
+
+}
