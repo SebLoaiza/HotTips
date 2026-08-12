@@ -1125,3 +1125,14 @@ footer {
         padding: 10px 18px;
     }
 }
+
+.tip-percentage {
+    font-size: 0.7em;
+    white-space: nowrap;
+}
+
+
+.employee-table td:nth-child(4) .tip-percentage,
+.employee-table td:nth-child(5) .tip-percentage {
+    color: #E942A3;
+}
