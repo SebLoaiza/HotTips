@@ -3,7 +3,6 @@ import {
 }
 from "../utils/formatters.js";
 
-
 export function renderPrintSummary(
     employees,
     distribution
@@ -17,6 +16,85 @@ export function renderPrintSummary(
     container.className =
         "printSheet";
 
+    // =========================
+    // FORMAT LEADERBOARD NAME
+    // =========================
+
+    function formatLeaderboardName(
+        name
+    ) {
+
+        const cleanName =
+            (name || "").trim();
+
+        if (!cleanName) {
+
+            return "";
+
+        }
+
+        // =========================
+        // LAST, FIRST FORMAT
+        // =========================
+
+        if (
+            cleanName.includes(",")
+        ) {
+
+            const parts =
+                cleanName
+                    .split(",")
+                    .map(
+                        part =>
+                            part.trim()
+                    );
+
+            const lastName =
+                parts[0] || "";
+
+            const firstName =
+                parts[1] || "";
+
+            if (!firstName) {
+
+                return lastName;
+
+            }
+
+            return (
+                `${firstName} ${lastName.charAt(0)}.`
+            );
+
+        }
+
+        // =========================
+        // FIRST LAST FORMAT
+        // =========================
+
+        const parts =
+            cleanName
+                .split(/\s+/)
+                .filter(Boolean);
+
+        if (
+            parts.length === 1
+        ) {
+
+            return parts[0];
+
+        }
+
+        const firstName =
+            parts[0];
+
+        const lastName =
+            parts[parts.length - 1];
+
+        return (
+            `${firstName} ${lastName.charAt(0)}.`
+        );
+
+    }
 
     // =========================
     // DATE RANGE
@@ -25,20 +103,25 @@ export function renderPrintSummary(
     const dates =
         [
             ...new Set(
-                distribution.map(
-                    block => block.date
-                )
+                distribution
+                    .map(
+                        block => block.date
+                    )
+                    .filter(Boolean)
             )
         ];
 
+    // Sort dates chronologically
+    dates.sort(
+        (a, b) =>
+            new Date(a) - new Date(b)
+    );
 
     const startDate =
         dates[0] || "";
 
-
     const endDate =
         dates[dates.length - 1] || "";
-
 
     // =========================
     // QUALIFIED EMPLOYEES
@@ -54,7 +137,6 @@ export function renderPrintSummary(
 
                 employee.worked_minutes >= 120
         );
-
 
     // =========================
     // TOP SALES
@@ -73,7 +155,6 @@ export function renderPrintSummary(
             0,
             5
         );
-
 
     // =========================
     // TOP TIP %
@@ -96,7 +177,6 @@ export function renderPrintSummary(
                         :
                         0;
 
-
                 const tipB =
                     b.total_sales > 0
                         ?
@@ -107,7 +187,6 @@ export function renderPrintSummary(
                         :
                         0;
 
-
                 return tipB - tipA;
 
             }
@@ -116,7 +195,6 @@ export function renderPrintSummary(
             0,
             5
         );
-
 
     // =========================
     // TOP TIPS / HOUR
@@ -133,11 +211,9 @@ export function renderPrintSummary(
                     a.worked_minutes /
                     60;
 
-
                 const hoursB =
                     b.worked_minutes /
                     60;
-
 
                 const tipsA =
                     hoursA > 0
@@ -147,7 +223,6 @@ export function renderPrintSummary(
                         :
                         0;
 
-
                 const tipsB =
                     hoursB > 0
                         ?
@@ -155,7 +230,6 @@ export function renderPrintSummary(
                         hoursB
                         :
                         0;
-
 
                 return tipsB - tipsA;
 
@@ -165,7 +239,6 @@ export function renderPrintSummary(
             0,
             5
         );
-
 
     // =========================
     // TOP SALES ROWS
@@ -192,13 +265,13 @@ export function renderPrintSummary(
 
                     </td>
 
-
                     <td class="nameCell">
 
-                        ${employee.name}
+                        ${formatLeaderboardName(
+                            employee.name
+                        )}
 
                     </td>
-
 
                     <td class="valueCell">
 
@@ -213,7 +286,6 @@ export function renderPrintSummary(
             `
         )
         .join("");
-
 
     // =========================
     // TOP TIP % ROWS
@@ -238,7 +310,6 @@ export function renderPrintSummary(
                         :
                         0;
 
-
                 return `
 
                     <tr
@@ -255,13 +326,13 @@ export function renderPrintSummary(
 
                         </td>
 
-
                         <td class="nameCell">
 
-                            ${employee.name}
+                            ${formatLeaderboardName(
+                                employee.name
+                            )}
 
                         </td>
-
 
                         <td class="valueCell">
 
@@ -276,7 +347,6 @@ export function renderPrintSummary(
             }
         )
         .join("");
-
 
     // =========================
     // TOP TIPS / HOUR ROWS
@@ -293,7 +363,6 @@ export function renderPrintSummary(
                     employee.worked_minutes /
                     60;
 
-
                 const hourly =
                     hours > 0
                         ?
@@ -301,7 +370,6 @@ export function renderPrintSummary(
                         hours
                         :
                         0;
-
 
                 return `
 
@@ -319,13 +387,13 @@ export function renderPrintSummary(
 
                         </td>
 
-
                         <td class="nameCell">
 
-                            ${employee.name}
+                            ${formatLeaderboardName(
+                                employee.name
+                            )}
 
                         </td>
-
 
                         <td class="valueCell">
 
@@ -344,7 +412,6 @@ export function renderPrintSummary(
             }
         )
         .join("");
-
 
     // =========================
     // REPORT HTML
@@ -374,7 +441,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                CUSTOM HEADER
             ========================= */
@@ -403,7 +469,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                BRAND
             ========================= */
@@ -417,7 +482,6 @@ export function renderPrintSummary(
                 gap: 12px;
 
             }
-
 
             /* =========================
                LOGO
@@ -435,7 +499,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                BRAND TEXT
             ========================= */
@@ -448,7 +511,6 @@ export function renderPrintSummary(
 
             }
 
-
             .reportBrandName {
 
                 font-size: 22px;
@@ -459,7 +521,6 @@ export function renderPrintSummary(
 
             }
 
-
             .reportBrandSubtitle {
 
                 font-size: 10px;
@@ -467,7 +528,6 @@ export function renderPrintSummary(
                 margin-top: 4px;
 
             }
-
 
             /* =========================
                REPORT INFO
@@ -479,7 +539,6 @@ export function renderPrintSummary(
 
             }
 
-
             .reportInfoTitle {
 
                 font-size: 21px;
@@ -490,7 +549,6 @@ export function renderPrintSummary(
 
             }
 
-
             .reportInfoDate {
 
                 font-size: 11px;
@@ -498,7 +556,6 @@ export function renderPrintSummary(
                 margin-top: 5px;
 
             }
-
 
             /* =========================
                DISCLAIMER
@@ -515,20 +572,15 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
-               THREE MATRIX LAYOUT
+               STACKED LAYOUT
             ========================= */
 
             .printResults {
 
-                display: grid;
+                display: flex;
 
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0, 1fr)
-                    );
+                flex-direction: column;
 
                 gap: 24px;
 
@@ -536,10 +588,9 @@ export function renderPrintSummary(
 
                 box-sizing: border-box;
 
-                align-items: start;
+                align-items: stretch;
 
             }
-
 
             /* =========================
                RESULT SECTION
@@ -559,7 +610,6 @@ export function renderPrintSummary(
 
             }
 
-
             .resultSection h2 {
 
                 margin:
@@ -573,22 +623,17 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                BOTTOM TABLE
             ========================= */
 
             .resultSection.bottomMatrix {
 
-                grid-column:
-                    1 / -1;
+                width: 100%;
 
-                width: 50%;
-
-                justify-self: center;
+                justify-self: auto;
 
             }
-
 
             /* =========================
                MATRIX
@@ -617,7 +662,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                CELLS
             ========================= */
@@ -642,7 +686,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                OUTER BORDERS
             ========================= */
@@ -654,13 +697,11 @@ export function renderPrintSummary(
 
             }
 
-
             .resultMatrix tbody tr:last-child td {
 
                 border-bottom: none;
 
             }
-
 
             /* =========================
                TABLE HEADERS
@@ -676,7 +717,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                COLUMN WIDTHS
             ========================= */
@@ -688,7 +728,6 @@ export function renderPrintSummary(
                 text-align: center;
 
             }
-
 
             .resultMatrix .nameCell {
 
@@ -704,7 +743,6 @@ export function renderPrintSummary(
 
             }
 
-
             .resultMatrix .valueCell {
 
                 width: 40%;
@@ -715,7 +753,6 @@ export function renderPrintSummary(
 
             }
 
-
             /* =========================
                FIRST PLACE
             ========================= */
@@ -725,7 +762,6 @@ export function renderPrintSummary(
                 font-weight: 700;
 
             }
-
 
             /* =========================
                PRINT SAFETY
@@ -743,7 +779,6 @@ export function renderPrintSummary(
 
                 }
 
-
                 .customReportHeader {
 
                     break-inside: avoid;
@@ -752,21 +787,15 @@ export function renderPrintSummary(
 
                 }
 
-
                 .printResults {
 
-                    display: grid;
+                    display: flex;
 
-                    grid-template-columns:
-                        repeat(
-                            2,
-                            minmax(0, 1fr)
-                        );
+                    flex-direction: column;
 
                     gap: 24px;
 
                 }
-
 
                 .resultSection {
 
@@ -776,18 +805,13 @@ export function renderPrintSummary(
 
                 }
 
-
                 .resultSection.bottomMatrix {
 
-                    grid-column:
-                        1 / -1;
+                    width: 100%;
 
-                    width: 50%;
-
-                    justify-self: center;
+                    justify-self: auto;
 
                 }
-
 
                 .resultMatrix {
 
@@ -796,7 +820,6 @@ export function renderPrintSummary(
                     page-break-inside: avoid;
 
                 }
-
 
                 .resultMatrix tr {
 
@@ -810,9 +833,7 @@ export function renderPrintSummary(
 
         </style>
 
-
         <div class="tipSummaryReport">
-
 
             <!-- =========================
                  CUSTOM HEADER
@@ -830,7 +851,6 @@ export function renderPrintSummary(
                         alt="Hot Noods"
                     />
 
-
                     <div class="reportBrandText">
 
                         <div class="reportBrandName">
@@ -838,7 +858,6 @@ export function renderPrintSummary(
                             Hot Noods
 
                         </div>
-
 
                         <div
                             class="
@@ -854,7 +873,6 @@ export function renderPrintSummary(
 
                 </div>
 
-
                 <div class="reportInfo">
 
                     <div
@@ -864,7 +882,6 @@ export function renderPrintSummary(
                     >
 
                     </div>
-
 
                     <div
                         class="
@@ -884,7 +901,6 @@ export function renderPrintSummary(
 
             </header>
 
-
             <!-- =========================
                  SINGLE DISCLAIMER
             ========================= -->
@@ -896,13 +912,11 @@ export function renderPrintSummary(
 
             </p>
 
-
             <!-- =========================
-                 THREE MATRICES
+                 THREE STACKED MATRICES
             ========================= -->
 
             <section class="printResults">
-
 
                 <!-- =========================
                      TOP SALES
@@ -918,7 +932,6 @@ export function renderPrintSummary(
 
                     </h2>
 
-
                     <table
                         class="resultMatrix"
                     >
@@ -933,13 +946,11 @@ export function renderPrintSummary(
 
                                 </th>
 
-
                                 <th>
 
                                     Employee
 
                                 </th>
-
 
                                 <th>
 
@@ -951,7 +962,6 @@ export function renderPrintSummary(
 
                         </thead>
 
-
                         <tbody>
 
                             ${topSalesRows}
@@ -961,7 +971,6 @@ export function renderPrintSummary(
                     </table>
 
                 </div>
-
 
                 <!-- =========================
                      TOP TIP %
@@ -977,7 +986,6 @@ export function renderPrintSummary(
 
                     </h2>
 
-
                     <table
                         class="resultMatrix"
                     >
@@ -992,13 +1000,11 @@ export function renderPrintSummary(
 
                                 </th>
 
-
                                 <th>
 
                                     Employee
 
                                 </th>
-
 
                                 <th>
 
@@ -1010,7 +1016,6 @@ export function renderPrintSummary(
 
                         </thead>
 
-
                         <tbody>
 
                             ${topTipsRows}
@@ -1020,7 +1025,6 @@ export function renderPrintSummary(
                     </table>
 
                 </div>
-
 
                 <!-- =========================
                      TOP TIPS / HOUR
@@ -1039,7 +1043,6 @@ export function renderPrintSummary(
 
                     </h2>
 
-
                     <table
                         class="resultMatrix"
                     >
@@ -1054,13 +1057,11 @@ export function renderPrintSummary(
 
                                 </th>
 
-
                                 <th>
 
                                     Employee
 
                                 </th>
-
 
                                 <th>
 
@@ -1072,7 +1073,6 @@ export function renderPrintSummary(
 
                         </thead>
 
-
                         <tbody>
 
                             ${topTipsPerHourRows}
@@ -1083,15 +1083,12 @@ export function renderPrintSummary(
 
                 </div>
 
-
             </section>
-
 
         </div>
 
     `;
 
-
     return container;
 
-}
+} 

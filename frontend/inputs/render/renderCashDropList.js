@@ -8,18 +8,27 @@ export function renderCashDropList(
             "cashDropTables"
         );
 
+    const controlsOutput =
+        document.getElementById(
+            "cashDropControls"
+        );
+
     if (!output) {
         return;
     }
 
     output.innerHTML = "";
 
+    if (controlsOutput) {
+        controlsOutput.innerHTML = "";
+    }
+
     const rows = [];
 
 
-    // =========================
+    // =================================================
     // BUILD ROW LIST
-    // =========================
+    // =================================================
 
     for (const block of mealBlocks) {
 
@@ -40,9 +49,200 @@ export function renderCashDropList(
     }
 
 
-    // =========================
+    // =================================================
+    // CONTROLS
+    // =================================================
+
+    const controls =
+        document.createElement(
+            "div"
+        );
+
+    controls.className =
+        "cash-drop-controls";
+
+
+    // =================================================
+    // DOWNLOAD BUTTON
+    // =================================================
+
+    const downloadButton =
+        document.createElement(
+            "button"
+        );
+
+    downloadButton.type =
+        "button";
+
+    downloadButton.className =
+        "cash-drop-button cash-drop-download-button";
+
+    downloadButton.textContent =
+        "Download Cash Drops";
+
+
+    downloadButton.addEventListener(
+        "click",
+        () => {
+
+            downloadCashDrops(
+                mealBlocks
+            );
+
+        }
+    );
+
+
+    // =================================================
+    // UPLOAD BUTTON
+    // =================================================
+
+    const uploadButton =
+        document.createElement(
+            "button"
+        );
+
+    uploadButton.type =
+        "button";
+
+    uploadButton.className =
+        "cash-drop-button cash-drop-upload-button";
+
+    uploadButton.textContent =
+        "Upload Cash Drops";
+
+
+    // =================================================
+    // FILE INPUT
+    // =================================================
+
+    const fileInput =
+        document.createElement(
+            "input"
+        );
+
+    fileInput.type =
+        "file";
+
+    fileInput.accept =
+        ".json,application/json";
+
+    fileInput.className =
+        "cash-drop-file-input";
+
+    fileInput.style.display =
+        "none";
+
+    // =================================================
+    // UPLOAD CLICK
+    // =================================================
+
+    uploadButton.addEventListener(
+        "click",
+        () => {
+
+            fileInput.click();
+
+        }
+    );
+
+
+    // =================================================
+    // FILE CHANGE
+    // =================================================
+
+    fileInput.addEventListener(
+        "change",
+        async () => {
+
+            const file =
+                fileInput.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+            try {
+
+                await uploadCashDrops(
+                    file,
+                    mealBlocks
+                );
+
+
+                renderCashDropList(
+                    mealBlocks,
+                    refreshUI
+                );
+
+
+                if (refreshUI) {
+
+                    refreshUI();
+
+                }
+
+
+                alert(
+                    "Cash drops loaded successfully."
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Failed to load cash drops:",
+                    error
+                );
+
+
+                alert(
+                    "Could not load the cash drops file."
+                );
+
+            }
+
+
+            fileInput.value = "";
+
+        }
+    );
+
+
+    // =================================================
+    // ADD CONTROLS
+    // =================================================
+
+    controls.appendChild(
+        downloadButton
+    );
+
+    controls.appendChild(
+        uploadButton
+    );
+
+    controls.appendChild(
+        fileInput
+    );
+
+
+    // =================================================
+    // IMPORTANT:
+    // Put controls ABOVE the totals.
+    // =================================================
+
+    if (controlsOutput) {
+
+        controlsOutput.appendChild(
+            controls
+        );
+
+    }
+
+
+    // =================================================
     // CREATE TABLE
-    // =========================
+    // =================================================
 
     output.appendChild(
         createTable(
@@ -55,9 +255,9 @@ export function renderCashDropList(
 }
 
 
-// =========================
+// =================================================
 // BOH FILTER
-// =========================
+// =================================================
 
 function isBOH(role) {
 
@@ -76,9 +276,9 @@ function isBOH(role) {
 }
 
 
-// =========================
+// =================================================
 // SORT STATE
-// =========================
+// =================================================
 
 if (!renderCashDropList.sortState) {
 
@@ -93,9 +293,9 @@ if (!renderCashDropList.sortState) {
 }
 
 
-// =========================
+// =================================================
 // CREATE TABLE
-// =========================
+// =================================================
 
 function createTable(
     rows,
@@ -112,9 +312,9 @@ function createTable(
         "cash-drop-table";
 
 
-    // =========================
+    // =================================================
     // MEAL ORDER
-    // =========================
+    // =================================================
 
     const mealOrder = {
 
@@ -127,9 +327,9 @@ function createTable(
     };
 
 
-    // =========================
+    // =================================================
     // SORT ROWS
-    // =========================
+    // =================================================
 
     const sortState =
         renderCashDropList.sortState;
@@ -143,10 +343,6 @@ function createTable(
 
             let comparison = 0;
 
-
-            // =========================
-            // DATE
-            // =========================
 
             if (
                 sortState.column ===
@@ -202,10 +398,6 @@ function createTable(
             }
 
 
-            // =========================
-            // MEAL
-            // =========================
-
             else if (
                 sortState.column ===
                 "meal"
@@ -226,10 +418,6 @@ function createTable(
             }
 
 
-            // =========================
-            // EMPLOYEE
-            // =========================
-
             else if (
                 sortState.column ===
                 "employee"
@@ -247,10 +435,6 @@ function createTable(
             }
 
 
-            // =========================
-            // ROLE
-            // =========================
-
             else if (
                 sortState.column ===
                 "role"
@@ -267,10 +451,6 @@ function createTable(
 
             }
 
-
-            // =========================
-            // CASH DROP
-            // =========================
 
             else if (
                 sortState.column ===
@@ -292,10 +472,6 @@ function createTable(
             }
 
 
-            // =========================
-            // CASH SALES
-            // =========================
-
             else if (
                 sortState.column ===
                 "cashSales"
@@ -316,10 +492,6 @@ function createTable(
             }
 
 
-            // =========================
-            // SORT DIRECTION
-            // =========================
-
             return (
                 sortState.direction ===
                 "asc"
@@ -333,9 +505,9 @@ function createTable(
     );
 
 
-    // =========================
-    // HEADER
-    // =========================
+    // =================================================
+    // HEADERS
+    // =================================================
 
     const headers = [
 
@@ -377,7 +549,6 @@ function createTable(
             "thead"
         );
 
-
     const headerRow =
         document.createElement(
             "tr"
@@ -394,18 +565,9 @@ function createTable(
                 "th"
             );
 
-
-        th.textContent =
-            header.label;
-
-
         th.className =
             "sortable-header";
 
-
-        // =========================
-        // SORT INDICATOR
-        // =========================
 
         if (
             sortState.column ===
@@ -420,19 +582,15 @@ function createTable(
                         : "▼"
                 }`;
 
-            th.classList.add(
-                sortState.direction ===
-                "asc"
-                    ? "sort-ascending"
-                    : "sort-descending"
-            );
+        }
+
+        else {
+
+            th.textContent =
+                header.label;
 
         }
 
-
-        // =========================
-        // CLICK TO SORT
-        // =========================
 
         th.addEventListener(
             "click",
@@ -482,15 +640,14 @@ function createTable(
         headerRow
     );
 
-
     table.appendChild(
         thead
     );
 
 
-    // =========================
+    // =================================================
     // BODY
-    // =========================
+    // =================================================
 
     const tbody =
         document.createElement(
@@ -498,18 +655,14 @@ function createTable(
         );
 
 
-    // =========================
-    // TOTALS
-    // =========================
-
     let totalCashDrop = 0;
 
     let totalCashSales = 0;
 
 
-    // =========================
-    // EMPLOYEE ROWS
-    // =========================
+    // =================================================
+    // ROWS
+    // =================================================
 
     sortedRows.forEach(
         (rowData, index) => {
@@ -542,24 +695,23 @@ function createTable(
     );
 
 
-    // =========================
+    // =================================================
     // UPDATE TIP TOTALS
-    // =========================
+    // =================================================
 
     updateTipTotals(
         mealBlocks
     );
 
 
-    // =========================
+    // =================================================
     // TOTAL ROW
-    // =========================
+    // =================================================
 
     const totalRow =
         document.createElement(
             "tr"
         );
-
 
     totalRow.className =
         "cash-drop-total-row";
@@ -570,12 +722,11 @@ function createTable(
             "th"
         );
 
-
     totalLabelCell.textContent =
         "TOTAL";
 
-
-    totalLabelCell.colSpan = 4;
+    totalLabelCell.colSpan =
+        4;
 
 
     totalRow.appendChild(
@@ -583,15 +734,10 @@ function createTable(
     );
 
 
-    // =========================
-    // CASH DROP TOTAL
-    // =========================
-
     const totalDropCell =
         document.createElement(
             "th"
         );
-
 
     totalDropCell.textContent =
         money(
@@ -604,15 +750,10 @@ function createTable(
     );
 
 
-    // =========================
-    // CASH SALES TOTAL
-    // =========================
-
     const totalSalesCell =
         document.createElement(
             "th"
         );
-
 
     totalSalesCell.textContent =
         money(
@@ -640,21 +781,9 @@ function createTable(
 }
 
 
-// =========================
+// =================================================
 // UPDATE TIP TOTALS
-// =========================
-//
-// Cash Tips:
-//
-//     ALL CASH DROP
-//          -
-//     ALL CASH SALES
-//          =
-//     TOTAL CASH TIPS
-//
-// This uses every employee
-// in every meal block.
-//
+// =================================================
 
 function updateTipTotals(
     mealBlocks
@@ -664,10 +793,6 @@ function updateTipTotals(
 
     let totalCashSales = 0;
 
-
-    // =========================
-    // COMBINE EVERY EMPLOYEE
-    // =========================
 
     for (
         const block
@@ -679,19 +804,10 @@ function updateTipTotals(
             of block.employees
         ) {
 
-            // -------------------------
-            // CASH DROP
-            // -------------------------
-
             totalCashDrop +=
                 Number(
                     employee.cash_drop
                 ) || 0;
-
-
-            // -------------------------
-            // CASH SALES
-            // -------------------------
 
             totalCashSales +=
                 Number(
@@ -703,24 +819,15 @@ function updateTipTotals(
     }
 
 
-    // =========================
-    // CALCULATE CASH TIPS
-    // =========================
-
     const totalCashTips =
         totalCashDrop -
         totalCashSales;
 
 
-    // =========================
-    // DISPLAY CASH DROP
-    // =========================
-
     const cashDropElement =
         document.getElementById(
             "totalCashDrop"
         );
-
 
     if (cashDropElement) {
 
@@ -732,15 +839,10 @@ function updateTipTotals(
     }
 
 
-    // =========================
-    // DISPLAY CASH SALES
-    // =========================
-
     const cashSalesElement =
         document.getElementById(
             "totalCashSales"
         );
-
 
     if (cashSalesElement) {
 
@@ -752,15 +854,10 @@ function updateTipTotals(
     }
 
 
-    // =========================
-    // DISPLAY CASH TIPS
-    // =========================
-
     const cashTipsElement =
         document.getElementById(
             "totalCashTips"
         );
-
 
     if (cashTipsElement) {
 
@@ -771,10 +868,6 @@ function updateTipTotals(
 
     }
 
-
-    // =========================
-    // CREDIT CARD TIPS
-    // =========================
 
     let totalCreditCardTips = 0;
 
@@ -802,10 +895,6 @@ function updateTipTotals(
             );
 
 
-        // -------------------------
-        // BLOCK LEVEL
-        // -------------------------
-
         if (
             blockCardTips !== null
         ) {
@@ -817,10 +906,6 @@ function updateTipTotals(
 
         }
 
-
-        // -------------------------
-        // EMPLOYEE LEVEL
-        // -------------------------
 
         for (
             const employee
@@ -859,10 +944,6 @@ function updateTipTotals(
     }
 
 
-    // =========================
-    // DISPLAY CREDIT CARD TIPS
-    // =========================
-
     const creditCardTipsElement =
         document.getElementById(
             "totalCreditCardTips"
@@ -883,9 +964,9 @@ function updateTipTotals(
 }
 
 
-// =========================
+// =================================================
 // FIND FIRST NUMBER
-// =========================
+// =================================================
 
 function firstNumber(
     ...values
@@ -922,15 +1003,14 @@ function firstNumber(
 
     }
 
-
     return null;
 
 }
 
 
-// =========================
+// =================================================
 // CREATE ROW
-// =========================
+// =================================================
 
 function createRow(
     { block, employee },
@@ -943,14 +1023,9 @@ function createRow(
             "tr"
         );
 
-
     row.className =
         "cash-drop-table-row";
 
-
-    // =========================
-    // DATE
-    // =========================
 
     addCell(
         row,
@@ -961,20 +1036,12 @@ function createRow(
     );
 
 
-    // =========================
-    // MEAL
-    // =========================
-
     addCell(
         row,
         "cash-drop-meal",
         block.meal
     );
 
-
-    // =========================
-    // EMPLOYEE
-    // =========================
 
     addCell(
         row,
@@ -983,10 +1050,6 @@ function createRow(
     );
 
 
-    // =========================
-    // ROLE
-    // =========================
-
     addCell(
         row,
         "cash-drop-role",
@@ -994,15 +1057,14 @@ function createRow(
     );
 
 
-    // =========================
+    // =================================================
     // CASH DROP
-    // =========================
+    // =================================================
 
     const dropCell =
         document.createElement(
             "td"
         );
-
 
     dropCell.className =
         "cash-drop-value-cell";
@@ -1013,18 +1075,14 @@ function createRow(
             "input"
         );
 
-
     input.className =
         "cash-drop-input";
-
 
     input.type =
         "number";
 
-
     input.min =
         "0";
-
 
     input.step =
         "0.01";
@@ -1048,15 +1106,14 @@ function createRow(
         input
     );
 
-
     row.appendChild(
         dropCell
     );
 
 
-    // =========================
+    // =================================================
     // CASH SALES
-    // =========================
+    // =================================================
 
     addCell(
         row,
@@ -1067,19 +1124,15 @@ function createRow(
     );
 
 
-    // =========================
-    // COLOR
-    // =========================
-
     updateColor(
         input,
         employee
     );
 
 
-    // =========================
-    // SELECT ALL + HIGHLIGHT
-    // =========================
+    // =================================================
+    // SELECT ALL
+    // =================================================
 
     input.addEventListener(
         "focus",
@@ -1107,9 +1160,9 @@ function createRow(
     );
 
 
-    // =========================
+    // =================================================
     // LIVE INPUT
-    // =========================
+    // =================================================
 
     input.addEventListener(
         "input",
@@ -1136,9 +1189,9 @@ function createRow(
     );
 
 
-    // =========================
+    // =================================================
     // SAVE
-    // =========================
+    // =================================================
 
     input.addEventListener(
         "change",
@@ -1166,9 +1219,9 @@ function createRow(
     );
 
 
-    // =========================
-    // ENTER / SHIFT + ENTER
-    // =========================
+    // =================================================
+    // ENTER NAVIGATION
+    // =================================================
 
     input.addEventListener(
         "keydown",
@@ -1189,19 +1242,11 @@ function createRow(
             event.stopPropagation();
 
 
-            // =========================
-            // SAVE CURRENT VALUE
-            // =========================
-
             saveCashDrop(
                 employee,
                 input
             );
 
-
-            // =========================
-            // FIND INPUTS
-            // =========================
 
             const inputs =
                 Array.from(
@@ -1217,21 +1262,11 @@ function createRow(
                 );
 
 
-            // =========================
-            // DIRECTION
-            // =========================
-
             const nextIndex =
                 event.shiftKey
-
                     ? currentIndex - 1
-
                     : currentIndex + 1;
 
-
-            // =========================
-            // TABLE EDGE
-            // =========================
 
             if (
                 nextIndex < 0 ||
@@ -1250,20 +1285,12 @@ function createRow(
             }
 
 
-            // =========================
-            // REFRESH
-            // =========================
-
             if (refreshUI) {
 
                 refreshUI();
 
             }
 
-
-            // =========================
-            // FIND NEW INPUT
-            // =========================
 
             requestAnimationFrame(
                 () => {
@@ -1302,9 +1329,9 @@ function createRow(
 }
 
 
-// =========================
+// =================================================
 // ADD CELL
-// =========================
+// =================================================
 
 function addCell(
     row,
@@ -1317,14 +1344,11 @@ function addCell(
             "td"
         );
 
-
     cell.className =
         className;
 
-
     cell.textContent =
         text;
-
 
     row.appendChild(
         cell
@@ -1333,9 +1357,9 @@ function addCell(
 }
 
 
-// =========================
+// =================================================
 // UPDATE COLOR
-// =========================
+// =================================================
 
 function updateColor(
     input,
@@ -1352,9 +1376,9 @@ function updateColor(
 }
 
 
-// =========================
+// =================================================
 // DROP COLOR
-// =========================
+// =================================================
 
 function getDropClass(
     drop,
@@ -1384,9 +1408,9 @@ function getDropClass(
 }
 
 
-// =========================
+// =================================================
 // SAVE CASH DROP
-// =========================
+// =================================================
 
 function saveCashDrop(
     employee,
@@ -1417,16 +1441,454 @@ function saveCashDrop(
 }
 
 
-// =========================
+// =================================================
+// DOWNLOAD CASH DROPS
+// =================================================
+
+function downloadCashDrops(
+    mealBlocks
+) {
+
+    const cashDrops = [];
+
+
+    for (
+        const block
+        of mealBlocks
+    ) {
+
+        for (
+            const employee
+            of block.employees
+        ) {
+
+            if (
+                isBOH(
+                    employee.role
+                )
+            ) {
+
+                continue;
+
+            }
+
+
+            const cashDrop =
+                Number(
+                    employee.cash_drop
+                );
+
+
+            if (
+                !Number.isFinite(
+                    cashDrop
+                ) ||
+                cashDrop <= 0
+            ) {
+
+                continue;
+
+            }
+
+
+            cashDrops.push({
+
+                employee:
+                    String(
+                        employee.employee_id
+                    ),
+
+                cash:
+                    Math.round(
+                        cashDrop
+                    ),
+
+                day:
+                    getBlockDay(
+                        block
+                    ),
+
+                meal:
+                    String(
+                        block.meal || ""
+                    )
+
+            });
+
+        }
+
+    }
+
+
+    const data = {
+
+        hotTipsCashDropsVersion:
+            1,
+
+        savedAt:
+            new Date().toISOString(),
+
+        cashDrops
+
+    };
+
+
+    const json =
+        JSON.stringify(
+            data,
+            null,
+            4
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    const now =
+        new Date();
+
+
+    const date =
+        `${String(
+            now.getMonth() + 1
+        ).padStart(2, "0")}-` +
+
+        `${String(
+            now.getDate()
+        ).padStart(2, "0")}-` +
+
+        `${now.getFullYear()}`;
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        `HotTips Cash Drops - ${date}.json`;
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+// =================================================
+// UPLOAD CASH DROPS
+// =================================================
+
+function uploadCashDrops(
+    file,
+    mealBlocks
+) {
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                () => {
+
+                    try {
+
+                        const data =
+                            JSON.parse(
+                                reader.result
+                            );
+
+
+                        if (
+                            !data ||
+                            !Array.isArray(
+                                data.cashDrops
+                            )
+                        ) {
+
+                            throw new Error(
+                                "Invalid HotTips cash drops file."
+                            );
+
+                        }
+
+
+                        for (
+                            const savedDrop
+                            of data.cashDrops
+                        ) {
+
+                            const savedEmployee =
+                                String(
+                                    savedDrop.employee
+                                );
+
+
+                            const savedDay =
+                                String(
+                                    savedDrop.day
+                                );
+
+
+                            const savedMeal =
+                                String(
+                                    savedDrop.meal
+                                );
+
+
+                            const savedCash =
+                                Number(
+                                    savedDrop.cash
+                                );
+
+
+                            if (
+                                !Number.isFinite(
+                                    savedCash
+                                )
+                            ) {
+
+                                continue;
+
+                            }
+
+
+                            for (
+                                const block
+                                of mealBlocks
+                            ) {
+
+                                const blockDay =
+                                    getBlockDay(
+                                        block
+                                    );
+
+
+                                if (
+                                    blockDay !==
+                                    savedDay
+                                ) {
+
+                                    continue;
+
+                                }
+
+
+                                if (
+                                    String(
+                                        block.meal || ""
+                                    ) !==
+                                    savedMeal
+                                ) {
+
+                                    continue;
+
+                                }
+
+
+                                for (
+                                    const employee
+                                    of block.employees
+                                ) {
+
+                                    const employeeId =
+                                        String(
+                                            employee.employee_id
+                                        );
+
+
+                                    if (
+                                        employeeId !==
+                                        savedEmployee
+                                    ) {
+
+                                        continue;
+
+                                    }
+
+
+                                    const existing =
+                                        Number(
+                                            employee.cash_drop
+                                        );
+
+
+                                    if (
+                                        !Number.isFinite(
+                                            existing
+                                        ) ||
+                                        existing === 0
+                                    ) {
+
+                                        employee.cash_drop =
+                                            Math.round(
+                                                savedCash
+                                            );
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+
+                        resolve(
+                            data
+                        );
+
+                    }
+                    catch (error) {
+
+                        reject(
+                            error
+                        );
+
+                    }
+
+                };
+
+
+            reader.onerror =
+                () => {
+
+                    reject(
+                        reader.error
+                    );
+
+                };
+
+
+            reader.readAsText(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+// =================================================
+// GET BLOCK DAY
+// =================================================
+
+function getBlockDay(
+    block
+) {
+
+    if (
+        block.day_key
+    ) {
+
+        return String(
+            block.day_key
+        ).trim();
+
+    }
+
+
+    if (
+        block.date
+    ) {
+
+        const date =
+            new Date(
+                block.date
+            );
+
+
+        if (
+            !Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return (
+                String(
+                    date.getFullYear()
+                ) +
+
+                "-" +
+
+                String(
+                    date.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                ) +
+
+                "-" +
+
+                String(
+                    date.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                )
+            );
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+// =================================================
 // FORMAT DATE
-// =========================
+// =================================================
 
 function formatDate(
     date
 ) {
 
     if (!date) {
+
         return "";
+
     }
 
 
@@ -1527,9 +1989,9 @@ function formatDate(
 }
 
 
-// =========================
+// =================================================
 // MONEY
-// =========================
+// =================================================
 
 function money(
     cents

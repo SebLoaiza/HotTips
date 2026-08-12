@@ -28,6 +28,7 @@
     <img
         src="logo.png"
         class="logo"
+        alt="HotTips Logo"
     >
 
     <div class="header-text">
@@ -47,15 +48,16 @@
 
 <main>
 
-<!-- =========================
+<!-- =========================================================
      PROCESS NAVIGATION
-========================= -->
+========================================================= -->
 
 <section class="panel workflow">
 
     <button
         id="backButton"
         class="nav-button"
+        type="button"
     >
         ← Back
     </button>
@@ -66,6 +68,7 @@
         <button
             class="step active"
             data-tab="inputTab"
+            type="button"
         >
             1. Cash Drop Entry
         </button>
@@ -73,6 +76,7 @@
         <button
             class="step"
             data-tab="employeeTab"
+            type="button"
         >
             2. Employee Config
         </button>
@@ -80,6 +84,7 @@
         <button
             class="step"
             data-tab="pointsTab"
+            type="button"
         >
             3. Employee Tip Points
         </button>
@@ -87,6 +92,7 @@
         <button
             class="step"
             data-tab="summaryTab"
+            type="button"
         >
             4. Summary
         </button>
@@ -97,6 +103,7 @@
     <button
         id="continueButton"
         class="nav-button"
+        type="button"
     >
         Continue →
     </button>
@@ -104,9 +111,9 @@
 </section>
 
 
-<!-- =========================
+<!-- =========================================================
      INPUTS — TAB 1
-========================= -->
+========================================================= -->
 
 <section
     id="inputTab"
@@ -119,14 +126,25 @@
             Cash Drop Entry
         </h2>
 
-        <p>
+        <p class="page-description">
             Enter the amount of cash each employee turned in.
         </p>
 
 
-        <!-- =========================
+        <!-- =================================================
+             CASH DROP ACTION BUTTONS
+        ================================================= -->
+
+        <div
+            id="cashDropControls"
+            class="cash-drop-controls"
+        >
+        </div>
+
+
+        <!-- =================================================
              TIP TOTALS
-        ========================= -->
+        ================================================= -->
 
         <div class="tip-totals">
 
@@ -228,7 +246,13 @@
         </div>
 
 
-        <div id="cashDropTables"></div>
+        <!-- =================================================
+             CASH DROP TABLES
+        ================================================= -->
+
+        <div
+            id="cashDropTables"
+        ></div>
 
 
     </section>
@@ -236,9 +260,9 @@
 </section>
 
 
-<!-- =========================
+<!-- =========================================================
      EMPLOYEE CONFIG — TAB 2
-========================= -->
+========================================================= -->
 
 <section
     id="employeeTab"
@@ -258,9 +282,9 @@
 </section>
 
 
-<!-- =========================
+<!-- =========================================================
      EMPLOYEE TIP POINTS — TAB 3
-========================= -->
+========================================================= -->
 
 <section
     id="pointsTab"
@@ -280,9 +304,9 @@
 </section>
 
 
-<!-- =========================
+<!-- =========================================================
      SUMMARY — TAB 4
-========================= -->
+========================================================= -->
 
 <section
     id="summaryTab"

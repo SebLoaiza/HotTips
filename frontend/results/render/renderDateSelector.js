@@ -11,13 +11,17 @@ export function renderDateSelector(
     div.className =
         "dateSelector";
 
+    // =========================
+    // GET AVAILABLE DAYS
+    // =========================
+
     const days =
         [
             ...resultsSession.getAvailableDays()
         ];
 
     // =========================
-    // SORT DATES CHRONOLOGICALLY
+    // SORT CHRONOLOGICALLY
     // =========================
 
     days.sort(
@@ -33,6 +37,10 @@ export function renderDateSelector(
 
         }
     );
+
+    // =========================
+    // BUILD HTML
+    // =========================
 
     div.innerHTML = `
 
@@ -87,45 +95,153 @@ export function renderDateSelector(
         );
 
     // =========================
-    // BUILD DATE OPTIONS
+    // BUILD OPTIONS
     // =========================
+
+    start.innerHTML = "";
+
+    end.innerHTML = "";
 
     for (
         const day of days
     ) {
 
-        start.innerHTML += `
+        const startOption =
+            document.createElement(
+                "option"
+            );
 
-            <option value="${day}">
-                ${day}
-            </option>
+        startOption.value =
+            day;
 
-        `;
+        startOption.textContent =
+            day;
 
-        end.innerHTML += `
+        start.appendChild(
+            startOption
+        );
 
-            <option value="${day}">
-                ${day}
-            </option>
 
-        `;
+        const endOption =
+            document.createElement(
+                "option"
+            );
+
+        endOption.value =
+            day;
+
+        endOption.textContent =
+            day;
+
+        end.appendChild(
+            endOption
+        );
 
     }
 
     // =========================
-    // DEFAULT FULL RANGE
+    // EXISTING DATE RANGE
+    // =========================
+    //
+    // Preserve the range that
+    // was already selected.
+    //
+
+    const currentRange =
+        resultsSession.getDateRanges();
+
+    const currentStart =
+        currentRange?.start;
+
+    const currentEnd =
+        currentRange?.end;
+
+    // =========================
+    // FULL AVAILABLE RANGE
     // =========================
 
-    const fullWeek =
-        resultsSession
-            .getDateRanges()
-            .full_week;
+    const firstDay =
+        days.length > 0
+            ? days[0]
+            : null;
 
-    start.value =
-        fullWeek.start;
+    const lastDay =
+        days.length > 0
+            ? days[days.length - 1]
+            : null;
 
-    end.value =
-        fullWeek.end;
+    // =========================
+    // START DATE
+    // =========================
+    //
+    // If the imported history
+    // contains an earlier date,
+    // use that earlier date.
+    //
+
+    if (
+        currentStart &&
+        firstDay
+    ) {
+
+        const currentStartTime =
+            new Date(
+                currentStart
+            ).getTime();
+
+        const firstDayTime =
+            new Date(
+                firstDay
+            ).getTime();
+
+        start.value =
+            currentStartTime < firstDayTime
+                ? currentStart
+                : firstDay;
+
+    }
+
+    else if (
+        firstDay
+    ) {
+
+        start.value =
+            firstDay;
+
+    }
+
+    // =========================
+    // END DATE
+    // =========================
+    //
+    // Preserve the existing
+    // end date when it is still
+    // available.
+    //
+    // Otherwise use the latest
+    // available date.
+    //
+
+    if (
+        currentEnd &&
+        days.includes(
+            currentEnd
+        )
+    ) {
+
+        end.value =
+            currentEnd;
+
+    }
+
+    else if (
+        lastDay
+    ) {
+
+        end.value =
+            lastDay;
+
+    }
 
     // =========================
     // APPLY BUTTON
@@ -134,16 +250,50 @@ export function renderDateSelector(
     div.querySelector(
         "#applyDates"
     )
-    .onclick = () => {
+    .onclick =
+        () => {
 
-        resultsSession.filterByDates(
-            start.value,
-            end.value
-        );
+            const startDate =
+                start.value;
 
-        renderResults();
+            const endDate =
+                end.value;
 
-    };
+            if (
+                !startDate ||
+                !endDate
+            ) {
+
+                return;
+
+            }
+
+            const startTime =
+                new Date(
+                    startDate
+                ).getTime();
+
+            const endTime =
+                new Date(
+                    endDate
+                ).getTime();
+
+            if (
+                startTime > endTime
+            ) {
+
+                return;
+
+            }
+
+            resultsSession.filterByDates(
+                startDate,
+                endDate
+            );
+
+            renderResults();
+
+        };
 
     return div;
 
