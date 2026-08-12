@@ -1106,6 +1106,44 @@ footer {
 
 
 /* =========================
+   MEAL BLOCK COLLAPSE
+========================= */
+
+.meal-block-header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.meal-block-header:hover {
+    opacity: 0.8;
+}
+
+.meal-block-arrow {
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.2s ease;
+}
+
+.meal-block-header.collapsed .meal-block-arrow {
+    transform: rotate(-90deg);
+}
+
+.meal-block-content {
+    overflow: hidden;
+    max-height: 10000px;
+    opacity: 1;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease;
+}
+
+.meal-block-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+
+/* =========================
    MOBILE
 ========================= */
 

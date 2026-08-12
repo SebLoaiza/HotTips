@@ -1,61 +1,64 @@
 import { renderMoneySummary }
 from "./renderMoneySummary.js";
 
-
 import { renderEmployeeTable }
 from "./renderEmployeeTable.js";
-
 
 import { rebuildDistributionPools }
 from "./../logic/rebuildDistributionPools.js";
 
-
 import { calculateRoleRatios }
 from "./../logic/calculateRoleRatios.js";
-
 
 export function renderMealBlock(
     block,
     refreshUI
 ) {
 
-
     const section =
         document.createElement("div");
-
 
     section.className =
         "meal-block";
 
+    // =========================
+    // MEAL BLOCK HEADER
+    // =========================
 
+    const header =
+        document.createElement("h2");
 
-    section.innerHTML = `
+    header.className =
+        "meal-block-header";
 
-        <h2>
-            ${block.meal}
-            -
-            ${block.date}
-        </h2>
-
+    header.innerHTML = `
+        <span class="meal-block-arrow">▼</span>
+        ${block.meal} - ${block.date}
     `;
 
+    // =========================
+    // MEAL BLOCK CONTENT
+    // =========================
 
+    const content =
+        document.createElement("div");
 
-    section.appendChild(
+    content.className =
+        "meal-block-content";
+
+    content.appendChild(
         renderMoneySummary(block)
     );
 
-
-
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             "Tip Owners",
             block.tipOwners,
             block
-            )
+        )
     );
 
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             "Servers",
             block.servers,
@@ -63,7 +66,7 @@ export function renderMealBlock(
         )
     );
 
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             "BOH",
             block.boh,
@@ -71,7 +74,7 @@ export function renderMealBlock(
         )
     );
 
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             `Bussers (${(block.busser_ratio * 100).toFixed(0)}%)`,
             block.bussers,
@@ -79,7 +82,7 @@ export function renderMealBlock(
         )
     );
 
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             `Hosts (${(block.host_ratio * 100).toFixed(0)}%)`,
             block.hosts,
@@ -87,7 +90,7 @@ export function renderMealBlock(
         )
     );
 
-    section.appendChild(
+    content.appendChild(
         renderEmployeeTable(
             "Other",
             block.others,
@@ -95,7 +98,42 @@ export function renderMealBlock(
         )
     );
 
+    // =========================
+    // COLLAPSE / EXPAND
+    // =========================
 
+    header.addEventListener(
+        "click",
+        () => {
+
+            const collapsed =
+                content.classList.toggle(
+                    "collapsed"
+                );
+
+            header.classList.toggle(
+                "collapsed",
+                collapsed
+            );
+
+        }
+    );
+
+    // =========================
+    // ADD TO SECTION
+    // =========================
+
+    section.appendChild(
+        header
+    );
+
+    section.appendChild(
+        content
+    );
+
+    // =========================
+    // ROLE LISTENERS
+    // =========================
 
     attachRoleListeners(
         section,
@@ -103,15 +141,8 @@ export function renderMealBlock(
         refreshUI
     );
 
-
-
     return section;
-
 }
-
-
-
-
 
 function attachRoleListeners(
     section,
@@ -119,21 +150,16 @@ function attachRoleListeners(
     refreshUI
 ) {
 
-
     const selects =
         section.querySelectorAll(
             ".distribution-role"
         );
 
-
-
     for (const select of selects) {
-
 
         select.addEventListener(
             "change",
             () => {
-
 
                 const employee =
                     block.employees.find(
@@ -142,40 +168,26 @@ function attachRoleListeners(
                             select.dataset.id
                     );
 
-
                 if (!employee) {
                     return;
                 }
 
-
-
                 employee.distribution_role =
                     select.value;
-
-
 
                 rebuildDistributionPools(
                     block
                 );
 
-
-
                 calculateRoleRatios(
                     block
                 );
 
-
-
-
-
                 refreshUI();
-
 
             }
         );
 
-
     }
-
 
 }
