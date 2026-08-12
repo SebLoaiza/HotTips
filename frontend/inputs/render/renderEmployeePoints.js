@@ -17,9 +17,11 @@ export function renderEmployeePoints(
     ========================= */
 
     /*
-        Keep the sort outside the
-        table-rendering logic so it
-        survives refreshUI() calls.
+        Each table gets its own
+        independent sort state.
+
+        FOH and BOH can therefore
+        be sorted differently.
     */
 
     if (
@@ -27,14 +29,53 @@ export function renderEmployeePoints(
     ) {
 
         renderEmployeePoints.sortState = {
-            column: "role",
-            direction: "asc"
+
+            frontOfHouse: {
+                column: "role",
+                direction: "asc"
+            },
+
+            backOfHouse: {
+                column: "role",
+                direction: "asc"
+            }
+
         };
 
     }
 
     const sortState =
         renderEmployeePoints.sortState;
+
+    /* =========================
+       ROLE CLASSIFICATION
+    ========================= */
+
+    function isFrontOfHouse(role) {
+
+        const normalizedRole =
+            String(role || "")
+                .toLowerCase()
+                .trim()
+                .replace(/[_-]+/g, " ")
+                .replace(/\s+/g, " ");
+
+        const baseRole =
+            normalizedRole
+                .replace(/\bbreakfast\b/g, "")
+                .replace(/\s+/g, " ")
+                .trim();
+
+        return (
+            baseRole === "server" ||
+            baseRole === "busser" ||
+            baseRole === "runner" ||
+            baseRole === "busser / runner" ||
+            baseRole === "busser/runner" ||
+            baseRole === "host"
+        );
+
+    }
 
     /* =========================
        COLLECT EMPLOYEES
@@ -68,287 +109,15 @@ export function renderEmployeePoints(
     }
 
     /* =========================
-       CREATE EMPLOYEE LIST
+       SPLIT FOH / BOH
     ========================= */
 
-    const sortedEmployees =
-        Array.from(
-            employees.values()
-        );
-
-    /* =========================
-       SORT EMPLOYEES
-    ========================= */
-
-    sortedEmployees.sort(
-        (a, b) => {
-
-            let comparison = 0;
-
-            /* =========================
-               ROLE SORT
-            ========================= */
-
-            if (
-                sortState.column ===
-                "role"
-            ) {
-
-                const roleA =
-                    String(
-                        a.distribution_role ||
-                        a.role ||
-                        "Other"
-                    ).toLowerCase();
-
-                const roleB =
-                    String(
-                        b.distribution_role ||
-                        b.role ||
-                        "Other"
-                    ).toLowerCase();
-
-                comparison =
-                    roleA.localeCompare(
-                        roleB
-                    );
-
-            }
-
-            /* =========================
-               NAME SORT
-            ========================= */
-
-            else if (
-                sortState.column ===
-                "name"
-            ) {
-
-                const nameA =
-                    String(
-                        a.name || ""
-                    );
-
-                const nameB =
-                    String(
-                        b.name || ""
-                    );
-
-                comparison =
-                    nameA.localeCompare(
-                        nameB
-                    );
-
-            }
-
-            /* =========================
-               POINT SORT
-            ========================= */
-
-            else if (
-                sortState.column ===
-                "point"
-            ) {
-
-                const pointA =
-                    Number(
-                        a.tip_points ?? 1
-                    );
-
-                const pointB =
-                    Number(
-                        b.tip_points ?? 1
-                    );
-
-                comparison =
-                    pointA -
-                    pointB;
-
-            }
-
-            /*
-                Apply ascending /
-                descending direction.
-            */
-
-            return (
-                sortState.direction ===
-                "asc"
-                    ? comparison
-                    : -comparison
-            );
-
-        }
-    );
-
-    /* =========================
-       CREATE TABLE
-    ========================= */
-
-    const table =
-        document.createElement(
-            "table"
-        );
-
-    table.className =
-        "config-table employee-points-table";
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    const thead =
-        document.createElement(
-            "thead"
-        );
-
-    const headerRow =
-        document.createElement(
-            "tr"
-        );
-
-    /* =========================
-       CREATE HEADER
-    ========================= */
-
-    const headers = [
-        {
-            label: "Role",
-            column: "role"
-        },
-        {
-            label: "Employee Name",
-            column: "name"
-        },
-        {
-            label: "Point",
-            column: "point"
-        }
-    ];
-
-    for (
-        const header
-        of headers
-    ) {
-
-        const th =
-            document.createElement(
-                "th"
-            );
-
-        th.textContent =
-            header.label;
-
-        th.className =
-            "sortable-header";
-
-        /*
-            Add the current sort
-            direction to the header.
-        */
-
-        if (
-            sortState.column ===
-            header.column
-        ) {
-
-            th.classList.add(
-                sortState.direction ===
-                    "asc"
-                    ? "sort-ascending"
-                    : "sort-descending"
-            );
-
-            th.textContent =
-                `${header.label} ${
-                    sortState.direction ===
-                    "asc"
-                        ? "▲"
-                        : "▼"
-                }`;
-
-        }
-
-        /*
-            Make the header clickable.
-        */
-
-        th.addEventListener(
-            "click",
-            () => {
-
-                /*
-                    Clicking the same column
-                    reverses the direction.
-                */
-
-                if (
-                    sortState.column ===
-                    header.column
-                ) {
-
-                    sortState.direction =
-                        sortState.direction ===
-                            "asc"
-                            ? "desc"
-                            : "asc";
-
-                }
-
-                /*
-                    Clicking a new column
-                    starts ascending.
-                */
-
-                else {
-
-                    sortState.column =
-                        header.column;
-
-                    sortState.direction =
-                        "asc";
-
-                }
-
-                /*
-                    Re-render the table
-                    using the new sort.
-                */
-
-                renderEmployeePoints(
-                    mealBlocks,
-                    refreshUI
-                );
-
-            }
-        );
-
-        headerRow.appendChild(
-            th
-        );
-
-    }
-
-    thead.appendChild(
-        headerRow
-    );
-
-    table.appendChild(
-        thead
-    );
-
-    /* =========================
-       BODY
-    ========================= */
-
-    const tbody =
-        document.createElement(
-            "tbody"
-        );
+    const frontOfHouse = [];
+    const backOfHouse = [];
 
     for (
         const employee
-        of sortedEmployees
+        of employees.values()
     ) {
 
         const role =
@@ -356,48 +125,490 @@ export function renderEmployeePoints(
             employee.role ||
             "Other";
 
-        const row =
-            document.createElement(
-                "tr"
+        if (
+            isFrontOfHouse(role)
+        ) {
+
+            frontOfHouse.push(
+                employee
             );
 
-        row.className =
-            "employee-points-row";
+        } else {
 
-        row.innerHTML = `
-            <td>
-                ${formatRoleName(role)}
-            </td>
+            backOfHouse.push(
+                employee
+            );
 
-            <td>
-                ${employee.name}
-            </td>
+        }
 
-            <td>
-                <input
-                    class="points-input"
-                    type="number"
-                    step="0.25"
-                    min="0"
-                    value="${employee.tip_points ?? 1}"
-                    data-employee-id="${employee.employee_id}"
-                    data-role="${role}"
-                >
-            </td>
-        `;
+    }
 
-        tbody.appendChild(
-            row
+    /* =========================
+       SORT EMPLOYEES
+    ========================= */
+
+    function sortEmployees(
+        list,
+        tableSortState
+    ) {
+
+        list.sort(
+            (a, b) => {
+
+                let comparison = 0;
+
+                /* =========================
+                   ROLE SORT
+                ========================= */
+
+                if (
+                    tableSortState.column ===
+                    "role"
+                ) {
+
+                    const roleA =
+                        String(
+                            a.distribution_role ||
+                            a.role ||
+                            "Other"
+                        ).toLowerCase();
+
+                    const roleB =
+                        String(
+                            b.distribution_role ||
+                            b.role ||
+                            "Other"
+                        ).toLowerCase();
+
+                    comparison =
+                        roleA.localeCompare(
+                            roleB
+                        );
+
+                }
+
+                /* =========================
+                   NAME SORT
+                ========================= */
+
+                else if (
+                    tableSortState.column ===
+                    "name"
+                ) {
+
+                    const nameA =
+                        String(
+                            a.name || ""
+                        );
+
+                    const nameB =
+                        String(
+                            b.name || ""
+                        );
+
+                    comparison =
+                        nameA.localeCompare(
+                            nameB
+                        );
+
+                }
+
+                /* =========================
+                   POINT SORT
+                ========================= */
+
+                else if (
+                    tableSortState.column ===
+                    "point"
+                ) {
+
+                    const pointA =
+                        Number(
+                            a.tip_points ?? 1
+                        );
+
+                    const pointB =
+                        Number(
+                            b.tip_points ?? 1
+                        );
+
+                    comparison =
+                        pointA -
+                        pointB;
+
+                }
+
+                return (
+                    tableSortState.direction ===
+                    "asc"
+                        ? comparison
+                        : -comparison
+                );
+
+            }
         );
 
     }
 
-    table.appendChild(
-        tbody
+    /*
+        Sort each list using its
+        own independent state.
+    */
+
+    sortEmployees(
+        frontOfHouse,
+        sortState.frontOfHouse
+    );
+
+    sortEmployees(
+        backOfHouse,
+        sortState.backOfHouse
+    );
+
+    /* =========================
+       CREATE TABLE
+    ========================= */
+
+    function createEmployeeTable(
+        employeeList,
+        title,
+        tableSortState,
+        sortStateKey
+    ) {
+
+        /* =========================
+           GROUP WRAPPER
+        ========================= */
+
+        const group =
+            document.createElement(
+                "div"
+            );
+
+        group.className =
+            "employee-points-group";
+
+        /* =========================
+           GROUP TITLE
+        ========================= */
+
+        const groupTitle =
+            document.createElement(
+                "h3"
+            );
+
+        groupTitle.className =
+            "employee-points-group-title";
+
+        groupTitle.textContent =
+            title;
+
+        group.appendChild(
+            groupTitle
+        );
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        const table =
+            document.createElement(
+                "table"
+            );
+
+        table.className =
+            "config-table employee-points-table";
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        const thead =
+            document.createElement(
+                "thead"
+            );
+
+        const headerRow =
+            document.createElement(
+                "tr"
+            );
+
+        const headers = [
+            {
+                label: "Role",
+                column: "role"
+            },
+            {
+                label: "Employee Name",
+                column: "name"
+            },
+            {
+                label: "Point",
+                column: "point"
+            }
+        ];
+
+        for (
+            const header
+            of headers
+        ) {
+
+            const th =
+                document.createElement(
+                    "th"
+                );
+
+            th.textContent =
+                header.label;
+
+            th.className =
+                "sortable-header";
+
+            /*
+                Use THIS table's sort state
+                rather than the shared state.
+            */
+
+            if (
+                tableSortState.column ===
+                header.column
+            ) {
+
+                th.classList.add(
+                    tableSortState.direction ===
+                        "asc"
+                        ? "sort-ascending"
+                        : "sort-descending"
+                );
+
+                th.textContent =
+                    `${header.label} ${
+                        tableSortState.direction ===
+                        "asc"
+                            ? "▲"
+                            : "▼"
+                    }`;
+
+            }
+
+            /* =========================
+               HEADER CLICK
+            ========================= */
+
+            th.addEventListener(
+                "click",
+                () => {
+
+                    /*
+                        Only change the sort
+                        state for THIS table.
+                    */
+
+                    if (
+                        tableSortState.column ===
+                        header.column
+                    ) {
+
+                        tableSortState.direction =
+                            tableSortState.direction ===
+                                "asc"
+                                ? "desc"
+                                : "asc";
+
+                    } else {
+
+                        tableSortState.column =
+                            header.column;
+
+                        tableSortState.direction =
+                            "asc";
+
+                    }
+
+                    /*
+                        Re-render both tables,
+                        but each table keeps
+                        its own sort state.
+                    */
+
+                    renderEmployeePoints(
+                        mealBlocks,
+                        refreshUI
+                    );
+
+                }
+            );
+
+            headerRow.appendChild(
+                th
+            );
+
+        }
+
+        thead.appendChild(
+            headerRow
+        );
+
+        table.appendChild(
+            thead
+        );
+
+        /* =========================
+           BODY
+        ========================= */
+
+        const tbody =
+            document.createElement(
+                "tbody"
+            );
+
+        for (
+            const employee
+            of employeeList
+        ) {
+
+            const role =
+                employee.distribution_role ||
+                employee.role ||
+                "Other";
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+            row.className =
+                "employee-points-row";
+
+            const roleCell =
+                document.createElement(
+                    "td"
+                );
+
+            roleCell.textContent =
+                formatRoleName(
+                    role
+                );
+
+            const nameCell =
+                document.createElement(
+                    "td"
+                );
+
+            nameCell.textContent =
+                employee.name || "";
+
+            const pointCell =
+                document.createElement(
+                    "td"
+                );
+
+            const input =
+                document.createElement(
+                    "input"
+                );
+
+            input.className =
+                "points-input";
+
+            input.type =
+                "number";
+
+            input.step =
+                "0.25";
+
+            input.min =
+                "0";
+
+            input.value =
+                employee.tip_points ?? 1;
+
+            input.dataset.employeeId =
+                employee.employee_id;
+
+            input.dataset.role =
+                role;
+
+            pointCell.appendChild(
+                input
+            );
+
+            row.appendChild(
+                roleCell
+            );
+
+            row.appendChild(
+                nameCell
+            );
+
+            row.appendChild(
+                pointCell
+            );
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+
+        table.appendChild(
+            tbody
+        );
+
+        group.appendChild(
+            table
+        );
+
+        return group;
+
+    }
+
+    /* =========================
+       CREATE TWO-TABLE LAYOUT
+    ========================= */
+
+    const tablesWrapper =
+        document.createElement(
+            "div"
+        );
+
+    tablesWrapper.className =
+        "employee-points-tables";
+
+    /*
+        FOH uses its own sort state.
+    */
+
+    const fohTable =
+        createEmployeeTable(
+            frontOfHouse,
+            "Front of House",
+            sortState.frontOfHouse,
+            "frontOfHouse"
+        );
+
+    /*
+        BOH uses its own sort state.
+    */
+
+    const bohTable =
+        createEmployeeTable(
+            backOfHouse,
+            "Back of House",
+            sortState.backOfHouse,
+            "backOfHouse"
+        );
+
+    tablesWrapper.appendChild(
+        fohTable
+    );
+
+    tablesWrapper.appendChild(
+        bohTable
     );
 
     output.appendChild(
-        table
+        tablesWrapper
     );
 
     /* =========================
@@ -496,9 +707,13 @@ export function renderEmployeePoints(
                 "change",
                 () => {
 
-                    savePoint(input);
+                    savePoint(
+                        input
+                    );
 
-                    if (refreshUI) {
+                    if (
+                        refreshUI
+                    ) {
 
                         refreshUI();
 
@@ -537,7 +752,9 @@ export function renderEmployeePoints(
                         Save current value.
                     */
 
-                    savePoint(input);
+                    savePoint(
+                        input
+                    );
 
                     /*
                         Find current inputs.
@@ -579,7 +796,9 @@ export function renderEmployeePoints(
                             inputs.length
                     ) {
 
-                        if (refreshUI) {
+                        if (
+                            refreshUI
+                        ) {
 
                             refreshUI();
 
@@ -600,16 +819,20 @@ export function renderEmployeePoints(
                         ];
 
                     const nextEmployeeId =
-                        nextInput.dataset.employeeId;
+                        nextInput.dataset
+                            .employeeId;
 
                     const nextRole =
-                        nextInput.dataset.role;
+                        nextInput.dataset
+                            .role;
 
                     /*
                         Refresh the UI.
                     */
 
-                    if (refreshUI) {
+                    if (
+                        refreshUI
+                    ) {
 
                         refreshUI();
 
@@ -646,7 +869,9 @@ export function renderEmployeePoints(
                                             nextRole
                                 );
 
-                            if (newInput) {
+                            if (
+                                newInput
+                            ) {
 
                                 newInput.focus();
 
@@ -680,6 +905,9 @@ function formatRoleName(role) {
             "BOH",
 
         "busser/runner":
+            "Busser / Runner",
+
+        "busser / runner":
             "Busser / Runner",
 
         "host":

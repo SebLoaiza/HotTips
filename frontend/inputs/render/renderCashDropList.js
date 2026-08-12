@@ -44,7 +44,6 @@ export function renderCashDropList(
 
 }
 
-
 // =========================
 // BOH FILTER
 // =========================
@@ -65,7 +64,6 @@ function isBOH(role) {
 
 }
 
-
 // =========================
 // SORT STATE
 // =========================
@@ -84,10 +82,10 @@ if (!renderCashDropList.sortState) {
 
 }
 
-
 // =========================
 // CREATE TABLE
 // =========================
+
 function createTable(
     rows,
     mealBlocks,
@@ -130,6 +128,18 @@ function createTable(
             // =========================
             // DATE
             // =========================
+            //
+            // When sorting by Date:
+            //
+            // 1. Date
+            // 2. Meal
+            // 3. Employee
+            //
+            // This means all employees for
+            // the same meal stay together,
+            // and employees are alphabetical
+            // within each meal.
+            // =========================
 
             if (
                 sortState.column ===
@@ -148,8 +158,47 @@ function createTable(
                         b.block.date
                     );
 
+                // First: Date
                 comparison =
                     dateA - dateB;
+
+                // -------------------------
+                // Same date → Meal
+                // -------------------------
+
+                if (comparison === 0) {
+
+                    comparison =
+                        (
+                            mealOrder[
+                                a.block.meal
+                            ] ?? 99
+                        ) -
+                        (
+                            mealOrder[
+                                b.block.meal
+                            ] ?? 99
+                        );
+
+                }
+
+                // -------------------------
+                // Same date + same meal
+                // → Employee
+                // -------------------------
+
+                if (comparison === 0) {
+
+                    comparison =
+                        String(
+                            a.employee.name || ""
+                        ).localeCompare(
+                            String(
+                                b.employee.name || ""
+                            )
+                        );
+
+                }
 
             }
 
@@ -478,7 +527,7 @@ function createTable(
     totalRow.className =
         "cash-drop-total-row";
 
-    // Empty Date cell
+    // Empty Date/Meal/Employee/Role cells
     const totalLabelCell =
         document.createElement(
             "th"
@@ -493,7 +542,10 @@ function createTable(
         totalLabelCell
     );
 
-    // Cash Drop total
+    // =========================
+    // CASH DROP TOTAL
+    // =========================
+
     const totalDropCell =
         document.createElement(
             "th"
@@ -506,7 +558,10 @@ function createTable(
         totalDropCell
     );
 
-    // Cash Sales total
+    // =========================
+    // CASH SALES TOTAL
+    // =========================
+
     const totalSalesCell =
         document.createElement(
             "th"
@@ -530,6 +585,7 @@ function createTable(
     return table;
 
 }
+
 // =========================
 // CREATE ROW
 // =========================
@@ -548,7 +604,6 @@ function createRow(
     row.className =
         "cash-drop-table-row";
 
-
     // =========================
     // DATE
     // =========================
@@ -561,7 +616,6 @@ function createRow(
         )
     );
 
-
     // =========================
     // MEAL
     // =========================
@@ -571,7 +625,6 @@ function createRow(
         "cash-drop-meal",
         block.meal
     );
-
 
     // =========================
     // EMPLOYEE
@@ -583,7 +636,6 @@ function createRow(
         employee.name
     );
 
-
     // =========================
     // ROLE
     // =========================
@@ -593,7 +645,6 @@ function createRow(
         "cash-drop-role",
         employee.role || ""
     );
-
 
     // =========================
     // CASH DROP
@@ -606,7 +657,6 @@ function createRow(
 
     dropCell.className =
         "cash-drop-value-cell";
-
 
     const input =
         document.createElement(
@@ -631,10 +681,8 @@ function createRow(
             100
         ).toFixed(2);
 
-
     input.dataset.row =
         index;
-
 
     dropCell.appendChild(
         input
@@ -643,7 +691,6 @@ function createRow(
     row.appendChild(
         dropCell
     );
-
 
     // =========================
     // CASH SALES
@@ -657,12 +704,10 @@ function createRow(
         )
     );
 
-
     updateColor(
         input,
         employee
     );
-
 
     // =========================
     // SELECT ALL + HIGHLIGHT ROW
@@ -681,7 +726,6 @@ function createRow(
         }
     );
 
-
     input.addEventListener(
         "blur",
         () => {
@@ -692,7 +736,6 @@ function createRow(
 
         }
     );
-
 
     // =========================
     // LIVE INPUT
@@ -721,7 +764,6 @@ function createRow(
         }
     );
 
-
     // =========================
     // SAVE
     // =========================
@@ -749,7 +791,6 @@ function createRow(
         }
     );
 
-
     // =========================
     // ENTER / SHIFT + ENTER
     // =========================
@@ -770,7 +811,6 @@ function createRow(
             event.preventDefault();
             event.stopPropagation();
 
-
             // =========================
             // SAVE CURRENT VALUE
             // =========================
@@ -779,7 +819,6 @@ function createRow(
                 employee,
                 input
             );
-
 
             // =========================
             // FIND CURRENT INPUTS
@@ -792,12 +831,10 @@ function createRow(
                     )
                 );
 
-
             const currentIndex =
                 inputs.indexOf(
                     input
                 );
-
 
             // =========================
             // DETERMINE DIRECTION
@@ -807,7 +844,6 @@ function createRow(
                 event.shiftKey
                     ? currentIndex - 1
                     : currentIndex + 1;
-
 
             // =========================
             // STOP AT TABLE EDGES
@@ -829,25 +865,9 @@ function createRow(
 
             }
 
-
             // =========================
-            // REMEMBER NEXT EMPLOYEE
+            // REMEMBER NEXT INPUT
             // =========================
-
-            const nextInput =
-                inputs[
-                    nextIndex
-                ];
-
-
-            const nextEmployeeId =
-                nextInput
-                    .closest("tr")
-                    ?.querySelector(
-                        ".cash-drop-input"
-                    )
-                    ?.dataset.row;
-
 
             /*
                 Refresh the application.
@@ -863,7 +883,6 @@ function createRow(
 
             }
 
-
             // =========================
             // FIND INPUT AFTER REFRESH
             // =========================
@@ -878,12 +897,10 @@ function createRow(
                             )
                         );
 
-
                     const newInput =
                         newInputs[
                             nextIndex
                         ];
-
 
                     if (newInput) {
 
@@ -899,11 +916,9 @@ function createRow(
         }
     );
 
-
     return row;
 
 }
-
 
 // =========================
 // ADD CELL
@@ -932,7 +947,6 @@ function addCell(
 
 }
 
-
 // =========================
 // UPDATE COLOR
 // =========================
@@ -950,7 +964,6 @@ function updateColor(
         );
 
 }
-
 
 function getDropClass(
     drop,
@@ -976,7 +989,6 @@ function getDropClass(
     return "drop-equal";
 
 }
-
 
 // =========================
 // SAVE CASH DROP
@@ -1007,7 +1019,6 @@ function saveCashDrop(
 
 }
 
-
 // =========================
 // FORMAT DATE
 // =========================
@@ -1023,12 +1034,10 @@ function formatDate(date) {
             date
         ).trim();
 
-
     const match =
         value.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
-
 
     if (match) {
 
@@ -1048,12 +1057,10 @@ function formatDate(date) {
 
     }
 
-
     const parsed =
         new Date(
             date
         );
-
 
     if (
         Number.isNaN(
@@ -1064,7 +1071,6 @@ function formatDate(date) {
         return value;
 
     }
-
 
     return (
         String(
@@ -1085,7 +1091,6 @@ function formatDate(date) {
     );
 
 }
-
 
 // =========================
 // MONEY
