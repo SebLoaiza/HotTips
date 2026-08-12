@@ -6,16 +6,17 @@ import { renderTabs }
 from "./renderTabs.js";
 
 
-
 let selectedDate = null;
 
 
+// =================================================
+// RENDER DISTRIBUTION
+// =================================================
 
 export function renderDistribution(
     tipDistribution,
     refreshUI
 ) {
-
 
     const output =
         document.getElementById(
@@ -24,19 +25,20 @@ export function renderDistribution(
 
 
     if (!output) {
+
         console.error(
             "Missing distributionTables"
         );
 
+
         return;
+
     }
 
 
-
-
-    // =========================
+    // =================================================
     // FIND ALL DAYS
-    // =========================
+    // =================================================
 
     const dates =
         [
@@ -49,15 +51,20 @@ export function renderDistribution(
         ];
 
 
-
     console.log(
         "DATES FOUND",
         dates
     );
 
 
+    // =================================================
+    // DEFAULT DATE
+    // =================================================
 
-    if (!selectedDate && dates.length > 0) {
+    if (
+        !selectedDate &&
+        dates.length > 0
+    ) {
 
         selectedDate =
             dates[0];
@@ -65,17 +72,14 @@ export function renderDistribution(
     }
 
 
-
-
-    // =========================
-    // RENDER TABS
-    // =========================
+    // =================================================
+    // RENDER DAY TABS
+    // =================================================
 
     renderTabs(
         dates,
         selectedDate,
-        (date)=>{
-
+        (date) => {
 
             selectedDate =
                 date;
@@ -86,25 +90,20 @@ export function renderDistribution(
                 refreshUI
             );
 
-
         }
     );
 
 
-
-
-
-
-    // =========================
+    // =================================================
     // FILTER CURRENT DAY
-    // =========================
+    // =================================================
 
     const currentBlocks =
         tipDistribution.filter(
             block =>
-                block.date === selectedDate
+                block.date ===
+                selectedDate
         );
-
 
 
     console.log(
@@ -113,14 +112,22 @@ export function renderDistribution(
     );
 
 
+    // =================================================
+    // CLEAR TABLES
+    // =================================================
+
+    output.innerHTML =
+        "";
 
 
-    output.innerHTML = "";
+    // =================================================
+    // RENDER MEAL BLOCKS
+    // =================================================
 
-
-
-    for (const block of currentBlocks) {
-
+    for (
+        const block
+        of currentBlocks
+    ) {
 
         output.appendChild(
 
@@ -132,6 +139,5 @@ export function renderDistribution(
         );
 
     }
-
 
 }

@@ -36,11 +36,11 @@ export function renderStats(
                 </th>
 
                 <th data-sort="card_tips">
-                    CC Tips ex fees
+                    CC Tips <br>ex. fees
                 </th>
 
                 <th data-sort="cash_to_card_ratio">
-                    Cash:CC
+                    Cash:CC<br>Tip Ratio
                 </th>
 
                 <th data-sort="total_tips">

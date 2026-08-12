@@ -499,22 +499,19 @@ select:focus {
 
 }
 
-
 #resultsContainer tbody tr:nth-child(odd) td {
 
     background:
-        rgba(249,243,99,.035);
+        rgba(249,243,99,.065);
 
 }
-
 
 #resultsContainer tbody tr:nth-child(even) td {
 
     background:
-        rgba(139,231,255,.045);
+        rgba(139,231,255,.075);
 
 }
-
 
 #resultsContainer tbody tr:hover td {
 
@@ -523,13 +520,11 @@ select:focus {
 
 }
 
-
 #resultsContainer tbody tr {
 
     cursor:pointer;
 
 }
-
 
 #resultsContainer td:first-child {
 
@@ -896,7 +891,7 @@ select:focus {
 #statsContainer tbody tr:nth-child(even) td {
 
     background:
-        rgba(139,231,255,.045);
+        rgba(139, 255, 178, 0.045);
 
 }
 

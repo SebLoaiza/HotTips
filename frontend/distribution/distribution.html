@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         HotTips - Tip Distribution
     </title>
 
-
-    <link rel="stylesheet"
-          href="./style.css">
-
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
 
 </head>
-
 
 
 <body>
@@ -28,68 +27,72 @@
 
 <header class="app-header">
 
-
     <img
         src="logo.png"
         class="logo"
     >
 
-
-
     <div class="header-text">
-
 
         <h1>
             HotTips
         </h1>
 
-
         <p>
             Tip Distribution
         </p>
 
-
     </div>
-
 
 </header>
 
 
-
-
-
 <main>
-
-
-
 
 
 <!-- =========================
      TOP NAVIGATION
 ========================= -->
 
-
 <section class="panel workflow-panel">
 
-    <h2>Tip Distribution</h2>
+    <h2>
+        Tip Distribution
+    </h2>
 
     <p class="page-description">
+
         Review each meal block, verify employee distributions,
         and calculate final payouts.
+
     </p>
 
 </section>
+
 
 <div class="sticky-nav">
 
     <div class="process-flow">
 
         <div class="continue-step">
-            <button id="topBackButton">← Back</button>
+
+            <button
+                id="topBackButton"
+            >
+                ← Back
+            </button>
+
         </div>
 
+
         <div class="upload-card">
-            <button id="topContinueButton">Continue →</button>
+
+            <button
+                id="topContinueButton"
+            >
+                Continue →
+            </button>
+
         </div>
 
     </div>
@@ -97,17 +100,9 @@
 </div>
 
 
-
-
-
-
-
-
-
 <!-- =========================
      DISTRIBUTION
 ========================= -->
-
 
 <section class="panel">
 
@@ -115,7 +110,6 @@
     <h2>
         7. Tip Distribution
     </h2>
-
 
 
     <p class="page-description">
@@ -126,55 +120,123 @@
     </p>
 
 
+    <!-- =========================
+         DISTRIBUTION TOTALS
+    ========================= -->
+
+<div class="distribution-totals">
+
+    <div class="distribution-total-card">
+
+        <span class="distribution-total-label">
+            Original Cash Tips
+        </span>
+
+        <strong
+            id="originalCashTips"
+            class="distribution-total-value"
+        >
+            $0.00
+        </strong>
+
+    </div>
 
 
+    <div class="distribution-total-card">
 
+        <span class="distribution-total-label">
+            Cash Distributed
+        </span>
+
+        <strong
+            id="totalCashDistributed"
+            class="distribution-total-value"
+        >
+            $0.00
+        </strong>
+
+    </div>
+
+
+    <div class="distribution-total-card">
+
+        <span class="distribution-total-label">
+            Original Card Tips
+        </span>
+
+        <strong
+            id="originalCardTips"
+            class="distribution-total-value"
+        >
+            $0.00
+        </strong>
+
+    </div>
+
+
+    <div class="distribution-total-card">
+
+        <span class="distribution-total-label">
+            Card Distributed
+        </span>
+
+        <strong
+            id="totalCardDistributed"
+            class="distribution-total-value"
+        >
+            $0.00
+        </strong>
+
+    </div>
+
+</div>
+
+
+<div
+    id="dayTabs"
+    class="day-tabs"
+>
+</div>
+
+
+    <!-- =========================
+         DAY TABS
+    ========================= -->
 
     <div
         id="dayTabs"
         class="day-tabs"
     >
 
-
     </div>
 
 
-
-
-
+    <!-- =========================
+         DISTRIBUTION TABLES
+    ========================= -->
 
     <div
         id="distributionTables"
     >
 
-
     </div>
 
 
-
 </section>
-
-
-
-
-
-
-
 
 
 <!-- =========================
      DEBUG
 ========================= -->
 
-
-<section class="panel debug-panel">
+<section
+    class="panel debug-panel"
+>
 
 
     <h2>
         Distribution Object
     </h2>
-
-
 
 
     <button
@@ -186,29 +248,21 @@
     </button>
 
 
-
-
-    <pre id="debugOutput"></pre>
-
+    <pre
+        id="debugOutput"
+    ></pre>
 
 
 </section>
-
-
-
-
-
-
-
 
 
 <!-- =========================
      BOTTOM NAVIGATION
 ========================= -->
 
-
-<section class="panel navigation-panel">
-
+<section
+    class="panel navigation-panel"
+>
 
 
     <button
@@ -220,9 +274,6 @@
     </button>
 
 
-
-
-
     <button
         id="continueButton"
     >
@@ -232,20 +283,10 @@
     </button>
 
 
-
-
 </section>
 
 
-
-
-
 </main>
-
-
-
-
-
 
 
 <footer>
@@ -255,19 +296,12 @@
 </footer>
 
 
-
-
-
-
 <script
     type="module"
-    src="./app.js">
-
-</script>
-
+    src="./app.js"
+></script>
 
 
 </body>
-
 
 </html>
