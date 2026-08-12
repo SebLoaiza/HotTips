@@ -1174,3 +1174,169 @@ footer {
 .employee-table td:nth-child(5) .tip-percentage {
     color: #E942A3;
 }
+/* =========================================================
+   DISTRIBUTION TOTALS
+========================================================= */
+
+.distribution-totals {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin:
+        20px 0 28px;
+}
+
+
+/* =========================================================
+   TOTAL CARD
+========================================================= */
+
+.distribution-total-card {
+    padding:
+        15px 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface),
+            var(--background-light)
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        9px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, .18);
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+
+.distribution-total-card:hover {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        var(--border-light);
+}
+
+
+/* =========================================================
+   TOTAL LABEL
+========================================================= */
+
+.distribution-total-label {
+    display: block;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .06em;
+}
+
+
+/* =========================================================
+   TOTAL VALUE
+========================================================= */
+
+.distribution-total-value {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size:
+        23px;
+
+    line-height:
+        1.1;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   ORIGINAL TOTALS
+========================================================= */
+
+#originalCashTips,
+#originalCardTips {
+    color:
+        var(--yellow);
+}
+
+
+/* =========================================================
+   DISTRIBUTED TOTALS
+========================================================= */
+
+#totalCashDistributed,
+#totalCardDistributed {
+    color:
+        var(--cyan);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .distribution-totals {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .distribution-totals {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            10px;
+    }
+
+
+    .distribution-total-card {
+        padding:
+            13px 16px;
+    }
+
+
+    .distribution-total-value {
+        font-size:
+            21px;
+    }
+
+}
