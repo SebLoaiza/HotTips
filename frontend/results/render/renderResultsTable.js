@@ -8,6 +8,7 @@ export function renderResultsTable(
     clickHandler
 ) {
 
+
     let currentSort = {
         key: "name",
         direction: "asc"
@@ -22,38 +23,35 @@ export function renderResultsTable(
 
     table.innerHTML = `
 
+
         <thead>
+
 
             <tr>
 
+
                 <th data-sort="name">
-
                     Employee
-
                 </th>
 
 
                 <th data-sort="cash">
-
                     Cash
-
                 </th>
 
 
                 <th data-sort="card">
-
                     Card
-
                 </th>
 
 
                 <th data-sort="total">
-
                     Total
-
                 </th>
 
+
             </tr>
+
 
         </thead>
 
@@ -63,38 +61,35 @@ export function renderResultsTable(
 
         <tfoot>
 
+
             <tr class="resultsTotalsRow">
 
+
                 <th>
-
                     Total
-
                 </th>
 
 
                 <th class="resultsCashTotal">
-
                     $0.00
-
                 </th>
 
 
                 <th class="resultsCardTotal">
-
                     $0.00
-
                 </th>
 
 
                 <th class="resultsGrandTotal">
-
                     $0.00
-
                 </th>
+
 
             </tr>
 
+
         </tfoot>
+
 
     `;
 
@@ -132,6 +127,7 @@ export function renderResultsTable(
         employee
     ) {
 
+
         const kept =
             employee.cash_kept ?? 0;
 
@@ -150,6 +146,7 @@ export function renderResultsTable(
             ) * 100
         );
 
+
     }
 
 
@@ -161,6 +158,7 @@ export function renderResultsTable(
     function cardAmount(
         employee
     ) {
+
 
         const kept =
             employee.card_kept ?? 0;
@@ -174,6 +172,7 @@ export function renderResultsTable(
             kept + pool
         );
 
+
     }
 
 
@@ -186,11 +185,13 @@ export function renderResultsTable(
         employee
     ) {
 
+
         return (
             roundedCash(employee)
             +
             cardAmount(employee)
         );
+
 
     }
 
@@ -201,7 +202,9 @@ export function renderResultsTable(
 
     function renderTotals() {
 
+
         let cashTotal = 0;
+
 
         let cardTotal = 0;
 
@@ -210,6 +213,7 @@ export function renderResultsTable(
             const employee
             of employees
         ) {
+
 
             cashTotal +=
                 roundedCash(
@@ -221,6 +225,7 @@ export function renderResultsTable(
                 cardAmount(
                     employee
                 );
+
 
         }
 
@@ -247,16 +252,21 @@ export function renderResultsTable(
                 grandTotal
             );
 
+
     }
 
 
     // =========================
     // LAST NAME
+    //
+    // Names are formatted:
+    // Last Name, First Name
     // =========================
 
     function lastName(
         employee
     ) {
+
 
         const name =
             String(
@@ -265,6 +275,35 @@ export function renderResultsTable(
             .trim();
 
 
+        // -------------------------
+        // NORMAL FORMAT
+        //
+        // Last Name, First Name
+        // -------------------------
+
+        if (
+            name.includes(",")
+        ) {
+
+
+            return (
+                name
+                    .split(",")[0]
+                    .trim()
+                    .toLowerCase()
+            );
+
+
+        }
+
+
+        // -------------------------
+        // FALLBACK
+        //
+        // Handles names without
+        // a comma.
+        // -------------------------
+
         const parts =
             name.split(/\s+/);
 
@@ -272,10 +311,78 @@ export function renderResultsTable(
         return (
             parts.length > 0
                 ?
-                parts[parts.length - 1]
+                parts[
+                    parts.length - 1
+                ]
+                    .toLowerCase()
                 :
                 ""
         );
+
+
+    }
+
+
+    // =========================
+    // FIRST NAME
+    //
+    // Used as a tie breaker
+    // when last names match.
+    // =========================
+
+    function firstName(
+        employee
+    ) {
+
+
+        const name =
+            String(
+                employee.name ?? ""
+            )
+            .trim();
+
+
+        // -------------------------
+        // NORMAL FORMAT
+        //
+        // Last Name, First Name
+        // -------------------------
+
+        if (
+            name.includes(",")
+        ) {
+
+
+            return (
+                name
+                    .split(",")
+                    .slice(1)
+                    .join(",")
+                    .trim()
+                    .toLowerCase()
+            );
+
+
+        }
+
+
+        // -------------------------
+        // FALLBACK
+        // -------------------------
+
+        const parts =
+            name.split(/\s+/);
+
+
+        return (
+            parts.length > 0
+                ?
+                parts[0]
+                    .toLowerCase()
+                :
+                ""
+        );
+
 
     }
 
@@ -288,6 +395,7 @@ export function renderResultsTable(
         key
     ) {
 
+
         const sorted =
             [
                 ...employees
@@ -297,7 +405,9 @@ export function renderResultsTable(
         sorted.sort(
             (a, b) => {
 
+
                 let A;
+
 
                 let B;
 
@@ -310,39 +420,82 @@ export function renderResultsTable(
                     key === "name"
                 ) {
 
-                    A =
-                        lastName(a)
-                        .toLowerCase();
+
+                    const lastA =
+                        lastName(a);
 
 
-                    B =
-                        lastName(b)
-                        .toLowerCase();
+                    const lastB =
+                        lastName(b);
 
 
-                    const result =
-                        A.localeCompare(
-                            B
+                    // -------------------------
+                    // SORT BY LAST NAME
+                    // -------------------------
+
+                    const lastResult =
+                        lastA.localeCompare(
+                            lastB
                         );
 
 
                     if (
-                        result !== 0
+                        lastResult !== 0
                     ) {
+
 
                         return (
                             currentSort.direction === "asc"
                                 ?
-                                result
+                                lastResult
                                 :
-                                -result
+                                -lastResult
                         );
+
 
                     }
 
 
-                    // Same last name:
-                    // sort by full name
+                    // -------------------------
+                    // SAME LAST NAME
+                    // SORT BY FIRST NAME
+                    // -------------------------
+
+                    const firstA =
+                        firstName(a);
+
+
+                    const firstB =
+                        firstName(b);
+
+
+                    const firstResult =
+                        firstA.localeCompare(
+                            firstB
+                        );
+
+
+                    if (
+                        firstResult !== 0
+                    ) {
+
+
+                        return (
+                            currentSort.direction === "asc"
+                                ?
+                                firstResult
+                                :
+                                -firstResult
+                        );
+
+
+                    }
+
+
+                    // -------------------------
+                    // FINAL TIE BREAKER
+                    // FULL NAME
+                    // -------------------------
 
                     A =
                         String(
@@ -357,6 +510,7 @@ export function renderResultsTable(
                         )
                         .toLowerCase();
 
+
                 }
 
 
@@ -368,12 +522,14 @@ export function renderResultsTable(
                     key === "cash"
                 ) {
 
+
                     A =
                         roundedCash(a);
 
 
                     B =
                         roundedCash(b);
+
 
                 }
 
@@ -386,12 +542,14 @@ export function renderResultsTable(
                     key === "card"
                 ) {
 
+
                     A =
                         cardAmount(a);
 
 
                     B =
                         cardAmount(b);
+
 
                 }
 
@@ -404,12 +562,14 @@ export function renderResultsTable(
                     key === "total"
                 ) {
 
+
                     A =
                         totalAmount(a);
 
 
                     B =
                         totalAmount(b);
+
 
                 }
 
@@ -422,6 +582,7 @@ export function renderResultsTable(
                     typeof A === "string"
                 ) {
 
+
                     return (
                         currentSort.direction === "asc"
                             ?
@@ -429,6 +590,7 @@ export function renderResultsTable(
                             :
                             B.localeCompare(A)
                     );
+
 
                 }
 
@@ -445,11 +607,13 @@ export function renderResultsTable(
                         B - A
                 );
 
+
             }
         );
 
 
         return sorted;
+
 
     }
 
@@ -462,6 +626,7 @@ export function renderResultsTable(
         list
     ) {
 
+
         body.innerHTML = "";
 
 
@@ -470,10 +635,19 @@ export function renderResultsTable(
             of list
         ) {
 
+
+            // =========================
+            // MAIN ROW
+            // =========================
+
             const row =
                 document.createElement(
                     "tr"
                 );
+
+
+            row.className =
+                "resultsEmployeeRow";
 
 
             const cash =
@@ -496,65 +670,346 @@ export function renderResultsTable(
 
             row.innerHTML = `
 
-                <td>
 
-                    ${employee.name}
+                <td class="resultsEmployeeCell">
+
+
+                    <span
+                        class="resultsExpandArrow"
+                        aria-hidden="true"
+                    >
+                        ▸
+                    </span>
+
+
+                    <span class="resultsEmployeeName">
+                        ${employee.name}
+                    </span>
+
 
                 </td>
 
 
                 <td>
-
                     ${formatMoney(
                         cash
                     )}
-
                 </td>
 
 
                 <td>
-
                     ${formatMoney(
                         card
                     )}
-
                 </td>
 
 
                 <td>
 
-                    <strong>
 
+                    <strong>
                         ${formatMoney(
                             total
                         )}
-
                     </strong>
 
+
                 </td>
+
 
             `;
 
 
+            // =========================
+            // EXPANDED ROW
+            // =========================
+
+            const expandedRow =
+                document.createElement(
+                    "tr"
+                );
+
+
+            expandedRow.className =
+                "resultsExpandedRow";
+
+
+            expandedRow.style.display =
+                "none";
+
+
+            const expandedCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            expandedCell.colSpan = 4;
+
+
+            expandedCell.className =
+                "resultsExpandedCell";
+
+
+            expandedCell.innerHTML = `
+
+
+                <div class="resultsExpandedContent">
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Cash Kept
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                employee.cash_kept ?? 0
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Cash Pool
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                employee.pool_cash ?? 0
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Card Kept
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                employee.card_kept ?? 0
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Card Pool
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                employee.pool_card ?? 0
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Cash Total
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                cash
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Card Total
+                        </span>
+
+
+                        <span class="resultsExpandedValue">
+                            ${formatMoney(
+                                card
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="resultsExpandedItem">
+
+
+                        <span class="resultsExpandedLabel">
+                            Total Take Home
+                        </span>
+
+
+                        <span class="resultsExpandedValue resultsExpandedTotal">
+                            ${formatMoney(
+                                total
+                            )}
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+
+            `;
+
+
+            expandedRow.appendChild(
+                expandedCell
+            );
+
+
+            // =========================
+            // ROW CLICK
+            // =========================
+
             row.onclick = () => {
 
-                if (clickHandler) {
+
+                const isExpanded =
+                    expandedRow.style.display !== "none";
+
+
+                if (
+                    isExpanded
+                ) {
+
+
+                    expandedRow.style.display =
+                        "none";
+
+
+                    row.classList.remove(
+                        "resultsRowExpanded"
+                    );
+
+
+                    const arrow =
+                        row.querySelector(
+                            ".resultsExpandArrow"
+                        );
+
+
+                    if (
+                        arrow
+                    ) {
+
+
+                        arrow.textContent =
+                            "▸";
+
+
+                    }
+
+
+                }
+
+
+                else {
+
+
+                    expandedRow.style.display =
+                        "table-row";
+
+
+                    row.classList.add(
+                        "resultsRowExpanded"
+                    );
+
+
+                    const arrow =
+                        row.querySelector(
+                            ".resultsExpandArrow"
+                        );
+
+
+                    if (
+                        arrow
+                    ) {
+
+
+                        arrow.textContent =
+                            "▾";
+
+
+                    }
+
+
+                }
+
+
+                // =========================
+                // EXISTING CLICK HANDLER
+                // =========================
+
+                if (
+                    clickHandler
+                ) {
+
 
                     clickHandler(
                         row,
                         employee
                     );
 
+
                 }
+
 
             };
 
+
+            // =========================
+            // ADD ROWS
+            // =========================
 
             body.appendChild(
                 row
             );
 
+
+            body.appendChild(
+                expandedRow
+            );
+
+
         }
+
 
     }
 
@@ -570,7 +1025,14 @@ export function renderResultsTable(
         .forEach(
             header => {
 
-                header.onclick = () => {
+
+                header.onclick = (
+                    event
+                ) => {
+
+
+                    event.stopPropagation();
+
 
                     const key =
                         header.dataset.sort;
@@ -580,6 +1042,7 @@ export function renderResultsTable(
                         currentSort.key === key
                     ) {
 
+
                         currentSort.direction =
                             currentSort.direction === "asc"
                                 ?
@@ -587,10 +1050,12 @@ export function renderResultsTable(
                                 :
                                 "asc";
 
+
                     }
 
 
                     else {
+
 
                         currentSort.key =
                             key;
@@ -598,6 +1063,7 @@ export function renderResultsTable(
 
                         currentSort.direction =
                             "asc";
+
 
                     }
 
@@ -608,7 +1074,9 @@ export function renderResultsTable(
                         )
                     );
 
+
                 };
+
 
             }
         );
@@ -616,6 +1084,7 @@ export function renderResultsTable(
 
     // =========================
     // INITIAL SORT
+    // LAST NAME
     // =========================
 
     renderRows(
@@ -633,5 +1102,6 @@ export function renderResultsTable(
 
 
     return table;
+
 
 }

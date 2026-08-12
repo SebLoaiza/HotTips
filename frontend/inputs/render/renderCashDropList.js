@@ -44,7 +44,6 @@ export function renderCashDropList(
 
 }
 
-
 // =========================
 // BOH FILTER
 // =========================
@@ -65,7 +64,6 @@ function isBOH(role) {
 
 }
 
-
 // =========================
 // SORT STATE
 // =========================
@@ -83,7 +81,6 @@ if (!renderCashDropList.sortState) {
     };
 
 }
-
 
 // =========================
 // CREATE TABLE
@@ -103,7 +100,6 @@ function createTable(
     table.className =
         "cash-drop-table";
 
-
     // =========================
     // MEAL ORDER
     // =========================
@@ -113,7 +109,6 @@ function createTable(
         Lunch: 1,
         Dinner: 2
     };
-
 
     // =========================
     // SORT ROWS
@@ -133,6 +128,18 @@ function createTable(
             // =========================
             // DATE
             // =========================
+            //
+            // When sorting by Date:
+            //
+            // 1. Date
+            // 2. Meal
+            // 3. Employee
+            //
+            // This means all employees for
+            // the same meal stay together,
+            // and employees are alphabetical
+            // within each meal.
+            // =========================
 
             if (
                 sortState.column ===
@@ -151,11 +158,49 @@ function createTable(
                         b.block.date
                     );
 
+                // First: Date
                 comparison =
                     dateA - dateB;
 
-            }
+                // -------------------------
+                // Same date → Meal
+                // -------------------------
 
+                if (comparison === 0) {
+
+                    comparison =
+                        (
+                            mealOrder[
+                                a.block.meal
+                            ] ?? 99
+                        ) -
+                        (
+                            mealOrder[
+                                b.block.meal
+                            ] ?? 99
+                        );
+
+                }
+
+                // -------------------------
+                // Same date + same meal
+                // → Employee
+                // -------------------------
+
+                if (comparison === 0) {
+
+                    comparison =
+                        String(
+                            a.employee.name || ""
+                        ).localeCompare(
+                            String(
+                                b.employee.name || ""
+                            )
+                        );
+
+                }
+
+            }
 
             // =========================
             // MEAL
@@ -180,7 +225,6 @@ function createTable(
 
             }
 
-
             // =========================
             // EMPLOYEE
             // =========================
@@ -201,7 +245,6 @@ function createTable(
 
             }
 
-
             // =========================
             // ROLE
             // =========================
@@ -221,7 +264,6 @@ function createTable(
                     );
 
             }
-
 
             // =========================
             // CASH DROP
@@ -246,7 +288,6 @@ function createTable(
 
             }
 
-
             // =========================
             // CASH SALES
             // =========================
@@ -270,7 +311,6 @@ function createTable(
 
             }
 
-
             // =========================
             // SORT DIRECTION
             // =========================
@@ -284,7 +324,6 @@ function createTable(
 
         }
     );
-
 
     // =========================
     // HEADER
@@ -324,7 +363,6 @@ function createTable(
 
     ];
 
-
     const thead =
         document.createElement(
             "thead"
@@ -334,7 +372,6 @@ function createTable(
         document.createElement(
             "tr"
         );
-
 
     for (
         const header
@@ -351,7 +388,6 @@ function createTable(
 
         th.className =
             "sortable-header";
-
 
         // =========================
         // SORT INDICATOR
@@ -372,13 +408,12 @@ function createTable(
 
             th.classList.add(
                 sortState.direction ===
-                    "asc"
+                "asc"
                     ? "sort-ascending"
                     : "sort-descending"
             );
 
         }
-
 
         // =========================
         // CLICK TO SORT
@@ -388,11 +423,6 @@ function createTable(
             "click",
             () => {
 
-                /*
-                    Clicking the same
-                    column reverses it.
-                */
-
                 if (
                     sortState.column ===
                     header.column
@@ -400,16 +430,11 @@ function createTable(
 
                     sortState.direction =
                         sortState.direction ===
-                            "asc"
+                        "asc"
                             ? "desc"
                             : "asc";
 
                 }
-
-                /*
-                    Clicking a new column
-                    starts ascending.
-                */
 
                 else {
 
@@ -421,12 +446,6 @@ function createTable(
 
                 }
 
-
-                /*
-                    Re-render using
-                    the new sort.
-                */
-
                 renderCashDropList(
                     mealBlocks,
                     refreshUI
@@ -435,13 +454,11 @@ function createTable(
             }
         );
 
-
         headerRow.appendChild(
             th
         );
 
     }
-
 
     thead.appendChild(
         headerRow
@@ -450,7 +467,6 @@ function createTable(
     table.appendChild(
         thead
     );
-
 
     // =========================
     // BODY
@@ -461,9 +477,32 @@ function createTable(
             "tbody"
         );
 
+    // =========================
+    // TOTALS
+    // =========================
+
+    let totalCashDrop = 0;
+    let totalCashSales = 0;
+
+    // =========================
+    // EMPLOYEE ROWS
+    // =========================
 
     sortedRows.forEach(
         (rowData, index) => {
+
+            const employee =
+                rowData.employee;
+
+            totalCashDrop +=
+                Number(
+                    employee.cash_drop
+                ) || 0;
+
+            totalCashSales +=
+                Number(
+                    employee.cash_sales
+                ) || 0;
 
             tbody.appendChild(
                 createRow(
@@ -476,6 +515,68 @@ function createTable(
         }
     );
 
+    // =========================
+    // TOTAL ROW
+    // =========================
+
+    const totalRow =
+        document.createElement(
+            "tr"
+        );
+
+    totalRow.className =
+        "cash-drop-total-row";
+
+    // Empty Date/Meal/Employee/Role cells
+    const totalLabelCell =
+        document.createElement(
+            "th"
+        );
+
+    totalLabelCell.textContent =
+        "TOTAL";
+
+    totalLabelCell.colSpan = 4;
+
+    totalRow.appendChild(
+        totalLabelCell
+    );
+
+    // =========================
+    // CASH DROP TOTAL
+    // =========================
+
+    const totalDropCell =
+        document.createElement(
+            "th"
+        );
+
+    totalDropCell.textContent =
+        money(totalCashDrop);
+
+    totalRow.appendChild(
+        totalDropCell
+    );
+
+    // =========================
+    // CASH SALES TOTAL
+    // =========================
+
+    const totalSalesCell =
+        document.createElement(
+            "th"
+        );
+
+    totalSalesCell.textContent =
+        money(totalCashSales);
+
+    totalRow.appendChild(
+        totalSalesCell
+    );
+
+    tbody.appendChild(
+        totalRow
+    );
 
     table.appendChild(
         tbody
@@ -484,7 +585,6 @@ function createTable(
     return table;
 
 }
-
 
 // =========================
 // CREATE ROW
@@ -504,7 +604,6 @@ function createRow(
     row.className =
         "cash-drop-table-row";
 
-
     // =========================
     // DATE
     // =========================
@@ -517,7 +616,6 @@ function createRow(
         )
     );
 
-
     // =========================
     // MEAL
     // =========================
@@ -527,7 +625,6 @@ function createRow(
         "cash-drop-meal",
         block.meal
     );
-
 
     // =========================
     // EMPLOYEE
@@ -539,7 +636,6 @@ function createRow(
         employee.name
     );
 
-
     // =========================
     // ROLE
     // =========================
@@ -549,7 +645,6 @@ function createRow(
         "cash-drop-role",
         employee.role || ""
     );
-
 
     // =========================
     // CASH DROP
@@ -562,7 +657,6 @@ function createRow(
 
     dropCell.className =
         "cash-drop-value-cell";
-
 
     const input =
         document.createElement(
@@ -587,10 +681,8 @@ function createRow(
             100
         ).toFixed(2);
 
-
     input.dataset.row =
         index;
-
 
     dropCell.appendChild(
         input
@@ -599,7 +691,6 @@ function createRow(
     row.appendChild(
         dropCell
     );
-
 
     // =========================
     // CASH SALES
@@ -613,12 +704,10 @@ function createRow(
         )
     );
 
-
     updateColor(
         input,
         employee
     );
-
 
     // =========================
     // SELECT ALL + HIGHLIGHT ROW
@@ -637,7 +726,6 @@ function createRow(
         }
     );
 
-
     input.addEventListener(
         "blur",
         () => {
@@ -648,7 +736,6 @@ function createRow(
 
         }
     );
-
 
     // =========================
     // LIVE INPUT
@@ -677,7 +764,6 @@ function createRow(
         }
     );
 
-
     // =========================
     // SAVE
     // =========================
@@ -705,7 +791,6 @@ function createRow(
         }
     );
 
-
     // =========================
     // ENTER / SHIFT + ENTER
     // =========================
@@ -726,7 +811,6 @@ function createRow(
             event.preventDefault();
             event.stopPropagation();
 
-
             // =========================
             // SAVE CURRENT VALUE
             // =========================
@@ -735,7 +819,6 @@ function createRow(
                 employee,
                 input
             );
-
 
             // =========================
             // FIND CURRENT INPUTS
@@ -748,12 +831,10 @@ function createRow(
                     )
                 );
 
-
             const currentIndex =
                 inputs.indexOf(
                     input
                 );
-
 
             // =========================
             // DETERMINE DIRECTION
@@ -763,7 +844,6 @@ function createRow(
                 event.shiftKey
                     ? currentIndex - 1
                     : currentIndex + 1;
-
 
             // =========================
             // STOP AT TABLE EDGES
@@ -785,25 +865,9 @@ function createRow(
 
             }
 
-
             // =========================
-            // REMEMBER NEXT EMPLOYEE
+            // REMEMBER NEXT INPUT
             // =========================
-
-            const nextInput =
-                inputs[
-                    nextIndex
-                ];
-
-
-            const nextEmployeeId =
-                nextInput
-                    .closest("tr")
-                    ?.querySelector(
-                        ".cash-drop-input"
-                    )
-                    ?.dataset.row;
-
 
             /*
                 Refresh the application.
@@ -819,7 +883,6 @@ function createRow(
 
             }
 
-
             // =========================
             // FIND INPUT AFTER REFRESH
             // =========================
@@ -834,12 +897,10 @@ function createRow(
                             )
                         );
 
-
                     const newInput =
                         newInputs[
                             nextIndex
                         ];
-
 
                     if (newInput) {
 
@@ -855,11 +916,9 @@ function createRow(
         }
     );
 
-
     return row;
 
 }
-
 
 // =========================
 // ADD CELL
@@ -888,7 +947,6 @@ function addCell(
 
 }
 
-
 // =========================
 // UPDATE COLOR
 // =========================
@@ -906,7 +964,6 @@ function updateColor(
         );
 
 }
-
 
 function getDropClass(
     drop,
@@ -932,7 +989,6 @@ function getDropClass(
     return "drop-equal";
 
 }
-
 
 // =========================
 // SAVE CASH DROP
@@ -963,7 +1019,6 @@ function saveCashDrop(
 
 }
 
-
 // =========================
 // FORMAT DATE
 // =========================
@@ -979,12 +1034,10 @@ function formatDate(date) {
             date
         ).trim();
 
-
     const match =
         value.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
-
 
     if (match) {
 
@@ -1004,12 +1057,10 @@ function formatDate(date) {
 
     }
 
-
     const parsed =
         new Date(
             date
         );
-
 
     if (
         Number.isNaN(
@@ -1020,7 +1071,6 @@ function formatDate(date) {
         return value;
 
     }
-
 
     return (
         String(
@@ -1041,7 +1091,6 @@ function formatDate(date) {
     );
 
 }
-
 
 // =========================
 // MONEY

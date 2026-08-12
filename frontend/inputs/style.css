@@ -1020,6 +1020,65 @@ td {
 
 
 /* =========================================================
+   EMPLOYEE POINTS — FOH / BOH LAYOUT
+========================================================= */
+
+.employee-points-tables {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 24px;
+
+    align-items: start;
+}
+
+.employee-points-group {
+    min-width: 0;
+}
+
+.employee-points-group-title {
+    margin: 0;
+
+    padding: 13px 18px;
+
+    background: var(--surface-hover);
+
+    border: 1px solid var(--border);
+    border-bottom: none;
+
+    border-radius:
+        10px 10px 0 0;
+
+    color: var(--yellow);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.employee-points-group .employee-points-table {
+    border-radius:
+        0 0 10px 10px;
+}
+
+/* =========================================================
+   EMPLOYEE POINTS — MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .employee-points-tables {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
    TRAINEE ASSIGNMENTS
 ========================================================= */
 

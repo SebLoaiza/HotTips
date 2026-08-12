@@ -1,10 +1,10 @@
 function money(cents) {
 
-    return `$${((Number(cents) || 0) / 100).toFixed(2)}`;
+    return `$${(
+        (Number(cents) || 0) / 100
+    ).toFixed(2)}`;
 
 }
-
-
 
 export function renderCashTipSummary(
     mealBlocks,
@@ -12,54 +12,63 @@ export function renderCashTipSummary(
 ) {
 
     const output =
-        document.getElementById("cashTipSummary");
-
+        document.getElementById(
+            "cashTipSummary"
+        );
 
     if (!output) {
         return;
     }
 
-
     output.innerHTML = "";
-
-
 
     let blocksToRender =
         mealBlocks;
 
+    // =================================================
+    // FILTER BY SELECTED DAY
+    // =================================================
 
-
-    // Filter by selected day if provided
     if (selectedDay) {
 
         blocksToRender =
             mealBlocks.filter(
                 block =>
-                    block.day_key === selectedDay
+                    block.day_key ===
+                    selectedDay
             );
 
     }
 
+    // =================================================
+    // OVERALL TOTALS
+    // =================================================
 
+    let grandCashSales = 0;
+    let grandCashDrop = 0;
+    let grandCashTips = 0;
+    let grandCardTips = 0;
+    let grandTotalTips = 0;
+
+    // =================================================
+    // INDIVIDUAL MEAL BLOCK TABLES
+    // =================================================
 
     for (const block of blocksToRender) {
 
-
         const wrap =
-            document.createElement("div");
-
+            document.createElement(
+                "div"
+            );
 
         wrap.className =
             "panel";
-
-
 
         let html = `
 
             <h3>
                 ${block.meal} • ${block.date}
             </h3>
-
 
             <table class="summary-table">
 
@@ -87,15 +96,68 @@ export function renderCashTipSummary(
 
                 </thead>
 
-
                 <tbody>
 
         `;
 
+        // =================================================
+        // BLOCK TOTALS
+        // =================================================
 
+        let blockCashSales = 0;
+        let blockCashDrop = 0;
+        let blockCashTips = 0;
+
+        // =================================================
+        // EMPLOYEE ROWS
+        // =================================================
 
         for (const employee of block.employees) {
 
+            const cashSales =
+                Number(
+                    employee.cash_sales
+                ) || 0;
+
+            const cashDrop =
+                Number(
+                    employee.cash_drop
+                ) || 0;
+
+            const cashTips =
+                Number(
+                    employee.cash_tips
+                ) || 0;
+
+            // -------------------------
+            // BLOCK TOTALS
+            // -------------------------
+
+            blockCashSales +=
+                cashSales;
+
+            blockCashDrop +=
+                cashDrop;
+
+            blockCashTips +=
+                cashTips;
+
+            // -------------------------
+            // GRAND TOTALS
+            // -------------------------
+
+            grandCashSales +=
+                cashSales;
+
+            grandCashDrop +=
+                cashDrop;
+
+            grandCashTips +=
+                cashTips;
+
+            // -------------------------
+            // EMPLOYEE ROW
+            // -------------------------
 
             html += `
 
@@ -105,19 +167,22 @@ export function renderCashTipSummary(
                         ${employee.name}
                     </td>
 
-
                     <td>
-                        ${money(employee.cash_sales)}
+                        ${money(
+                            cashSales
+                        )}
                     </td>
 
-
                     <td>
-                        ${money(employee.cash_drop)}
+                        ${money(
+                            cashDrop
+                        )}
                     </td>
 
-
                     <td>
-                        ${money(employee.cash_tips)}
+                        ${money(
+                            cashTips
+                        )}
                     </td>
 
                 </tr>
@@ -126,7 +191,9 @@ export function renderCashTipSummary(
 
         }
 
-
+        // =================================================
+        // MEAL BLOCK TOTAL
+        // =================================================
 
         html += `
 
@@ -136,23 +203,25 @@ export function renderCashTipSummary(
                         Total
                     </th>
 
-
                     <th>
-                        ${money(block.cash_sales)}
+                        ${money(
+                            blockCashSales
+                        )}
                     </th>
 
-
                     <th>
-                        ${money(block.cash_drop)}
+                        ${money(
+                            blockCashDrop
+                        )}
                     </th>
 
-
                     <th>
-                        ${money(block.cash_tips)}
+                        ${money(
+                            blockCashTips
+                        )}
                     </th>
 
                 </tr>
-
 
                 </tbody>
 
@@ -160,13 +229,249 @@ export function renderCashTipSummary(
 
         `;
 
-
-
         wrap.innerHTML =
             html;
 
+        output.appendChild(
+            wrap
+        );
 
-        output.appendChild(wrap);
+    }
+
+    // =================================================
+    // OVERALL TABLE
+    // =================================================
+
+    if (
+        blocksToRender.length > 0
+    ) {
+
+        const totalWrap =
+            document.createElement(
+                "div"
+            );
+
+        totalWrap.className =
+            "panel";
+
+        let totalHtml = `
+
+            <h3>
+                Overall Cash Tip Totals
+            </h3>
+
+            <table class="summary-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Meal
+                        </th>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            Cash Sales
+                        </th>
+
+                        <th>
+                            Cash Drop
+                        </th>
+
+                        <th>
+                            Cash Tips
+                        </th>
+
+                        <th>
+                            Card Tips
+                        </th>
+
+                        <th>
+                            Total Tips
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+        `;
+
+        // =================================================
+        // EVERY EMPLOYEE
+        // =================================================
+
+        for (
+            const block
+            of blocksToRender
+        ) {
+
+            for (
+                const employee
+                of block.employees
+            ) {
+
+                const cashSales =
+                    Number(
+                        employee.cash_sales
+                    ) || 0;
+
+                const cashDrop =
+                    Number(
+                        employee.cash_drop
+                    ) || 0;
+
+                const cashTips =
+                    Number(
+                        employee.cash_tips
+                    ) || 0;
+
+                const cardTips =
+                    Number(
+                        employee.card_tips
+                    ) || 0;
+
+                const totalTips =
+                    cashTips +
+                    cardTips;
+
+                // -------------------------
+                // CARD TIP TOTAL
+                // -------------------------
+
+                grandCardTips +=
+                    cardTips;
+
+                // -------------------------
+                // TOTAL TIP TOTAL
+                // -------------------------
+
+                grandTotalTips +=
+                    totalTips;
+
+                // -------------------------
+                // FINAL TABLE ROW
+                // -------------------------
+
+                totalHtml += `
+
+                    <tr>
+
+                        <td>
+                            ${block.date}
+                        </td>
+
+                        <td>
+                            ${block.meal}
+                        </td>
+
+                        <td>
+                            ${employee.name}
+                        </td>
+
+                        <td>
+                            ${money(
+                                cashSales
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                cashDrop
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                cashTips
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                cardTips
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                totalTips
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+        // =================================================
+        // GRAND TOTAL
+        // =================================================
+
+        totalHtml += `
+
+                    <tr>
+
+                        <th colspan="3">
+                            GRAND TOTAL
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandCashSales
+                            )}
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandCashDrop
+                            )}
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandCashTips
+                            )}
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandCardTips
+                            )}
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandTotalTips
+                            )}
+                        </th>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        `;
+
+        totalWrap.innerHTML =
+            totalHtml;
+
+        output.appendChild(
+            totalWrap
+        );
 
     }
 
