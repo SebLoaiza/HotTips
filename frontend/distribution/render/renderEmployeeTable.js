@@ -5,12 +5,10 @@ import {
 }
 from "./formatters.js";
 
-
 import {
     renderRoleSelect
 }
 from "./renderRoleSelect.js";
-
 
 export function renderEmployeeTable(
     title,
@@ -18,127 +16,87 @@ export function renderEmployeeTable(
     mealBlock
 ) {
 
-
     const wrapper =
         document.createElement("div");
-
 
     wrapper.className =
         "employee-table";
 
-
     wrapper.innerHTML =
         `<h3>${title} (${employees.length})</h3>`;
 
-
     if (employees.length === 0) {
-
 
         wrapper.innerHTML +=
             "<p>No Employees</p>";
 
-
         return wrapper;
 
-
     }
-
 
     const isTipOwners =
         title === "Tip Owners";
 
-
     const table =
         document.createElement("table");
 
-
     table.innerHTML = `
-
 
         <thead>
 
-
             <tr>
-
 
                 <th>Name</th>
 
-
                 <th>Role</th>
 
-
-                <th>Distribution Role</th>
-
+                <th>Dist. Role</th>
 
                 ${
                     isTipOwners
 
-
                     ?
 
-
                     `
-
 
                     <th>Net Card Tips</th>
 
-
                     <th>Cash Tips</th>
-
 
                     <th>Server Tips</th>
 
-
                     <th>BOH Tips</th>
-
 
                     <th>Busser Tips</th>
 
-
                     <th>Host Tips</th>
-
 
                     <th>Total Kept</th>
 
-
                     `
-
 
                     :
 
-
                     `
-
 
                     <th>Shift</th>
 
-
                     <th>Tip Points</th>
-
 
                     <th>Pool Card Received</th>
 
-
                     <th>Pool Cash Received</th>
-
 
                     <th>Trainer</th>
 
-
                     `
-
-
                 }
-
 
             </tr>
 
-
         </thead>
 
-
     `;
-
 
     const body =
         document.createElement("tbody");
@@ -146,50 +104,131 @@ export function renderEmployeeTable(
 
     for (const employee of employees) {
 
-
         const row =
             document.createElement("tr");
 
 
+        // =====================================================
+        // TIP OWNERS
+        // =====================================================
+
         if (isTipOwners) {
 
-
-            // =========================================
+            // =================================================
             // PERSON'S TIP DROP
-            // =========================================
+            // =================================================
 
             const cardTips =
                 employee.card_after_fee ?? 0;
-
 
             const cashTips =
                 employee.cash_remaining ?? 0;
 
 
-            // Total tips for THIS PERSON only
+            // =================================================
+            // PERSON'S TOTAL TIPS
+            //
+            // This is the denominator for all percentages.
+            // =================================================
+
             const personTotalTips =
-                cardTips + cashTips;
+                cardTips +
+                cashTips;
 
 
-            // =========================================
+            // =================================================
             // CARD / CASH PERCENTAGES
-            // =========================================
+            //
+            // EDGE CASE:
+            // If cash is negative:
+            //
+            //     Card = 100%
+            //     Cash = 0%
+            //
+            // The actual dollar amounts are NOT changed.
+            // =================================================
 
-            const cardPercentage =
+            let cardPercentage = 0;
+
+            let cashPercentage = 0;
+
+
+            if (cashTips < 0) {
+
+                cardPercentage = 100;
+
+                cashPercentage = 0;
+
+            }
+
+            else if (personTotalTips > 0) {
+
+                cardPercentage =
+                    (cardTips / personTotalTips) * 100;
+
+                cashPercentage =
+                    (cashTips / personTotalTips) * 100;
+
+            }
+
+
+            // =================================================
+            // ROLE TIP AMOUNTS
+            // =================================================
+
+            const serverTips =
+                (employee.server_card_contribution ?? 0)
+                +
+                (employee.server_cash_contribution ?? 0);
+
+            const bohTips =
+                (employee.boh_card_contribution ?? 0)
+                +
+                (employee.boh_cash_contribution ?? 0);
+
+            const busserTips =
+                (employee.busser_card_contribution ?? 0)
+                +
+                (employee.busser_cash_contribution ?? 0);
+
+            const hostTips =
+                (employee.host_card_contribution ?? 0)
+                +
+                (employee.host_cash_contribution ?? 0);
+
+
+            // =================================================
+            // ROLE PERCENTAGES
+            //
+            // Each role is compared against THIS TIP OWNER'S
+            //
+            // Net Card Tips + Cash Tips
+            // =================================================
+
+            const serverPercentage =
                 personTotalTips > 0
-                    ? (cardTips / personTotalTips) * 100
+                    ? (serverTips / personTotalTips) * 100
+                    : 0;
+
+            const bohPercentage =
+                personTotalTips > 0
+                    ? (bohTips / personTotalTips) * 100
+                    : 0;
+
+            const busserPercentage =
+                personTotalTips > 0
+                    ? (busserTips / personTotalTips) * 100
+                    : 0;
+
+            const hostPercentage =
+                personTotalTips > 0
+                    ? (hostTips / personTotalTips) * 100
                     : 0;
 
 
-            const cashPercentage =
-                personTotalTips > 0
-                    ? (cashTips / personTotalTips) * 100
-                    : 0;
-
-
-            // =========================================
+            // =================================================
             // TOTAL KEPT
-            // =========================================
+            // =================================================
 
             const totalKept =
                 (employee.card_kept ?? 0)
@@ -197,89 +236,152 @@ export function renderEmployeeTable(
                 (employee.cash_kept ?? 0);
 
 
-            row.innerHTML = `
+            // =================================================
+            // TOTAL KEPT PERCENTAGE
+            //
+            // Total Kept /
+            // (Net Card Tips + Cash Tips)
+            // =================================================
 
+            const totalKeptPercentage =
+                personTotalTips > 0
+                    ? (totalKept / personTotalTips) * 100
+                    : 0;
+
+
+            // =================================================
+            // RENDER TIP OWNER ROW
+            // =================================================
+
+            row.innerHTML = `
 
                 <td>
                     ${employee.name}
                 </td>
 
-
                 <td>
                     ${employee.role}
                 </td>
-
 
                 <td>
                     ${renderRoleSelect(employee)}
                 </td>
 
 
+                <!-- =========================================
+                     NET CARD TIPS
+                     ========================================= -->
+
                 <td>
+
                     ${formatMoney(cardTips)}
+
                     <span class="tip-percentage">
                         (${cardPercentage.toFixed(1)}%)
                     </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     CASH TIPS
+                     ========================================= -->
+
                 <td class="${cashTips < 0 ? 'negative-cash' : ''}">
+
                     ${formatMoney(cashTips)}
+
                     <span class="tip-percentage">
                         (${cashPercentage.toFixed(1)}%)
                     </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     SERVER TIPS
+                     ========================================= -->
+
                 <td>
-                    ${formatMoney(
-                        (employee.server_card_contribution ?? 0)
-                        +
-                        (employee.server_cash_contribution ?? 0)
-                    )}
+
+                    ${formatMoney(serverTips)}
+
+                    <span class="tip-percentage">
+                        (${serverPercentage.toFixed(1)}%)
+                    </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     BOH TIPS
+                     ========================================= -->
+
                 <td>
-                    ${formatMoney(
-                        (employee.boh_card_contribution ?? 0)
-                        +
-                        (employee.boh_cash_contribution ?? 0)
-                    )}
+
+                    ${formatMoney(bohTips)}
+
+                    <span class="tip-percentage">
+                        (${bohPercentage.toFixed(1)}%)
+                    </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     BUSSER TIPS
+                     ========================================= -->
+
                 <td>
-                    ${formatMoney(
-                        (employee.busser_card_contribution ?? 0)
-                        +
-                        (employee.busser_cash_contribution ?? 0)
-                    )}
+
+                    ${formatMoney(busserTips)}
+
+                    <span class="tip-percentage">
+                        (${busserPercentage.toFixed(1)}%)
+                    </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     HOST TIPS
+                     ========================================= -->
+
                 <td>
-                    ${formatMoney(
-                        (employee.host_card_contribution ?? 0)
-                        +
-                        (employee.host_cash_contribution ?? 0)
-                    )}
+
+                    ${formatMoney(hostTips)}
+
+                    <span class="tip-percentage">
+                        (${hostPercentage.toFixed(1)}%)
+                    </span>
+
                 </td>
 
 
+                <!-- =========================================
+                     TOTAL KEPT
+                     ========================================= -->
+
                 <td>
+
                     ${formatMoney(totalKept)}
-                </td>
 
+                    <span class="tip-percentage">
+                        (${totalKeptPercentage.toFixed(1)}%)
+                    </span>
+
+                </td>
 
             `;
-
 
         }
 
 
-        else {
+        // =====================================================
+        // ALL OTHER EMPLOYEES
+        // =====================================================
 
+        else {
 
             const isTrainee =
                 employee.is_trainee;
@@ -301,30 +403,30 @@ export function renderEmployeeTable(
 
             row.innerHTML = `
 
-
                 <td>
                     ${employee.name}
                 </td>
-
 
                 <td>
                     ${employee.role}
                 </td>
 
-
                 <td>
                     ${renderRoleSelect(employee)}
                 </td>
 
-
                 <td>
+
                     ${formatTime(employee.meal_start)}
+
                     -
+
                     ${formatTime(employee.meal_end)}
+
                 </td>
 
-
                 <td>
+
                     <input
                         class="tip-point-input"
                         type="number"
@@ -334,47 +436,45 @@ export function renderEmployeeTable(
                         data-employee-id="${employee.employee_id}"
                         data-meal-block-id="${mealBlock.id}"
                     >
+
                 </td>
 
-
                 <td>
+
                     ${formatMoney(
                         employee.pool_card_received
                     )}
+
                 </td>
 
-
                 <td>
+
                     ${formatMoney(
                         employee.pool_cash_received
                     )}
-                </td>
 
+                </td>
 
                 <td>
+
                     ${trainerDisplay}
+
                 </td>
 
-
             `;
-
 
         }
 
 
         body.appendChild(row);
 
-
     }
 
 
     table.appendChild(body);
 
-
     wrapper.appendChild(table);
 
-
     return wrapper;
-
 
 }

@@ -27,7 +27,7 @@ export function renderRoleSelect(
             <option value="busser/runner"
                 ${employee.distribution_role === "busser/runner" ? "selected" : ""}
             >
-                Busser / Runner
+                Busser
             </option>
 
 
