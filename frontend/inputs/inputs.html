@@ -44,6 +44,7 @@
 
 </header>
 
+
 <main>
 
 <!-- =========================
@@ -59,13 +60,14 @@
         ← Back
     </button>
 
+
     <div class="steps">
 
         <button
             class="step active"
             data-tab="inputTab"
         >
-            1. Inputs
+            1. Cash Drop Entry
         </button>
 
         <button
@@ -91,6 +93,7 @@
 
     </div>
 
+
     <button
         id="continueButton"
         class="nav-button"
@@ -99,6 +102,7 @@
     </button>
 
 </section>
+
 
 <!-- =========================
      INPUTS — TAB 1
@@ -119,25 +123,118 @@
             Enter the amount of cash each employee turned in.
         </p>
 
+
+        <!-- =========================
+             TIP TOTALS
+        ========================= -->
+
+        <div class="tip-totals">
+
+
+            <!-- CREDIT CARD TIPS -->
+
+            <div class="tip-total-card credit-card-tips">
+
+                <span class="tip-total-label">
+                    Total Credit Card Tips
+                </span>
+
+                <strong
+                    id="totalCreditCardTips"
+                    class="tip-total-value"
+                >
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <!-- CASH TIP CALCULATION -->
+
+            <div class="tip-total-card cash-tips-card">
+
+                <span class="tip-total-label">
+                    Cash Tip Calculation
+                </span>
+
+
+                <div class="cash-tip-calculation">
+
+
+                    <!-- TOTAL CASH DROP -->
+
+                    <div class="cash-tip-number">
+
+                        <span class="cash-tip-subtitle">
+                            Total Cash Drop
+                        </span>
+
+                        <strong id="totalCashDrop">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- MINUS -->
+
+                    <span class="cash-tip-operator">
+                        −
+                    </span>
+
+
+                    <!-- TOTAL CASH SALES -->
+
+                    <div class="cash-tip-number">
+
+                        <span class="cash-tip-subtitle">
+                            Total Cash Sales
+                        </span>
+
+                        <strong id="totalCashSales">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- EQUALS -->
+
+                    <span class="cash-tip-operator">
+                        =
+                    </span>
+
+
+                    <!-- TOTAL CASH TIPS -->
+
+                    <div class="cash-tip-number cash-tip-result">
+
+                        <span class="cash-tip-subtitle">
+                            Total Cash Tips
+                        </span>
+
+                        <strong id="totalCashTips">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
         <div id="cashDropTables"></div>
 
-    </section>
-
-    <section class="panel">
-
-        <h2>
-            Card Tips
-        </h2>
-
-        <p>
-            Review calculated card tips.
-        </p>
-
-        <div id="cardSalesTables"></div>
 
     </section>
 
 </section>
+
 
 <!-- =========================
      EMPLOYEE CONFIG — TAB 2
@@ -160,6 +257,7 @@
 
 </section>
 
+
 <!-- =========================
      EMPLOYEE TIP POINTS — TAB 3
 ========================= -->
@@ -180,6 +278,7 @@
     </section>
 
 </section>
+
 
 <!-- =========================
      SUMMARY — TAB 4
@@ -202,17 +301,21 @@
 
 </section>
 
+
 </main>
+
 
 <script
     type="module"
     src="./tabs.js"
 ></script>
 
+
 <script
     type="module"
     src="./app.js"
 ></script>
+
 
 </body>
 
