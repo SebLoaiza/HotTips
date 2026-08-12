@@ -804,3 +804,152 @@ footer{
 .summary-table tbody tr:nth-child(even) td:first-child {
     background: #202338;
 }
+
+/* =================================================
+   REPORT HEADER
+================================================= */
+
+.report-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 24px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+/* =================================================
+   REPORT DESCRIPTION
+================================================= */
+
+.report-description {
+
+    margin: 6px 0 0;
+
+    color: var(--muted);
+
+    font-size: 0.9rem;
+
+}
+
+
+/* =================================================
+   REPORT TOTAL
+================================================= */
+
+.report-total {
+
+    flex-shrink: 0;
+
+}
+
+
+.report-total .overall-total-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 14px 20px;
+
+    min-width: 210px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.18);
+
+}
+
+
+.report-total .overall-total-label {
+
+    color: var(--muted);
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+
+.report-total .overall-total-value {
+
+    color: var(--text);
+
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+/* =================================================
+   CARD / CASH TOTAL DISTINCTION
+================================================= */
+
+#overallTotals .overall-total-card {
+
+    border-left: 4px solid var(--pink);
+
+}
+
+
+#overallCashSales .overall-total-card {
+
+    border-left: 4px solid var(--cyan);
+
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media (max-width: 700px) {
+
+    .report-header {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .report-total {
+
+        width: 100%;
+
+    }
+
+
+    .report-total .overall-total-card {
+
+        justify-content: space-between;
+
+        width: 100%;
+
+    }
+
+}

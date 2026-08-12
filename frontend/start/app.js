@@ -24,13 +24,9 @@ let currentMealParticipations = [];
 let currentOrders = [];
 let currentPayments = [];
 
-let shiftUploaded = false;
-let orderUploaded = false;
-let paymentUploaded = false;
-
 
 // =================================================
-// DOM
+// ELEMENTS
 // =================================================
 
 const shiftInput =
@@ -41,15 +37,6 @@ const orderInput =
 
 const paymentInput =
     document.getElementById("paymentCsv");
-
-const shiftCard =
-    document.getElementById("shiftCard");
-
-const orderCard =
-    document.getElementById("orderCard");
-
-const paymentCard =
-    document.getElementById("paymentCard");
 
 const debugButton =
     document.getElementById("debugObjects");
@@ -63,6 +50,15 @@ const nextButton =
 const resetButton =
     document.getElementById("resetProcess");
 
+const shiftCard =
+    document.getElementById("shiftCard");
+
+const orderCard =
+    document.getElementById("orderCard");
+
+const paymentCard =
+    document.getElementById("paymentCard");
+
 
 // =================================================
 // INITIAL BUTTON STATE
@@ -70,6 +66,71 @@ const resetButton =
 
 if (nextButton) {
     nextButton.disabled = true;
+}
+
+
+// =================================================
+// CHECK IF DATA EXISTS
+// =================================================
+
+function hasShiftData() {
+
+    return (
+        Array.isArray(currentMealBlocks) &&
+        currentMealBlocks.length > 0
+    );
+}
+
+
+function hasOrderData() {
+
+    return (
+        Array.isArray(currentOrders) &&
+        currentOrders.length > 0
+    );
+}
+
+
+function hasPaymentData() {
+
+    return (
+        Array.isArray(currentPayments) &&
+        currentPayments.length > 0
+    );
+}
+
+
+// =================================================
+// CHECK IF FILE IS CURRENTLY SELECTED
+// =================================================
+
+function hasShiftFile() {
+
+    return (
+        shiftInput &&
+        shiftInput.files &&
+        shiftInput.files.length > 0
+    );
+}
+
+
+function hasOrderFile() {
+
+    return (
+        orderInput &&
+        orderInput.files &&
+        orderInput.files.length > 0
+    );
+}
+
+
+function hasPaymentFile() {
+
+    return (
+        paymentInput &&
+        paymentInput.files &&
+        paymentInput.files.length > 0
+    );
 }
 
 
@@ -95,34 +156,35 @@ if (shiftInput) {
                 const rows =
                     await readCsv(file);
 
+
                 currentMealBlocks =
                     createMealBlocks(rows);
+
 
                 currentMealParticipations =
                     createMealParticipations(rows);
 
-                shiftUploaded = true;
 
                 shiftCard?.classList.add(
                     "completed"
                 );
 
-                updateContinueButton();
 
                 rebuildMealBlocks();
 
-            }
 
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Error reading shift CSV:",
+                    "Error reading Shift CSV:",
                     error
                 );
 
-                alert(
-                    "There was an error reading the shift CSV."
+                shiftCard?.classList.remove(
+                    "completed"
                 );
+
+                updateContinueButton();
 
             }
 
@@ -151,33 +213,34 @@ if (orderInput) {
 
             try {
 
-                currentOrders =
-                    createOrders(
-                        await readCsv(file)
-                    );
+                const rows =
+                    await readCsv(file);
 
-                orderUploaded = true;
+
+                currentOrders =
+                    createOrders(rows);
+
 
                 orderCard?.classList.add(
                     "completed"
                 );
 
-                updateContinueButton();
 
                 rebuildMealBlocks();
 
-            }
 
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Error reading order CSV:",
+                    "Error reading Order CSV:",
                     error
                 );
 
-                alert(
-                    "There was an error reading the order CSV."
+                orderCard?.classList.remove(
+                    "completed"
                 );
+
+                updateContinueButton();
 
             }
 
@@ -206,33 +269,34 @@ if (paymentInput) {
 
             try {
 
-                currentPayments =
-                    createPayments(
-                        await readCsv(file)
-                    );
+                const rows =
+                    await readCsv(file);
 
-                paymentUploaded = true;
+
+                currentPayments =
+                    createPayments(rows);
+
 
                 paymentCard?.classList.add(
                     "completed"
                 );
 
-                updateContinueButton();
 
                 rebuildMealBlocks();
 
-            }
 
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Error reading payment CSV:",
+                    "Error reading Payment CSV:",
                     error
                 );
 
-                alert(
-                    "There was an error reading the payment CSV."
+                paymentCard?.classList.remove(
+                    "completed"
                 );
+
+                updateContinueButton();
 
             }
 
@@ -248,55 +312,76 @@ if (paymentInput) {
 
 function rebuildMealBlocks() {
 
-    // Assign employees to meal blocks
-    assignMealParticipations(
-        currentMealBlocks,
-        currentMealParticipations
-    );
+    /*
+        Only perform the logic that is possible
+        with the data currently available.
+    */
+
+    if (
+        currentMealBlocks.length > 0 &&
+        currentMealParticipations.length > 0
+    ) {
+
+        assignMealParticipations(
+            currentMealBlocks,
+            currentMealParticipations
+        );
+
+    }
 
 
-    // =================================================
-    // IMPORTANT
-    //
-    // This enriches each order with its payments.
-    //
-    // After this runs, orders should contain:
-    //
-    // order.payments
-    // order.cash_payment
-    // order.card_payment
-    // order.other_payment
-    //
-    // =================================================
+    if (
+        currentOrders.length > 0 &&
+        currentPayments.length > 0
+    ) {
 
-    enrichOrdersWithPayments(
-        currentOrders,
-        currentPayments
-    );
+        enrichOrdersWithPayments(
+            currentOrders,
+            currentPayments
+        );
+
+    }
 
 
-    // Assign orders to meal blocks
-    assignOrders(
-        currentMealBlocks,
-        currentOrders
-    );
+    if (
+        currentMealBlocks.length > 0 &&
+        currentOrders.length > 0
+    ) {
+
+        assignOrders(
+            currentMealBlocks,
+            currentOrders
+        );
 
 
-    // Assign orders to employees
-    assignOrdersToEmployees(
-        currentMealBlocks
-    );
+        assignOrdersToEmployees(
+            currentMealBlocks
+        );
+
+    }
 
 
-    // Calculate participation totals
-    calculateParticipationTotals(
-        currentMealBlocks
-    );
+    if (
+        currentMealBlocks.length > 0
+    ) {
+
+        calculateParticipationTotals(
+            currentMealBlocks
+        );
+
+    }
 
 
+    // Save the current state
     saveState();
 
+
+    // Re-render everything
     refreshUI();
+
+
+    // Re-check Continue
+    updateContinueButton();
 
 }
 
@@ -307,451 +392,16 @@ function rebuildMealBlocks() {
 
 function refreshUI() {
 
+    renderOverallTotals();
+
+    renderOverallCashSales();
+
     renderTipTables(
         currentMealBlocks
     );
 
     renderCashCollectedTables(
         currentMealBlocks
-    );
-
-    renderMealBlockTotals(
-        currentMealBlocks
-    );
-
-}
-
-
-// =================================================
-// MEAL BLOCK TOTALS
-//
-// IMPORTANT:
-//
-// These totals ONLY use:
-//
-//     block.orders
-//
-// They do NOT loop through currentOrders.
-//
-// The orders inside block.orders have already
-// been enriched by enrichOrdersWithPayments().
-//
-// Therefore:
-//
-// Card Tips
-//     -> order.tip
-//
-// Cash Sales
-//     -> order.cash_payment
-//
-// Card Sales
-//     -> order.card_payment
-//
-// =================================================
-
-function renderMealBlockTotals(
-    mealBlocks
-) {
-
-    const container =
-        document.getElementById(
-            "mealBlockTotals"
-        );
-
-    if (!container) {
-        return;
-    }
-
-    container.innerHTML = "";
-
-
-    // =================================================
-    // GROUP BLOCKS BY MEAL
-    // =================================================
-
-    const breakfastBlocks =
-        mealBlocks.filter(
-            block =>
-                String(
-                    block.meal ?? ""
-                ).toLowerCase() === "breakfast"
-        );
-
-
-    const lunchBlocks =
-        mealBlocks.filter(
-            block =>
-                String(
-                    block.meal ?? ""
-                ).toLowerCase() === "lunch"
-        );
-
-
-    const dinnerBlocks =
-        mealBlocks.filter(
-            block =>
-                String(
-                    block.meal ?? ""
-                ).toLowerCase() === "dinner"
-        );
-
-
-    // =================================================
-    // CALCULATE TOTALS FOR ONE MEAL
-    //
-    // ONLY block.orders ARE USED.
-    // =================================================
-
-    function calculateMealTotals(
-        blocks
-    ) {
-
-        let cardTips = 0;
-        let cashSales = 0;
-        let cardSales = 0;
-
-
-        for (
-            const block of blocks
-        ) {
-
-            const orders =
-                block.orders || [];
-
-
-            for (
-                const order of orders
-            ) {
-
-                // =====================================
-                // CARD TIPS
-                //
-                // Tip belongs to the order.
-                // =====================================
-
-                cardTips +=
-                    Number(
-                        order.tip ?? 0
-                    );
-
-
-                // =====================================
-                // CASH SALES
-                //
-                // This comes from the enriched order.
-                // =====================================
-
-                cashSales +=
-                    Number(
-                        order.cash_payment ?? 0
-                    );
-
-
-                // =====================================
-                // CARD SALES
-                //
-                // This comes from the enriched order.
-                // =====================================
-
-                cardSales +=
-                    Number(
-                        order.card_payment ?? 0
-                    );
-
-            }
-
-        }
-
-
-        return {
-            cardTips,
-            cashSales,
-            cardSales
-        };
-
-    }
-
-
-    // =================================================
-    // MONEY FORMATTER
-    //
-    // All money is stored as cents.
-    // =================================================
-
-    function formatMoney(
-        cents
-    ) {
-
-        return (
-            Number(cents || 0) / 100
-        ).toLocaleString(
-            "en-US",
-            {
-                style: "currency",
-                currency: "USD"
-            }
-        );
-
-    }
-
-
-    // =================================================
-    // CREATE MEAL SECTION
-    // =================================================
-
-function createMealSection(
-    mealName,
-    blocks
-) {
-
-    const totals =
-        calculateMealTotals(
-            blocks
-        );
-
-
-    // =================================================
-    // ORDER TOTALS ACROSS ALL MEAL BLOCKS
-    // =================================================
-
-    let totalOrders = 0;
-    let totalOrderTips = 0;
-    let totalOrderGratuity = 0;
-
-
-    for (const block of blocks) {
-
-        for (const order of (block.orders || [])) {
-
-            totalOrders += 1;
-
-            totalOrderTips +=
-                Number(order.tip) || 0;
-
-            totalOrderGratuity +=
-                Number(order.gratuity) || 0;
-
-        }
-
-    }
-
-
-    const totalTipsAndGratuity =
-        totalOrderTips +
-        totalOrderGratuity;
-
-
-    // =================================================
-    // CREATE SECTION
-    // =================================================
-
-    const section =
-        document.createElement(
-            "section"
-        );
-
-
-    section.className =
-        "meal-block-total-section";
-
-
-    section.innerHTML = `
-
-        <div class="meal-block-total-header">
-
-            <h3>
-                ${mealName}
-            </h3>
-
-            <span>
-                ${blocks.length}
-                meal block${blocks.length === 1 ? "" : "s"}
-            </span>
-
-        </div>
-
-
-        <!-- =========================================
-             ORDER TOTALS
-        ========================================== -->
-
-        <div class="meal-block-orders">
-
-            <h4>
-                Order Totals
-            </h4>
-
-
-            <div class="meal-block-total-grid">
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Orders
-                    </span>
-
-                    <strong>
-                        ${totalOrders}
-                    </strong>
-
-                </div>
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Order Tips
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totalOrderTips
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Order Gratuity
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totalOrderGratuity
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Tips + Gratuity
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totalTipsAndGratuity
-                        )}
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-        <!-- =========================================
-             PAYMENT TOTALS
-        ========================================== -->
-
-        <div class="meal-block-financials">
-
-            <h4>
-                Payment Totals
-            </h4>
-
-
-            <div class="meal-block-total-grid">
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Card Tips
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totals.cardTips
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Cash Sales
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totals.cashSales
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div class="meal-total-item">
-
-                    <span>
-                        Card Sales
-                    </span>
-
-                    <strong>
-                        ${formatMoney(
-                            totals.cardSales
-                        )}
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    return section;
-
-}
-
-
-    // =================================================
-    // BREAKFAST
-    // =================================================
-
-    container.appendChild(
-        createMealSection(
-            "Breakfast",
-            breakfastBlocks
-        )
-    );
-
-
-    // =================================================
-    // LUNCH
-    // =================================================
-
-    container.appendChild(
-        createMealSection(
-            "Lunch",
-            lunchBlocks
-        )
-    );
-
-
-    // =================================================
-    // DINNER
-    // =================================================
-
-    container.appendChild(
-        createMealSection(
-            "Dinner",
-            dinnerBlocks
-        )
     );
 
 }
@@ -808,90 +458,251 @@ function loadState() {
             "mealBlocks"
         );
 
+    const savedParticipations =
+        sessionStorage.getItem(
+            "mealParticipations"
+        );
 
-    if (!savedBlocks) {
-        return false;
-    }
+    const savedOrders =
+        sessionStorage.getItem(
+            "orders"
+        );
 
-
-    currentMealBlocks =
-        JSON.parse(
-            savedBlocks
+    const savedPayments =
+        sessionStorage.getItem(
+            "payments"
         );
 
 
-    currentMealParticipations =
-        JSON.parse(
-            sessionStorage.getItem(
-                "mealParticipations"
-            )
-        ) || [];
+    // ---------------------------------------------
+    // LOAD EACH DATASET
+    // ---------------------------------------------
+
+    try {
+
+        currentMealBlocks =
+            JSON.parse(
+                savedBlocks || "[]"
+            );
 
 
-    currentOrders =
-        JSON.parse(
-            sessionStorage.getItem(
-                "orders"
-            )
-        ) || [];
+        currentMealParticipations =
+            JSON.parse(
+                savedParticipations || "[]"
+            );
 
 
-    currentPayments =
-        JSON.parse(
-            sessionStorage.getItem(
-                "payments"
-            )
-        ) || [];
+        currentOrders =
+            JSON.parse(
+                savedOrders || "[]"
+            );
 
 
-    // =============================================
-    // IMPORTANT
-    //
-    // Re-enrich the loaded orders so the
-    // block.orders contain the payment information.
-    //
-    // =============================================
+        currentPayments =
+            JSON.parse(
+                savedPayments || "[]"
+            );
 
-    enrichOrdersWithPayments(
-        currentOrders,
-        currentPayments
+    } catch (error) {
+
+        console.error(
+            "Error loading saved state:",
+            error
+        );
+
+
+        currentMealBlocks = [];
+
+        currentMealParticipations = [];
+
+        currentOrders = [];
+
+        currentPayments = [];
+
+    }
+
+
+    // ---------------------------------------------
+    // UPDATE CARD APPEARANCE
+    // ---------------------------------------------
+
+    updateCardStatus();
+
+
+    // ---------------------------------------------
+    // UPDATE CONTINUE
+    // ---------------------------------------------
+
+    updateContinueButton();
+
+
+    // ---------------------------------------------
+    // TELL CALLER WHETHER DATA EXISTS
+    // ---------------------------------------------
+
+    return (
+        hasShiftData() ||
+        hasOrderData() ||
+        hasPaymentData()
     );
 
-
-    shiftUploaded =
-        currentMealBlocks.length > 0;
+}
 
 
-    orderUploaded =
-        currentOrders.length > 0;
+// =================================================
+// UPDATE CARD STATUS
+// =================================================
+
+function updateCardStatus() {
+
+    /*
+        A card is complete if either:
+
+        1. Its file is currently selected
+        OR
+        2. Its data was loaded from sessionStorage
+    */
 
 
-    paymentUploaded =
-        currentPayments.length > 0;
+    const shiftComplete =
+        hasShiftFile() ||
+        hasShiftData();
+
+
+    const orderComplete =
+        hasOrderFile() ||
+        hasOrderData();
+
+
+    const paymentComplete =
+        hasPaymentFile() ||
+        hasPaymentData();
 
 
     shiftCard?.classList.toggle(
         "completed",
-        shiftUploaded
+        shiftComplete
     );
 
 
     orderCard?.classList.toggle(
         "completed",
-        orderUploaded
+        orderComplete
     );
 
 
     paymentCard?.classList.toggle(
         "completed",
-        paymentUploaded
+        paymentComplete
+    );
+
+}
+
+
+// =================================================
+// CONTINUE BUTTON
+// =================================================
+
+function updateContinueButton() {
+
+    if (!nextButton) {
+        return;
+    }
+
+
+    /*
+        IMPORTANT:
+
+        Each input is considered complete if:
+
+        FILE EXISTS
+        OR
+        DATA ALREADY EXISTS
+
+        This means the user does NOT have to
+        re-upload a file after returning to
+        this page.
+    */
+
+
+    const shiftComplete =
+        hasShiftFile() ||
+        hasShiftData();
+
+
+    const orderComplete =
+        hasOrderFile() ||
+        hasOrderData();
+
+
+    const paymentComplete =
+        hasPaymentFile() ||
+        hasPaymentData();
+
+
+    const allComplete =
+        shiftComplete &&
+        orderComplete &&
+        paymentComplete;
+
+
+    // ---------------------------------------------
+    // Update card appearance
+    // ---------------------------------------------
+
+    shiftCard?.classList.toggle(
+        "completed",
+        shiftComplete
     );
 
 
-    updateContinueButton();
+    orderCard?.classList.toggle(
+        "completed",
+        orderComplete
+    );
 
 
-    return true;
+    paymentCard?.classList.toggle(
+        "completed",
+        paymentComplete
+    );
+
+
+    // ---------------------------------------------
+    // Enable / disable Continue
+    // ---------------------------------------------
+
+    nextButton.disabled =
+        !allComplete;
+
+
+    console.log(
+        "Continue check:",
+        {
+            shiftComplete,
+            orderComplete,
+            paymentComplete,
+            allComplete,
+
+            shiftFile:
+                hasShiftFile(),
+
+            shiftData:
+                hasShiftData(),
+
+            orderFile:
+                hasOrderFile(),
+
+            orderData:
+                hasOrderData(),
+
+            paymentFile:
+                hasPaymentFile(),
+
+            paymentData:
+                hasPaymentData()
+        }
+    );
 
 }
 
@@ -938,14 +749,34 @@ if (debugButton) {
 
 
 // =================================================
-// CONTINUE
+// NEXT PAGE
 // =================================================
 
 if (nextButton) {
 
     nextButton.onclick = () => {
 
+        /*
+            Run the check one last time before
+            navigating.
+        */
+
+        updateContinueButton();
+
+
+        if (nextButton.disabled) {
+
+            console.warn(
+                "Cannot continue. Required data is missing."
+            );
+
+            return;
+
+        }
+
+
         saveState();
+
 
         window.location.href =
             "../inputs/inputs.html";
@@ -986,27 +817,9 @@ if (resetButton) {
         currentPayments = [];
 
 
-        shiftUploaded = false;
-
-        orderUploaded = false;
-
-        paymentUploaded = false;
-
-
-        shiftCard?.classList.remove(
-            "completed"
-        );
-
-
-        orderCard?.classList.remove(
-            "completed"
-        );
-
-
-        paymentCard?.classList.remove(
-            "completed"
-        );
-
+        /*
+            Clear the actual file inputs too.
+        */
 
         if (shiftInput) {
             shiftInput.value = "";
@@ -1023,45 +836,15 @@ if (resetButton) {
         }
 
 
+        updateCardStatus();
+
         updateContinueButton();
-
-
-        const totals =
-            document.getElementById(
-                "mealBlockTotals"
-            );
-
-
-        if (totals) {
-            totals.innerHTML = "";
-        }
 
 
         window.location.href =
             "../index.html";
 
     };
-
-}
-
-
-// =================================================
-// UPDATE CONTINUE BUTTON
-// =================================================
-
-function updateContinueButton() {
-
-    if (!nextButton) {
-        return;
-    }
-
-
-    nextButton.disabled =
-        !(
-            shiftUploaded &&
-            orderUploaded &&
-            paymentUploaded
-        );
 
 }
 
@@ -1076,6 +859,9 @@ document
         "click",
         () => {
 
+            saveState();
+
+
             window.location.href =
                 "../index.html";
 
@@ -1084,11 +870,183 @@ document
 
 
 // =================================================
+// MONEY FORMAT
+// =================================================
+
+function money(cents) {
+
+    cents =
+        Number(cents) || 0;
+
+
+    return (
+        "$" +
+        (
+            cents / 100
+        ).toFixed(2)
+    );
+
+}
+
+
+// =================================================
+// OVERALL CARD TIPS
+// =================================================
+
+function renderOverallTotals() {
+
+    const output =
+        document.getElementById(
+            "overallTotals"
+        );
+
+
+    if (!output) {
+        return;
+    }
+
+
+    output.innerHTML = "";
+
+
+    let overallCardTips = 0;
+
+
+    for (
+        const block
+        of currentMealBlocks
+    ) {
+
+        for (
+            const employee
+            of (
+                block.employees ?? []
+            )
+        ) {
+
+            overallCardTips +=
+                Number(
+                    employee.card_tips
+                ) || 0;
+
+        }
+
+    }
+
+
+    output.innerHTML = `
+
+        <div class="overall-total-card">
+
+            <span class="overall-total-label">
+                Total Card Tips
+            </span>
+
+            <strong class="overall-total-value">
+                ${money(
+                    overallCardTips
+                )}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+
+// =================================================
+// OVERALL CASH SALES
+// =================================================
+
+function renderOverallCashSales() {
+
+    const output =
+        document.getElementById(
+            "overallCashSales"
+        );
+
+
+    if (!output) {
+        return;
+    }
+
+
+    output.innerHTML = "";
+
+
+    let overallCashSales = 0;
+
+
+    for (
+        const block
+        of currentMealBlocks
+    ) {
+
+        for (
+            const employee
+            of (
+                block.employees ?? []
+            )
+        ) {
+
+            overallCashSales +=
+                Number(
+                    employee.cash_sales
+                ) || 0;
+
+        }
+
+    }
+
+
+    output.innerHTML = `
+
+        <div class="overall-total-card">
+
+            <span class="overall-total-label">
+                Total Cash Sales
+            </span>
+
+            <strong class="overall-total-value">
+                ${money(
+                    overallCashSales
+                )}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+
+// =================================================
 // LOAD SAVED STATE
 // =================================================
 
-if (loadState()) {
+loadState();
 
-    refreshUI();
 
-}
+// =================================================
+// RENDER SAVED TABLES
+// =================================================
+
+/*
+    IMPORTANT:
+
+    Always refresh the UI after loading.
+
+    This is what makes the previously generated
+    tables appear again even though the file inputs
+    themselves are empty.
+*/
+
+refreshUI();
+
+
+// =================================================
+// FINAL CONTINUE CHECK
+// =================================================
+
+updateContinueButton();
