@@ -1223,3 +1223,326 @@ select:focus {
     }
 
 }
+
+
+/* =================================
+   ANALYTICS
+================================= */
+
+.analytics-content {
+    width: 100%;
+}
+
+.analytics-content h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+
+/* =================================
+   ANALYTICS TABLE
+================================= */
+
+.analytics-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.analytics-table th,
+.analytics-table td {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    color: var(--text);
+}
+
+.analytics-table th {
+    font-weight: 700;
+    background: var(--surface-hover);
+    color: var(--yellow);
+}
+
+
+/* =================================
+   GRAPH SECTION
+================================= */
+
+.analytics-graphs-title {
+    margin-top: 40px;
+    margin-bottom: 25px;
+    color: var(--yellow);
+}
+
+
+/* =================================
+   GRAPH GRID
+   TWO GRAPHS PER ROW
+================================= */
+
+.analytics-graphs {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 25px;
+
+    width: 100%;
+}
+
+
+/* =================================
+   GRAPH CARD
+================================= */
+
+.analytics-graph-card {
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    background: var(--surface);
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, .20);
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+
+    min-width: 0;
+}
+
+.analytics-graph-card:hover {
+    background: var(--surface-hover);
+
+    border-color: var(--cyan);
+
+    transform: translateY(-2px);
+}
+
+.analytics-graph-card h3 {
+    text-align: center;
+
+    margin-top: 0;
+
+    margin-bottom: 25px;
+
+    color: var(--cyan);
+}
+
+
+/* =================================
+   BAR CHART
+================================= */
+
+.bar-chart {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    width: 100%;
+
+    height: 600px;
+
+    padding-top: 30px;
+
+    box-sizing: border-box;
+}
+
+
+/* =================================
+   BAR COLUMN
+================================= */
+
+.bar-column {
+    flex: 1;
+
+    min-width: 0;
+
+    max-width: 100px;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    align-items: center;
+}
+
+
+/* =================================
+   VALUE ABOVE BAR
+================================= */
+
+.bar-value {
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+    white-space: nowrap;
+
+    color: var(--text);
+}
+
+
+/* =================================
+   BAR AREA
+================================= */
+
+.bar-area {
+    width: 100%;
+
+    height: 440px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+}
+
+
+/* =================================
+   BAR
+================================= */
+
+.bar {
+    width: 70%;
+
+    min-height: 3px;
+
+    border-radius:
+        6px 6px 0 0;
+
+    background: var(--pink);
+
+    box-shadow:
+        0 0 12px rgba(
+            233,
+            66,
+            163,
+            .20
+        );
+
+    transition:
+        height .25s ease,
+        opacity .2s ease,
+        box-shadow .2s ease;
+
+    cursor: pointer;
+}
+
+
+/* =================================
+   BAR HOVER
+================================= */
+
+.bar:hover {
+    opacity: .9;
+
+    box-shadow:
+        0 0 18px rgba(230, 159, 200, 0.758);
+}
+
+
+/* =================================
+   EMPLOYEE NAME
+================================= */
+
+.bar-label {
+    margin-top: 12px;
+
+    font-size: 10px;
+
+    text-align: center;
+
+    width: 100%;
+
+    color: var(--muted);
+
+    /* Allow names to wrap */
+    white-space: normal;
+
+    overflow: visible;
+
+    text-overflow: clip;
+
+    /* Break long names naturally */
+    overflow-wrap: break-word;
+
+    word-break: normal;
+
+    line-height: 1.2;
+
+    min-height: 32px;
+}
+
+
+/* =================================
+   TABLET / MOBILE
+================================= */
+
+@media (max-width: 900px) {
+
+    .analytics-graphs {
+        grid-template-columns: 1fr;
+    }
+
+    .bar-chart {
+        height: 500px;
+    }
+
+    .bar-area {
+        height: 360px;
+    }
+
+}
+
+
+/* =================================
+   SMALL MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .analytics-graph-card {
+        overflow-x: auto;
+    }
+
+    .bar-chart {
+        min-width: 650px;
+
+        height: 500px;
+    }
+
+    .bar-column {
+        min-width: 55px;
+    }
+
+}
