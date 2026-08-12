@@ -1,73 +1,66 @@
 import {
     ResultsSession
-}
-from "./model/resultsSession.js";
+} from "./model/resultsSession.js";
 
 
 import {
     compileResults
-}
-from "./logic/compileResults.js";
+} from "./logic/compileResults.js";
 
 
 import {
     renderResultsTable
-}
-from "./render/renderResultsTable.js";
+} from "./render/renderResultsTable.js";
 
 
 import {
     renderStats
-}
-from "./render/renderStats.js";
+} from "./render/renderStats.js";
+
+
+import {
+    renderAnalytics
+} from "./render/renderAnalytics.js";
 
 
 import {
     renderEmployeeDetails
-}
-from "./render/renderEmployeeDetails.js";
+} from "./render/renderEmployeeDetails.js";
 
 
 import {
     renderDateSelector
-}
-from "./render/renderDateSelector.js";
+} from "./render/renderDateSelector.js";
 
 
 import {
     renderPrintSummary
-}
-from "./render/renderPrintSummary.js";
+} from "./render/renderPrintSummary.js";
 
 
 import {
     exportTipDistributionCSV
-}
-from "./logic/exportTipDistributionCSV.js";
+} from "./logic/exportTipDistributionCSV.js";
 
 
 import {
     saveTipDistributionJSON
-}
-from "./logic/saveTipDistributionJSON.js";
+} from "./logic/saveTipDistributionJSON.js";
 
 
 import {
     loadTipDistributionJSON
-}
-from "./logic/loadTipDistributionJSON.js";
+} from "./logic/loadTipDistributionJSON.js";
 
 
 import {
     renderSpecialOrders
-}
-from "./render/renderSpecialOrders.js";
+} from "./render/renderSpecialOrders.js";
 
 
 import {
     exportPayrollSummaryCSV
-}
-from "./logic/exportPayrollSummaryCSV.js";
+} from "./logic/exportPayrollSummaryCSV.js";
 
 
 // =================================
@@ -95,6 +88,18 @@ const resultsSession =
 const resultsContainer =
     document.getElementById(
         "resultsContainer"
+    );
+
+
+const statsContainer =
+    document.getElementById(
+        "statsContainer"
+    );
+
+
+const analyticsContainer =
+    document.getElementById(
+        "analyticsContainer"
     );
 
 
@@ -152,6 +157,30 @@ const resultsButton =
     );
 
 
+const analyticsButton =
+    document.getElementById(
+        "analyticsButton"
+    );
+
+
+const resultsView =
+    document.getElementById(
+        "resultsView"
+    );
+
+
+const statsView =
+    document.getElementById(
+        "statsView"
+    );
+
+
+const analyticsView =
+    document.getElementById(
+        "analyticsView"
+    );
+
+
 // =================================
 // CURRENT VIEW
 // =================================
@@ -202,16 +231,6 @@ function openEmployee(
         );
 
 
-    /*
-        The simple Results table only has
-        four columns now:
-
-        Name
-        Cash
-        Card
-        Total
-    */
-
     cell.colSpan = 4;
 
 
@@ -235,6 +254,120 @@ function openEmployee(
 
 
 // =================================
+// SHOW RESULTS VIEW
+// =================================
+
+function showResultsView() {
+
+    if (
+        resultsView
+    ) {
+
+        resultsView.style.display =
+            "";
+
+    }
+
+
+    if (
+        statsView
+    ) {
+
+        statsView.style.display =
+            "none";
+
+    }
+
+
+    if (
+        analyticsView
+    ) {
+
+        analyticsView.style.display =
+            "none";
+
+    }
+
+}
+
+
+// =================================
+// SHOW STATS VIEW
+// =================================
+
+function showStatsView() {
+
+    if (
+        resultsView
+    ) {
+
+        resultsView.style.display =
+            "none";
+
+    }
+
+
+    if (
+        statsView
+    ) {
+
+        statsView.style.display =
+            "";
+
+    }
+
+
+    if (
+        analyticsView
+    ) {
+
+        analyticsView.style.display =
+            "none";
+
+    }
+
+}
+
+
+// =================================
+// SHOW ANALYTICS VIEW
+// =================================
+
+function showAnalyticsView() {
+
+    if (
+        resultsView
+    ) {
+
+        resultsView.style.display =
+            "none";
+
+    }
+
+
+    if (
+        statsView
+    ) {
+
+        statsView.style.display =
+            "none";
+
+    }
+
+
+    if (
+        analyticsView
+    ) {
+
+        analyticsView.style.display =
+            "";
+
+    }
+
+}
+
+
+// =================================
 // RENDER RESULTS VIEW
 // =================================
 
@@ -243,8 +376,31 @@ function renderResults() {
     currentView = "results";
 
 
+    showResultsView();
+
+
     resultsContainer.innerHTML =
         "";
+
+
+    if (
+        statsContainer
+    ) {
+
+        statsContainer.innerHTML =
+            "";
+
+    }
+
+
+    if (
+        analyticsContainer
+    ) {
+
+        analyticsContainer.innerHTML =
+            "";
+
+    }
 
 
     printContainer.innerHTML =
@@ -310,6 +466,9 @@ function renderStatsPage() {
     currentView = "stats";
 
 
+    showStatsView();
+
+
     resultsContainer.innerHTML =
         "";
 
@@ -318,24 +477,44 @@ function renderStatsPage() {
         "";
 
 
-    const filtered =
-        resultsSession.filtered_distribution;
+    if (
+        statsContainer
+    ) {
+
+        statsContainer.innerHTML =
+            "";
 
 
-    const employees =
-        compileResults(
-            filtered
+        const filtered =
+            resultsSession.filtered_distribution;
+
+
+        const employees =
+            compileResults(
+                filtered
+            );
+
+
+        statsContainer.appendChild(
+
+            renderStats(
+                employees,
+                filtered
+            )
+
         );
 
+    }
 
-    resultsContainer.appendChild(
 
-        renderStats(
-            employees,
-            filtered
-        )
+    if (
+        analyticsContainer
+    ) {
 
-    );
+        analyticsContainer.innerHTML =
+            "";
+
+    }
 
 
     updateViewButtons();
@@ -344,7 +523,72 @@ function renderStatsPage() {
 
 
 // =================================
-// UPDATE TOGGLE BUTTONS
+// RENDER ANALYTICS VIEW
+// =================================
+
+function renderAnalyticsPage() {
+
+    currentView = "analytics";
+
+
+    showAnalyticsView();
+
+
+    resultsContainer.innerHTML =
+        "";
+
+
+    printContainer.innerHTML =
+        "";
+
+
+    if (
+        statsContainer
+    ) {
+
+        statsContainer.innerHTML =
+            "";
+
+    }
+
+
+    if (
+        analyticsContainer
+    ) {
+
+        analyticsContainer.innerHTML =
+            "";
+
+
+        const filtered =
+            resultsSession.filtered_distribution;
+
+
+        const employees =
+            compileResults(
+                filtered
+            );
+
+
+        analyticsContainer.appendChild(
+
+            renderAnalytics(
+                employees,
+                filtered
+            )
+
+        );
+
+    }
+
+
+    updateViewButtons();
+
+}
+
+
+// =================================
+// UPDATE VIEW BUTTONS
 // =================================
 
 function updateViewButtons() {
@@ -368,6 +612,18 @@ function updateViewButtons() {
         summaryButton.classList.toggle(
             "active",
             currentView === "stats"
+        );
+
+    }
+
+
+    if (
+        analyticsButton
+    ) {
+
+        analyticsButton.classList.toggle(
+            "active",
+            currentView === "analytics"
         );
 
     }
@@ -396,6 +652,13 @@ if (
                     renderStatsPage();
 
                 }
+                else if (
+                    currentView === "analytics"
+                ) {
+
+                    renderAnalyticsPage();
+
+                }
                 else {
 
                     renderResults();
@@ -411,7 +674,7 @@ if (
 
 
 // =================================
-// RESULTS / STATS TOGGLE
+// RESULTS BUTTON
 // =================================
 
 if (
@@ -428,6 +691,10 @@ if (
 }
 
 
+// =================================
+// STATS BUTTON
+// =================================
+
 if (
     summaryButton
 ) {
@@ -436,6 +703,24 @@ if (
         () => {
 
             renderStatsPage();
+
+        };
+
+}
+
+
+// =================================
+// ANALYTICS BUTTON
+// =================================
+
+if (
+    analyticsButton
+) {
+
+    analyticsButton.onclick =
+        () => {
+
+            renderAnalyticsPage();
 
         };
 
@@ -484,6 +769,7 @@ if (
 
 }
 
+
 // =================================
 // IMPORT JSON HISTORY
 // =================================
@@ -511,6 +797,7 @@ if (
 
             const file =
                 event.target.files[0];
+
 
             if (
                 !file
@@ -542,7 +829,7 @@ if (
 
 
                 // =================================
-                // FIND OVERLAPPING MEAL BLOCKS
+                // FIND CONFLICTS
                 // =================================
 
                 const existingKeys =
@@ -592,6 +879,7 @@ if (
 
                     location.reload();
 
+
                     return;
 
                 }
@@ -614,11 +902,17 @@ if (
 
                 const useNew =
                     confirm(
+
                         `Some meal blocks already exist:\n\n` +
+
                         conflictText +
+
                         `\n\n` +
+
                         `OK = Replace the existing blocks with the new ones\n` +
+
                         `Cancel = Keep the existing blocks`
+
                     );
 
 
@@ -663,13 +957,18 @@ if (
 
 
                     alert(
+
                         `Import complete.\n\n` +
+
                         `Kept existing overlapping meal blocks.\n` +
+
                         `Added ${newOnly.length} new meal blocks.`
+
                     );
 
 
                     location.reload();
+
 
                     return;
 
@@ -713,14 +1012,17 @@ if (
 
 
                 alert(
+
                     `Import complete.\n\n` +
+
                     `Replaced ${conflicts.length} overlapping meal blocks.\n` +
+
                     `Added ${incoming.length - conflicts.length} new meal blocks.`
+
                 );
 
 
                 location.reload();
-
 
             }
             catch (
@@ -838,6 +1140,10 @@ window.RENDER_RESULTS =
 
 window.RENDER_STATS =
     renderStatsPage;
+
+
+window.RENDER_ANALYTICS =
+    renderAnalyticsPage;
 
 
 console.log(
