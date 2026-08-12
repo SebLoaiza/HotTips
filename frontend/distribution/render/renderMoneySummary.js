@@ -1,11 +1,14 @@
 import { formatMoney } from "./formatters.js";
 
+
 export function renderMoneySummary(block) {
 
     const wrapper =
         document.createElement("div");
 
-    wrapper.className = "money-summary";
+    wrapper.className =
+        "money-summary";
+
 
     wrapper.innerHTML = `
 
@@ -23,30 +26,98 @@ export function renderMoneySummary(block) {
 
             </thead>
 
+
             <tbody>
 
-                <tr>
-                    <td>Servers</td>
-                    <td>${formatMoney(block.servers_cash)}</td>
-                    <td>${formatMoney(block.servers_card)}</td>
-                </tr>
+                <!-- SERVERS -->
 
                 <tr>
-                    <td>BOH</td>
-                    <td>${formatMoney(block.boh_cash)}</td>
-                    <td>${formatMoney(block.boh_card)}</td>
+
+                    <td>
+                        Servers
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.servers_cash ?? 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.servers_card ?? 0
+                        )}
+                    </td>
+
                 </tr>
 
-                <tr>
-                    <td>Bussers</td>
-                    <td>${formatMoney(block.busser_cash)}</td>
-                    <td>${formatMoney(block.busser_card)}</td>
-                </tr>
+
+                <!-- BUSSERS -->
 
                 <tr>
-                    <td>Hosts</td>
-                    <td>${formatMoney(block.host_cash)}</td>
-                    <td>${formatMoney(block.host_card)}</td>
+
+                    <td>
+                        Bussers
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.busser_cash ?? 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.busser_card ?? 0
+                        )}
+                    </td>
+
+                </tr>
+
+
+                <!-- HOSTS -->
+
+                <tr>
+
+                    <td>
+                        Hosts
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.host_cash ?? 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.host_card ?? 0
+                        )}
+                    </td>
+
+                </tr>
+
+
+                <!-- BOH -->
+
+                <tr>
+
+                    <td>
+                        BOH
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.boh_cash ?? 0
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatMoney(
+                            block.boh_card ?? 0
+                        )}
+                    </td>
+
                 </tr>
 
             </tbody>
@@ -54,6 +125,7 @@ export function renderMoneySummary(block) {
         </table>
 
     `;
+
 
     return wrapper;
 
