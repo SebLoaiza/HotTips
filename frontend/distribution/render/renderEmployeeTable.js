@@ -131,9 +131,12 @@ export function renderEmployeeTable(
             // This is the denominator for all percentages.
             // =================================================
 
+            const cashTipsForPercentage =
+                Math.max(cashTips, 0);
+
             const personTotalTips =
                 cardTips +
-                cashTips;
+                cashTipsForPercentage;
 
 
             // =================================================
