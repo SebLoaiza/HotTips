@@ -6,7 +6,6 @@ function money(cents) {
 
 }
 
-
 export function renderCashTipSummary(
     mealBlocks,
     selectedDay = null
@@ -26,7 +25,6 @@ export function renderCashTipSummary(
     let blocksToRender =
         mealBlocks;
 
-
     // =================================================
     // FILTER BY SELECTED DAY
     // =================================================
@@ -42,7 +40,6 @@ export function renderCashTipSummary(
 
     }
 
-
     // =================================================
     // OVERALL TOTALS
     // =================================================
@@ -50,7 +47,8 @@ export function renderCashTipSummary(
     let grandCashSales = 0;
     let grandCashDrop = 0;
     let grandCashTips = 0;
-
+    let grandCardTips = 0;
+    let grandTotalTips = 0;
 
     // =================================================
     // INDIVIDUAL MEAL BLOCK TABLES
@@ -65,7 +63,6 @@ export function renderCashTipSummary(
 
         wrap.className =
             "panel";
-
 
         let html = `
 
@@ -103,7 +100,6 @@ export function renderCashTipSummary(
 
         `;
 
-
         // =================================================
         // BLOCK TOTALS
         // =================================================
@@ -111,7 +107,6 @@ export function renderCashTipSummary(
         let blockCashSales = 0;
         let blockCashDrop = 0;
         let blockCashTips = 0;
-
 
         // =================================================
         // EMPLOYEE ROWS
@@ -134,7 +129,6 @@ export function renderCashTipSummary(
                     employee.cash_tips
                 ) || 0;
 
-
             // -------------------------
             // BLOCK TOTALS
             // -------------------------
@@ -148,7 +142,6 @@ export function renderCashTipSummary(
             blockCashTips +=
                 cashTips;
 
-
             // -------------------------
             // GRAND TOTALS
             // -------------------------
@@ -161,7 +154,6 @@ export function renderCashTipSummary(
 
             grandCashTips +=
                 cashTips;
-
 
             // -------------------------
             // EMPLOYEE ROW
@@ -198,7 +190,6 @@ export function renderCashTipSummary(
             `;
 
         }
-
 
         // =================================================
         // MEAL BLOCK TOTAL
@@ -238,17 +229,14 @@ export function renderCashTipSummary(
 
         `;
 
-
         wrap.innerHTML =
             html;
-
 
         output.appendChild(
             wrap
         );
 
     }
-
 
     // =================================================
     // OVERALL TABLE
@@ -265,7 +253,6 @@ export function renderCashTipSummary(
 
         totalWrap.className =
             "panel";
-
 
         let totalHtml = `
 
@@ -303,6 +290,14 @@ export function renderCashTipSummary(
                             Cash Tips
                         </th>
 
+                        <th>
+                            Card Tips
+                        </th>
+
+                        <th>
+                            Total Tips
+                        </th>
+
                     </tr>
 
                 </thead>
@@ -311,9 +306,8 @@ export function renderCashTipSummary(
 
         `;
 
-
         // =================================================
-        // EVERY EMPLOYEE / DROP
+        // EVERY EMPLOYEE
         // =================================================
 
         for (
@@ -341,6 +335,32 @@ export function renderCashTipSummary(
                         employee.cash_tips
                     ) || 0;
 
+                const cardTips =
+                    Number(
+                        employee.card_tips
+                    ) || 0;
+
+                const totalTips =
+                    cashTips +
+                    cardTips;
+
+                // -------------------------
+                // CARD TIP TOTAL
+                // -------------------------
+
+                grandCardTips +=
+                    cardTips;
+
+                // -------------------------
+                // TOTAL TIP TOTAL
+                // -------------------------
+
+                grandTotalTips +=
+                    totalTips;
+
+                // -------------------------
+                // FINAL TABLE ROW
+                // -------------------------
 
                 totalHtml += `
 
@@ -376,6 +396,18 @@ export function renderCashTipSummary(
                             )}
                         </td>
 
+                        <td>
+                            ${money(
+                                cardTips
+                            )}
+                        </td>
+
+                        <td>
+                            ${money(
+                                totalTips
+                            )}
+                        </td>
+
                     </tr>
 
                 `;
@@ -383,7 +415,6 @@ export function renderCashTipSummary(
             }
 
         }
-
 
         // =================================================
         // GRAND TOTAL
@@ -415,6 +446,18 @@ export function renderCashTipSummary(
                             )}
                         </th>
 
+                        <th>
+                            ${money(
+                                grandCardTips
+                            )}
+                        </th>
+
+                        <th>
+                            ${money(
+                                grandTotalTips
+                            )}
+                        </th>
+
                     </tr>
 
                 </tbody>
@@ -423,10 +466,8 @@ export function renderCashTipSummary(
 
         `;
 
-
         totalWrap.innerHTML =
             totalHtml;
-
 
         output.appendChild(
             totalWrap
