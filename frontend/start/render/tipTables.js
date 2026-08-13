@@ -49,6 +49,18 @@ export function renderTipTables(mealBlocks) {
         }
 
 
+        // Create the meal title OUTSIDE the scrollable table
+        const title = document.createElement("h4");
+
+        title.className = "table-title";
+
+        title.textContent =
+            `${meal} Tips & Gratuity Earned`;
+
+        output.appendChild(title);
+
+
+        // Create table
         const table =
             document.createElement("table");
 
@@ -57,8 +69,6 @@ export function renderTipTables(mealBlocks) {
 
         // Header
         let html = `
-            <caption>${meal} Tips &amp; Gratuity Earned</caption>
-
             <thead>
 
                 <tr>
@@ -122,7 +132,9 @@ export function renderTipTables(mealBlocks) {
 
             html += `
                     <td>
-                        <strong>${money(employeeTotal)}</strong>
+                        <strong>
+                            ${money(employeeTotal)}
+                        </strong>
                     </td>
 
                 </tr>
@@ -169,10 +181,13 @@ export function renderTipTables(mealBlocks) {
         `;
 
 
+        // Insert table HTML
         table.innerHTML = html;
 
 
-        const wrapper = document.createElement("div");
+        // Create scrollable wrapper
+        const wrapper =
+            document.createElement("div");
 
         wrapper.className = "table-scroll";
 
@@ -180,6 +195,7 @@ export function renderTipTables(mealBlocks) {
         wrapper.appendChild(table);
 
 
+        // Add scrolling table underneath the title
         output.appendChild(wrapper);
 
     }

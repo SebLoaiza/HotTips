@@ -1,9 +1,7 @@
 import {
     formatMoney,
     formatHours
-}
-from "../utils/formatters.js";
-
+} from "../utils/formatters.js";
 
 export function renderEmployeeDetails(
     employee
@@ -14,8 +12,56 @@ export function renderEmployeeDetails(
             "div"
         );
 
-
     let trainerSection = "";
+
+    // =========================
+    // PERCENTAGES
+    // =========================
+
+    // Pre-distribution tip percentages
+    const originalTips =
+        employee.original_tips ?? 0;
+
+    const cashTipsPercentage =
+        originalTips > 0
+            ? ((employee.original_cash_tips ?? 0) / originalTips) * 100
+            : 0;
+
+    const cardTipsPercentage =
+        originalTips > 0
+            ? ((employee.original_card_tips ?? 0) / originalTips) * 100
+            : 0;
+
+
+    // Final payout percentages
+    // Based on the FINAL PAYOUT TOTAL
+    const finalPayoutTotal =
+        employee.total_payout ?? 0;
+
+    const cashPayoutPercentage =
+        finalPayoutTotal > 0
+            ? ((employee.cash_payout ?? 0) / finalPayoutTotal) * 100
+            : 0;
+
+    const cardPayoutPercentage =
+        finalPayoutTotal > 0
+            ? ((employee.card_payout ?? 0) / finalPayoutTotal) * 100
+            : 0;
+
+
+    // Tip percentage
+    // Total original tips divided by total sales
+    const totalSales =
+        employee.total_sales ?? 0;
+
+    const tipPercentage =
+        totalSales > 0
+            ? (originalTips / totalSales) * 100
+            : 0;
+
+
+    const formatPercentage = (value) =>
+        `${value.toFixed(2)}%`;
 
 
     // =========================
@@ -23,10 +69,8 @@ export function renderEmployeeDetails(
     // =========================
 
     if (
-
         employee.tips_sent_to_trainers &&
         employee.tips_sent_to_trainers.length > 0
-
     ) {
 
         trainerSection += `
@@ -39,19 +83,13 @@ export function renderEmployeeDetails(
 
         `;
 
-
         for (
-
             const transfer of employee.tips_sent_to_trainers
-
         ) {
 
             const total =
-
                 (transfer.cash_amount ?? 0) +
-
                 (transfer.card_amount ?? 0);
-
 
             trainerSection += `
 
@@ -69,23 +107,32 @@ export function renderEmployeeDetails(
 
                         <div>
                             <label>Cash</label>
-                            <span>${formatMoney(
-                                transfer.cash_amount
-                            )}</span>
+
+                            <span>
+                                ${formatMoney(
+                                    transfer.cash_amount
+                                )}
+                            </span>
                         </div>
 
                         <div>
                             <label>Card</label>
-                            <span>${formatMoney(
-                                transfer.card_amount
-                            )}</span>
+
+                            <span>
+                                ${formatMoney(
+                                    transfer.card_amount
+                                )}
+                            </span>
                         </div>
 
                         <div>
                             <label>Total</label>
-                            <span>${formatMoney(
-                                total
-                            )}</span>
+
+                            <span>
+                                ${formatMoney(
+                                    total
+                                )}
+                            </span>
                         </div>
 
                     </div>
@@ -93,16 +140,13 @@ export function renderEmployeeDetails(
                 </div>
 
             `;
-
         }
-
 
         trainerSection += `
 
             </section>
 
         `;
-
     }
 
 
@@ -111,11 +155,8 @@ export function renderEmployeeDetails(
     // =========================
 
     const trainingTotal =
-
         (employee.training_cash_received ?? 0) +
-
         (employee.training_card_received ?? 0);
-
 
     if (trainingTotal > 0) {
 
@@ -131,7 +172,9 @@ export function renderEmployeeDetails(
 
                     <div>
 
-                        <label>Cash</label>
+                        <label>
+                            Cash
+                        </label>
 
                         <span>
 
@@ -145,7 +188,9 @@ export function renderEmployeeDetails(
 
                     <div>
 
-                        <label>Card</label>
+                        <label>
+                            Card
+                        </label>
 
                         <span>
 
@@ -159,7 +204,9 @@ export function renderEmployeeDetails(
 
                     <div>
 
-                        <label>Total</label>
+                        <label>
+                            Total
+                        </label>
 
                         <span>
 
@@ -176,7 +223,6 @@ export function renderEmployeeDetails(
             </section>
 
         `;
-
     }
 
 
@@ -197,33 +243,91 @@ export function renderEmployeeDetails(
 
         <div class="detailGrid">
 
+
+            <!-- =========================
+                 TIPS PRE-DISTRIBUTION
+                 ========================= -->
+
             <section class="detailCard">
 
                 <h3>
-                    Original Tips
+                    Tips Pre-Distribution
                 </h3>
 
                 <div class="detailList">
 
-                    <div>
-                        <label>Cash Tips</label>
-                        <span>${formatMoney(employee.original_cash_tips)}</span>
-                    </div>
 
                     <div>
-                        <label>Card Tips</label>
-                        <span>${formatMoney(employee.original_card_tips)}</span>
+
+                        <label>
+                            Cash Tips
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.original_cash_tips
+                            )}
+
+                            <small>
+                                ${formatPercentage(
+                                    cashTipsPercentage
+                                )}
+                            </small>
+
+                        </span>
+
                     </div>
 
+
                     <div>
-                        <label>Total Generated</label>
-                        <span>${formatMoney(employee.original_tips)}</span>
+
+                        <label>
+                            Card Tips
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.original_card_tips
+                            )}
+
+                            <small>
+                                ${formatPercentage(
+                                    cardTipsPercentage
+                                )}
+                            </small>
+
+                        </span>
+
                     </div>
+
+
+                    <div>
+
+                        <label>
+                            Total Generated
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.original_tips
+                            )}
+
+                        </span>
+
+                    </div>
+
 
                 </div>
 
             </section>
 
+
+            <!-- =========================
+                 DISTRIBUTION
+                 ========================= -->
 
             <section class="detailCard">
 
@@ -233,30 +337,75 @@ export function renderEmployeeDetails(
 
                 <div class="detailList">
 
-                    <div>
-                        <label>Cash Kept</label>
-                        <span>${formatMoney(employee.cash_kept)}</span>
-                    </div>
 
                     <div>
-                        <label>Card Kept</label>
-                        <span>${formatMoney(employee.card_kept)}</span>
+
+                        <label>
+                            Cash Tips Kept
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.cash_kept
+                            )}
+                        </span>
+
                     </div>
 
-                    <div>
-                        <label>Pool Cash</label>
-                        <span>${formatMoney(employee.pool_cash)}</span>
-                    </div>
 
                     <div>
-                        <label>Pool Card</label>
-                        <span>${formatMoney(employee.pool_card)}</span>
+
+                        <label>
+                            Credit Card Tips Kept
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.card_kept
+                            )}
+                        </span>
+
                     </div>
+
+
+                    <div>
+
+                        <label>
+                            Pool Cash Received
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.pool_cash
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Pool Credit Card Received
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.pool_card
+                            )}
+                        </span>
+
+                    </div>
+
 
                 </div>
 
             </section>
 
+
+            <!-- =========================
+                 FINAL PAYOUT
+                 ========================= -->
 
             <section class="detailCard">
 
@@ -266,25 +415,78 @@ export function renderEmployeeDetails(
 
                 <div class="detailList">
 
-                    <div>
-                        <label>Cash</label>
-                        <span>${formatMoney(employee.cash_payout)}</span>
-                    </div>
 
                     <div>
-                        <label>Card</label>
-                        <span>${formatMoney(employee.card_payout)}</span>
+
+                        <label>
+                            Cash
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.cash_payout
+                            )}
+
+                            <small>
+                                ${formatPercentage(
+                                    cashPayoutPercentage
+                                )}
+                            </small>
+
+                        </span>
+
                     </div>
 
+
                     <div>
-                        <label>Total</label>
-                        <span>${formatMoney(employee.total_payout)}</span>
+
+                        <label>
+                            Credit Card
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.card_payout
+                            )}
+
+                            <small>
+                                ${formatPercentage(
+                                    cardPayoutPercentage
+                                )}
+                            </small>
+
+                        </span>
+
                     </div>
+
+
+                    <div>
+
+                        <label>
+                            Total
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.total_payout
+                            )}
+
+                        </span>
+
+                    </div>
+
 
                 </div>
 
             </section>
 
+
+            <!-- =========================
+                 SALES
+                 ========================= -->
 
             <section class="detailCard">
 
@@ -294,25 +496,60 @@ export function renderEmployeeDetails(
 
                 <div class="detailList">
 
-                    <div>
-                        <label>Cash Sales</label>
-                        <span>${formatMoney(employee.cash_sales)}</span>
-                    </div>
 
                     <div>
-                        <label>Card Sales</label>
-                        <span>${formatMoney(employee.card_sales)}</span>
+
+                        <label>
+                            Cash Sales
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.cash_sales
+                            )}
+                        </span>
+
                     </div>
 
+
                     <div>
-                        <label>Total Sales</label>
-                        <span>${formatMoney(employee.total_sales)}</span>
+
+                        <label>
+                            Credit Card Sales
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.card_sales
+                            )}
+                        </span>
+
                     </div>
+
+
+                    <div>
+
+                        <label>
+                            Total Sales
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.total_sales
+                            )}
+                        </span>
+
+                    </div>
+
 
                 </div>
 
             </section>
 
+
+            <!-- =========================
+                 PERFORMANCE
+                 ========================= -->
 
             <section class="detailCard">
 
@@ -322,36 +559,78 @@ export function renderEmployeeDetails(
 
                 <div class="detailList">
 
-                    <div>
-                        <label>Orders</label>
-                        <span>${employee.order_count}</span>
-                    </div>
 
                     <div>
-                        <label>Hours</label>
-                        <span>${formatHours(employee.worked_minutes)}</span>
+
+                        <label>
+                            Orders
+                        </label>
+
+                        <span>
+                            ${employee.order_count}
+                        </span>
+
                     </div>
 
-                    <div>
-                        <label>Sales / Hour</label>
-                        <span>${formatMoney(employee.avg_sales_per_hour)}</span>
-                    </div>
 
                     <div>
-                        <label>Avg Tip / Order</label>
-                        <span>${formatMoney(employee.avg_tip_per_order)}</span>
+
+                        <label>
+                            Hours
+                        </label>
+
+                        <span>
+                            ${formatHours(
+                                employee.worked_minutes
+                            )}
+                        </span>
+
                     </div>
+
+
+                    <div>
+
+                        <label>
+                            Sales / Hour
+                        </label>
+
+                        <span>
+                            ${formatMoney(
+                                employee.avg_sales_per_hour
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Avg Tip / Order
+                        </label>
+
+                        <span>
+
+                            ${formatMoney(
+                                employee.avg_tip_per_order
+                            )}
+
+                        </span>
+
+                    </div>
+
 
                 </div>
 
             </section>
 
+
             ${trainerSection}
+
 
         </div>
 
     `;
-
 
     return div;
 

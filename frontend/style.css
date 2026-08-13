@@ -310,3 +310,37 @@ button:hover {
         max-width: 320px;
     }
 }
+
+/* =========================
+   Copyright
+========================= */
+
+.copyright {
+    position: fixed;
+
+    bottom: 12px;
+    left: 16px;
+
+    font-size: 11px;
+
+    color: rgba(245, 245, 247, 0.45);
+
+    letter-spacing: 0.3px;
+
+    pointer-events: none;
+}
+
+.version {
+    position: fixed;
+
+    bottom: 12px;
+    right: 16px;
+
+    font-size: 11px;
+
+    color: rgba(245, 245, 247, 0.45);
+
+    letter-spacing: 0.3px;
+
+    pointer-events: none;
+}

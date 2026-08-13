@@ -1,7 +1,6 @@
 import {
     formatMoney
-}
-from "../utils/formatters.js";
+} from "../utils/formatters.js";
 
 export function renderPrintSummary(
     employees,
@@ -9,16 +8,14 @@ export function renderPrintSummary(
 ) {
 
     const container =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     container.className =
         "printSheet";
 
-    // =========================
+    // =================================
     // FORMAT LEADERBOARD NAME
-    // =========================
+    // =================================
 
     function formatLeaderboardName(
         name
@@ -28,15 +25,10 @@ export function renderPrintSummary(
             (name || "").trim();
 
         if (!cleanName) {
-
             return "";
-
         }
 
-        // =========================
-        // LAST, FIRST FORMAT
-        // =========================
-
+        // LAST, FIRST
         if (
             cleanName.includes(",")
         ) {
@@ -56,21 +48,13 @@ export function renderPrintSummary(
                 parts[1] || "";
 
             if (!firstName) {
-
                 return lastName;
-
             }
 
-            return (
-                `${firstName} ${lastName.charAt(0)}.`
-            );
-
+            return `${firstName} ${lastName.charAt(0)}.`;
         }
 
-        // =========================
-        // FIRST LAST FORMAT
-        // =========================
-
+        // FIRST LAST
         const parts =
             cleanName
                 .split(/\s+/)
@@ -79,9 +63,7 @@ export function renderPrintSummary(
         if (
             parts.length === 1
         ) {
-
             return parts[0];
-
         }
 
         const firstName =
@@ -90,31 +72,29 @@ export function renderPrintSummary(
         const lastName =
             parts[parts.length - 1];
 
-        return (
-            `${firstName} ${lastName.charAt(0)}.`
-        );
-
+        return `${firstName} ${lastName.charAt(0)}.`;
     }
 
-    // =========================
+    // =================================
     // DATE RANGE
-    // =========================
+    // =================================
 
     const dates =
         [
             ...new Set(
                 distribution
                     .map(
-                        block => block.date
+                        block =>
+                            block.date
                     )
                     .filter(Boolean)
             )
         ];
 
-    // Sort dates chronologically
     dates.sort(
         (a, b) =>
-            new Date(a) - new Date(b)
+            new Date(a) -
+            new Date(b)
     );
 
     const startDate =
@@ -123,42 +103,66 @@ export function renderPrintSummary(
     const endDate =
         dates[dates.length - 1] || "";
 
-    // =========================
+    // =================================
     // QUALIFIED EMPLOYEES
-    // =========================
+    // =================================
 
     const qualifiedEmployees =
         employees.filter(
-            employee =>
+            employee => {
 
-                employee.total_sales >= 250
+                const totalSales =
+                    Number(
+                        employee.total_sales
+                    ) || 0;
 
-                &&
+                const workedMinutes =
+                    Number(
+                        employee.worked_minutes
+                    ) || 0;
 
-                employee.worked_minutes >= 120
+                return (
+                    totalSales >= 250 &&
+                    workedMinutes >= 120
+                );
+            }
         );
 
-    // =========================
+    // =================================
     // TOP SALES
-    // =========================
+    // =================================
 
     const topSales =
         [
             ...employees
         ]
         .sort(
-            (a, b) =>
-                b.total_sales -
-                a.total_sales
+            (a, b) => {
+
+                const salesA =
+                    Number(
+                        a.total_sales
+                    ) || 0;
+
+                const salesB =
+                    Number(
+                        b.total_sales
+                    ) || 0;
+
+                return (
+                    salesB -
+                    salesA
+                );
+            }
         )
         .slice(
             0,
             5
         );
 
-    // =========================
+    // =================================
     // TOP TIP %
-    // =========================
+    // =================================
 
     const topTips =
         [
@@ -167,28 +171,40 @@ export function renderPrintSummary(
         .sort(
             (a, b) => {
 
+                const salesA =
+                    Number(
+                        a.total_sales
+                    ) || 0;
+
+                const salesB =
+                    Number(
+                        b.total_sales
+                    ) || 0;
+
+                const tipsA =
+                    Number(
+                        a.original_tips
+                    ) || 0;
+
+                const tipsB =
+                    Number(
+                        b.original_tips
+                    ) || 0;
+
                 const tipA =
-                    a.total_sales > 0
-                        ?
-                        (
-                            a.original_tips /
-                            a.total_sales
-                        )
-                        :
-                        0;
+                    salesA > 0
+                        ? tipsA / salesA
+                        : 0;
 
                 const tipB =
-                    b.total_sales > 0
-                        ?
-                        (
-                            b.original_tips /
-                            b.total_sales
-                        )
-                        :
-                        0;
+                    salesB > 0
+                        ? tipsB / salesB
+                        : 0;
 
-                return tipB - tipA;
-
+                return (
+                    tipB -
+                    tipA
+                );
             }
         )
         .slice(
@@ -196,9 +212,9 @@ export function renderPrintSummary(
             5
         );
 
-    // =========================
+    // =================================
     // TOP TIPS / HOUR
-    // =========================
+    // =================================
 
     const topTipsPerHour =
         [
@@ -207,32 +223,46 @@ export function renderPrintSummary(
         .sort(
             (a, b) => {
 
+                const minutesA =
+                    Number(
+                        a.worked_minutes
+                    ) || 0;
+
+                const minutesB =
+                    Number(
+                        b.worked_minutes
+                    ) || 0;
+
                 const hoursA =
-                    a.worked_minutes /
-                    60;
+                    minutesA / 60;
 
                 const hoursB =
-                    b.worked_minutes /
-                    60;
+                    minutesB / 60;
 
                 const tipsA =
-                    hoursA > 0
-                        ?
-                        a.original_tips /
-                        hoursA
-                        :
-                        0;
+                    Number(
+                        a.original_tips
+                    ) || 0;
 
                 const tipsB =
+                    Number(
+                        b.original_tips
+                    ) || 0;
+
+                const hourlyA =
+                    hoursA > 0
+                        ? tipsA / hoursA
+                        : 0;
+
+                const hourlyB =
                     hoursB > 0
-                        ?
-                        b.original_tips /
-                        hoursB
-                        :
-                        0;
+                        ? tipsB / hoursB
+                        : 0;
 
-                return tipsB - tipsA;
-
+                return (
+                    hourlyB -
+                    hourlyA
+                );
             }
         )
         .slice(
@@ -240,9 +270,267 @@ export function renderPrintSummary(
             5
         );
 
-    // =========================
+    // =================================
+    // TIP %
+    // =================================
+
+    function getTipPercentage(
+        employee
+    ) {
+
+        const sales =
+            Number(
+                employee.total_sales
+            ) || 0;
+
+        const tips =
+            Number(
+                employee.original_tips
+            ) || 0;
+
+        if (
+            sales <= 0
+        ) {
+            return 0;
+        }
+
+        return (
+            tips /
+            sales
+        ) * 100;
+    }
+
+    // =================================
+    // TIPS / HOUR
+    // =================================
+
+    function getTipsPerHour(
+        employee
+    ) {
+
+        const minutes =
+            Number(
+                employee.worked_minutes
+            ) || 0;
+
+        const tips =
+            Number(
+                employee.original_tips
+            ) || 0;
+
+        const hours =
+            minutes / 60;
+
+        if (
+            hours <= 0
+        ) {
+            return 0;
+        }
+
+        return (
+            tips /
+            hours
+        );
+    }
+
+    // =================================
+    // GRAPH BAR BUILDER
+    // =================================
+
+    function buildGraphBars(
+        data,
+        valueFunction,
+        formatter,
+        suffix = "",
+        barColor = "#000000"
+    ) {
+
+        if (
+            !data.length
+        ) {
+
+            return `
+                <div class="analyticsNoData">
+                    No qualifying employees
+                </div>
+            `;
+        }
+
+        const values =
+            data.map(
+                employee =>
+                    valueFunction(
+                        employee
+                    )
+            );
+
+        const maxValue =
+            Math.max(
+                ...values,
+                1
+            );
+
+        // =================================
+        // GRAPH DIMENSIONS
+        // =================================
+
+        const BAR_AREA_HEIGHT =
+            155;
+
+        const SVG_WIDTH =
+            42;
+
+        return data.map(
+            employee => {
+
+                const value =
+                    valueFunction(
+                        employee
+                    );
+
+                const normalizedValue =
+                    maxValue > 0
+                        ?
+                        value /
+                        maxValue
+                        :
+                        0;
+
+                const barHeight =
+                    Math.max(
+                        3,
+                        normalizedValue *
+                        BAR_AREA_HEIGHT
+                    );
+
+                const barY =
+                    BAR_AREA_HEIGHT -
+                    barHeight;
+
+                const displayValue =
+                    `${formatter(value)}${suffix}`;
+
+                const displayName =
+                    formatLeaderboardName(
+                        employee.name
+                    );
+
+                return `
+
+                    <div
+                        class="analyticsBarColumn"
+                    >
+
+                        <div
+                            class="analyticsBarValue"
+                            title="${displayValue}"
+                        >
+
+                            ${displayValue}
+
+                        </div>
+
+                        <div
+                            class="analyticsBarArea"
+                        >
+
+                            <svg
+                                class="analyticsBarSvg"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="${SVG_WIDTH}"
+                                height="${BAR_AREA_HEIGHT}"
+                                viewBox="
+                                    0 0
+                                    ${SVG_WIDTH}
+                                    ${BAR_AREA_HEIGHT}
+                                "
+                                preserveAspectRatio="none"
+                            >
+
+                                <rect
+                                    x="0"
+                                    y="${barY}"
+                                    width="${SVG_WIDTH}"
+                                    height="${barHeight}"
+                                    rx="1"
+                                    ry="1"
+                                    fill="${barColor}"
+                                ></rect>
+
+                            </svg>
+
+                        </div>
+
+                        <div
+                            class="analyticsBarLabel"
+                            title="${displayName}"
+                        >
+
+                            ${displayName}
+
+                        </div>
+
+                    </div>
+
+                `;
+            }
+        )
+        .join("");
+    }
+
+    // =================================
+    // GRAPH HTML
+    // =================================
+
+    // PINK = TOP SALES
+    const salesGraph =
+        buildGraphBars(
+            topSales,
+            employee =>
+                Number(
+                    employee.total_sales
+                ) || 0,
+            value =>
+                formatMoney(
+                    value
+                ),
+            "",
+            "#E942A3"
+        );
+
+    // YELLOW = TOP TIP %
+    const tipPercentageGraph =
+        buildGraphBars(
+            topTips,
+            employee =>
+                getTipPercentage(
+                    employee
+                ),
+            value =>
+                value.toFixed(2),
+            "%",
+            "#8BE7FF"
+        );
+
+    // CYAN = TOP TIPS / HOUR
+    const tipsPerHourGraph =
+        buildGraphBars(
+            topTipsPerHour,
+            employee =>
+                getTipsPerHour(
+                    employee
+                ),
+            value =>
+                formatMoney(
+                    value
+                ),
+            " / hr",
+            "#E942A3"
+        );
+
+    // =================================
     // TOP SALES ROWS
-    // =========================
+    // =================================
 
     const topSalesRows =
         topSales.map(
@@ -276,7 +564,9 @@ export function renderPrintSummary(
                     <td class="valueCell">
 
                         ${formatMoney(
-                            employee.total_sales
+                            Number(
+                                employee.total_sales
+                            ) || 0
                         )}
 
                     </td>
@@ -287,9 +577,9 @@ export function renderPrintSummary(
         )
         .join("");
 
-    // =========================
+    // =================================
     // TOP TIP % ROWS
-    // =========================
+    // =================================
 
     const topTipsRows =
         topTips.map(
@@ -299,16 +589,9 @@ export function renderPrintSummary(
             ) => {
 
                 const percent =
-                    employee.total_sales > 0
-                        ?
-                        (
-                            employee.original_tips /
-                            employee.total_sales
-                        )
-                        *
-                        100
-                        :
-                        0;
+                    getTipPercentage(
+                        employee
+                    );
 
                 return `
 
@@ -343,14 +626,13 @@ export function renderPrintSummary(
                     </tr>
 
                 `;
-
             }
         )
         .join("");
 
-    // =========================
+    // =================================
     // TOP TIPS / HOUR ROWS
-    // =========================
+    // =================================
 
     const topTipsPerHourRows =
         topTipsPerHour.map(
@@ -359,17 +641,10 @@ export function renderPrintSummary(
                 index
             ) => {
 
-                const hours =
-                    employee.worked_minutes /
-                    60;
-
                 const hourly =
-                    hours > 0
-                        ?
-                        employee.original_tips /
-                        hours
-                        :
-                        0;
+                    getTipsPerHour(
+                        employee
+                    );
 
                 return `
 
@@ -408,22 +683,21 @@ export function renderPrintSummary(
                     </tr>
 
                 `;
-
             }
         )
         .join("");
 
-    // =========================
-    // REPORT HTML
-    // =========================
+    // =================================
+    // REPORT
+    // =================================
 
     container.innerHTML = `
 
         <style>
 
-            /* =========================
+            /* =================================
                REPORT
-            ========================= */
+            ================================= */
 
             .tipSummaryReport {
 
@@ -439,15 +713,22 @@ export function renderPrintSummary(
 
                 color: black;
 
+                font-family:
+                    Arial,
+                    Helvetica,
+                    sans-serif;
+
             }
 
-            /* =========================
-               CUSTOM HEADER
-            ========================= */
+            /* =================================
+               REPEATING PRINT HEADER
+            ================================= */
 
             .customReportHeader {
 
                 width: 100%;
+
+                height: 72px;
 
                 display: flex;
 
@@ -459,7 +740,7 @@ export function renderPrintSummary(
                 box-sizing: border-box;
 
                 padding:
-                    0 0 14px 0;
+                    0 0 10px 0;
 
                 margin:
                     0 0 18px 0;
@@ -468,10 +749,6 @@ export function renderPrintSummary(
                     2px solid #000;
 
             }
-
-            /* =========================
-               BRAND
-            ========================= */
 
             .reportBrand {
 
@@ -483,25 +760,19 @@ export function renderPrintSummary(
 
             }
 
-            /* =========================
-               LOGO
-            ========================= */
-
             .reportLogo {
 
-                width: 90px;
+                width: 82px;
 
                 height: auto;
+
+                max-height: 48px;
 
                 display: block;
 
                 object-fit: contain;
 
             }
-
-            /* =========================
-               BRAND TEXT
-            ========================= */
 
             .reportBrandText {
 
@@ -525,13 +796,9 @@ export function renderPrintSummary(
 
                 font-size: 10px;
 
-                margin-top: 4px;
+                margin-top: 5px;
 
             }
-
-            /* =========================
-               REPORT INFO
-            ========================= */
 
             .reportInfo {
 
@@ -541,7 +808,7 @@ export function renderPrintSummary(
 
             .reportInfoTitle {
 
-                font-size: 21px;
+                font-size: 19px;
 
                 font-weight: 700;
 
@@ -551,15 +818,15 @@ export function renderPrintSummary(
 
             .reportInfoDate {
 
-                font-size: 11px;
+                font-size: 10px;
 
                 margin-top: 5px;
 
             }
 
-            /* =========================
-               DISCLAIMER
-            ========================= */
+            /* =================================
+               CRITERIA
+            ================================= */
 
             .criteria {
 
@@ -568,13 +835,13 @@ export function renderPrintSummary(
                 margin:
                     0 0 20px 0;
 
-                font-size: 11px;
+                font-size: 10px;
 
             }
 
-            /* =========================
-               STACKED LAYOUT
-            ========================= */
+            /* =================================
+               TABLE LAYOUT
+            ================================= */
 
             .printResults {
 
@@ -582,7 +849,7 @@ export function renderPrintSummary(
 
                 flex-direction: column;
 
-                gap: 24px;
+                gap: 100px;
 
                 width: 100%;
 
@@ -591,10 +858,6 @@ export function renderPrintSummary(
                 align-items: stretch;
 
             }
-
-            /* =========================
-               RESULT SECTION
-            ========================= */
 
             .resultSection {
 
@@ -613,31 +876,15 @@ export function renderPrintSummary(
             .resultSection h2 {
 
                 margin:
-                    0 0 8px 0;
+                    0 0 8px 30px;
 
-                text-align: center;
+                text-align: left;
 
-                font-size: 16px;
+                font-size: 15px;
 
                 font-weight: 700;
 
             }
-
-            /* =========================
-               BOTTOM TABLE
-            ========================= */
-
-            .resultSection.bottomMatrix {
-
-                width: 100%;
-
-                justify-self: auto;
-
-            }
-
-            /* =========================
-               MATRIX
-            ========================= */
 
             .resultMatrix {
 
@@ -662,10 +909,6 @@ export function renderPrintSummary(
 
             }
 
-            /* =========================
-               CELLS
-            ========================= */
-
             .resultMatrix th,
             .resultMatrix td {
 
@@ -676,7 +919,7 @@ export function renderPrintSummary(
                     1px solid #000;
 
                 padding:
-                    7px 9px;
+                    6px 9px;
 
                 line-height: 1.2;
 
@@ -685,10 +928,6 @@ export function renderPrintSummary(
                 box-sizing: border-box;
 
             }
-
-            /* =========================
-               OUTER BORDERS
-            ========================= */
 
             .resultMatrix th:last-child,
             .resultMatrix td:last-child {
@@ -703,10 +942,6 @@ export function renderPrintSummary(
 
             }
 
-            /* =========================
-               TABLE HEADERS
-            ========================= */
-
             .resultMatrix thead th {
 
                 font-weight: bold;
@@ -717,45 +952,38 @@ export function renderPrintSummary(
 
             }
 
-            /* =========================
-               COLUMN WIDTHS
-            ========================= */
+            .resultMatrix {
+                width: 75%;
+                table-layout: fixed;
+                border-collapse: separate;
+                border-spacing: 0;
+                border: 2px solid #000;
+                margin: 0 auto;
+                padding: 0;
+                background: white;
+                box-sizing: border-box;
+            }
 
-            .resultMatrix .rankCell {
-
-                width: 12%;
-
+            /* # column */
+            .resultMatrix th:nth-child(1),
+            .resultMatrix td:nth-child(1) {
+                width: 8% !important;
                 text-align: center;
-
             }
 
-            .resultMatrix .nameCell {
-
-                width: 48%;
-
+            /* Employee column */
+            .resultMatrix th:nth-child(2),
+            .resultMatrix td:nth-child(2) {
+                width: 37% !important;
                 text-align: left;
-
-                white-space: nowrap;
-
-                overflow: hidden;
-
-                text-overflow: ellipsis;
-
             }
 
-            .resultMatrix .valueCell {
-
-                width: 40%;
-
-                text-align: right;
-
-                white-space: nowrap;
-
+            /* Value column */
+            .resultMatrix th:nth-child(3),
+            .resultMatrix td:nth-child(3) {
+                width: 30% !important;
+                text-align: center;
             }
-
-            /* =========================
-               FIRST PLACE
-            ========================= */
 
             .resultMatrix .firstPlace td {
 
@@ -763,11 +991,308 @@ export function renderPrintSummary(
 
             }
 
-            /* =========================
-               PRINT SAFETY
-            ========================= */
+            /* =================================
+               PERFORMANCE GRAPHS
+            ================================= */
+
+            .performanceGraphs {
+
+                width: 100%;
+
+                display: flex;
+
+                flex-direction: column;
+
+                gap: 40px;
+
+                margin-top: 12px;
+
+            }
+
+            .performanceGraphCard {
+
+                width: 100%;
+
+                box-sizing: border-box;
+
+                break-inside: avoid;
+
+                page-break-inside: avoid;
+
+            }
+
+            .performanceGraphCard h2 {
+
+                margin:
+                    0 0 10px 0;
+
+                text-align: left;
+
+                font-size: 15px;
+
+                font-weight: 700;
+
+            }
+
+            /* =================================
+               GRAPH
+            ================================= */
+
+            .analyticsBarChart {
+
+                width: 100%;
+
+                height: 235px;
+
+                display: flex;
+
+                align-items: flex-end;
+
+                justify-content:
+                    space-evenly;
+
+                gap: 14px;
+
+                padding:
+                    14px 14px 0 14px;
+
+                box-sizing: border-box;
+
+                border-top:
+                    1px solid #999;
+
+                border-bottom:
+                    2px solid #000;
+
+                position: relative;
+
+                background: white;
+
+            }
+
+            /* =================================
+               VERY LIGHT GUIDE LINES
+            ================================= */
+
+            .analyticsBarChart::before {
+
+                content: "";
+
+                position: absolute;
+
+                left: 14px;
+
+                right: 14px;
+
+                top: 25%;
+
+                border-top:
+                    1px solid #d0d0d0;
+
+                pointer-events: none;
+
+            }
+
+            .analyticsBarChart::after {
+
+                content: "";
+
+                position: absolute;
+
+                left: 14px;
+
+                right: 14px;
+
+                top: 50%;
+
+                border-top:
+                    1px solid #d0d0d0;
+
+                pointer-events: none;
+
+            }
+
+            /* =================================
+               BAR COLUMN
+            ================================= */
+
+            .analyticsBarColumn {
+
+                flex: 0 1 76px;
+
+                width: 76px;
+
+                min-width: 42px;
+
+                height: 215px;
+
+                display: flex;
+
+                flex-direction: column;
+
+                justify-content: flex-end;
+
+                align-items: center;
+
+                box-sizing: border-box;
+
+                position: relative;
+
+                z-index: 2;
+
+            }
+
+            /* =================================
+               VALUE
+            ================================= */
+
+            .analyticsBarValue {
+
+                width: 100%;
+
+                height: 16px;
+
+                text-align: center;
+
+                font-size: 15px;
+
+                font-weight: 700;
+
+                line-height: 1.1;
+
+                margin-bottom: 5px;
+
+                white-space: nowrap;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+
+                box-sizing: border-box;
+
+            }
+
+            /* =================================
+               BAR AREA
+            ================================= */
+
+            .analyticsBarArea {
+
+                width: 48%;
+
+                max-width: 42px;
+
+                min-width: 24px;
+
+                height: 155px;
+
+                display: flex;
+
+                align-items: flex-end;
+
+                justify-content: center;
+
+                box-sizing: border-box;
+
+                flex-shrink: 0;
+
+            }
+
+            /* =================================
+               SVG BAR
+            ================================= */
+
+            .analyticsBarSvg {
+
+                display: block;
+
+                width: 100%;
+
+                height: 155px;
+
+                flex-shrink: 0;
+
+                overflow: visible;
+
+            }
+
+            /* =================================
+               EMPLOYEE LABEL
+            ================================= */
+
+            .analyticsBarLabel {
+
+                width: 100%;
+
+                height: 14px;
+
+                margin-top: 6px;
+
+                text-align: center;
+
+                font-size: 12px;
+
+                font-weight: 600;
+
+                line-height: 1.1;
+
+                white-space: nowrap;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+
+                box-sizing: border-box;
+
+            }
+
+            /* =================================
+               NO DATA
+            ================================= */
+
+            .analyticsNoData {
+
+                width: 100%;
+
+                padding: 20px;
+
+                box-sizing: border-box;
+
+                border:
+                    1px solid #000;
+
+                text-align: center;
+
+                font-size: 11px;
+
+            }
+
+            /* =================================
+               PRINT
+            ================================= */
 
             @media print {
+
+                @page {
+
+                    margin:
+                        8mm
+                        14mm
+                        6mm
+                        14mm;
+
+                }
+
+                html,
+                body {
+
+                    margin: 0;
+
+                    padding: 0;
+
+                    background: white;
+
+                }
 
                 .tipSummaryReport {
 
@@ -781,9 +1306,76 @@ export function renderPrintSummary(
 
                 .customReportHeader {
 
-                    break-inside: avoid;
+                    position: fixed;
 
-                    page-break-inside: avoid;
+                    top: 0;
+
+                    left: 0;
+
+                    right: 0;
+
+                    width: 100%;
+
+                    height: 58px;
+
+                    margin: 0;
+
+                    padding:
+                        0 0 8px 0;
+
+                    background: white;
+
+                    z-index: 1000;
+
+                }
+
+                .tipSummaryReport {
+
+                    padding-top: 98px;
+
+                }
+
+                .tipSummaryReport .customReportHeader {
+
+                    box-sizing: border-box;
+
+                }
+
+                .reportLogo {
+
+                    width: 72px;
+
+                    max-height: 40px;
+
+                }
+
+                .reportBrandName {
+
+                    font-size: 18px;
+
+                }
+
+                .reportBrandSubtitle {
+
+                    font-size: 8px;
+
+                }
+
+                .reportInfoTitle {
+
+                    font-size: 16px;
+
+                }
+
+                .reportInfoDate {
+
+                    font-size: 9px;
+
+                }
+
+                .criteria {
+
+                    margin-bottom: 18px;
 
                 }
 
@@ -793,7 +1385,7 @@ export function renderPrintSummary(
 
                     flex-direction: column;
 
-                    gap: 24px;
+                    gap: 50px;
 
                 }
 
@@ -802,14 +1394,6 @@ export function renderPrintSummary(
                     break-inside: avoid;
 
                     page-break-inside: avoid;
-
-                }
-
-                .resultSection.bottomMatrix {
-
-                    width: 100%;
-
-                    justify-self: auto;
 
                 }
 
@@ -829,15 +1413,65 @@ export function renderPrintSummary(
 
                 }
 
+                .performanceGraphs {
+
+                    break-inside: avoid;
+
+                    page-break-inside: avoid;
+
+                    gap: 40px;
+
+                }
+
+                .performanceGraphCard {
+
+                    break-inside: avoid;
+
+                    page-break-inside: avoid;
+
+                }
+
+                .analyticsBarChart {
+
+                    height: 235px;
+
+                    break-inside: avoid;
+
+                    page-break-inside: avoid;
+
+                }
+
+                .analyticsBarColumn {
+
+                    height: 215px;
+
+                    break-inside: avoid;
+
+                    page-break-inside: avoid;
+
+                }
+
+                .analyticsBarArea {
+
+                    height: 155px;
+
+                }
+
+                .analyticsBarSvg {
+
+                    height: 155px;
+
+                }
+
             }
 
         </style>
 
         <div class="tipSummaryReport">
 
-            <!-- =========================
-                 CUSTOM HEADER
-            ========================= -->
+            <!-- =================================
+                 REPEATING HEADER
+            ================================= -->
 
             <header
                 class="customReportHeader"
@@ -851,18 +1485,20 @@ export function renderPrintSummary(
                         alt="Hot Noods"
                     />
 
-                    <div class="reportBrandText">
+                    <div
+                        class="reportBrandText"
+                    >
 
-                        <div class="reportBrandName">
+                        <div
+                            class="reportBrandName"
+                        >
 
                             Hot Noods
 
                         </div>
 
                         <div
-                            class="
-                                reportBrandSubtitle
-                            "
+                            class="reportBrandSubtitle"
                         >
 
                             Employee leaderboard
@@ -873,20 +1509,20 @@ export function renderPrintSummary(
 
                 </div>
 
-                <div class="reportInfo">
+                <div
+                    class="reportInfo"
+                >
 
                     <div
-                        class="
-                            reportInfoTitle
-                        "
+                        class="reportInfoTitle"
                     >
+
+                        Tip Summary
 
                     </div>
 
                     <div
-                        class="
-                            reportInfoDate
-                        "
+                        class="reportInfoDate"
                     >
 
                         ${startDate}
@@ -901,26 +1537,15 @@ export function renderPrintSummary(
 
             </header>
 
-            <!-- =========================
-                 SINGLE DISCLAIMER
-            ========================= -->
+            <!-- =================================
+                 TABLES
+            ================================= -->
 
-            <p class="criteria">
+            <section
+                class="printResults"
+            >
 
-                Minimum $250 sales + 2 hours worked
-                required for Tip % and Tips / Hour.
-
-            </p>
-
-            <!-- =========================
-                 THREE STACKED MATRICES
-            ========================= -->
-
-            <section class="printResults">
-
-                <!-- =========================
-                     TOP SALES
-                ========================= -->
+                <!-- TOP SALES -->
 
                 <div
                     class="resultSection"
@@ -972,9 +1597,7 @@ export function renderPrintSummary(
 
                 </div>
 
-                <!-- =========================
-                     TOP TIP %
-                ========================= -->
+                <!-- TOP TIP % -->
 
                 <div
                     class="resultSection"
@@ -982,7 +1605,7 @@ export function renderPrintSummary(
 
                     <h2>
 
-                        Top 5 Tip %
+                        Top 5 Tip Percentage *
 
                     </h2>
 
@@ -1026,20 +1649,15 @@ export function renderPrintSummary(
 
                 </div>
 
-                <!-- =========================
-                     TOP TIPS / HOUR
-                ========================= -->
+                <!-- TOP TIPS / HOUR -->
 
                 <div
-                    class="
-                        resultSection
-                        bottomMatrix
-                    "
+                    class="resultSection bottomMatrix"
                 >
 
                     <h2>
 
-                        Top 5 Tips / Hour
+                        Top 5 Tips Per Hour *
 
                     </h2>
 
@@ -1085,10 +1703,120 @@ export function renderPrintSummary(
 
             </section>
 
+            <!-- =================================
+                 PERFORMANCE GRAPHS
+            ================================= -->
+
+            <section
+                class="performanceGraphs"
+            >
+
+                <!-- TOP SALES GRAPH -->
+
+                <div
+                    class="performanceGraphCard"
+                >
+
+                    <h2>
+
+                        Top Sales
+
+                    </h2>
+
+                    <div
+                        class="analyticsBarChart"
+                    >
+
+                        ${salesGraph}
+
+                    </div>
+
+                </div>
+
+                <!-- TOP TIP % GRAPH -->
+
+                <div
+                    class="performanceGraphCard"
+                >
+
+                    <h2>
+
+                        Top Tip Percentage *
+
+                    </h2>
+
+                    <div
+                        class="analyticsBarChart"
+                    >
+
+                        ${tipPercentageGraph}
+
+                    </div>
+
+                </div>
+
+                <!-- TOP TIPS / HOUR GRAPH -->
+
+                <div
+                    class="performanceGraphCard"
+                >
+
+                    <h2>
+
+                        Top Tips Per Hour *
+
+                    </h2>
+
+                    <div
+                        class="analyticsBarChart"
+                    >
+
+                        ${tipsPerHourGraph}
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </div>
 
     `;
+    const footer =
+        document.createElement("div");
+
+    footer.className =
+        "analytics-footer";
+
+    const footerNote =
+        document.createElement("div");
+
+    footerNote.className =
+        "analytics-footer-note";
+
+    footerNote.textContent =
+        "*Minimum $250 sales + 2 hours worked required for Tip % and Tips / Hour.";
+
+    const footerDate =
+        document.createElement("div");
+
+    footerDate.className =
+        "analytics-footer-date";
+
+    footerDate.textContent =
+        `${new Date().toLocaleDateString()}`;
+
+    footer.appendChild(
+        footerNote
+    );
+
+    footer.appendChild(
+        footerDate
+    );
+
+    container.appendChild(
+        footer
+    );
 
     return container;
-
-} 
+}

@@ -1,269 +1,78 @@
-// =================================
-// RENDER ANALYTICS
-// =================================
-
 import {
     formatMoney,
     formatNumber
 } from "../utils/formatters.js";
 
-
 // =================================
 // RENDER ANALYTICS
 // =================================
 
-export function renderAnalytics(
-    employees
-) {
+export function renderAnalytics(employees) {
 
     const container =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     container.className =
         "analytics-content";
 
-
     // =================================
-    // SHARED EMPLOYEE CALCULATIONS
-    // SAME LOGIC AS renderStats
+    // SHARED CALCULATIONS
     // =================================
 
-    function cashTips(
-        employee
-    ) {
+    function originalTips(employee) {
 
         return (
-
-            (
-                Number(
-                    employee.cash_kept
-                ) || 0
-            )
-
-            +
-
-            (
-                Number(
-                    employee.pool_cash
-                ) || 0
-            )
-
-        );
-
-    }
-
-
-    function cardTips(
-        employee
-    ) {
-
-        return (
-
-            (
-                Number(
-                    employee.card_kept
-                ) || 0
-            )
-
-            +
-
-            (
-                Number(
-                    employee.pool_card
-                ) || 0
-            )
-
-        );
-
-    }
-
-
-    function totalTips(
-        employee
-    ) {
-
-        return (
-            cashTips(
-                employee
-            )
-
-            +
-
-            cardTips(
-                employee
-            )
-        );
-
-    }
-
-
-    function salesPerHour(
-        employee
-    ) {
-
-        const hours =
             Number(
-                employee.hours
-            ) || 0;
+                employee.original_tips
+            ) || 0
+        );
+    }
+
+    function tipPercentage(employee) {
+
+        const tips =
+            originalTips(employee);
 
         const totalSales =
             Number(
                 employee.total_sales
             ) || 0;
 
-        if (
-            hours <= 0
-        ) {
+        if (totalSales <= 0) {
 
             return 0;
-
         }
 
         return (
-            totalSales /
-            hours
-        );
-
+            tips /
+            totalSales
+        ) * 100;
     }
 
-
-    function ordersPerHour(
-        employee
-    ) {
+    function tipsPerHour(employee) {
 
         const hours =
             Number(
                 employee.hours
             ) || 0;
 
-        const orders =
-            Number(
-                employee.order_count
-            ) || 0;
-
-        if (
-            hours <= 0
-        ) {
+        if (hours <= 0) {
 
             return 0;
-
         }
 
         return (
-            orders /
+            originalTips(employee) /
             hours
         );
-
     }
-
-
-    function tipsPerHour(
-        employee
-    ) {
-
-        const hours =
-            Number(
-                employee.hours
-            ) || 0;
-
-        if (
-            hours <= 0
-        ) {
-
-            return 0;
-
-        }
-
-        return (
-            totalTips(
-                employee
-            )
-
-            /
-
-            hours
-        );
-
-    }
-
-
-    function avgTipPerOrder(
-        employee
-    ) {
-
-        const orders =
-            Number(
-                employee.order_count
-            ) || 0;
-
-        if (
-            orders <= 0
-        ) {
-
-            return 0;
-
-        }
-
-        return (
-            totalTips(
-                employee
-            )
-
-            /
-
-            orders
-        );
-
-    }
-
-
-    function totalPayout(
-        employee
-    ) {
-
-        const cashKept =
-            Number(
-                employee.cash_kept
-            ) || 0;
-
-        const cardKept =
-            Number(
-                employee.card_kept
-            ) || 0;
-
-        const poolCash =
-            Number(
-                employee.pool_cash
-            ) || 0;
-
-        const poolCard =
-            Number(
-                employee.pool_card
-            ) || 0;
-
-        return (
-            cashKept
-            +
-            cardKept
-            +
-            poolCash
-            +
-            poolCard
-        );
-
-    }
-
 
     // =================================
     // TITLE
     // =================================
 
     const title =
-        document.createElement(
-            "h2"
-        );
+        document.createElement("h2");
 
     title.textContent =
         "Employee Performance";
@@ -272,779 +81,648 @@ export function renderAnalytics(
         title
     );
 
-
     // =================================
-    // EMPLOYEE PERFORMANCE TABLE
-    // =================================
-
-    const tableWrapper =
-        document.createElement(
-            "div"
-        );
-
-    tableWrapper.className =
-        "analytics-table-wrapper";
-
-
-    const table =
-        document.createElement(
-            "table"
-        );
-
-    table.className =
-        "analytics-table";
-
-
-    // =================================
-    // TABLE HEADER
+    // TABLE CONFIGURATION
     // =================================
 
-    const thead =
-        document.createElement(
-            "thead"
-        );
-
-    const headerRow =
-        document.createElement(
-            "tr"
-        );
-
-
-    const headers = [
-
-        "Employee",
-
-        "Total Sales",
-
-        "Sales / Hr",
-
-        "Orders",
-
-        "Orders / Hr",
-
-        "Original Tips",
-
-        "Tips / Hr",
-
-        "Avg Tip / Order",
-
-        "Hours",
-
-        "Total Payout"
-
-    ];
-
-
-    headers.forEach(
-        header => {
-
-            const th =
-                document.createElement(
-                    "th"
-                );
-
-            th.textContent =
-                header;
-
-            headerRow.appendChild(
-                th
-            );
-
-        }
-    );
-
-
-    thead.appendChild(
-        headerRow
-    );
-
-    table.appendChild(
-        thead
-    );
-
-
-    // =================================
-    // TABLE BODY
-    // =================================
-
-    const tbody =
-        document.createElement(
-            "tbody"
-        );
-
-
-    employees.forEach(
-        employee => {
-
-            const totalSales =
-                Number(
-                    employee.total_sales
-                ) || 0;
-
-            const orders =
-                Number(
-                    employee.order_count
-                ) || 0;
-
-            const hours =
-                Number(
-                    employee.hours
-                ) || 0;
-
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            const values = [
-
-                employee.name ?? "",
-
-                formatMoney(
-                    totalSales
-                ),
-
-                formatMoney(
-                    salesPerHour(
-                        employee
-                    )
-                ),
-
-                formatNumber(
-                    orders
-                ),
-
-                formatNumber(
-                    ordersPerHour(
-                        employee
-                    )
-                ),
-
-                formatMoney(
-                    totalTips(
-                        employee
-                    )
-                ),
-
-                formatMoney(
-                    tipsPerHour(
-                        employee
-                    )
-                ),
-
-                formatMoney(
-                    avgTipPerOrder(
-                        employee
-                    )
-                ),
-
-                formatNumber(
-                    hours
-                ),
-
-                formatMoney(
-                    totalPayout(
-                        employee
-                    )
-                )
-
-            ];
-
-
-            values.forEach(
-                value => {
-
-                    const td =
-                        document.createElement(
-                            "td"
-                        );
-
-                    td.textContent =
-                        value;
-
-                    row.appendChild(
-                        td
-                    );
-
-                }
-            );
-
-
-            tbody.appendChild(
-                row
-            );
-
-        }
-    );
-
-
-    table.appendChild(
-        tbody
-    );
-
-
-    tableWrapper.appendChild(
-        table
-    );
-
-
-    container.appendChild(
-        tableWrapper
-    );
-
-
-    // =================================
-    // GRAPHS TITLE
-    // =================================
-
-    const graphsTitle =
-        document.createElement(
-            "h2"
-        );
-
-    graphsTitle.textContent =
-        "Employee Performance Graphs";
-
-    graphsTitle.className =
-        "analytics-graphs-title";
-
-    container.appendChild(
-        graphsTitle
-    );
-
-
-    // =================================
-    // GRAPH CONTAINER
-    // =================================
-
-    const graphsContainer =
-        document.createElement(
-            "div"
-        );
-
-    graphsContainer.className =
-        "analytics-graphs";
-
-
-    // =================================
-    // BUILD ALL EMPLOYEE DATA
-    // =================================
-    //
-    // IMPORTANT:
-    //
-    // Do NOT sort or slice here.
-    //
-    // Every graph gets to choose its
-    // own top 10.
-    //
-    // =================================
-
-    const allEmployeeData =
-        employees.map(
-            employee => {
-
-                const totalSales =
-                    Number(
-                        employee.total_sales
-                    ) || 0;
-
-                const orders =
-                    Number(
-                        employee.order_count
-                    ) || 0;
-
-                const hours =
-                    Number(
-                        employee.hours
-                    ) || 0;
-
-
-                return {
-
-                    name:
-                        employee.name ??
-                        "Unknown",
-
-                    totalSales,
-
-                    salesPerHour:
-                        salesPerHour(
-                            employee
-                        ),
-
-                    orders,
-
-                    ordersPerHour:
-                        ordersPerHour(
-                            employee
-                        ),
-
-                    totalTips:
-                        totalTips(
-                            employee
-                        ),
-
-                    tipsPerHour:
-                        tipsPerHour(
-                            employee
-                        ),
-
-                    avgTipPerOrder:
-                        avgTipPerOrder(
-                            employee
-                        ),
-
-                    hours,
-
-                    totalPayout:
-                        totalPayout(
-                            employee
-                        )
-
-                };
-
-            }
-        );
-
-
-    // =================================
-    // GRAPH METRICS
-    // =================================
-
-    const metrics = [
+    const tables = [
 
         {
             title:
-                "Total Sales",
+                "Top Sales",
 
-            key:
+            valueKey:
                 "totalSales",
 
-            type:
-                "money"
-        },
+            valueLabel:
+                "Total Sales",
 
+            format:
+                value =>
+                    formatMoney(value),
+
+            getValue:
+                employee =>
+                    Number(
+                        employee.total_sales
+                    ) || 0
+        },
 
         {
             title:
-                "Sales / Hr",
+                "Top Tip %",
 
-            key:
-                "salesPerHour",
+            valueKey:
+                "tipPercentage",
 
-            type:
-                "money"
+            valueLabel:
+                "Tip %",
+
+            format:
+                value =>
+                    `${formatNumber(value)}%`,
+
+            getValue:
+                employee =>
+                    tipPercentage(employee)
         },
-
 
         {
             title:
-                "Orders",
+                "Top Tips / Hour",
 
-            key:
-                "orders",
-
-            type:
-                "number"
-        },
-
-
-        {
-            title:
-                "Orders / Hr",
-
-            key:
-                "ordersPerHour",
-
-            type:
-                "number"
-        },
-
-
-        {
-            title:
-                "Original Total Tips",
-
-            key:
-                "totalTips",
-
-            type:
-                "money"
-        },
-
-
-        {
-            title:
-                "Tips / Hr",
-
-            key:
+            valueKey:
                 "tipsPerHour",
 
-            type:
-                "money"
-        },
+            valueLabel:
+                "Tips / Hour",
 
+            format:
+                value =>
+                    formatMoney(value),
 
-        {
-            title:
-                "Avg Tip / Order",
-
-            key:
-                "avgTipPerOrder",
-
-            type:
-                "money"
-        },
-
-
-        {
-            title:
-                "Hours",
-
-            key:
-                "hours",
-
-            type:
-                "number"
-        },
-
-
-        {
-            title:
-                "Total Payout",
-
-            key:
-                "totalPayout",
-
-            type:
-                "money"
+            getValue:
+                employee =>
+                    tipsPerHour(employee)
         }
 
     ];
 
-
     // =================================
-    // CREATE EACH GRAPH
+    // CREATE TABLES
     // =================================
 
-    metrics.forEach(
-        metric => {
-
-            const graphCard =
-                document.createElement(
-                    "div"
-                );
-
-            graphCard.className =
-                "analytics-graph-card";
-
+    tables.forEach(
+        tableConfig => {
 
             // =================================
-            // GRAPH TITLE
+            // SORT STATE
             // =================================
 
-            const graphTitle =
-                document.createElement(
-                    "h3"
-                );
+            let sortColumn =
+                tableConfig.valueKey;
 
-            graphTitle.textContent =
-                metric.title;
+            let sortDirection =
+                "desc";
 
-            graphCard.appendChild(
-                graphTitle
+            // =================================
+            // TABLE SECTION
+            // =================================
+
+            const section =
+                document.createElement("div");
+
+            section.className =
+                "analytics-table-section";
+
+            // =================================
+            // TABLE TITLE
+            // =================================
+
+            const tableTitle =
+                document.createElement("h3");
+
+            tableTitle.textContent =
+                tableConfig.title;
+
+            section.appendChild(
+                tableTitle
             );
 
+            // =================================
+            // TABLE WRAPPER
+            // =================================
+
+            const tableWrapper =
+                document.createElement("div");
+
+            tableWrapper.className =
+                "analytics-table-wrapper";
 
             // =================================
-            // CHART
+            // TABLE
             // =================================
 
-            const chartWrapper =
-                document.createElement(
-                    "div"
+            const table =
+                document.createElement("table");
+
+            table.className =
+                "analytics-table";
+
+            // =================================
+            // TABLE HEADER
+            // =================================
+
+            const thead =
+                document.createElement("thead");
+
+            const headerRow =
+                document.createElement("tr");
+
+            // =================================
+            // SORT HEADER CREATOR
+            // =================================
+
+            function createHeader(
+                label,
+                columnKey
+            ) {
+
+                const header =
+                    document.createElement("th");
+
+                const button =
+                    document.createElement("button");
+
+                button.type =
+                    "button";
+
+                button.className =
+                    "analytics-sort-button";
+
+                // =================================
+                // HEADER LABEL
+                // =================================
+
+                const labelSpan =
+                    document.createElement("span");
+
+                labelSpan.textContent =
+                    label;
+
+                // =================================
+                // SORT ARROW
+                // =================================
+
+                const arrow =
+                    document.createElement("span");
+
+                arrow.className =
+                    "analytics-sort-arrow";
+
+                // =================================
+                // UPDATE HEADER
+                // =================================
+
+                function updateHeader() {
+
+                    const isActive =
+                        sortColumn === columnKey;
+
+                    if (!isActive) {
+
+                        arrow.textContent =
+                            "↑";
+
+                        arrow.classList.add(
+                            "inactive"
+                        );
+
+                        button.setAttribute(
+                            "aria-sort",
+                            "none"
+                        );
+
+                        return;
+                    }
+
+                    arrow.classList.remove(
+                        "inactive"
+                    );
+
+                    if (
+                        sortDirection ===
+                        "asc"
+                    ) {
+
+                        arrow.textContent =
+                            "↑";
+
+                        button.setAttribute(
+                            "aria-sort",
+                            "ascending"
+                        );
+
+                    } else {
+
+                        arrow.textContent =
+                            "↓";
+
+                        button.setAttribute(
+                            "aria-sort",
+                            "descending"
+                        );
+                    }
+                }
+
+                // =================================
+                // SORT CLICK
+                // =================================
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        if (
+                            sortColumn ===
+                            columnKey
+                        ) {
+
+                            sortDirection =
+                                sortDirection ===
+                                "asc"
+                                    ? "desc"
+                                    : "asc";
+
+                        } else {
+
+                            sortColumn =
+                                columnKey;
+
+                            sortDirection =
+                                "asc";
+                        }
+
+                        updateHeader();
+
+                        renderBody();
+                    }
                 );
 
-            chartWrapper.className =
-                "bar-chart";
+                button.appendChild(
+                    labelSpan
+                );
 
+                button.appendChild(
+                    arrow
+                );
+
+                header.appendChild(
+                    button
+                );
+
+                updateHeader();
+
+                return header;
+            }
 
             // =================================
-            // TOP 10 FOR THIS GRAPH
-            // =================================
-            //
-            // Each graph independently:
-            //
-            // 1. Copies ALL employees
-            // 2. Sorts by its own metric
-            // 3. Highest first
-            // 4. Takes top 10
-            //
-            // Therefore:
-            //
-            // LEFT  = highest
-            // RIGHT = lowest of top 10
-            //
+            // RANK HEADER
             // =================================
 
-            const employeeData =
-                [...allEmployeeData]
-                    .sort(
-                        (
-                            a,
-                            b
-                        ) => {
+            const rankHeader =
+                createHeader(
+                    "Rank",
+                    "rank"
+                );
+
+            rankHeader.className =
+                "analytics-rank-column";
+
+            // =================================
+            // EMPLOYEE HEADER
+            // =================================
+
+            const employeeHeader =
+                createHeader(
+                    "Employee",
+                    "employee"
+                );
+
+            // =================================
+            // VALUE HEADER
+            // =================================
+
+            const valueHeader =
+                createHeader(
+                    tableConfig.valueLabel,
+                    tableConfig.valueKey
+                );
+
+            // =================================
+            // ADD HEADERS
+            // =================================
+
+            headerRow.appendChild(
+                rankHeader
+            );
+
+            headerRow.appendChild(
+                employeeHeader
+            );
+
+            headerRow.appendChild(
+                valueHeader
+            );
+
+            thead.appendChild(
+                headerRow
+            );
+
+            table.appendChild(
+                thead
+            );
+
+            // =================================
+            // TABLE BODY
+            // =================================
+
+            const tbody =
+                document.createElement("tbody");
+
+            // =================================
+            // RENDER TABLE BODY
+            // =================================
+
+            function renderBody() {
+
+                // Remove existing rows
+                tbody.replaceChildren();
+
+                // =================================
+                // CREATE PERMANENT RANKINGS
+                // =================================
+
+                /*
+                    Rank is based on the table's
+                    primary metric.
+
+                    Highest metric = Rank 1.
+
+                    The rank stays attached to
+                    the employee even when the
+                    table is sorted differently.
+                */
+
+                const rankedEmployees =
+                    [...employees]
+                        .sort(
+                            (a, b) => {
+
+                                const valueA =
+                                    tableConfig.getValue(
+                                        a
+                                    );
+
+                                const valueB =
+                                    tableConfig.getValue(
+                                        b
+                                    );
+
+                                return (
+                                    valueB -
+                                    valueA
+                                );
+                            }
+                        )
+                        .map(
+                            (employee, index) => {
+
+                                return {
+                                    employee,
+                                    rank:
+                                        index + 1
+                                };
+                            }
+                        );
+
+                // =================================
+                // SORT DISPLAY ORDER
+                // =================================
+
+                const sortedEmployees =
+                    [...rankedEmployees].sort(
+                        (a, b) => {
+
+                            // =================================
+                            // SORT BY RANK
+                            // =================================
+
+                            if (
+                                sortColumn ===
+                                "rank"
+                            ) {
+
+                                return (
+                                    sortDirection ===
+                                    "asc"
+                                )
+                                    ? a.rank - b.rank
+                                    : b.rank - a.rank;
+                            }
+
+                            // =================================
+                            // SORT BY EMPLOYEE
+                            // =================================
+
+                            if (
+                                sortColumn ===
+                                "employee"
+                            ) {
+
+                                const nameA =
+                                    String(
+                                        a.employee.name ?? ""
+                                    ).toLowerCase();
+
+                                const nameB =
+                                    String(
+                                        b.employee.name ?? ""
+                                    ).toLowerCase();
+
+                                const comparison =
+                                    nameA.localeCompare(
+                                        nameB
+                                    );
+
+                                return (
+                                    sortDirection ===
+                                    "asc"
+                                )
+                                    ? comparison
+                                    : -comparison;
+                            }
+
+                            // =================================
+                            // SORT BY METRIC
+                            // =================================
 
                             const valueA =
-                                Number(
-                                    a[
-                                        metric.key
-                                    ]
-                                ) || 0;
+                                tableConfig.getValue(
+                                    a.employee
+                                );
 
                             const valueB =
-                                Number(
-                                    b[
-                                        metric.key
-                                    ]
-                                ) || 0;
+                                tableConfig.getValue(
+                                    b.employee
+                                );
+
+                            if (
+                                sortDirection ===
+                                "asc"
+                            ) {
+
+                                return (
+                                    valueA -
+                                    valueB
+                                );
+                            }
 
                             return (
                                 valueB -
                                 valueA
                             );
-
                         }
-                    )
-                    .slice(
-                        0,
-                        10
                     );
 
+                // =================================
+                // CREATE ROWS
+                // =================================
 
-            // =================================
-            // FIND MAX VALUE
-            // =================================
+                sortedEmployees.forEach(
+                    ({
+                        employee,
+                        rank
+                    }) => {
 
-            const maxValue =
-                Math.max(
-                    ...employeeData.map(
-                        employee =>
-                            Number(
-                                employee[
-                                    metric.key
-                                ]
-                            ) || 0
-                    ),
-                    1
+                        const value =
+                            tableConfig.getValue(
+                                employee
+                            );
+
+                        const row =
+                            document.createElement("tr");
+
+                        // =================================
+                        // RANK CELL
+                        // =================================
+
+                        const rankCell =
+                            document.createElement("td");
+
+                        rankCell.textContent =
+                            String(rank);
+
+                        rankCell.className =
+                            "analytics-rank-column";
+
+                        // =================================
+                        // EMPLOYEE CELL
+                        // =================================
+
+                        const employeeCell =
+                            document.createElement("td");
+
+                        employeeCell.textContent =
+                            employee.name ?? "";
+
+                        // =================================
+                        // VALUE CELL
+                        // =================================
+
+                        const valueCell =
+                            document.createElement("td");
+
+                        valueCell.textContent =
+                            tableConfig.format(
+                                value
+                            );
+
+                        // =================================
+                        // ADD CELLS
+                        // =================================
+
+                        row.appendChild(
+                            rankCell
+                        );
+
+                        row.appendChild(
+                            employeeCell
+                        );
+
+                        row.appendChild(
+                            valueCell
+                        );
+
+                        tbody.appendChild(
+                            row
+                        );
+                    }
                 );
-
+            }
 
             // =================================
-            // CREATE BARS
+            // INITIAL BODY
             // =================================
 
-            employeeData.forEach(
-                employee => {
+            renderBody();
 
-                    const value =
-                        Number(
-                            employee[
-                                metric.key
-                            ]
-                        ) || 0;
+            table.appendChild(
+                tbody
+            );
 
+            // =================================
+            // ADD TABLE
+            // =================================
 
-                    const percentage =
-                        (
-                            value /
-                            maxValue
-                        ) * 100;
+            tableWrapper.appendChild(
+                table
+            );
 
+            section.appendChild(
+                tableWrapper
+            );
 
-                    // =================================
-                    // BAR COLUMN
-                    // =================================
+            container.appendChild(
+                section
+            );
 
-                    const barColumn =
-                        document.createElement(
-                            "div"
-                        );
+            // =================================
+            // STICKY HEADER SCROLL HANDLER
+            // =================================
 
-                    barColumn.className =
-                        "bar-column";
+            function updateStickyHeader() {
 
+                const tableRect =
+                    table.getBoundingClientRect();
 
-                    // =================================
-                    // VALUE ABOVE BAR
-                    // =================================
+                const headerRect =
+                    thead.getBoundingClientRect();
 
-                    const valueLabel =
-                        document.createElement(
-                            "div"
-                        );
+                /*
+                    When the table's top has moved
+                    above the viewport, add the
+                    sticky-active class.
 
-                    valueLabel.className =
-                        "bar-value";
+                    This does not affect the table
+                    rendering or sorting.
+                */
 
+                const isSticky =
+                    tableRect.top < 0 &&
+                    headerRect.top <= 1;
 
-                    if (
-                        metric.type ===
-                        "money"
-                    ) {
+                thead.classList.toggle(
+                    "sticky-active",
+                    isSticky
+                );
+            }
 
-                        valueLabel.textContent =
-                            formatMoney(
-                                value
-                            );
-
-                    }
-
-                    else {
-
-                        valueLabel.textContent =
-                            formatNumber(
-                                value
-                            );
-
-                    }
-
-
-                    // =================================
-                    // BAR AREA
-                    // =================================
-
-                    const barArea =
-                        document.createElement(
-                            "div"
-                        );
-
-                    barArea.className =
-                        "bar-area";
-
-
-                    // =================================
-                    // BAR
-                    // =================================
-
-                    const bar =
-                        document.createElement(
-                            "div"
-                        );
-
-                    bar.className =
-                        "bar";
-
-
-                    bar.style.height =
-                        `${percentage}%`;
-
-
-                    // =================================
-                    // TOOLTIP
-                    // =================================
-
-                    const formattedValue =
-                        metric.type ===
-                        "money"
-
-                            ?
-
-                            formatMoney(
-                                value
-                            )
-
-                            :
-
-                            formatNumber(
-                                value
-                            );
-
-
-                    bar.title =
-                        `${employee.name}: ${formattedValue}`;
-
-
-                    // =================================
-                    // EMPLOYEE NAME
-                    // =================================
-
-                    const employeeLabel =
-                        document.createElement(
-                            "div"
-                        );
-
-                    employeeLabel.className =
-                        "bar-label";
-
-                    employeeLabel.textContent =
-                        employee.name;
-
-
-                    // =================================
-                    // ASSEMBLE BAR
-                    // =================================
-
-                    barArea.appendChild(
-                        bar
-                    );
-
-
-                    barColumn.appendChild(
-                        valueLabel
-                    );
-
-
-                    barColumn.appendChild(
-                        barArea
-                    );
-
-
-                    barColumn.appendChild(
-                        employeeLabel
-                    );
-
-
-                    chartWrapper.appendChild(
-                        barColumn
-                    );
-
+            window.addEventListener(
+                "scroll",
+                updateStickyHeader,
+                {
+                    passive: true
                 }
             );
 
-
-            // =================================
-            // ADD GRAPH
-            // =================================
-
-            graphCard.appendChild(
-                chartWrapper
-            );
-
-
-            graphsContainer.appendChild(
-                graphCard
-            );
-
+            updateStickyHeader();
         }
     );
-
-
-    // =================================
-    // ADD ALL GRAPHS
-    // =================================
-
-    container.appendChild(
-        graphsContainer
-    );
-
 
     // =================================
     // RETURN ANALYTICS
     // =================================
 
     return container;
-
 }

@@ -81,7 +81,7 @@ export function renderCashTipSummary(
                         </th>
 
                         <th>
-                            Cash Sales
+                            Cash Payments
                         </th>
 
                         <th>

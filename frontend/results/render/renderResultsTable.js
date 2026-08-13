@@ -23,73 +23,71 @@ export function renderResultsTable(
 
     table.innerHTML = `
 
-
         <thead>
-
 
             <tr>
 
-
                 <th data-sort="name">
                     Employee
+                    <span
+                        class="sortIndicator"
+                        aria-hidden="true"
+                    ></span>
                 </th>
-
 
                 <th data-sort="cash">
                     Cash
+                    <span
+                        class="sortIndicator"
+                        aria-hidden="true"
+                    ></span>
                 </th>
-
 
                 <th data-sort="card">
                     Card
+                    <span
+                        class="sortIndicator"
+                        aria-hidden="true"
+                    ></span>
                 </th>
-
 
                 <th data-sort="total">
                     Total
+                    <span
+                        class="sortIndicator"
+                        aria-hidden="true"
+                    ></span>
                 </th>
-
 
             </tr>
 
-
         </thead>
-
 
         <tbody></tbody>
 
-
         <tfoot>
 
-
             <tr class="resultsTotalsRow">
-
 
                 <th>
                     Total
                 </th>
 
-
                 <th class="resultsCashTotal">
                     $0.00
                 </th>
-
 
                 <th class="resultsCardTotal">
                     $0.00
                 </th>
 
-
                 <th class="resultsGrandTotal">
                     $0.00
                 </th>
 
-
             </tr>
 
-
         </tfoot>
-
 
     `;
 
@@ -127,7 +125,6 @@ export function renderResultsTable(
         employee
     ) {
 
-
         const kept =
             employee.cash_kept ?? 0;
 
@@ -146,7 +143,6 @@ export function renderResultsTable(
             ) * 100
         );
 
-
     }
 
 
@@ -158,7 +154,6 @@ export function renderResultsTable(
     function cardAmount(
         employee
     ) {
-
 
         const kept =
             employee.card_kept ?? 0;
@@ -172,7 +167,6 @@ export function renderResultsTable(
             kept + pool
         );
 
-
     }
 
 
@@ -185,13 +179,36 @@ export function renderResultsTable(
         employee
     ) {
 
-
         return (
             roundedCash(employee)
             +
             cardAmount(employee)
         );
 
+    }
+
+
+    // =========================
+    // TIP PERCENTAGE
+    // =========================
+
+    function tipPercentage(
+        amount,
+        total
+    ) {
+
+        if (
+            !total
+        ) {
+
+            return 0;
+
+        }
+
+
+        return (
+            amount / total
+        ) * 100;
 
     }
 
@@ -201,7 +218,6 @@ export function renderResultsTable(
     // =========================
 
     function renderTotals() {
-
 
         let cashTotal = 0;
 
@@ -214,7 +230,6 @@ export function renderResultsTable(
             of employees
         ) {
 
-
             cashTotal +=
                 roundedCash(
                     employee
@@ -225,7 +240,6 @@ export function renderResultsTable(
                 cardAmount(
                     employee
                 );
-
 
         }
 
@@ -252,6 +266,59 @@ export function renderResultsTable(
                 grandTotal
             );
 
+    }
+
+
+    // =========================
+    // SORT INDICATORS
+    // =========================
+
+    function updateSortIndicators() {
+
+        table
+            .querySelectorAll(
+                "th[data-sort]"
+            )
+            .forEach(
+                header => {
+
+                    const indicator =
+                        header.querySelector(
+                            ".sortIndicator"
+                        );
+
+
+                    if (
+                        header.dataset.sort ===
+                        currentSort.key
+                    ) {
+
+                        indicator.textContent =
+                            currentSort.direction === "asc"
+                                ? " ▲"
+                                : " ▼";
+
+
+                        header.classList.add(
+                            "resultsSortedHeader"
+                        );
+
+                    }
+
+                    else {
+
+                        indicator.textContent =
+                            "";
+
+
+                        header.classList.remove(
+                            "resultsSortedHeader"
+                        );
+
+                    }
+
+                }
+            );
 
     }
 
@@ -266,7 +333,6 @@ export function renderResultsTable(
     function lastName(
         employee
     ) {
-
 
         const name =
             String(
@@ -285,7 +351,6 @@ export function renderResultsTable(
             name.includes(",")
         ) {
 
-
             return (
                 name
                     .split(",")[0]
@@ -293,15 +358,11 @@ export function renderResultsTable(
                     .toLowerCase()
             );
 
-
         }
 
 
         // -------------------------
         // FALLBACK
-        //
-        // Handles names without
-        // a comma.
         // -------------------------
 
         const parts =
@@ -319,7 +380,6 @@ export function renderResultsTable(
                 ""
         );
 
-
     }
 
 
@@ -333,7 +393,6 @@ export function renderResultsTable(
     function firstName(
         employee
     ) {
-
 
         const name =
             String(
@@ -352,7 +411,6 @@ export function renderResultsTable(
             name.includes(",")
         ) {
 
-
             return (
                 name
                     .split(",")
@@ -361,7 +419,6 @@ export function renderResultsTable(
                     .trim()
                     .toLowerCase()
             );
-
 
         }
 
@@ -383,7 +440,6 @@ export function renderResultsTable(
                 ""
         );
 
-
     }
 
 
@@ -395,7 +451,6 @@ export function renderResultsTable(
         key
     ) {
 
-
         const sorted =
             [
                 ...employees
@@ -404,7 +459,6 @@ export function renderResultsTable(
 
         sorted.sort(
             (a, b) => {
-
 
                 let A;
 
@@ -419,7 +473,6 @@ export function renderResultsTable(
                 if (
                     key === "name"
                 ) {
-
 
                     const lastA =
                         lastName(a);
@@ -443,7 +496,6 @@ export function renderResultsTable(
                         lastResult !== 0
                     ) {
 
-
                         return (
                             currentSort.direction === "asc"
                                 ?
@@ -451,7 +503,6 @@ export function renderResultsTable(
                                 :
                                 -lastResult
                         );
-
 
                     }
 
@@ -479,7 +530,6 @@ export function renderResultsTable(
                         firstResult !== 0
                     ) {
 
-
                         return (
                             currentSort.direction === "asc"
                                 ?
@@ -487,7 +537,6 @@ export function renderResultsTable(
                                 :
                                 -firstResult
                         );
-
 
                     }
 
@@ -510,7 +559,6 @@ export function renderResultsTable(
                         )
                         .toLowerCase();
 
-
                 }
 
 
@@ -522,14 +570,12 @@ export function renderResultsTable(
                     key === "cash"
                 ) {
 
-
                     A =
                         roundedCash(a);
 
 
                     B =
                         roundedCash(b);
-
 
                 }
 
@@ -542,14 +588,12 @@ export function renderResultsTable(
                     key === "card"
                 ) {
 
-
                     A =
                         cardAmount(a);
 
 
                     B =
                         cardAmount(b);
-
 
                 }
 
@@ -562,14 +606,12 @@ export function renderResultsTable(
                     key === "total"
                 ) {
 
-
                     A =
                         totalAmount(a);
 
 
                     B =
                         totalAmount(b);
-
 
                 }
 
@@ -582,7 +624,6 @@ export function renderResultsTable(
                     typeof A === "string"
                 ) {
 
-
                     return (
                         currentSort.direction === "asc"
                             ?
@@ -590,7 +631,6 @@ export function renderResultsTable(
                             :
                             B.localeCompare(A)
                     );
-
 
                 }
 
@@ -607,13 +647,11 @@ export function renderResultsTable(
                         B - A
                 );
 
-
             }
         );
 
 
         return sorted;
-
 
     }
 
@@ -626,7 +664,6 @@ export function renderResultsTable(
         list
     ) {
 
-
         body.innerHTML = "";
 
 
@@ -634,7 +671,6 @@ export function renderResultsTable(
             const employee
             of list
         ) {
-
 
             // =========================
             // MAIN ROW
@@ -668,11 +704,27 @@ export function renderResultsTable(
                 );
 
 
+            // =========================
+            // CASH / CARD PERCENTAGES
+            // =========================
+
+            const cashPercentage =
+                tipPercentage(
+                    cash,
+                    total
+                );
+
+
+            const cardPercentage =
+                tipPercentage(
+                    card,
+                    total
+                );
+
+
             row.innerHTML = `
 
-
                 <td class="resultsEmployeeCell">
-
 
                     <span
                         class="resultsExpandArrow"
@@ -681,31 +733,44 @@ export function renderResultsTable(
                         ▸
                     </span>
 
-
                     <span class="resultsEmployeeName">
                         ${employee.name}
                     </span>
 
-
-                </td>
-
-
-                <td>
-                    ${formatMoney(
-                        cash
-                    )}
-                </td>
-
-
-                <td>
-                    ${formatMoney(
-                        card
-                    )}
                 </td>
 
 
                 <td>
 
+                    <span class="resultsAmount">
+                        ${formatMoney(
+                            cash
+                        )}
+                    </span>
+
+                    <span class="resultsPercentage">
+                        ${cashPercentage.toFixed(1)}%
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="resultsAmount">
+                        ${formatMoney(
+                            card
+                        )}
+                    </span>
+
+                    <span class="resultsPercentage">
+                        ${cardPercentage.toFixed(1)}%
+                    </span>
+
+                </td>
+
+
+                <td>
 
                     <strong>
                         ${formatMoney(
@@ -713,9 +778,7 @@ export function renderResultsTable(
                         )}
                     </strong>
 
-
                 </td>
-
 
             `;
 
@@ -753,17 +816,13 @@ export function renderResultsTable(
 
             expandedCell.innerHTML = `
 
-
                 <div class="resultsExpandedContent">
 
-
                     <div class="resultsExpandedItem">
-
 
                         <span class="resultsExpandedLabel">
                             Cash Kept
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -771,17 +830,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Cash Pool
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -789,17 +845,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Card Kept
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -807,17 +860,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Card Pool
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -825,17 +875,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Cash Total
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -843,17 +890,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Card Total
                         </span>
-
 
                         <span class="resultsExpandedValue">
                             ${formatMoney(
@@ -861,17 +905,14 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
 
                     <div class="resultsExpandedItem">
 
-
                         <span class="resultsExpandedLabel">
                             Total Take Home
                         </span>
-
 
                         <span class="resultsExpandedValue resultsExpandedTotal">
                             ${formatMoney(
@@ -879,12 +920,9 @@ export function renderResultsTable(
                             )}
                         </span>
 
-
                     </div>
 
-
                 </div>
-
 
             `;
 
@@ -900,7 +938,6 @@ export function renderResultsTable(
 
             row.onclick = () => {
 
-
                 const isExpanded =
                     expandedRow.style.display !== "none";
 
@@ -908,7 +945,6 @@ export function renderResultsTable(
                 if (
                     isExpanded
                 ) {
-
 
                     expandedRow.style.display =
                         "none";
@@ -929,19 +965,14 @@ export function renderResultsTable(
                         arrow
                     ) {
 
-
                         arrow.textContent =
                             "▸";
 
-
                     }
-
 
                 }
 
-
                 else {
-
 
                     expandedRow.style.display =
                         "table-row";
@@ -962,13 +993,10 @@ export function renderResultsTable(
                         arrow
                     ) {
 
-
                         arrow.textContent =
                             "▾";
 
-
                     }
-
 
                 }
 
@@ -981,15 +1009,12 @@ export function renderResultsTable(
                     clickHandler
                 ) {
 
-
                     clickHandler(
                         row,
                         employee
                     );
 
-
                 }
-
 
             };
 
@@ -1007,9 +1032,7 @@ export function renderResultsTable(
                 expandedRow
             );
 
-
         }
-
 
     }
 
@@ -1025,11 +1048,9 @@ export function renderResultsTable(
         .forEach(
             header => {
 
-
                 header.onclick = (
                     event
                 ) => {
-
 
                     event.stopPropagation();
 
@@ -1042,7 +1063,6 @@ export function renderResultsTable(
                         currentSort.key === key
                     ) {
 
-
                         currentSort.direction =
                             currentSort.direction === "asc"
                                 ?
@@ -1050,12 +1070,9 @@ export function renderResultsTable(
                                 :
                                 "asc";
 
-
                     }
 
-
                     else {
-
 
                         currentSort.key =
                             key;
@@ -1063,7 +1080,6 @@ export function renderResultsTable(
 
                         currentSort.direction =
                             "asc";
-
 
                     }
 
@@ -1075,8 +1091,12 @@ export function renderResultsTable(
                     );
 
 
-                };
+                    // Update the visible
+                    // sort arrow
 
+                    updateSortIndicators();
+
+                };
 
             }
         );
@@ -1095,6 +1115,13 @@ export function renderResultsTable(
 
 
     // =========================
+    // INITIAL SORT ARROW
+    // =========================
+
+    updateSortIndicators();
+
+
+    // =========================
     // INITIAL TOTALS
     // =========================
 
@@ -1102,6 +1129,5 @@ export function renderResultsTable(
 
 
     return table;
-
 
 }

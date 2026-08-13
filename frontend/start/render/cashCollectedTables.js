@@ -43,14 +43,24 @@ export function renderCashCollectedTables(mealBlocks) {
         }
 
 
+        // Create the meal title OUTSIDE the scrollable table
+        const title = document.createElement("h4");
+
+        title.className = "table-title";
+
+        title.textContent = `${meal} Cash Payments`;
+
+        output.appendChild(title);
+
+
+        // Create table
         const table = document.createElement("table");
+
         table.className = "summary-table";
 
 
         // Header
         let html = `
-            <caption>${meal} Cash Payments</caption>
-
             <thead>
                 <tr>
                     <th>Employee</th>
@@ -104,7 +114,11 @@ export function renderCashCollectedTables(mealBlocks) {
             }
 
             html += `
-                    <td><strong>${money(employeeTotal)}</strong></td>
+                    <td>
+                        <strong>
+                            ${money(employeeTotal)}
+                        </strong>
+                    </td>
                 </tr>
             `;
 
@@ -124,7 +138,9 @@ export function renderCashCollectedTables(mealBlocks) {
             let dayTotal = 0;
 
             for (const employee of block.employees) {
+
                 dayTotal += employee.cash_sales;
+
             }
 
             grandTotal += dayTotal;
@@ -142,17 +158,20 @@ export function renderCashCollectedTables(mealBlocks) {
             </tbody>
         `;
 
+
+        // Insert table HTML
         table.innerHTML = html;
 
 
+        // Create scrollable wrapper
         const wrapper = document.createElement("div");
 
         wrapper.className = "table-scroll";
 
-
         wrapper.appendChild(table);
 
 
+        // Add scrollable table AFTER the title
         output.appendChild(wrapper);
 
     }

@@ -2,6 +2,7 @@
     box-sizing: border-box;
 }
 
+
 :root {
     --background: #0b1220;
     --background-light: #101a2e;
@@ -83,6 +84,7 @@ body {
     border-bottom: 1px solid var(--border);
 }
 
+
 .logo {
     width: 75px;
     height: 75px;
@@ -90,11 +92,13 @@ body {
     object-fit: contain;
 }
 
+
 .header-text h1 {
     margin: 0;
 
     font-size: 24px;
 }
+
 
 .header-text p {
     margin: 5px 0 0;
@@ -113,15 +117,18 @@ main {
     padding: 70px 90px;
 }
 
+
 .panel {
     margin: 0;
 }
+
 
 .panel h2 {
     margin: 0 0 15px;
 
     font-size: 32px;
 }
+
 
 .page-description {
     max-width: 650px;
@@ -150,6 +157,7 @@ main {
     border-block: 1px solid var(--border);
 }
 
+
 .upload-card,
 .continue-step {
     padding: 32px 26px;
@@ -159,11 +167,13 @@ main {
     min-height: 180px;
 }
 
+
 .upload-card:hover,
 .continue-step:hover {
     background:
         rgba(233, 66, 163, .04);
 }
+
 
 .upload-card label {
     display: block;
@@ -174,13 +184,16 @@ main {
     font-weight: 700;
 }
 
+
 #shiftCard label {
     color: var(--yellow);
 }
 
+
 #orderCard label {
     color: var(--pink);
 }
+
 
 #paymentCard label {
     color: var(--cyan);
@@ -204,6 +217,7 @@ input {
 
     border-radius: 6px;
 }
+
 
 input:focus {
     outline: none;
@@ -234,13 +248,16 @@ button {
     cursor: pointer;
 }
 
+
 button:hover {
     background: var(--surface-hover);
 }
 
+
 button:disabled {
     opacity: .45;
 }
+
 
 #nextPage:not(:disabled) {
     background: var(--pink);
@@ -248,9 +265,11 @@ button:disabled {
     border-color: var(--pink);
 }
 
+
 #nextPage:not(:disabled):hover {
     background: var(--pink-hover);
 }
+
 
 .reset-button {
     margin-top: 12px;
@@ -274,9 +293,11 @@ button:disabled {
     gap: 40px;
 }
 
+
 .report-column {
     min-width: 0;
 }
+
 
 .report-column h3 {
     margin-bottom: 20px;
@@ -295,13 +316,13 @@ button:disabled {
 
     flex-direction: column;
 
-    gap: 40px;
+    gap: 28px;
 }
 
 
 /*
    Each individual table gets
-   its own scroll container
+   its own scroll container.
 */
 
 .table-scroll {
@@ -326,6 +347,51 @@ button:disabled {
 
 
 /* =========================
+   TABLE TITLES
+========================= */
+
+.table-title {
+    margin: 0;
+
+    padding: 0 0 12px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    color: var(--text);
+
+    border-bottom: 1px solid var(--border);
+
+    position: relative;
+}
+
+
+/*
+   Pink accent line underneath
+   each Breakfast / Lunch / Dinner title.
+*/
+
+.table-title::after {
+    content: "";
+
+    display: block;
+
+    width: 45px;
+
+    height: 3px;
+
+    margin-top: 10px;
+
+    background: var(--pink);
+
+    border-radius: 2px;
+}
+
+
+/* =========================
    SCROLLBAR
 ========================= */
 
@@ -334,9 +400,11 @@ button:disabled {
     width: 10px;
 }
 
+
 .table-scroll::-webkit-scrollbar-track {
     background: #0b1220;
 }
+
 
 .table-scroll::-webkit-scrollbar-thumb {
     background: #334766;
@@ -374,59 +442,6 @@ button:disabled {
 
 
 /* =========================
-   STICKY TABLE TITLE
-========================= */
-
-.summary-table caption {
-    /*
-       Makes:
-       "Breakfast Cash Payments"
-       "Lunch Cash Payments"
-       "Dinner Cash Payments"
-
-       stay attached to the table
-       while vertically scrolling.
-    */
-    position: sticky;
-
-    top: 0;
-
-    z-index: 15;
-
-    caption-side: top;
-
-    text-align: left;
-
-    padding: 22px 24px;
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-    color: var(--text);
-
-    background: var(--surface);
-}
-
-
-/* Pink line underneath title */
-
-.summary-table caption::after {
-    content: "";
-
-    display: block;
-
-    width: 45px;
-
-    height: 3px;
-
-    margin-top: 12px;
-
-    background: var(--pink);
-}
-
-
-/* =========================
    TABLE HEADER
 ========================= */
 
@@ -434,18 +449,17 @@ button:disabled {
     background: var(--surface-hover);
 }
 
+
 .summary-table thead th {
     /*
-       The caption is approximately
-       77px tall.
-
-       This places the column headers
-       directly underneath the sticky
-       table title.
+       No top offset is needed anymore
+       because the table title is outside
+       the scrolling table.
     */
+
     position: sticky;
 
-    top: 77px;
+    top: 0;
 
     z-index: 10;
 
@@ -468,15 +482,18 @@ button:disabled {
     border-bottom: 1px solid var(--border);
 }
 
+
 .summary-table th:first-child,
 .summary-table td:first-child {
     min-width: 180px;
 }
 
+
 .summary-table th:not(:first-child),
 .summary-table td:not(:first-child) {
     min-width: 120px;
 }
+
 
 .summary-table th {
     color: var(--yellow);
@@ -501,6 +518,7 @@ button:disabled {
     background:
         rgba(139, 231, 255, .05);
 }
+
 
 .summary-table tbody tr:last-child th,
 .summary-table tbody tr:last-child td {
@@ -537,7 +555,7 @@ button:disabled {
    The Employee header cell needs
    to stay above both:
 
-   - the sticky title
+   - the sticky column header
    - the sticky first column
 */
 
@@ -546,7 +564,7 @@ button:disabled {
 
     left: 0;
 
-    top: 77px;
+    top: 0;
 
     z-index: 20;
 
@@ -563,6 +581,7 @@ button:disabled {
     background: #202338;
 }
 
+
 .summary-table tbody tr:nth-child(even) td:first-child {
     background: #202338;
 }
@@ -575,6 +594,7 @@ button:disabled {
 .debug-panel {
     margin-top: 60px;
 }
+
 
 pre {
     padding: 20px;
@@ -650,6 +670,7 @@ footer {
     flex-shrink: 0;
 }
 
+
 .report-total .overall-total-card {
     display: flex;
 
@@ -671,6 +692,7 @@ footer {
         0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
+
 .report-total .overall-total-label {
     color: var(--muted);
 
@@ -680,6 +702,7 @@ footer {
 
     white-space: nowrap;
 }
+
 
 .report-total .overall-total-value {
     color: var(--text);
@@ -700,6 +723,7 @@ footer {
 #overallTotals .overall-total-card {
     border-left: 4px solid var(--pink);
 }
+
 
 #overallCashSales .overall-total-card {
     border-left: 4px solid var(--cyan);
@@ -736,6 +760,7 @@ footer {
     border-color: #32cd32;
 }
 
+
 .upload-card.completed label::after {
     content: " ✓";
 
@@ -750,16 +775,20 @@ footer {
 ========================= */
 
 @media (max-width: 1100px) {
+
     .results-panel {
         grid-template-columns: 1fr;
     }
+
 }
 
 
 @media (max-width: 850px) {
+
     main {
         padding: 40px 25px;
     }
+
 
     .process-flow {
         display: flex;
@@ -769,6 +798,7 @@ footer {
         border-block: 1px solid var(--border);
     }
 
+
     .upload-card,
     .continue-step {
         border-right: none;
@@ -776,32 +806,44 @@ footer {
         border-bottom: 1px solid var(--border);
     }
 
+
     .app-header {
         padding: 0 20px;
     }
+
 
     .logo {
         width: 60px;
 
         height: 60px;
     }
+
 }
 
 
 @media (max-width: 700px) {
+
     .report-header {
         align-items: stretch;
 
         flex-direction: column;
     }
 
+
     .report-total {
         width: 100%;
     }
+
 
     .report-total .overall-total-card {
         justify-content: space-between;
 
         width: 100%;
     }
+
+
+    .table-title {
+        font-size: 17px;
+    }
+
 }
