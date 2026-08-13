@@ -1289,6 +1289,8 @@ footer {
 #originalCardTips {
     color:
         var(--yellow);
+        font-weight: 800;
+        white-space: nowrap;
 }
 
 

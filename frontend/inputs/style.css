@@ -798,7 +798,7 @@ button:disabled {
         sticky;
 
     top:
-        100px;
+        0px;
 
     z-index:
         10;

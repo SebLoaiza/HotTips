@@ -281,7 +281,7 @@ export function renderEmployeePoints(
         "employee-points-button export-points-button";
 
     exportButton.textContent =
-        "Export Points";
+        "Save Tip Points";
 
     exportButton.addEventListener(
         "click",
@@ -311,7 +311,7 @@ export function renderEmployeePoints(
         "employee-points-button load-points-button";
 
     loadButton.textContent =
-        "Load Points";
+        "Load Pre-Saved Points";
 
     /* =================================================
        HIDDEN FILE INPUT
@@ -494,7 +494,7 @@ export function renderEmployeePoints(
             },
 
             {
-                label: "Point",
+                label: "Tip Points",
                 column: "point"
             }
 

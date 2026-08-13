@@ -49,7 +49,7 @@ export function renderCashCollectedTables(mealBlocks) {
 
         // Header
         let html = `
-            <caption>${meal} Cash Collected</caption>
+            <caption>${meal} Cash Payments</caption>
 
             <thead>
                 <tr>

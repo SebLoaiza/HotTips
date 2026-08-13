@@ -78,7 +78,7 @@ export function renderCashDropList(
         "cash-drop-button cash-drop-download-button";
 
     downloadButton.textContent =
-        "Download Cash Drops";
+        "Save Cash Drops";
 
 
     downloadButton.addEventListener(
@@ -109,7 +109,7 @@ export function renderCashDropList(
         "cash-drop-button cash-drop-upload-button";
 
     uploadButton.textContent =
-        "Upload Cash Drops";
+        "Load Pre-Saved Cash Drops";
 
 
     // =================================================
