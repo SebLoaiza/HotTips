@@ -2,12 +2,20 @@ import {
     formatMoney,
     formatNumber
 } from "../utils/formatters.js";
-
+import {
+    History
+}
+from "../model/History.js";
 
 export function exportTipDistributionCSV(
     tipDistribution
 ) {
 
+
+    const history =
+        new History(
+            tipDistribution
+        );
 
     const rows = [];
 
@@ -597,7 +605,7 @@ export function exportTipDistributionCSV(
 
     downloadCSV(
         rows,
-        `HotTips Stats - ${dateTime}.csv`
+        `HotTips Stats - ${history.start_date}_to_${history.end_date}.csv`
     );
 
 

@@ -1566,6 +1566,9 @@ function downloadCashDrops(
     const now =
         new Date();
 
+    const time = 
+        now.toTimeString().slice(0, 8).replace(/:/g, '-');
+
 
     const date =
         `${String(
@@ -1583,8 +1586,8 @@ function downloadCashDrops(
         url;
 
 
-    link.download =
-        `HotTips Cash Drops - ${date}.json`;
+    link.download = 
+        `HotTips Cash Drops - ${date} - ${time}.json`;
 
 
     document.body.appendChild(

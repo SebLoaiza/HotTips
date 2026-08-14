@@ -1,6 +1,17 @@
+import {
+    History
+}
+from "../model/History.js";
+
 export function exportPayrollSummaryCSV(
-    employees
+    employees,
+    tipDistribution
 ) {
+
+    const history =
+        new History(
+            tipDistribution
+        );
 
 
     const rows = [
@@ -188,7 +199,7 @@ export function exportPayrollSummaryCSV(
 
 
     link.download =
-        `Summary Results - ${dateTime}.csv`;
+        `HotTips Summary Results - ${history.start_date}_to_${history.end_date}`;
 
 
     document.body.appendChild(

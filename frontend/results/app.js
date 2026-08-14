@@ -1343,7 +1343,8 @@ document
 
 
             exportPayrollSummaryCSV(
-                employees
+                employees,
+                tipDistribution
             );
 
         }
