@@ -605,7 +605,7 @@ export function exportTipDistributionCSV(
 
     downloadCSV(
         rows,
-        `HotTips Stats - ${history.start_date}_to_${history.end_date}.csv`
+        `HotTips Stats - ${history.start_date}_to_${history.end_date} - ${dateTime}.csv`
     );
 
 

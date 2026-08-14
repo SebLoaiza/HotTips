@@ -30,8 +30,8 @@ export function exportPayrollSummaryCSV(
     // DATE / TIME
     // =========================
 
-    const now =
-        new Date();
+    const now = new Date();
+    const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
 
 
     const dateTime =
@@ -199,7 +199,7 @@ export function exportPayrollSummaryCSV(
 
 
     link.download =
-        `HotTips Summary Results - ${history.start_date}_to_${history.end_date}`;
+        `HotTips Summary Results - ${history.start_date}_to_${history.end_date} - ${dateTime}.csv`;
 
 
     document.body.appendChild(
