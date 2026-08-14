@@ -133,6 +133,7 @@ export function renderCashDropList(
     fileInput.style.display =
         "none";
 
+
     // =================================================
     // UPLOAD CLICK
     // =================================================
@@ -164,23 +165,32 @@ export function renderCashDropList(
 
             try {
 
+                // -----------------------------------------
+                // LOAD SAVED CASH DROPS
+                // -----------------------------------------
+
                 await uploadCashDrops(
                     file,
                     mealBlocks
                 );
 
 
+                /*
+                    IMPORTANT:
+
+                    Only rebuild the cash-drop table.
+
+                    Do NOT call refreshUI() here.
+
+                    refreshUI() rebuilds the entire Inputs
+                    page and can interfere with the newly
+                    created cash-drop inputs.
+                */
+
                 renderCashDropList(
                     mealBlocks,
                     refreshUI
                 );
-
-
-                if (refreshUI) {
-
-                    refreshUI();
-
-                }
 
 
                 alert(
@@ -227,8 +237,7 @@ export function renderCashDropList(
 
 
     // =================================================
-    // IMPORTANT:
-    // Put controls ABOVE the totals.
+    // PUT CONTROLS ABOVE TABLE
     // =================================================
 
     if (controlsOutput) {
@@ -1209,11 +1218,18 @@ function createRow(
             );
 
 
-            if (refreshUI) {
+            /*
+                IMPORTANT:
 
-                refreshUI();
+                Do not refresh the entire Inputs page
+                immediately after changing a cash drop.
 
-            }
+                The value is already saved directly into
+                the employee object.
+
+                A full refresh here can destroy focus and
+                make the table difficult to edit.
+            */
 
         }
     );
@@ -1274,51 +1290,24 @@ function createRow(
                 inputs.length
             ) {
 
-                if (refreshUI) {
-
-                    refreshUI();
-
-                }
-
                 return;
 
             }
 
 
-            if (refreshUI) {
+            const newInput =
+                inputs[
+                    nextIndex
+                ];
 
-                refreshUI();
+
+            if (newInput) {
+
+                newInput.focus();
+
+                newInput.select();
 
             }
-
-
-            requestAnimationFrame(
-                () => {
-
-                    const newInputs =
-                        Array.from(
-                            document.querySelectorAll(
-                                "#cashDropTables .cash-drop-input"
-                            )
-                        );
-
-
-                    const newInput =
-                        newInputs[
-                            nextIndex
-                        ];
-
-
-                    if (newInput) {
-
-                        newInput.focus();
-
-                        newInput.select();
-
-                    }
-
-                }
-            );
 
         }
     );
@@ -1566,8 +1555,18 @@ function downloadCashDrops(
     const now =
         new Date();
 
-    const time = 
-        now.toTimeString().slice(0, 8).replace(/:/g, '_');
+
+    const time =
+        now
+            .toTimeString()
+            .slice(
+                0,
+                8
+            )
+            .replace(
+                /:/g,
+                "_"
+            );
 
 
     const date =
@@ -1586,7 +1585,7 @@ function downloadCashDrops(
         url;
 
 
-    link.download = 
+    link.download =
         `HotTips Cash Drops - ${date} - ${time}.json`;
 
 
@@ -1748,25 +1747,26 @@ function uploadCashDrops(
                                     }
 
 
-                                    const existing =
-                                        Number(
-                                            employee.cash_drop
+                                    /*
+                                        Keep the saved value.
+
+                                        The old code only loaded the
+                                        saved value when the existing
+                                        value was zero.
+
+                                        That can make loading a saved
+                                        cash-drop file behave
+                                        unexpectedly.
+
+                                        A loaded file should replace
+                                        the current cash drop for
+                                        that matching employee/meal.
+                                    */
+
+                                    employee.cash_drop =
+                                        Math.round(
+                                            savedCash
                                         );
-
-
-                                    if (
-                                        !Number.isFinite(
-                                            existing
-                                        ) ||
-                                        existing === 0
-                                    ) {
-
-                                        employee.cash_drop =
-                                            Math.round(
-                                                savedCash
-                                            );
-
-                                    }
 
                                 }
 
