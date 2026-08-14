@@ -1380,6 +1380,10 @@ if (
 // LOAD RESULTS
 // =================================================
 
+// =================================================
+// LOAD RESULTS
+// =================================================
+
 async function start() {
 
     try {
@@ -1424,17 +1428,55 @@ async function start() {
 
 
         // =========================================
-        // VALIDATION
+        // NO DATA
         // =========================================
 
         if (
             tipDistribution.length === 0
         ) {
 
-            alert(
-                "No tip distribution data found."
-            );
+            const loadData =
+                confirm(
 
+                    "No saved Results data was found.\n\n" +
+
+                    "Would you like to load a saved HotTips history file?"
+
+                );
+
+
+            // =====================================
+            // USER WANTS TO LOAD DATA
+            // =====================================
+
+            if (
+                loadData
+            ) {
+
+                if (
+                    historyInput
+                ) {
+
+                    historyInput.click();
+
+                    return;
+
+                }
+
+
+                alert(
+                    "The history file loader could not be found."
+                );
+
+
+                return;
+
+            }
+
+
+            // =====================================
+            // USER DOES NOT WANT TO LOAD DATA
+            // =====================================
 
             window.location.href =
                 "../distribution/distribution.html";
@@ -1516,8 +1558,6 @@ async function start() {
     }
 
 }
-
-
 // =================================================
 // START
 // =================================================
