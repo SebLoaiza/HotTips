@@ -63,27 +63,279 @@ import {
 } from "./logic/exportPayrollSummaryCSV.js";
 
 
-// =================================
-// LOAD CURRENT HISTORY
-// =================================
+// =================================================
+// INDEXED DB
+// =================================================
 
-let tipDistribution =
-    JSON.parse(
-        sessionStorage.getItem(
-            "tipDistribution"
-        )
-    ) || [];
+const DB_NAME =
+    "HotTipsDB";
+
+const STORE_NAME =
+    "state";
 
 
-const resultsSession =
-    new ResultsSession(
-        tipDistribution
+// =================================================
+// OPEN DATABASE
+// =================================================
+
+function openDatabase() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const request =
+                indexedDB.open(
+                    DB_NAME
+                );
+
+
+            request.onupgradeneeded =
+                () => {
+
+                    const db =
+                        request.result;
+
+
+                    if (
+                        !db.objectStoreNames.contains(
+                            STORE_NAME
+                        )
+                    ) {
+
+                        db.createObjectStore(
+                            STORE_NAME
+                        );
+
+                    }
+
+                };
+
+
+            request.onsuccess =
+                () => {
+
+                    const db =
+                        request.result;
+
+
+                    if (
+                        db.objectStoreNames.contains(
+                            STORE_NAME
+                        )
+                    ) {
+
+                        resolve(db);
+
+                        return;
+
+                    }
+
+
+                    const currentVersion =
+                        db.version;
+
+
+                    db.close();
+
+
+                    const upgradeRequest =
+                        indexedDB.open(
+                            DB_NAME,
+                            currentVersion + 1
+                        );
+
+
+                    upgradeRequest.onupgradeneeded =
+                        () => {
+
+                            const upgradedDB =
+                                upgradeRequest.result;
+
+
+                            if (
+                                !upgradedDB.objectStoreNames.contains(
+                                    STORE_NAME
+                                )
+                            ) {
+
+                                upgradedDB.createObjectStore(
+                                    STORE_NAME
+                                );
+
+                            }
+
+                        };
+
+
+                    upgradeRequest.onsuccess =
+                        () => {
+
+                            resolve(
+                                upgradeRequest.result
+                            );
+
+                        };
+
+
+                    upgradeRequest.onerror =
+                        () => {
+
+                            reject(
+                                upgradeRequest.error
+                            );
+
+                        };
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
     );
 
+}
 
-// =================================
+
+// =================================================
+// LOAD STATE
+// =================================================
+
+async function loadState(
+    key
+) {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readonly"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.get(
+                    key
+                );
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve(
+                        request.result
+                    );
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// SAVE STATE
+// =================================================
+
+async function saveState(
+    key,
+    value
+) {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.put(
+                    value,
+                    key
+                );
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve();
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// STATE
+// =================================================
+
+let tipDistribution =
+    [];
+
+let resultsSession =
+    null;
+
+
+// =================================================
 // DOM
-// =================================
+// =================================================
 
 const resultsContainer =
     document.getElementById(
@@ -181,16 +433,17 @@ const analyticsView =
     );
 
 
-// =================================
+// =================================================
 // CURRENT VIEW
-// =================================
+// =================================================
 
-let currentView = "results";
+let currentView =
+    "results";
 
 
-// =================================
+// =================================================
 // EMPLOYEE DETAILS
-// =================================
+// =================================================
 
 function openEmployee(
     row,
@@ -231,7 +484,8 @@ function openEmployee(
         );
 
 
-    cell.colSpan = 4;
+    cell.colSpan =
+        4;
 
 
     cell.appendChild(
@@ -253,9 +507,9 @@ function openEmployee(
 }
 
 
-// =================================
+// =================================================
 // SHOW RESULTS VIEW
-// =================================
+// =================================================
 
 function showResultsView() {
 
@@ -291,9 +545,9 @@ function showResultsView() {
 }
 
 
-// =================================
+// =================================================
 // SHOW STATS VIEW
-// =================================
+// =================================================
 
 function showStatsView() {
 
@@ -329,9 +583,9 @@ function showStatsView() {
 }
 
 
-// =================================
+// =================================================
 // SHOW ANALYTICS VIEW
-// =================================
+// =================================================
 
 function showAnalyticsView() {
 
@@ -367,13 +621,14 @@ function showAnalyticsView() {
 }
 
 
-// =================================
+// =================================================
 // RENDER RESULTS VIEW
-// =================================
+// =================================================
 
 function renderResults() {
 
-    currentView = "results";
+    currentView =
+        "results";
 
 
     showResultsView();
@@ -408,7 +663,8 @@ function renderResults() {
 
 
     const filtered =
-        resultsSession.filtered_distribution;
+        resultsSession
+            .filtered_distribution;
 
 
     const employees =
@@ -416,8 +672,6 @@ function renderResults() {
             filtered
         );
 
-
-    // Employee results table
 
     resultsContainer.appendChild(
 
@@ -429,8 +683,6 @@ function renderResults() {
     );
 
 
-    // Special orders
-
     resultsContainer.appendChild(
 
         renderSpecialOrders(
@@ -439,8 +691,6 @@ function renderResults() {
 
     );
 
-
-    // Print summary
 
     printContainer.appendChild(
 
@@ -457,13 +707,14 @@ function renderResults() {
 }
 
 
-// =================================
+// =================================================
 // RENDER STATS VIEW
-// =================================
+// =================================================
 
 function renderStatsPage() {
 
-    currentView = "stats";
+    currentView =
+        "stats";
 
 
     showStatsView();
@@ -486,7 +737,8 @@ function renderStatsPage() {
 
 
         const filtered =
-            resultsSession.filtered_distribution;
+            resultsSession
+                .filtered_distribution;
 
 
         const employees =
@@ -522,13 +774,14 @@ function renderStatsPage() {
 }
 
 
-// =================================
+// =================================================
 // RENDER ANALYTICS VIEW
-// =================================
+// =================================================
 
 function renderAnalyticsPage() {
 
-    currentView = "analytics";
+    currentView =
+        "analytics";
 
 
     showAnalyticsView();
@@ -561,7 +814,8 @@ function renderAnalyticsPage() {
 
 
         const filtered =
-            resultsSession.filtered_distribution;
+            resultsSession
+                .filtered_distribution;
 
 
         const employees =
@@ -587,9 +841,9 @@ function renderAnalyticsPage() {
 }
 
 
-// =================================
+// =================================================
 // UPDATE VIEW BUTTONS
-// =================================
+// =================================================
 
 function updateViewButtons() {
 
@@ -631,13 +885,24 @@ function updateViewButtons() {
 }
 
 
-// =================================
+// =================================================
 // DATE SELECTOR
-// =================================
+// =================================================
 
-if (
-    dateContainer
-) {
+function setupDateSelector() {
+
+    if (
+        !dateContainer
+    ) {
+
+        return;
+
+    }
+
+
+    dateContainer.innerHTML =
+        "";
+
 
     dateContainer.appendChild(
 
@@ -652,6 +917,7 @@ if (
                     renderStatsPage();
 
                 }
+
                 else if (
                     currentView === "analytics"
                 ) {
@@ -659,6 +925,7 @@ if (
                     renderAnalyticsPage();
 
                 }
+
                 else {
 
                     renderResults();
@@ -673,9 +940,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // RESULTS BUTTON
-// =================================
+// =================================================
 
 if (
     resultsButton
@@ -691,9 +958,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // STATS BUTTON
-// =================================
+// =================================================
 
 if (
     summaryButton
@@ -709,9 +976,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // ANALYTICS BUTTON
-// =================================
+// =================================================
 
 if (
     analyticsButton
@@ -727,9 +994,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // EXPORT CSV
-// =================================
+// =================================================
 
 if (
     exportCSVButton
@@ -750,9 +1017,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // SAVE JSON
-// =================================
+// =================================================
 
 if (
     saveButton
@@ -770,9 +1037,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // IMPORT JSON HISTORY
-// =================================
+// =================================================
 
 if (
     loadButton
@@ -817,15 +1084,14 @@ if (
 
 
                 const existing =
-                    JSON.parse(
-                        sessionStorage.getItem(
-                            "tipDistribution"
-                        )
+                    await loadState(
+                        "tipDistribution"
                     ) || [];
 
 
                 const incoming =
-                    imported.tipDistribution || [];
+                    imported.tipDistribution ||
+                    [];
 
 
                 // =================================
@@ -864,11 +1130,9 @@ if (
                     ];
 
 
-                    sessionStorage.setItem(
+                    await saveState(
                         "tipDistribution",
-                        JSON.stringify(
-                            merged
-                        )
+                        merged
                     );
 
 
@@ -879,14 +1143,13 @@ if (
 
                     location.reload();
 
-
                     return;
 
                 }
 
 
                 // =================================
-                // BUILD CONFLICT MESSAGE
+                // CONFLICT MESSAGE
                 // =================================
 
                 const conflictText =
@@ -948,11 +1211,9 @@ if (
                     ];
 
 
-                    sessionStorage.setItem(
+                    await saveState(
                         "tipDistribution",
-                        JSON.stringify(
-                            merged
-                        )
+                        merged
                     );
 
 
@@ -968,7 +1229,6 @@ if (
 
 
                     location.reload();
-
 
                     return;
 
@@ -1003,11 +1263,9 @@ if (
                 ];
 
 
-                sessionStorage.setItem(
+                await saveState(
                     "tipDistribution",
-                    JSON.stringify(
-                        merged
-                    )
+                    merged
                 );
 
 
@@ -1025,11 +1283,13 @@ if (
                 location.reload();
 
             }
+
             catch (
                 error
             ) {
 
                 console.error(
+                    "Could not import history:",
                     error
                 );
 
@@ -1045,9 +1305,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // PRINT
-// =================================
+// =================================================
 
 if (
     printButton
@@ -1063,9 +1323,9 @@ if (
 }
 
 
-// =================================
+// =================================================
 // PAYROLL SUMMARY
-// =================================
+// =================================================
 
 document
     .getElementById(
@@ -1090,9 +1350,9 @@ document
     );
 
 
-// =================================
+// =================================================
 // BACK BUTTON
-// =================================
+// =================================================
 
 const backButton =
     document.getElementById(
@@ -1115,38 +1375,150 @@ if (
 }
 
 
-// =================================
+// =================================================
+// LOAD RESULTS
+// =================================================
+
+async function start() {
+
+    try {
+
+        console.log(
+            "================================"
+        );
+
+
+        console.log(
+            "Loading Results from IndexedDB..."
+        );
+
+
+        console.log(
+            "================================"
+        );
+
+
+        const savedDistribution =
+            await loadState(
+                "tipDistribution"
+            );
+
+
+        tipDistribution =
+            Array.isArray(
+                savedDistribution
+            )
+                ? savedDistribution
+                : [];
+
+
+        console.log(
+            "TIP DISTRIBUTION LOADED"
+        );
+
+
+        console.log(
+            tipDistribution
+        );
+
+
+        // =========================================
+        // VALIDATION
+        // =========================================
+
+        if (
+            tipDistribution.length === 0
+        ) {
+
+            alert(
+                "No tip distribution data found."
+            );
+
+
+            window.location.href =
+                "../distribution/distribution.html";
+
+
+            return;
+
+        }
+
+
+        // =========================================
+        // CREATE RESULTS SESSION
+        // =========================================
+
+        resultsSession =
+            new ResultsSession(
+                tipDistribution
+            );
+
+
+        // =========================================
+        // DATE SELECTOR
+        // =========================================
+
+        setupDateSelector();
+
+
+        // =========================================
+        // INITIAL RENDER
+        // =========================================
+
+        renderResults();
+
+
+        // =========================================
+        // DEBUG GLOBALS
+        // =========================================
+
+        window.RESULTS_SESSION =
+            resultsSession;
+
+
+        window.TIP_DISTRIBUTION =
+            tipDistribution;
+
+
+        window.RENDER_RESULTS =
+            renderResults;
+
+
+        window.RENDER_STATS =
+            renderStatsPage;
+
+
+        window.RENDER_ANALYTICS =
+            renderAnalyticsPage;
+
+
+        console.log(
+            "Results page loaded successfully."
+        );
+
+    }
+
+    catch (
+        error
+    ) {
+
+        console.error(
+            "Could not load Results data:",
+            error
+        );
+
+
+        alert(
+            "Could not load the saved application data."
+        );
+
+    }
+
+}
+
+
+// =================================================
 // START
-// =================================
+// =================================================
 
-renderResults();
-
-
-// =================================
-// DEBUG
-// =================================
-
-window.RESULTS_SESSION =
-    resultsSession;
-
-
-window.TIP_DISTRIBUTION =
-    tipDistribution;
-
-
-window.RENDER_RESULTS =
-    renderResults;
-
-
-window.RENDER_STATS =
-    renderStatsPage;
-
-
-window.RENDER_ANALYTICS =
-    renderAnalyticsPage;
-
-
-console.log(
-    "TIP DISTRIBUTION",
-    tipDistribution
-);
+start();

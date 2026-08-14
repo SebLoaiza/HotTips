@@ -16,12 +16,24 @@ import { renderCashCollectedTables } from "./render/cashCollectedTables.js";
 
 
 // =================================================
+// INDEXED DB
+// =================================================
+
+const DB_NAME = "HotTipsDB";
+
+const STORE_NAME = "state";
+
+
+// =================================================
 // STATE
 // =================================================
 
 let currentMealBlocks = [];
+
 let currentMealParticipations = [];
+
 let currentOrders = [];
+
 let currentPayments = [];
 
 
@@ -65,7 +77,528 @@ const paymentCard =
 // =================================================
 
 if (nextButton) {
+
     nextButton.disabled = true;
+
+}
+
+
+// =================================================
+// OPEN INDEXED DB
+// =================================================
+
+function openDatabase() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const request =
+                indexedDB.open(
+                    DB_NAME
+                );
+
+
+            // -----------------------------------------
+            // DATABASE CREATED FOR THE FIRST TIME
+            // -----------------------------------------
+
+            request.onupgradeneeded =
+                () => {
+
+                    const db =
+                        request.result;
+
+
+                    if (
+                        !db.objectStoreNames.contains(
+                            STORE_NAME
+                        )
+                    ) {
+
+                        db.createObjectStore(
+                            STORE_NAME
+                        );
+
+                    }
+
+                };
+
+
+            // -----------------------------------------
+            // DATABASE OPENED
+            // -----------------------------------------
+
+            request.onsuccess =
+                () => {
+
+                    const db =
+                        request.result;
+
+
+                    /*
+                        Normally the state store already
+                        exists.
+
+                        This check protects against a
+                        partially-created database.
+                    */
+
+                    if (
+                        db.objectStoreNames.contains(
+                            STORE_NAME
+                        )
+                    ) {
+
+                        resolve(db);
+
+                        return;
+
+                    }
+
+
+                    /*
+                        The database exists but the store
+                        does not.
+
+                        Close it and upgrade to the next
+                        version.
+                    */
+
+                    const currentVersion =
+                        db.version;
+
+
+                    db.close();
+
+
+                    const upgradeRequest =
+                        indexedDB.open(
+                            DB_NAME,
+                            currentVersion + 1
+                        );
+
+
+                    upgradeRequest.onupgradeneeded =
+                        () => {
+
+                            const upgradedDB =
+                                upgradeRequest.result;
+
+
+                            if (
+                                !upgradedDB.objectStoreNames.contains(
+                                    STORE_NAME
+                                )
+                            ) {
+
+                                upgradedDB.createObjectStore(
+                                    STORE_NAME
+                                );
+
+                            }
+
+                        };
+
+
+                    upgradeRequest.onsuccess =
+                        () => {
+
+                            resolve(
+                                upgradeRequest.result
+                            );
+
+                        };
+
+
+                    upgradeRequest.onerror =
+                        () => {
+
+                            reject(
+                                upgradeRequest.error
+                            );
+
+                        };
+
+                };
+
+
+            // -----------------------------------------
+            // ERROR
+            // -----------------------------------------
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+
+            // -----------------------------------------
+            // VERSION BLOCKED
+            // -----------------------------------------
+
+            request.onblocked =
+                () => {
+
+                    reject(
+                        new Error(
+                            "HotTips database is blocked by another open page."
+                        )
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// SAVE ONE STATE VALUE
+// =================================================
+
+async function saveState(
+    key,
+    value
+) {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            let transaction;
+
+            try {
+
+                transaction =
+                    db.transaction(
+                        STORE_NAME,
+                        "readwrite"
+                    );
+
+            }
+
+            catch (error) {
+
+                db.close();
+
+                reject(error);
+
+                return;
+
+            }
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.put(
+                    value,
+                    key
+                );
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve();
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+
+            transaction.oncomplete =
+                () => {
+
+                    db.close();
+
+                };
+
+
+            transaction.onerror =
+                () => {
+
+                    reject(
+                        transaction.error
+                    );
+
+                };
+
+
+            transaction.onabort =
+                () => {
+
+                    reject(
+                        transaction.error ||
+                        new Error(
+                            "IndexedDB transaction aborted."
+                        )
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// LOAD ONE STATE VALUE
+// =================================================
+
+async function loadState(
+    key
+) {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            let transaction;
+
+            try {
+
+                transaction =
+                    db.transaction(
+                        STORE_NAME,
+                        "readonly"
+                    );
+
+            }
+
+            catch (error) {
+
+                db.close();
+
+                reject(error);
+
+                return;
+
+            }
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.get(
+                    key
+                );
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve(
+                        request.result
+                    );
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+
+            transaction.oncomplete =
+                () => {
+
+                    db.close();
+
+                };
+
+
+            transaction.onerror =
+                () => {
+
+                    reject(
+                        transaction.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// DELETE ONE STATE VALUE
+// =================================================
+
+async function deleteState(
+    key
+) {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.delete(
+                    key
+                );
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve();
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+
+            transaction.oncomplete =
+                () => {
+
+                    db.close();
+
+                };
+
+
+            transaction.onerror =
+                () => {
+
+                    reject(
+                        transaction.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+// =================================================
+// CLEAR APPLICATION STATE
+// =================================================
+
+async function clearApplicationState() {
+
+    const db =
+        await openDatabase();
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const transaction =
+                db.transaction(
+                    STORE_NAME,
+                    "readwrite"
+                );
+
+
+            const store =
+                transaction.objectStore(
+                    STORE_NAME
+                );
+
+
+            const request =
+                store.clear();
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve();
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+
+            transaction.oncomplete =
+                () => {
+
+                    db.close();
+
+                };
+
+
+            transaction.onerror =
+                () => {
+
+                    reject(
+                        transaction.error
+                    );
+
+                };
+
+        }
+    );
+
 }
 
 
@@ -76,27 +609,36 @@ if (nextButton) {
 function hasShiftData() {
 
     return (
-        Array.isArray(currentMealBlocks) &&
+        Array.isArray(
+            currentMealBlocks
+        ) &&
         currentMealBlocks.length > 0
     );
+
 }
 
 
 function hasOrderData() {
 
     return (
-        Array.isArray(currentOrders) &&
+        Array.isArray(
+            currentOrders
+        ) &&
         currentOrders.length > 0
     );
+
 }
 
 
 function hasPaymentData() {
 
     return (
-        Array.isArray(currentPayments) &&
+        Array.isArray(
+            currentPayments
+        ) &&
         currentPayments.length > 0
     );
+
 }
 
 
@@ -111,6 +653,7 @@ function hasShiftFile() {
         shiftInput.files &&
         shiftInput.files.length > 0
     );
+
 }
 
 
@@ -121,6 +664,7 @@ function hasOrderFile() {
         orderInput.files &&
         orderInput.files.length > 0
     );
+
 }
 
 
@@ -131,6 +675,7 @@ function hasPaymentFile() {
         paymentInput.files &&
         paymentInput.files.length > 0
     );
+
 }
 
 
@@ -147,22 +692,35 @@ if (shiftInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
 
+
             try {
+
+                console.log(
+                    "Reading Shift CSV..."
+                );
+
 
                 const rows =
                     await readCsv(file);
 
 
                 currentMealBlocks =
-                    createMealBlocks(rows);
+                    createMealBlocks(
+                        rows
+                    );
 
 
                 currentMealParticipations =
-                    createMealParticipations(rows);
+                    createMealParticipations(
+                        rows
+                    );
 
 
                 shiftCard?.classList.add(
@@ -170,19 +728,23 @@ if (shiftInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     "Error reading Shift CSV:",
                     error
                 );
 
+
                 shiftCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -207,18 +769,29 @@ if (orderInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
 
+
             try {
+
+                console.log(
+                    "Reading Order CSV..."
+                );
+
 
                 const rows =
                     await readCsv(file);
 
 
                 currentOrders =
-                    createOrders(rows);
+                    createOrders(
+                        rows
+                    );
 
 
                 orderCard?.classList.add(
@@ -226,19 +799,23 @@ if (orderInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     "Error reading Order CSV:",
                     error
                 );
 
+
                 orderCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -263,18 +840,29 @@ if (paymentInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
 
+
             try {
+
+                console.log(
+                    "Reading Payment CSV..."
+                );
+
 
                 const rows =
                     await readCsv(file);
 
 
                 currentPayments =
-                    createPayments(rows);
+                    createPayments(
+                        rows
+                    );
 
 
                 paymentCard?.classList.add(
@@ -282,19 +870,23 @@ if (paymentInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     "Error reading Payment CSV:",
                     error
                 );
 
+
                 paymentCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -310,12 +902,17 @@ if (paymentInput) {
 // REBUILD MEAL BLOCKS
 // =================================================
 
-function rebuildMealBlocks() {
+async function rebuildMealBlocks() {
 
     /*
-        Only perform the logic that is possible
+        Only perform logic that is possible
         with the data currently available.
     */
+
+
+    // ---------------------------------------------
+    // MEAL PARTICIPATIONS
+    // ---------------------------------------------
 
     if (
         currentMealBlocks.length > 0 &&
@@ -330,6 +927,10 @@ function rebuildMealBlocks() {
     }
 
 
+    // ---------------------------------------------
+    // PAYMENT ENRICHMENT
+    // ---------------------------------------------
+
     if (
         currentOrders.length > 0 &&
         currentPayments.length > 0
@@ -342,6 +943,10 @@ function rebuildMealBlocks() {
 
     }
 
+
+    // ---------------------------------------------
+    // ASSIGN ORDERS
+    // ---------------------------------------------
 
     if (
         currentMealBlocks.length > 0 &&
@@ -361,6 +966,10 @@ function rebuildMealBlocks() {
     }
 
 
+    // ---------------------------------------------
+    // PARTICIPATION TOTALS
+    // ---------------------------------------------
+
     if (
         currentMealBlocks.length > 0
     ) {
@@ -372,76 +981,95 @@ function rebuildMealBlocks() {
     }
 
 
-    // Save the current state
-    saveState();
+    // ---------------------------------------------
+    // SAVE
+    // ---------------------------------------------
+
+    try {
+
+        await saveAllState();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not save application state:",
+            error
+        );
 
 
-    // Re-render everything
+        alert(
+            "Could not save the imported data.\n\n" +
+            "Please check the browser storage settings."
+        );
+
+        return;
+
+    }
+
+
+    // ---------------------------------------------
+    // RENDER
+    // ---------------------------------------------
+
     refreshUI();
 
 
-    // Re-check Continue
+    // ---------------------------------------------
+    // CONTINUE
+    // ---------------------------------------------
+
     updateContinueButton();
 
 }
 
 
 // =================================================
-// REFRESH UI
+// SAVE ALL STATE
 // =================================================
 
-function refreshUI() {
+async function saveAllState() {
 
-    renderOverallTotals();
-
-    renderOverallCashSales();
-
-    renderTipTables(
-        currentMealBlocks
+    console.log(
+        "Saving HotTips application state..."
     );
 
-    renderCashCollectedTables(
-        currentMealBlocks
-    );
 
-}
+    /*
+        Save each dataset into its own IndexedDB
+        key.
 
+        IndexedDB can store much larger objects than
+        sessionStorage.
+    */
 
-// =================================================
-// SAVE STATE
-// =================================================
-
-function saveState() {
-
-    sessionStorage.setItem(
+    await saveState(
         "mealBlocks",
-        JSON.stringify(
-            currentMealBlocks
-        )
+        currentMealBlocks
     );
 
 
-    sessionStorage.setItem(
+    await saveState(
         "mealParticipations",
-        JSON.stringify(
-            currentMealParticipations
-        )
+        currentMealParticipations
     );
 
 
-    sessionStorage.setItem(
+    await saveState(
         "orders",
-        JSON.stringify(
-            currentOrders
-        )
+        currentOrders
     );
 
 
-    sessionStorage.setItem(
+    await saveState(
         "payments",
-        JSON.stringify(
-            currentPayments
-        )
+        currentPayments
+    );
+
+
+    console.log(
+        "HotTips application state saved."
     );
 
 }
@@ -451,100 +1079,152 @@ function saveState() {
 // LOAD STATE
 // =================================================
 
-function loadState() {
-
-    const savedBlocks =
-        sessionStorage.getItem(
-            "mealBlocks"
-        );
-
-    const savedParticipations =
-        sessionStorage.getItem(
-            "mealParticipations"
-        );
-
-    const savedOrders =
-        sessionStorage.getItem(
-            "orders"
-        );
-
-    const savedPayments =
-        sessionStorage.getItem(
-            "payments"
-        );
-
-
-    // ---------------------------------------------
-    // LOAD EACH DATASET
-    // ---------------------------------------------
+async function loadSavedState() {
 
     try {
 
-        currentMealBlocks =
-            JSON.parse(
-                savedBlocks || "[]"
+        console.log(
+            "Loading HotTips application state..."
+        );
+
+
+        // -----------------------------------------
+        // LOAD MEAL BLOCKS
+        // -----------------------------------------
+
+        const savedBlocks =
+            await loadState(
+                "mealBlocks"
             );
+
+
+        // -----------------------------------------
+        // LOAD PARTICIPATIONS
+        // -----------------------------------------
+
+        const savedParticipations =
+            await loadState(
+                "mealParticipations"
+            );
+
+
+        // -----------------------------------------
+        // LOAD ORDERS
+        // -----------------------------------------
+
+        const savedOrders =
+            await loadState(
+                "orders"
+            );
+
+
+        // -----------------------------------------
+        // LOAD PAYMENTS
+        // -----------------------------------------
+
+        const savedPayments =
+            await loadState(
+                "payments"
+            );
+
+
+        // -----------------------------------------
+        // RESTORE STATE
+        // -----------------------------------------
+
+        currentMealBlocks =
+            Array.isArray(
+                savedBlocks
+            )
+                ? savedBlocks
+                : [];
 
 
         currentMealParticipations =
-            JSON.parse(
-                savedParticipations || "[]"
-            );
+            Array.isArray(
+                savedParticipations
+            )
+                ? savedParticipations
+                : [];
 
 
         currentOrders =
-            JSON.parse(
-                savedOrders || "[]"
-            );
+            Array.isArray(
+                savedOrders
+            )
+                ? savedOrders
+                : [];
 
 
         currentPayments =
-            JSON.parse(
-                savedPayments || "[]"
-            );
+            Array.isArray(
+                savedPayments
+            )
+                ? savedPayments
+                : [];
 
-    } catch (error) {
+
+        console.log(
+            "=============================="
+        );
+
+
+        console.log(
+            "SAVED STATE LOADED"
+        );
+
+
+        console.log(
+            "=============================="
+        );
+
+
+        console.log(
+            {
+                mealBlocks:
+                    currentMealBlocks.length,
+
+                mealParticipations:
+                    currentMealParticipations.length,
+
+                orders:
+                    currentOrders.length,
+
+                payments:
+                    currentPayments.length
+            }
+        );
+
+
+        // -----------------------------------------
+        // UPDATE UI
+        // -----------------------------------------
+
+        updateCardStatus();
+
+        updateContinueButton();
+
+
+        return true;
+
+    }
+
+    catch (error) {
 
         console.error(
-            "Error loading saved state:",
+            "Could not load application state:",
             error
         );
 
 
-        currentMealBlocks = [];
+        alert(
+            "Could not load the saved application data."
+        );
 
-        currentMealParticipations = [];
 
-        currentOrders = [];
-
-        currentPayments = [];
+        return false;
 
     }
-
-
-    // ---------------------------------------------
-    // UPDATE CARD APPEARANCE
-    // ---------------------------------------------
-
-    updateCardStatus();
-
-
-    // ---------------------------------------------
-    // UPDATE CONTINUE
-    // ---------------------------------------------
-
-    updateContinueButton();
-
-
-    // ---------------------------------------------
-    // TELL CALLER WHETHER DATA EXISTS
-    // ---------------------------------------------
-
-    return (
-        hasShiftData() ||
-        hasOrderData() ||
-        hasPaymentData()
-    );
 
 }
 
@@ -559,8 +1239,11 @@ function updateCardStatus() {
         A card is complete if either:
 
         1. Its file is currently selected
+
         OR
-        2. Its data was loaded from sessionStorage
+
+        2. Its processed data was restored from
+           IndexedDB.
     */
 
 
@@ -606,23 +1289,10 @@ function updateCardStatus() {
 function updateContinueButton() {
 
     if (!nextButton) {
+
         return;
+
     }
-
-
-    /*
-        IMPORTANT:
-
-        Each input is considered complete if:
-
-        FILE EXISTS
-        OR
-        DATA ALREADY EXISTS
-
-        This means the user does NOT have to
-        re-upload a file after returning to
-        this page.
-    */
 
 
     const shiftComplete =
@@ -647,7 +1317,7 @@ function updateContinueButton() {
 
 
     // ---------------------------------------------
-    // Update card appearance
+    // CARD STATUS
     // ---------------------------------------------
 
     shiftCard?.classList.toggle(
@@ -669,7 +1339,7 @@ function updateContinueButton() {
 
 
     // ---------------------------------------------
-    // Enable / disable Continue
+    // BUTTON
     // ---------------------------------------------
 
     nextButton.disabled =
@@ -680,8 +1350,11 @@ function updateContinueButton() {
         "Continue check:",
         {
             shiftComplete,
+
             orderComplete,
+
             paymentComplete,
+
             allComplete,
 
             shiftFile:
@@ -708,42 +1381,79 @@ function updateContinueButton() {
 
 
 // =================================================
+// REFRESH UI
+// =================================================
+
+function refreshUI() {
+
+    renderOverallTotals();
+
+    renderOverallCashSales();
+
+
+    renderTipTables(
+        currentMealBlocks
+    );
+
+
+    renderCashCollectedTables(
+        currentMealBlocks
+    );
+
+}
+
+
+// =================================================
 // DEBUG
 // =================================================
 
 if (debugButton) {
 
-    debugButton.onclick = () => {
+    debugButton.onclick =
+        async () => {
 
-        const debug = {
+            try {
 
-            mealBlocks:
-                currentMealBlocks,
+                const debug = {
 
-            participations:
-                currentMealParticipations,
+                    mealBlocks:
+                        currentMealBlocks,
 
-            orders:
-                currentOrders,
+                    participations:
+                        currentMealParticipations,
 
-            payments:
-                currentPayments
+                    orders:
+                        currentOrders,
 
-        };
+                    payments:
+                        currentPayments
+
+                };
 
 
-        if (debugOutput) {
+                if (debugOutput) {
 
-            debugOutput.textContent =
-                JSON.stringify(
-                    debug,
-                    null,
-                    2
+                    debugOutput.textContent =
+                        JSON.stringify(
+                            debug,
+                            null,
+                            2
+                        );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Debug error:",
+                    error
                 );
 
-        }
+            }
 
-    };
+        };
 
 }
 
@@ -754,34 +1464,63 @@ if (debugButton) {
 
 if (nextButton) {
 
-    nextButton.onclick = () => {
+    nextButton.onclick =
+        async () => {
 
-        /*
-            Run the check one last time before
-            navigating.
-        */
+            /*
+                Check one last time before
+                navigating.
+            */
 
-        updateContinueButton();
-
-
-        if (nextButton.disabled) {
-
-            console.warn(
-                "Cannot continue. Required data is missing."
-            );
-
-            return;
-
-        }
+            updateContinueButton();
 
 
-        saveState();
+            if (nextButton.disabled) {
+
+                console.warn(
+                    "Cannot continue. Required data is missing."
+                );
 
 
-        window.location.href =
-            "../inputs/inputs.html";
+                return;
 
-    };
+            }
+
+
+            try {
+
+                /*
+                    Save everything before leaving
+                    the Start page.
+                */
+
+                await saveAllState();
+
+
+                /*
+                    Go to the Inputs page.
+                */
+
+                window.location.href =
+                    "../inputs/inputs.html";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Could not save before continuing:",
+                    error
+                );
+
+
+                alert(
+                    "Could not save the current process."
+                );
+
+            }
+
+        };
 
 }
 
@@ -792,59 +1531,114 @@ if (nextButton) {
 
 if (resetButton) {
 
-    resetButton.onclick = () => {
+    resetButton.onclick =
+        async () => {
 
-        const confirmed =
-            confirm(
-                "Reset the current process?\n\nAll imported files and calculations will be removed."
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
+            const confirmed =
+                confirm(
+                    "Reset the current process?\n\n" +
+                    "All imported files and calculations " +
+                    "will be removed."
+                );
 
 
-        sessionStorage.clear();
+            if (!confirmed) {
+
+                return;
+
+            }
 
 
-        currentMealBlocks = [];
+            try {
 
-        currentMealParticipations = [];
+                /*
+                    Clear ALL HotTips IndexedDB state.
 
-        currentOrders = [];
+                    This removes:
 
-        currentPayments = [];
+                    mealBlocks
+                    mealParticipations
+                    orders
+                    payments
+                    tipDistribution
+                */
 
-
-        /*
-            Clear the actual file inputs too.
-        */
-
-        if (shiftInput) {
-            shiftInput.value = "";
-        }
-
-
-        if (orderInput) {
-            orderInput.value = "";
-        }
+                await clearApplicationState();
 
 
-        if (paymentInput) {
-            paymentInput.value = "";
-        }
+                // -------------------------------------
+                // CLEAR MEMORY
+                // -------------------------------------
+
+                currentMealBlocks = [];
+
+                currentMealParticipations = [];
+
+                currentOrders = [];
+
+                currentPayments = [];
 
 
-        updateCardStatus();
+                // -------------------------------------
+                // CLEAR FILE INPUTS
+                // -------------------------------------
 
-        updateContinueButton();
+                if (shiftInput) {
+
+                    shiftInput.value = "";
+
+                }
 
 
-        window.location.href =
-            "../index.html";
+                if (orderInput) {
 
-    };
+                    orderInput.value = "";
+
+                }
+
+
+                if (paymentInput) {
+
+                    paymentInput.value = "";
+
+                }
+
+
+                // -------------------------------------
+                // UPDATE UI
+                // -------------------------------------
+
+                updateCardStatus();
+
+                updateContinueButton();
+
+                refreshUI();
+
+
+                /*
+                    Return to the main Home page.
+                */
+
+                window.location.href =
+                    "../index.html";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Could not reset application:",
+                    error
+                );
+
+
+                alert(
+                    "Could not completely reset the application."
+                );
+
+            }
+
+        };
 
 }
 
@@ -854,16 +1648,40 @@ if (resetButton) {
 // =================================================
 
 document
-    .getElementById("backButton")
+    .getElementById(
+        "backButton"
+    )
     ?.addEventListener(
         "click",
-        () => {
+        async () => {
 
-            saveState();
+            try {
+
+                /*
+                    Save before leaving.
+                */
+
+                await saveAllState();
 
 
-            window.location.href =
-                "../index.html";
+                window.location.href =
+                    "../index.html";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Could not save before going back:",
+                    error
+                );
+
+
+                alert(
+                    "Could not save the current process."
+                );
+
+            }
 
         }
     );
@@ -902,7 +1720,9 @@ function renderOverallTotals() {
 
 
     if (!output) {
+
         return;
+
     }
 
 
@@ -968,7 +1788,9 @@ function renderOverallCashSales() {
 
 
     if (!output) {
+
         return;
+
     }
 
 
@@ -1022,31 +1844,73 @@ function renderOverallCashSales() {
 
 
 // =================================================
-// LOAD SAVED STATE
+// START APPLICATION
 // =================================================
 
-loadState();
+async function start() {
+
+    console.log(
+        "Starting HotTips Start page..."
+    );
+
+
+    try {
+
+        /*
+            Make sure the database can be opened.
+        */
+
+        await openDatabase();
+
+
+        /*
+            Restore any existing application state.
+        */
+
+        await loadSavedState();
+
+
+        /*
+            Render whatever was restored.
+        */
+
+        refreshUI();
+
+
+        /*
+            Update cards and Continue button.
+        */
+
+        updateCardStatus();
+
+        updateContinueButton();
+
+
+        console.log(
+            "HotTips Start page initialized."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not initialize Start page:",
+            error
+        );
+
+
+        alert(
+            "Could not initialize the HotTips application."
+        );
+
+    }
+
+}
 
 
 // =================================================
-// RENDER SAVED TABLES
+// START
 // =================================================
 
-/*
-    IMPORTANT:
-
-    Always refresh the UI after loading.
-
-    This is what makes the previously generated
-    tables appear again even though the file inputs
-    themselves are empty.
-*/
-
-refreshUI();
-
-
-// =================================================
-// FINAL CONTINUE CHECK
-// =================================================
-
-updateContinueButton();
+start();
