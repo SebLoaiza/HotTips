@@ -320,18 +320,6 @@ function syncCashDropsFromMealBlocks() {
     }
 
 
-    console.log(
-        "SOURCE MEAL BLOCKS:",
-        mealBlocks.length
-    );
-
-
-    console.log(
-        "TARGET TIP DISTRIBUTION:",
-        tipDistribution.length
-    );
-
-
     let updatedCount = 0;
 
 
@@ -343,23 +331,6 @@ function syncCashDropsFromMealBlocks() {
         const sourceBlock
         of mealBlocks
     ) {
-
-        console.log(
-            "----------------------------------------"
-        );
-
-
-        console.log(
-            "SOURCE BLOCK:",
-            {
-                date:
-                    sourceBlock.date,
-
-                meal:
-                    sourceBlock.meal
-            }
-        );
-
 
         // =================================================
         // FIND MATCHING TIP DISTRIBUTION BLOCK
@@ -389,8 +360,8 @@ function syncCashDropsFromMealBlocks() {
 
         if (!targetBlock) {
 
-            console.error(
-                "NO TARGET BLOCK FOUND:",
+            console.warn(
+                "NO TARGET BLOCK FOUND FOR CASH SYNC:",
                 {
                     date:
                         sourceBlock.date,
@@ -405,21 +376,6 @@ function syncCashDropsFromMealBlocks() {
         }
 
 
-        console.log(
-            "TARGET BLOCK FOUND:",
-            {
-                date:
-                    targetBlock.date,
-
-                meal:
-                    targetBlock.meal,
-
-                id:
-                    targetBlock.id
-            }
-        );
-
-
         // =================================================
         // LOOP EMPLOYEES
         // =================================================
@@ -430,30 +386,6 @@ function syncCashDropsFromMealBlocks() {
                 sourceBlock.employees || []
             )
         ) {
-
-            console.log(
-                "SOURCE EMPLOYEE:",
-                {
-                    id:
-                        sourceEmployee.employee_id,
-
-                    name:
-                        sourceEmployee.name,
-
-                    cash_drop:
-                        sourceEmployee.cash_drop,
-
-                    cash_sales:
-                        sourceEmployee.cash_sales,
-
-                    cash_tips:
-                        sourceEmployee.cash_tips,
-
-                    role:
-                        sourceEmployee.role
-                }
-            );
-
 
             // =================================================
             // FIND MATCHING EMPLOYEE
@@ -476,10 +408,10 @@ function syncCashDropsFromMealBlocks() {
 
             if (!targetEmployee) {
 
-                console.error(
-                    "NO TARGET EMPLOYEE FOUND:",
+                console.warn(
+                    "NO TARGET EMPLOYEE FOUND FOR CASH SYNC:",
                     {
-                        id:
+                        employee_id:
                             sourceEmployee.employee_id,
 
                         name:
@@ -499,35 +431,7 @@ function syncCashDropsFromMealBlocks() {
 
 
             // =================================================
-            // BEFORE SYNC
-            // =================================================
-
-            console.log(
-                "TARGET EMPLOYEE BEFORE SYNC:",
-                {
-                    id:
-                        targetEmployee.employee_id,
-
-                    name:
-                        targetEmployee.name,
-
-                    cash_drop:
-                        targetEmployee.cash_drop,
-
-                    cash_sales:
-                        targetEmployee.cash_sales,
-
-                    cash_sold:
-                        targetEmployee.cash_sold,
-
-                    cash_remaining:
-                        targetEmployee.cash_remaining
-                }
-            );
-
-
-            // =================================================
-            // CONVERT VALUES
+            // CASH DROP
             // =================================================
 
             const newCashDrop =
@@ -536,40 +440,24 @@ function syncCashDropsFromMealBlocks() {
                 ) || 0;
 
 
+            // =================================================
+            // CASH SALES
+            // =================================================
+
             const newCashSales =
                 Number(
                     sourceEmployee.cash_sales
                 ) || 0;
 
 
+            // =================================================
+            // CASH TIPS
+            // =================================================
+
             const newCashTips =
                 Number(
                     sourceEmployee.cash_tips
                 ) || 0;
-
-
-            console.log(
-                "VALUES BEING COPIED:",
-                {
-                    sourceCashDrop:
-                        sourceEmployee.cash_drop,
-
-                    convertedCashDrop:
-                        newCashDrop,
-
-                    sourceCashSales:
-                        sourceEmployee.cash_sales,
-
-                    convertedCashSales:
-                        newCashSales,
-
-                    sourceCashTips:
-                        sourceEmployee.cash_tips,
-
-                    convertedCashTips:
-                        newCashTips
-                }
-            );
 
 
             // =================================================
@@ -613,37 +501,6 @@ function syncCashDropsFromMealBlocks() {
                 newCashSales;
 
 
-            // =================================================
-            // AFTER SYNC
-            // =================================================
-
-            console.log(
-                "TARGET EMPLOYEE AFTER SYNC:",
-                {
-                    id:
-                        targetEmployee.employee_id,
-
-                    name:
-                        targetEmployee.name,
-
-                    cash_drop:
-                        targetEmployee.cash_drop,
-
-                    cash_sales:
-                        targetEmployee.cash_sales,
-
-                    cash_sold:
-                        targetEmployee.cash_sold,
-
-                    cash_tips:
-                        targetEmployee.cash_tips,
-
-                    cash_remaining:
-                        targetEmployee.cash_remaining
-                }
-            );
-
-
             updatedCount++;
 
         }
@@ -651,28 +508,237 @@ function syncCashDropsFromMealBlocks() {
     }
 
 
-    // =================================================
-    // COMPLETE
-    // =================================================
-
     console.log(
-        "========================================"
-    );
-
-
-    console.log(
-        "CASH DROP SYNC COMPLETE"
-    );
-
-
-    console.log(
-        "UPDATED EMPLOYEES:",
+        "CASH DROP SYNC COMPLETE:",
         updatedCount
     );
 
+}
+
+
+// =================================================
+// SYNC TIP POINTS
+//
+// IMPORTANT:
+//
+// This is ONLY called when the Distribution page
+// loads.
+//
+// It does NOT run during refreshUI() or
+// recalculateDistribution().
+//
+// This means:
+//     Employee Points page
+//              ↓
+//       Distribution page load
+//              ↓
+//       Distribution owns points
+//
+// Editing points on Distribution will therefore
+// survive recalculation and refresh.
+// =================================================
+
+function syncTipPointsFromMealBlocks() {
 
     console.log(
         "========================================"
+    );
+
+    console.log(
+        "TIP POINT INITIAL SYNC"
+    );
+
+    console.log(
+        "========================================"
+    );
+
+
+    if (
+        !Array.isArray(mealBlocks) ||
+        !Array.isArray(tipDistribution)
+    ) {
+
+        console.error(
+            "Tip point sync failed: arrays missing",
+            {
+                mealBlocks,
+                tipDistribution
+            }
+        );
+
+        return;
+
+    }
+
+
+    let updatedCount = 0;
+
+
+    // =================================================
+    // LOOP SOURCE MEAL BLOCKS
+    // =================================================
+
+    for (
+        const sourceBlock
+        of mealBlocks
+    ) {
+
+        // =================================================
+        // FIND MATCHING DISTRIBUTION BLOCK
+        // =================================================
+
+        const targetBlock =
+            tipDistribution.find(
+                block =>
+
+                    String(
+                        block.date
+                    ) ===
+                    String(
+                        sourceBlock.date
+                    )
+
+                    &&
+
+                    String(
+                        block.meal
+                    ) ===
+                    String(
+                        sourceBlock.meal
+                    )
+            );
+
+
+        if (!targetBlock) {
+
+            console.warn(
+                "NO TARGET BLOCK FOUND FOR TIP POINT SYNC:",
+                {
+                    date:
+                        sourceBlock.date,
+
+                    meal:
+                        sourceBlock.meal
+                }
+            );
+
+            continue;
+
+        }
+
+
+        // =================================================
+        // LOOP EMPLOYEES
+        // =================================================
+
+        for (
+            const sourceEmployee
+            of (
+                sourceBlock.employees || []
+            )
+        ) {
+
+            // =================================================
+            // FIND MATCHING EMPLOYEE
+            // =================================================
+
+            const targetEmployee =
+                (
+                    targetBlock.employees || []
+                ).find(
+                    employee =>
+
+                        String(
+                            employee.employee_id
+                        ) ===
+                        String(
+                            sourceEmployee.employee_id
+                        )
+                );
+
+
+            if (!targetEmployee) {
+
+                console.warn(
+                    "NO TARGET EMPLOYEE FOUND FOR TIP POINT SYNC:",
+                    {
+                        employee_id:
+                            sourceEmployee.employee_id,
+
+                        name:
+                            sourceEmployee.name,
+
+                        date:
+                            sourceBlock.date,
+
+                        meal:
+                            sourceBlock.meal
+                    }
+                );
+
+                continue;
+
+            }
+
+
+            // =================================================
+            // GET POINTS
+            // =================================================
+
+            let points =
+                Number(
+                    sourceEmployee.tip_points
+                );
+
+
+            if (
+                Number.isNaN(points) ||
+                points < 0
+            ) {
+
+                points = 0;
+
+            }
+
+
+            // =================================================
+            // COPY POINTS
+            // =================================================
+
+            targetEmployee.tip_points =
+                points;
+
+
+            updatedCount++;
+
+
+            console.log(
+                "TIP POINT INITIALIZED:",
+                {
+                    employee:
+                        sourceEmployee.name,
+
+                    employee_id:
+                        sourceEmployee.employee_id,
+
+                    date:
+                        sourceBlock.date,
+
+                    meal:
+                        sourceBlock.meal,
+
+                    points
+                }
+            );
+
+        }
+
+    }
+
+
+    console.log(
+        "TIP POINT INITIAL SYNC COMPLETE:",
+        updatedCount
     );
 
 }
@@ -738,73 +804,6 @@ async function loadApplicationState() {
 
 
         // =================================================
-        // DEBUG SOURCE CASH DROPS
-        // =================================================
-
-        console.log(
-            "========================================"
-        );
-
-
-        console.log(
-            "SOURCE CASH DROP CHECK"
-        );
-
-
-        for (
-            const block
-            of mealBlocks
-        ) {
-
-            for (
-                const employee
-                of (
-                    block.employees || []
-                )
-            ) {
-
-                if (
-                    Number(
-                        employee.cash_drop
-                    ) > 0
-                ) {
-
-                    console.log(
-                        "SOURCE CASH DROP FOUND:",
-                        {
-                            date:
-                                block.date,
-
-                            meal:
-                                block.meal,
-
-                            employee:
-                                employee.name,
-
-                            employee_id:
-                                employee.employee_id,
-
-                            cash_drop:
-                                employee.cash_drop,
-
-                            cash_sales:
-                                employee.cash_sales
-                        }
-                    );
-
-                }
-
-            }
-
-        }
-
-
-        console.log(
-            "========================================"
-        );
-
-
-        // =================================================
         // LOAD EXISTING TIP DISTRIBUTION
         // =================================================
 
@@ -829,18 +828,6 @@ async function loadApplicationState() {
                 "Existing tip distribution loaded."
             );
 
-
-            console.log(
-                "TIP DISTRIBUTION LOADED FROM INDEXED DB:",
-                tipDistribution
-            );
-
-
-            console.log(
-                "FIRST TIP DISTRIBUTION EMPLOYEES:",
-                tipDistribution[0]?.employees
-            );
-
         }
 
         else {
@@ -863,17 +850,6 @@ async function loadApplicationState() {
             console.log(
                 "New tip distribution created:",
                 tipDistribution
-            );
-
-
-            await saveState(
-                "tipDistribution",
-                tipDistribution
-            );
-
-
-            console.log(
-                "New tip distribution saved."
             );
 
         }
@@ -906,15 +882,21 @@ async function loadApplicationState() {
 
 
         // =================================================
-        // IMPORTANT:
-        // SYNC CASH DROPS BEFORE CALCULATIONS
+        // INITIAL PAGE-LOAD SYNC
+        //
+        // Cash drops are synchronized from Inputs.
+        //
+        // Tip points are synchronized from Employee
+        // Points ONLY HERE during page initialization.
         // =================================================
 
         syncCashDropsFromMealBlocks();
 
+        syncTipPointsFromMealBlocks();
+
 
         // =================================================
-        // SAVE THE SYNCHRONIZED DISTRIBUTION
+        // SAVE INITIALIZED DISTRIBUTION
         // =================================================
 
         await saveState(
@@ -924,7 +906,7 @@ async function loadApplicationState() {
 
 
         console.log(
-            "Tip distribution after cash-drop sync:",
+            "Initial tip distribution ready:",
             tipDistribution
         );
 
@@ -955,6 +937,16 @@ async function loadApplicationState() {
 
 // =================================================
 // RECALCULATE DISTRIBUTION
+//
+// IMPORTANT:
+//
+// Do NOT sync tip points here.
+//
+// The points in tipDistribution are now the
+// values being edited by this page.
+//
+// Only cash-drop information comes from
+// mealBlocks during recalculation.
 // =================================================
 
 function recalculateDistribution() {
@@ -963,14 +955,17 @@ function recalculateDistribution() {
         "========================================"
     );
 
-
     console.log(
         "RECALCULATING DISTRIBUTION"
     );
 
+    console.log(
+        "========================================"
+    );
+
 
     // =================================================
-    // SYNC CASH DROPS FIRST
+    // SYNC CASH DROPS
     // =================================================
 
     syncCashDropsFromMealBlocks();
@@ -997,20 +992,36 @@ function recalculateDistribution() {
         );
 
 
+        // =================================================
+        // REBUILD POOLS
+        // =================================================
+
         rebuildDistributionPools(
             mealBlock
         );
 
+
+        // =================================================
+        // CALCULATE ROLE RATIOS
+        // =================================================
 
         calculateRoleRatios(
             mealBlock
         );
 
 
+        // =================================================
+        // DISTRIBUTE TIPS
+        // =================================================
+
         distributeTips(
             mealBlock
         );
 
+
+        // =================================================
+        // DISTRIBUTE POOLS
+        // =================================================
 
         distributePools(
             mealBlock
@@ -1022,7 +1033,6 @@ function recalculateDistribution() {
     console.log(
         "RECALCULATION COMPLETE"
     );
-
 
     console.log(
         "========================================"
@@ -1438,6 +1448,21 @@ document.addEventListener(
             newPoints;
 
 
+        console.log(
+            "Distribution tip points changed:",
+            {
+                employee_id:
+                    employeeId,
+
+                mealBlockId:
+                    mealBlockId,
+
+                points:
+                    newPoints
+            }
+        );
+
+
         // =================================================
         // RECALCULATE THIS MEAL BLOCK
         // =================================================
@@ -1463,10 +1488,22 @@ document.addEventListener(
 
 
         // =================================================
-        // SAVE + REFRESH
+        // SAVE
         // =================================================
 
         await saveTipDistribution();
+
+
+        // =================================================
+        // REFRESH
+        //
+        // IMPORTANT:
+        //
+        // refreshUI() does NOT sync tip points from
+        // mealBlocks.
+        //
+        // Therefore this new value remains intact.
+        // =================================================
 
         await refreshUI();
 
@@ -1629,8 +1666,8 @@ async function goBack() {
         Save the current distribution before
         returning to Inputs.
 
-        This means any changes made here
-        survive navigation.
+        Distribution edits are preserved in
+        tipDistribution.
     */
 
     await saveTipDistribution();

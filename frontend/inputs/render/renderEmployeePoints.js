@@ -10,7 +10,9 @@ export function renderEmployeePoints(
 
     if (!output) return;
 
+
     output.innerHTML = "";
+
 
     /* =================================================
        SORT STATE
@@ -34,6 +36,7 @@ export function renderEmployeePoints(
 
     }
 
+
     const sortState =
         renderEmployeePoints.sortState;
 
@@ -51,11 +54,13 @@ export function renderEmployeePoints(
                 .replace(/[_-]+/g, " ")
                 .replace(/\s+/g, " ");
 
+
         const baseRole =
             normalizedRole
                 .replace(/\bbreakfast\b/g, "")
                 .replace(/\s+/g, " ")
                 .trim();
+
 
         return (
             baseRole === "server" ||
@@ -76,26 +81,32 @@ export function renderEmployeePoints(
     const employees =
         new Map();
 
-    for (const block of mealBlocks) {
 
-        for (const employee of block.employees) {
+    for (
+        const block
+        of mealBlocks
+    ) {
+
+        for (
+            const employee
+            of (
+                block.employees || []
+            )
+        ) {
 
             const role =
                 employee.distribution_role ||
                 employee.role ||
                 "Other";
 
-            /*
-                Employee + role is the unique key.
-
-                This is important because one employee
-                can have multiple roles.
-            */
 
             const key =
                 `${employee.employee_id}__${role}`;
 
-            if (!employees.has(key)) {
+
+            if (
+                !employees.has(key)
+            ) {
 
                 employees.set(
                     key,
@@ -116,20 +127,29 @@ export function renderEmployeePoints(
     const frontOfHouse = [];
     const backOfHouse = [];
 
-    for (const employee of employees.values()) {
+
+    for (
+        const employee
+        of employees.values()
+    ) {
 
         const role =
             employee.distribution_role ||
             employee.role ||
             "Other";
 
-        if (isFrontOfHouse(role)) {
+
+        if (
+            isFrontOfHouse(role)
+        ) {
 
             frontOfHouse.push(
                 employee
             );
 
-        } else {
+        }
+
+        else {
 
             backOfHouse.push(
                 employee
@@ -154,6 +174,7 @@ export function renderEmployeePoints(
 
                 let comparison = 0;
 
+
                 /* ROLE */
 
                 if (
@@ -168,6 +189,7 @@ export function renderEmployeePoints(
                             "Other"
                         ).toLowerCase();
 
+
                     const roleB =
                         String(
                             b.distribution_role ||
@@ -175,12 +197,14 @@ export function renderEmployeePoints(
                             "Other"
                         ).toLowerCase();
 
+
                     comparison =
                         roleA.localeCompare(
                             roleB
                         );
 
                 }
+
 
                 /* NAME */
 
@@ -194,10 +218,12 @@ export function renderEmployeePoints(
                             a.name || ""
                         );
 
+
                     const nameB =
                         String(
                             b.name || ""
                         );
+
 
                     comparison =
                         nameA.localeCompare(
@@ -205,6 +231,7 @@ export function renderEmployeePoints(
                         );
 
                 }
+
 
                 /* POINT */
 
@@ -218,15 +245,18 @@ export function renderEmployeePoints(
                             a.tip_points ?? 1
                         );
 
+
                     const pointB =
                         Number(
                             b.tip_points ?? 1
                         );
 
+
                     comparison =
                         pointA - pointB;
 
                 }
+
 
                 return (
                     tableSortState.direction ===
@@ -246,6 +276,7 @@ export function renderEmployeePoints(
         sortState.frontOfHouse
     );
 
+
     sortEmployees(
         backOfHouse,
         sortState.backOfHouse
@@ -261,6 +292,7 @@ export function renderEmployeePoints(
             "div"
         );
 
+
     controls.className =
         "employee-points-controls";
 
@@ -274,14 +306,18 @@ export function renderEmployeePoints(
             "button"
         );
 
+
     exportButton.type =
         "button";
+
 
     exportButton.className =
         "employee-points-button export-points-button";
 
+
     exportButton.textContent =
         "Save Tip Points";
+
 
     exportButton.addEventListener(
         "click",
@@ -304,14 +340,18 @@ export function renderEmployeePoints(
             "button"
         );
 
+
     loadButton.type =
         "button";
+
 
     loadButton.className =
         "employee-points-button load-points-button";
 
+
     loadButton.textContent =
         "Load Pre-Saved Points";
+
 
     /* =================================================
        HIDDEN FILE INPUT
@@ -322,15 +362,22 @@ export function renderEmployeePoints(
             "input"
         );
 
+
     fileInput.type =
         "file";
+
 
     fileInput.accept =
         ".json,application/json";
 
+
     fileInput.style.display =
         "none";
 
+
+    /* =================================================
+       LOAD BUTTON CLICK
+    ================================================= */
 
     loadButton.addEventListener(
         "click",
@@ -342,6 +389,10 @@ export function renderEmployeePoints(
     );
 
 
+    /* =================================================
+       LOAD POINT FILE
+    ================================================= */
+
     fileInput.addEventListener(
         "change",
         async () => {
@@ -349,7 +400,9 @@ export function renderEmployeePoints(
             const file =
                 fileInput.files?.[0];
 
+
             if (!file) return;
+
 
             try {
 
@@ -358,10 +411,24 @@ export function renderEmployeePoints(
                     mealBlocks
                 );
 
+
+                /*
+                    The loaded values are now
+                    directly inside mealBlocks.
+
+                    Do not save to IndexedDB here.
+
+                    app.js owns application persistence
+                    and will save currentMealBlocks when
+                    the user clicks Continue or Back.
+                */
+
+
                 renderEmployeePoints(
                     mealBlocks,
                     refreshUI
                 );
+
 
                 if (refreshUI) {
 
@@ -370,6 +437,7 @@ export function renderEmployeePoints(
                 }
 
             }
+
             catch (error) {
 
                 console.error(
@@ -377,11 +445,13 @@ export function renderEmployeePoints(
                     error
                 );
 
+
                 alert(
                     "Could not load the employee points file."
                 );
 
             }
+
 
             fileInput.value = "";
 
@@ -393,22 +463,16 @@ export function renderEmployeePoints(
         exportButton
     );
 
+
     controls.appendChild(
         loadButton
     );
+
 
     controls.appendChild(
         fileInput
     );
 
-
-    /*
-        IMPORTANT:
-
-        The controls are added BEFORE
-        either table so they appear
-        at the top.
-    */
 
     output.appendChild(
         controls
@@ -430,6 +494,7 @@ export function renderEmployeePoints(
                 "div"
             );
 
+
         group.className =
             "employee-points-group";
 
@@ -443,11 +508,14 @@ export function renderEmployeePoints(
                 "h3"
             );
 
+
         groupTitle.className =
             "employee-points-group-title";
 
+
         groupTitle.textContent =
             title;
+
 
         group.appendChild(
             groupTitle
@@ -463,6 +531,7 @@ export function renderEmployeePoints(
                 "table"
             );
 
+
         table.className =
             "config-table employee-points-table";
 
@@ -476,10 +545,12 @@ export function renderEmployeePoints(
                 "thead"
             );
 
+
         const headerRow =
             document.createElement(
                 "tr"
             );
+
 
         const headers = [
 
@@ -501,23 +572,24 @@ export function renderEmployeePoints(
         ];
 
 
-        for (const header of headers) {
+        for (
+            const header
+            of headers
+        ) {
 
             const th =
                 document.createElement(
                     "th"
                 );
 
+
             th.className =
                 "sortable-header";
+
 
             th.textContent =
                 header.label;
 
-
-            /*
-                Show sort arrow.
-            */
 
             if (
                 tableSortState.column ===
@@ -531,6 +603,7 @@ export function renderEmployeePoints(
                         : "sort-descending"
                 );
 
+
                 th.textContent =
                     `${header.label} ${
                         tableSortState.direction ===
@@ -541,10 +614,6 @@ export function renderEmployeePoints(
 
             }
 
-
-            /*
-                Sorting.
-            */
 
             th.addEventListener(
                 "click",
@@ -561,15 +630,19 @@ export function renderEmployeePoints(
                                 ? "desc"
                                 : "asc";
 
-                    } else {
+                    }
+
+                    else {
 
                         tableSortState.column =
                             header.column;
+
 
                         tableSortState.direction =
                             "asc";
 
                     }
+
 
                     renderEmployeePoints(
                         mealBlocks,
@@ -590,6 +663,7 @@ export function renderEmployeePoints(
         thead.appendChild(
             headerRow
         );
+
 
         table.appendChild(
             thead
@@ -622,16 +696,20 @@ export function renderEmployeePoints(
                     "tr"
                 );
 
+
             row.className =
                 "employee-points-row";
 
 
-            /* ROLE */
+            /* =================================================
+               ROLE
+            ================================================= */
 
             const roleCell =
                 document.createElement(
                     "td"
                 );
+
 
             roleCell.textContent =
                 formatRoleName(
@@ -639,12 +717,15 @@ export function renderEmployeePoints(
                 );
 
 
-            /* NAME */
+            /* =================================================
+               NAME
+            ================================================= */
 
             const nameCell =
                 document.createElement(
                     "td"
                 );
+
 
             nameCell.textContent =
                 formatEmployeeName(
@@ -652,38 +733,49 @@ export function renderEmployeePoints(
                 );
 
 
-            /* POINT */
+            /* =================================================
+               POINT
+            ================================================= */
 
             const pointCell =
                 document.createElement(
                     "td"
                 );
 
+
             const input =
                 document.createElement(
                     "input"
                 );
 
+
             input.className =
                 "points-input";
+
 
             input.type =
                 "number";
 
+
             input.step =
                 "0.25";
+
 
             input.min =
                 "0";
 
+
             input.value =
                 employee.tip_points ?? 1;
+
 
             input.dataset.employeeId =
                 employee.employee_id;
 
+
             input.dataset.role =
                 role;
+
 
             pointCell.appendChild(
                 input
@@ -694,13 +786,16 @@ export function renderEmployeePoints(
                 roleCell
             );
 
+
             row.appendChild(
                 nameCell
             );
 
+
             row.appendChild(
                 pointCell
             );
+
 
             tbody.appendChild(
                 row
@@ -712,6 +807,7 @@ export function renderEmployeePoints(
         table.appendChild(
             tbody
         );
+
 
         group.appendChild(
             table
@@ -732,13 +828,10 @@ export function renderEmployeePoints(
             "div"
         );
 
+
     tablesWrapper.className =
         "employee-points-tables";
 
-
-    /*
-        Tables remain stacked vertically.
-    */
 
     tablesWrapper.appendChild(
         createEmployeeTable(
@@ -747,6 +840,7 @@ export function renderEmployeePoints(
             sortState.frontOfHouse
         )
     );
+
 
     tablesWrapper.appendChild(
         createEmployeeTable(
@@ -781,13 +875,17 @@ export function renderEmployeePoints(
        SAVE POINT
     ================================================= */
 
-    function savePoint(input) {
+    function savePoint(
+        input
+    ) {
 
         const employeeId =
             input.dataset.employeeId;
 
+
         const role =
             input.dataset.role;
+
 
         let value =
             Number(
@@ -821,7 +919,9 @@ export function renderEmployeePoints(
 
             for (
                 const employee
-                of block.employees
+                of (
+                    block.employees || []
+                )
             ) {
 
                 const employeeRole =
@@ -873,12 +973,6 @@ export function renderEmployeePoints(
                         input
                     );
 
-                    if (refreshUI) {
-
-                        refreshUI();
-
-                    }
-
                 }
             );
 
@@ -906,6 +1000,7 @@ export function renderEmployeePoints(
 
                     }
 
+
                     event.preventDefault();
                     event.stopPropagation();
 
@@ -925,12 +1020,6 @@ export function renderEmployeePoints(
                         );
 
 
-                    /*
-                        Enter = down
-
-                        Shift + Enter = up
-                    */
-
                     const direction =
                         event.shiftKey
                             ? -1
@@ -948,12 +1037,6 @@ export function renderEmployeePoints(
                         inputs.length
                     ) {
 
-                        if (refreshUI) {
-
-                            refreshUI();
-
-                        }
-
                         return;
 
                     }
@@ -965,62 +1048,15 @@ export function renderEmployeePoints(
                         ];
 
 
-                    const nextEmployeeId =
-                        nextInput.dataset
-                            .employeeId;
+                    if (
+                        nextInput
+                    ) {
 
+                        nextInput.focus();
 
-                    const nextRole =
-                        nextInput.dataset
-                            .role;
-
-
-                    if (refreshUI) {
-
-                        refreshUI();
+                        nextInput.select();
 
                     }
-
-
-                    requestAnimationFrame(
-                        () => {
-
-                            const newInputs =
-                                getPointInputs();
-
-
-                            const newInput =
-                                newInputs.find(
-                                    candidate =>
-
-                                        String(
-                                            candidate
-                                                .dataset
-                                                .employeeId
-                                        ) ===
-                                        String(
-                                            nextEmployeeId
-                                        )
-
-                                        &&
-
-                                        candidate
-                                            .dataset
-                                            .role ===
-                                        nextRole
-                                );
-
-
-                            if (newInput) {
-
-                                newInput.focus();
-
-                                newInput.select();
-
-                            }
-
-                        }
-                    );
 
                 }
             );
@@ -1050,7 +1086,9 @@ function exportPoints(
 
         for (
             const employee
-            of block.employees
+            of (
+                block.employees || []
+            )
         ) {
 
             const role =
@@ -1150,6 +1188,7 @@ function exportPoints(
     const now =
         new Date();
 
+
     const date =
         `${String(
             now.getMonth() + 1
@@ -1234,10 +1273,6 @@ function loadPoints(
                             );
 
 
-                        /*
-                            Validate the file.
-                        */
-
                         if (
                             !data ||
                             !Array.isArray(
@@ -1251,10 +1286,6 @@ function loadPoints(
 
                         }
 
-
-                        /*
-                            Apply saved points.
-                        */
 
                         for (
                             const savedEmployee
@@ -1292,11 +1323,6 @@ function loadPoints(
                             }
 
 
-                            /*
-                                Find matching
-                                employee + role.
-                            */
-
                             for (
                                 const block
                                 of mealBlocks
@@ -1304,7 +1330,9 @@ function loadPoints(
 
                                 for (
                                     const employee
-                                    of block.employees
+                                    of (
+                                        block.employees || []
+                                    )
                                 ) {
 
                                     const employeeId =
@@ -1320,19 +1348,6 @@ function loadPoints(
                                             "Other"
                                         );
 
-
-                                    /*
-                                        BOTH employee ID
-                                        AND role must match.
-
-                                        This allows:
-
-                                        John Smith
-                                        Server = 1.0
-
-                                        John Smith
-                                        Host = 0.5
-                                    */
 
                                     if (
 
@@ -1363,6 +1378,7 @@ function loadPoints(
                         );
 
                     }
+
                     catch (error) {
 
                         reject(
@@ -1415,16 +1431,6 @@ function formatEmployeeName(
     }
 
 
-    /*
-        POS format:
-
-        Last, First
-
-        becomes:
-
-        First L.
-    */
-
     if (
         raw.includes(",")
     ) {
@@ -1458,16 +1464,6 @@ function formatEmployeeName(
 
     }
 
-
-    /*
-        Standard format:
-
-        First Last
-
-        becomes:
-
-        First L.
-    */
 
     const parts =
         raw

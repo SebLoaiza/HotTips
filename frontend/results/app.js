@@ -1380,6 +1380,10 @@ if (
 // LOAD RESULTS
 // =================================================
 
+// =================================================
+// LOAD RESULTS
+// =================================================
+
 async function start() {
 
     try {
@@ -1424,20 +1428,88 @@ async function start() {
 
 
         // =========================================
-        // VALIDATION
+        // NO SAVED DATA
         // =========================================
 
         if (
             tipDistribution.length === 0
         ) {
 
-            alert(
-                "No tip distribution data found."
+            console.log(
+                "No saved tip distribution found."
             );
 
 
-            window.location.href =
-                "../distribution/distribution.html";
+            /*
+                IMPORTANT:
+
+                Do NOT redirect.
+
+                The user is allowed to stay on
+                the Results page and import a
+                previously saved HotTips JSON file.
+            */
+
+            if (
+                resultsContainer
+            ) {
+
+                resultsContainer.innerHTML = "";
+
+                const message =
+                    document.createElement(
+                        "div"
+                    );
+
+                message.className =
+                    "no-results-message";
+
+                message.innerHTML =
+                    `
+                    <h2>No Saved Results</h2>
+                    <p>
+                        No tip distribution history is currently saved.
+                    </p>
+                    <p>
+                        Use <strong>Load History</strong> above
+                        to import a previously saved HotTips JSON file.
+                    </p>
+                    `;
+
+                resultsContainer.appendChild(
+                    message
+                );
+
+            }
+
+
+            /*
+                Keep the Results page active.
+            */
+
+            currentView =
+                "results";
+
+            showResultsView();
+
+            updateViewButtons();
+
+
+            /*
+                Make sure the debug global still
+                exists as an empty array.
+            */
+
+            window.RESULTS_SESSION =
+                null;
+
+            window.TIP_DISTRIBUTION =
+                tipDistribution;
+
+
+            console.log(
+                "Results page ready for history import."
+            );
 
 
             return;
@@ -1509,9 +1581,40 @@ async function start() {
         );
 
 
-        alert(
-            "Could not load the saved application data."
-        );
+        /*
+            Do NOT redirect on an error either.
+            Keep the user on Results so they can
+            still attempt to import a history file.
+        */
+
+        if (
+            resultsContainer
+        ) {
+
+            resultsContainer.innerHTML = "";
+
+            const message =
+                document.createElement(
+                    "div"
+                );
+
+            message.className =
+                "no-results-message";
+
+            message.innerHTML =
+                `
+                <h2>Unable to Load Saved Results</h2>
+                <p>
+                    You can still use <strong>Load History</strong>
+                    to import a HotTips JSON file.
+                </p>
+                `;
+
+            resultsContainer.appendChild(
+                message
+            );
+
+        }
 
     }
 

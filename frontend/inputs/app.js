@@ -65,69 +65,80 @@ function openDatabase() {
 
 
                     if (
-                        !db.objectStoreNames.contains(
+                        db.objectStoreNames.contains(
                             STORE_NAME
                         )
                     ) {
 
-                        db.close();
-
-
-                        const upgradeRequest =
-                            indexedDB.open(
-                                DB_NAME,
-                                db.version + 1
-                            );
-
-
-                        upgradeRequest.onupgradeneeded =
-                            () => {
-
-                                const upgradedDB =
-                                    upgradeRequest.result;
-
-
-                                if (
-                                    !upgradedDB.objectStoreNames.contains(
-                                        STORE_NAME
-                                    )
-                                ) {
-
-                                    upgradedDB.createObjectStore(
-                                        STORE_NAME
-                                    );
-
-                                }
-
-                            };
-
-
-                        upgradeRequest.onsuccess =
-                            () => {
-
-                                resolve(
-                                    upgradeRequest.result
-                                );
-
-                            };
-
-
-                        upgradeRequest.onerror =
-                            () => {
-
-                                reject(
-                                    upgradeRequest.error
-                                );
-
-                            };
-
+                        resolve(db);
 
                         return;
 
                     }
 
 
-                    resolve(db);
+                    /*
+                        This should normally never be
+                        necessary because the store is
+                        created in onupgradeneeded.
+
+                        It is kept here as a safety net.
+                    */
+
+                    const currentVersion =
+                        db.version;
+
+
+                    db.close();
+
+
+                    const upgradeRequest =
+                        indexedDB.open(
+                            DB_NAME,
+                            currentVersion + 1
+                        );
+
+
+                    upgradeRequest.onupgradeneeded =
+                        () => {
+
+                            const upgradedDB =
+                                upgradeRequest.result;
+
+
+                            if (
+                                !upgradedDB.objectStoreNames.contains(
+                                    STORE_NAME
+                                )
+                            ) {
+
+                                upgradedDB.createObjectStore(
+                                    STORE_NAME
+                                );
+
+                            }
+
+                        };
+
+
+                    upgradeRequest.onsuccess =
+                        () => {
+
+                            resolve(
+                                upgradeRequest.result
+                            );
+
+                        };
+
+
+                    upgradeRequest.onerror =
+                        () => {
+
+                            reject(
+                                upgradeRequest.error
+                            );
+
+                        };
 
                 };
 
@@ -151,14 +162,19 @@ function openDatabase() {
 // LOAD STATE
 // =================================================
 
-async function loadState(key) {
+async function loadState(
+    key
+) {
 
     const db =
         await openDatabase();
 
 
     return new Promise(
-        (resolve, reject) => {
+        (
+            resolve,
+            reject
+        ) => {
 
             const transaction =
                 db.transaction(
@@ -180,8 +196,15 @@ async function loadState(key) {
             request.onsuccess =
                 () => {
 
+                    const result =
+                        request.result;
+
+
+                    db.close();
+
+
                     resolve(
-                        request.result
+                        result
                     );
 
                 };
@@ -189,6 +212,9 @@ async function loadState(key) {
 
             request.onerror =
                 () => {
+
+                    db.close();
+
 
                     reject(
                         request.error
@@ -216,7 +242,10 @@ async function saveState(
 
 
     return new Promise(
-        (resolve, reject) => {
+        (
+            resolve,
+            reject
+        ) => {
 
             const transaction =
                 db.transaction(
@@ -241,6 +270,9 @@ async function saveState(
             request.onsuccess =
                 () => {
 
+                    db.close();
+
+
                     resolve();
 
                 };
@@ -248,6 +280,9 @@ async function saveState(
 
             request.onerror =
                 () => {
+
+                    db.close();
+
 
                     reject(
                         request.error
@@ -262,7 +297,7 @@ async function saveState(
 
 
 // =================================================
-// STATE
+// CURRENT STATE
 // =================================================
 
 let currentMealBlocks = [];
@@ -318,6 +353,10 @@ function validateInputs() {
                 .toLowerCase();
 
 
+            /*
+                Only trainees require a trainer.
+            */
+
             if (
                 !role.includes("trainee")
             ) {
@@ -350,7 +389,9 @@ function validateInputs() {
 
 
     if (!continueButton) {
+
         return;
+
     }
 
 
@@ -367,12 +408,27 @@ function validateInputs() {
 
 
 // =================================================
-// SAVE MEAL BLOCKS
+// SAVE CURRENT MEAL BLOCKS
 // =================================================
 
 async function saveMealBlocks() {
 
     try {
+
+        /*
+            currentMealBlocks is the single source
+            of truth for the Inputs page.
+
+            Anything changed inside the employee
+            objects, including:
+
+                employee.tip_points
+                employee.cash_drop
+                employee.trainer_employee_id
+                employee.no_trainer
+
+            will be saved here.
+        */
 
         await saveState(
             "mealBlocks",
@@ -381,7 +437,8 @@ async function saveMealBlocks() {
 
 
         console.log(
-            "Meal blocks saved."
+            "Meal blocks saved:",
+            currentMealBlocks
         );
 
 
@@ -410,10 +467,23 @@ async function saveMealBlocks() {
 
 function refreshUI() {
 
+    /*
+        Recalculate values that depend on the
+        current meal blocks.
+    */
+
     calculateCashTips(
         currentMealBlocks
     );
 
+
+    /*
+        Render everything from currentMealBlocks.
+
+        These render functions should modify the
+        objects inside currentMealBlocks rather
+        than replacing the entire state.
+    */
 
     renderCashDropList(
         currentMealBlocks,
@@ -444,7 +514,7 @@ function refreshUI() {
 
 
 // =================================================
-// GO BACK TO START
+// GO BACK
 // =================================================
 
 async function goBack() {
@@ -456,7 +526,12 @@ async function goBack() {
     if (!saved) {
 
         console.error(
-            "Could not save before returning to Start."
+            "Could not save before returning."
+        );
+
+
+        alert(
+            "Could not save the current data."
         );
 
 
@@ -477,6 +552,11 @@ async function goBack() {
 
 async function goToDistribution() {
 
+    /*
+        Do not continue if trainee validation
+        has not passed.
+    */
+
     if (
         continueButton &&
         continueButton.disabled
@@ -486,6 +566,13 @@ async function goToDistribution() {
 
     }
 
+
+    /*
+        Save EVERYTHING currently in memory
+        before leaving Inputs.
+
+        This includes employee.tip_points.
+    */
 
     const saved =
         await saveMealBlocks();
@@ -498,9 +585,20 @@ async function goToDistribution() {
         );
 
 
+        alert(
+            "Could not save the current data."
+        );
+
+
         return;
 
     }
+
+
+    console.log(
+        "Opening Distribution with:",
+        currentMealBlocks
+    );
 
 
     window.location.href =
@@ -566,7 +664,7 @@ document
 
 
 // =================================================
-// DEBUG
+// DEBUG BUTTON
 // =================================================
 
 if (debugButton) {
@@ -582,11 +680,19 @@ if (debugButton) {
 
 
             if (!output) {
+
                 return;
+
             }
 
 
             try {
+
+                /*
+                    Read directly from IndexedDB so
+                    this shows what is ACTUALLY saved,
+                    not merely what is currently in memory.
+                */
 
                 const savedMealBlocks =
                     await loadState(
@@ -607,6 +713,12 @@ if (debugButton) {
             }
 
             catch (error) {
+
+                console.error(
+                    "Could not load debug state:",
+                    error
+                );
+
 
                 output.textContent =
                     String(
@@ -634,6 +746,11 @@ async function start() {
 
     try {
 
+        /*
+            Load the exact mealBlocks object that
+            was previously saved.
+        */
+
         const savedMealBlocks =
             await loadState(
                 "mealBlocks"
@@ -652,19 +769,25 @@ async function start() {
             );
 
 
-            alert(
-                "No imported data found."
-            );
-
-
-            window.location.href =
-                "../start/start.html";
-
+            /*
+                Stay on the page instead of
+                redirecting automatically.
+            */
 
             return;
 
         }
 
+
+        /*
+            IMPORTANT:
+
+            Use the saved objects directly.
+
+            Do NOT rebuild employee objects.
+            Do NOT regenerate tip_points.
+            Do NOT reset defaults here.
+        */
 
         currentMealBlocks =
             savedMealBlocks;
@@ -675,6 +798,10 @@ async function start() {
             currentMealBlocks
         );
 
+
+        /*
+            Render the saved state.
+        */
 
         refreshUI();
 
