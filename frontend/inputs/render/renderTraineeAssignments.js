@@ -129,13 +129,146 @@ export function renderTraineeAssignments(
 
 
     /* =========================
+       SORT TRAINEES
+
+       ORDER:
+       1. HOST TRAINEES
+       2. FOH TRAINEES
+       3. BOH TRAINEES
+       4. OTHER TRAINEES
+
+       Within each group:
+       Earliest first trainee date
+       comes first.
+    ========================= */
+
+    const sortedTrainees = [
+        ...traineeMap.values()
+    ].sort((a, b) => {
+
+        const roleA =
+            String(a.role || "")
+                .toLowerCase();
+
+        const roleB =
+            String(b.role || "")
+                .toLowerCase();
+
+
+        /* =========================
+           GET TRAINEE GROUP
+        ========================= */
+
+        const getGroup =
+            role => {
+
+                /*
+                 * HOST TRAINEE
+                 */
+
+                if (
+                    role.includes("host") &&
+                    role.includes("trainee")
+                ) {
+                    return 1;
+                }
+
+
+                /*
+                 * FOH TRAINEE
+                 */
+
+                if (
+                    role.includes("foh") &&
+                    role.includes("trainee")
+                ) {
+                    return 2;
+                }
+
+
+                /*
+                 * BOH TRAINEE
+                 */
+
+                if (
+                    role.includes("boh") &&
+                    role.includes("trainee")
+                ) {
+                    return 3;
+                }
+
+
+                /*
+                 * ANY OTHER TRAINEE
+                 */
+
+                return 4;
+
+            };
+
+
+        const groupA =
+            getGroup(roleA);
+
+        const groupB =
+            getGroup(roleB);
+
+
+        /* =========================
+           SORT BY TRAINEE GROUP
+        ========================= */
+
+        if (groupA !== groupB) {
+
+            return (
+                groupA -
+                groupB
+            );
+
+        }
+
+
+        /* =========================
+           GET FIRST TRAINEE DATE
+        ========================= */
+
+        const firstDateA =
+            [...a.traineeDates]
+                .sort(
+                    (x, y) =>
+                        new Date(x) -
+                        new Date(y)
+                )[0];
+
+        const firstDateB =
+            [...b.traineeDates]
+                .sort(
+                    (x, y) =>
+                        new Date(x) -
+                        new Date(y)
+                )[0];
+
+
+        /* =========================
+           SORT EARLIEST TO LATEST
+        ========================= */
+
+        return (
+            new Date(firstDateA) -
+            new Date(firstDateB)
+        );
+
+    });
+
+
+    /* =========================
        CREATE TABLE FOR EACH
        TRAINEE
     ========================= */
 
     for (
         const trainee of
-        traineeMap.values()
+        sortedTrainees
     ) {
 
         /*
@@ -470,7 +603,9 @@ function createTraineeTable(
             document.createElement("tr");
 
 
-        /* Meal name */
+        /* =========================
+           MEAL NAME
+        ========================= */
 
         const mealCell =
             document.createElement("td");
@@ -486,7 +621,9 @@ function createTraineeTable(
         );
 
 
-        /* Date cells */
+        /* =========================
+           DATE CELLS
+        ========================= */
 
         for (const date of dates) {
 
