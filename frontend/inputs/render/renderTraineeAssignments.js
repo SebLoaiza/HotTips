@@ -15,11 +15,20 @@ export function renderTraineeAssignments(
 
     /* =========================
        FIND TRAINEES
+       AND THEIR TRAINEE DATES
     ========================= */
 
     const traineeMap = new Map();
 
     for (const block of mealBlocks) {
+
+        const date =
+            block.day_key ||
+            block.date;
+
+        if (!date) {
+            continue;
+        }
 
         for (const employee of block.employees) {
 
@@ -27,27 +36,64 @@ export function renderTraineeAssignments(
                 String(employee.role || "")
                     .toLowerCase();
 
+            /*
+             * Only add the employee to the
+             * trainee list when they are
+             * actually a trainee on this date.
+             */
+
             if (!role.includes("trainee")) {
                 continue;
             }
 
-            if (
-                !traineeMap.has(
+
+            let trainee =
+                traineeMap.get(
                     employee.employee_id
-                )
-            ) {
+                );
+
+
+            /* =========================
+               CREATE TRAINEE RECORD
+            ========================= */
+
+            if (!trainee) {
+
+                trainee = {
+                    name:
+                        employee.name,
+
+                    role:
+                        employee.role,
+
+                    employee_id:
+                        employee.employee_id,
+
+                    /*
+                     * Stores every date this
+                     * employee was actually
+                     * a trainee.
+                     */
+
+                    traineeDates:
+                        new Set()
+                };
 
                 traineeMap.set(
                     employee.employee_id,
-                    {
-                        name: employee.name,
-                        role: employee.role,
-                        employee_id:
-                            employee.employee_id
-                    }
+                    trainee
                 );
 
             }
+
+
+            /* =========================
+               STORE TRAINEE DATE
+            ========================= */
+
+            trainee.traineeDates.add(
+                date
+            );
 
         }
 
@@ -55,21 +101,27 @@ export function renderTraineeAssignments(
 
 
     /* =========================
-       GET DATES
+       GET ALL DATES
     ========================= */
 
-    const dates = [
+    const allDates = [
         ...new Set(
-            mealBlocks.map(
-                block =>
-                    block.day_key ||
-                    block.date
-            )
+            mealBlocks
+                .map(
+                    block =>
+                        block.day_key ||
+                        block.date
+                )
+                .filter(Boolean)
         )
     ];
 
 
-    dates.sort(
+    /* =========================
+       SORT DATES
+    ========================= */
+
+    allDates.sort(
         (a, b) =>
             new Date(a) -
             new Date(b)
@@ -77,7 +129,7 @@ export function renderTraineeAssignments(
 
 
     /* =========================
-       CREATE ONE TABLE PER
+       CREATE TABLE FOR EACH
        TRAINEE
     ========================= */
 
@@ -85,6 +137,92 @@ export function renderTraineeAssignments(
         const trainee of
         traineeMap.values()
     ) {
+
+        /*
+         * Get the dates on which this
+         * employee was actually a trainee.
+         */
+
+        const traineeDates = [
+            ...trainee.traineeDates
+        ];
+
+
+        traineeDates.sort(
+            (a, b) =>
+                new Date(a) -
+                new Date(b)
+        );
+
+
+        if (!traineeDates.length) {
+            continue;
+        }
+
+
+        /* =========================
+           FIRST TRAINEE DATE
+        ========================= */
+
+        const firstTraineeDate =
+            new Date(
+                traineeDates[0]
+            );
+
+
+        /* =========================
+           LAST TRAINEE DATE
+        ========================= */
+
+        const lastTraineeDate =
+            new Date(
+                traineeDates[
+                    traineeDates.length - 1
+                ]
+            );
+
+
+        /*
+         * Only show dates from the
+         * first time they were a trainee
+         * through the last time they were
+         * a trainee.
+         *
+         * Example:
+         *
+         * 8/10 = trainee
+         * 8/11 = cook
+         * 8/12 = cook
+         * 8/13 = trainee
+         *
+         * Table shows:
+         *
+         * 8/10 | 8/11 | 8/12 | 8/13
+         *
+         * The middle dates will display "-".
+         */
+
+        const dates =
+            allDates.filter(
+                date => {
+
+                    const currentDate =
+                        new Date(date);
+
+                    return (
+                        currentDate >=
+                            firstTraineeDate &&
+                        currentDate <=
+                            lastTraineeDate
+                    );
+
+                }
+            );
+
+
+        /* =========================
+           CREATE TABLE
+        ========================= */
 
         output.appendChild(
             createTraineeTable(
@@ -133,7 +271,9 @@ function createTraineeTable(
         <span>${trainee.role || ""}</span>
     `;
 
-    section.appendChild(title);
+    section.appendChild(
+        title
+    );
 
 
     /* =========================
@@ -159,6 +299,16 @@ function createTraineeTable(
 
             for (const block of mealBlocks) {
 
+                const date =
+                    block.day_key ||
+                    block.date;
+
+
+                if (!dates.includes(date)) {
+                    continue;
+                }
+
+
                 const traineeInBlock =
                     block.employees.find(
                         employee =>
@@ -166,7 +316,19 @@ function createTraineeTable(
                             trainee.employee_id
                     );
 
+
                 if (!traineeInBlock) {
+                    continue;
+                }
+
+
+                const role =
+                    String(
+                        traineeInBlock.role || ""
+                    ).toLowerCase();
+
+
+                if (!role.includes("trainee")) {
                     continue;
                 }
 
@@ -194,6 +356,34 @@ function createTraineeTable(
     section.appendChild(
         noTrainerButton
     );
+
+
+    /* =========================
+       TABLE SCROLL WRAPPER
+    ========================= */
+
+    const tableWrapper =
+        document.createElement("div");
+
+    tableWrapper.className =
+        "trainee-table-scroll";
+
+
+    /*
+     * Add a class when there are more
+     * than 10 date columns.
+     *
+     * The first column is "Meal", so
+     * this checks only the dates.
+     */
+
+    if (dates.length > 10) {
+
+        tableWrapper.classList.add(
+            "has-horizontal-scroll"
+        );
+
+    }
 
 
     /* =========================
@@ -327,8 +517,18 @@ function createTraineeTable(
         tbody
     );
 
-    section.appendChild(
+
+    /* =========================
+       PUT TABLE INSIDE WRAPPER
+    ========================= */
+
+    tableWrapper.appendChild(
         table
+    );
+
+
+    section.appendChild(
+        tableWrapper
     );
 
 
@@ -357,6 +557,29 @@ function createAssignmentCell(
 
 
     /* =========================
+       CHECK IF ACTUALLY A
+       TRAINEE ON THIS DATE
+    ========================= */
+
+    if (
+        !trainee.traineeDates.has(
+            date
+        )
+    ) {
+
+        cell.classList.add(
+            "not-trainee"
+        );
+
+        cell.textContent =
+            "—";
+
+        return cell;
+
+    }
+
+
+    /* =========================
        FIND MEAL BLOCK
     ========================= */
 
@@ -372,8 +595,8 @@ function createAssignmentCell(
 
 
     /*
-        No meal block for this date.
-    */
+     * No meal block for this date.
+     */
 
     if (!block) {
 
@@ -401,10 +624,47 @@ function createAssignmentCell(
         );
 
 
+    /*
+     * Employee is not working this
+     * particular meal.
+     */
+
     if (!traineeInBlock) {
 
         cell.classList.add(
             "not-working"
+        );
+
+        cell.textContent =
+            "—";
+
+        return cell;
+
+    }
+
+
+    /* =========================
+       VERIFY ROLE
+    ========================= */
+
+    const traineeRole =
+        String(
+            traineeInBlock.role || ""
+        ).toLowerCase();
+
+
+    /*
+     * This handles the situation where
+     * the employee is in the block but
+     * isn't actually a trainee anymore.
+     */
+
+    if (
+        !traineeRole.includes("trainee")
+    ) {
+
+        cell.classList.add(
+            "not-trainee"
         );
 
         cell.textContent =
@@ -428,6 +688,7 @@ function createAssignmentCell(
                         employee.role || ""
                     ).toLowerCase();
 
+
                 return (
                     !role.includes("trainee") &&
                     employee.employee_id !==
@@ -439,7 +700,7 @@ function createAssignmentCell(
 
 
     /* =========================
-       SELECT
+       CREATE SELECT
     ========================= */
 
     const select =
@@ -449,7 +710,9 @@ function createAssignmentCell(
         "assignment-select";
 
 
-    /* Empty option */
+    /* =========================
+       EMPTY OPTION
+    ========================= */
 
     const blank =
         document.createElement("option");
@@ -465,7 +728,9 @@ function createAssignmentCell(
     );
 
 
-    /* No trainer */
+    /* =========================
+       NO TRAINER OPTION
+    ========================= */
 
     const noTrainer =
         document.createElement("option");
@@ -481,7 +746,9 @@ function createAssignmentCell(
     );
 
 
-    /* Trainers */
+    /* =========================
+       TRAINER OPTIONS
+    ========================= */
 
     for (const trainer of trainers) {
 
@@ -502,7 +769,7 @@ function createAssignmentCell(
 
 
     /* =========================
-       RESTORE STATE
+       RESTORE SAVED STATE
     ========================= */
 
     if (
@@ -526,12 +793,16 @@ function createAssignmentCell(
 
 
     /* =========================
-       CHANGE
+       CHANGE EVENT
     ========================= */
 
     select.addEventListener(
         "change",
         () => {
+
+            /* =========================
+               NO TRAINER
+            ========================= */
 
             if (
                 select.value ===
@@ -556,6 +827,10 @@ function createAssignmentCell(
             }
 
 
+            /* =========================
+               FIND SELECTED TRAINER
+            ========================= */
+
             const trainer =
                 trainers.find(
                     employee =>
@@ -563,6 +838,10 @@ function createAssignmentCell(
                         select.value
                 );
 
+
+            /* =========================
+               VALID TRAINER
+            ========================= */
 
             if (trainer) {
 
@@ -578,6 +857,11 @@ function createAssignmentCell(
                     trainer.name;
 
             }
+
+
+            /* =========================
+               BLANK SELECTION
+            ========================= */
 
             else {
 
@@ -601,9 +885,14 @@ function createAssignmentCell(
     );
 
 
+    /* =========================
+       ADD SELECT TO CELL
+    ========================= */
+
     cell.appendChild(
         select
     );
+
 
     return cell;
 
@@ -611,18 +900,23 @@ function createAssignmentCell(
 
 
 /* =========================
-   DATE
+   FORMAT DATE
 ========================= */
 
 function formatDate(date) {
 
-    if (!date) return "";
+    if (!date) {
+        return "";
+    }
+
 
     const value =
         String(date).trim();
 
+
     const parsed =
         new Date(value);
+
 
     if (
         Number.isNaN(
@@ -633,6 +927,7 @@ function formatDate(date) {
         return value;
 
     }
+
 
     return (
         String(

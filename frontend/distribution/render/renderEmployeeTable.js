@@ -59,7 +59,7 @@ export function renderEmployeeTable(
 
                     `
 
-                    <th>Net Card Tips</th>
+                    <th>Card Tips Ex. Fees</th>
 
                     <th>Cash Tips</th>
 

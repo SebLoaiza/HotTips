@@ -29,10 +29,10 @@ if (userGuideButton) {
                 );
 
             link.href =
-                "./HotTips-User-Manual.pdf";
+                "./HotTips-User-Guide.pdf";
 
             link.download =
-                "HotTips-User-Manual.pdf";
+                "HotTips-User-Guide.pdf";
 
             document.body.appendChild(
                 link

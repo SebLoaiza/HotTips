@@ -1906,3 +1906,56 @@ pre {
 .logo-button .logo {
     display: block;
 }
+
+
+.trainee-table-scroll {
+    width: 100%;
+}
+
+
+/*
+ * Only tables with more than 10 dates
+ * become horizontally scrollable.
+ */
+
+.trainee-table-scroll.has-horizontal-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+
+/*
+ * Make the table wide enough that the
+ * dates don't get squeezed together.
+ */
+
+.trainee-table-scroll.has-horizontal-scroll
+.trainee-assignment-table {
+    min-width: max-content;
+}
+
+
+/*
+ * Keep each date column a reasonable width.
+ */
+
+.trainee-table-scroll.has-horizontal-scroll
+.trainee-date-header,
+.trainee-table-scroll.has-horizontal-scroll
+.trainee-assignment-cell {
+    min-width: 130px;
+}
+
+
+/*
+ * Keep the Meal column visible and
+ * consistent.
+ */
+
+.trainee-table-scroll.has-horizontal-scroll
+.trainee-meal-header,
+.trainee-table-scroll.has-horizontal-scroll
+.trainee-meal-cell {
+    min-width: 100px;
+}

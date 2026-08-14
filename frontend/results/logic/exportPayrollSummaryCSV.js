@@ -188,7 +188,7 @@ export function exportPayrollSummaryCSV(
 
 
     link.download =
-        `Payroll Summary - ${dateTime}.csv`;
+        `Summary Results - ${dateTime}.csv`;
 
 
     document.body.appendChild(
