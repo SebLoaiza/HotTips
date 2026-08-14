@@ -19,6 +19,7 @@ export function exportPayrollSummaryCSV(
         [
             "Employee",
             "Sales",
+            "Total Tips",
             "Card Take Home",
             "Cash Take Home"
         ]
@@ -31,8 +32,6 @@ export function exportPayrollSummaryCSV(
     // =========================
 
     const now = new Date();
-    const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
-
 
     const dateTime =
         `${String(
@@ -112,6 +111,42 @@ export function exportPayrollSummaryCSV(
 
 
         // =========================
+        // TOTAL TIPS
+        // CARD + CASH
+        // =========================
+
+        const totalTips =
+            cardTakeHome +
+            cashTakeHome;
+
+
+        // =========================
+        // CARD TIP PERCENTAGE
+        // =========================
+
+        const cardPercentage =
+            totalTips > 0
+                ? (
+                    cardTakeHome /
+                    totalTips
+                ) * 100
+                : 0;
+
+
+        // =========================
+        // CASH TIP PERCENTAGE
+        // =========================
+
+        const cashPercentage =
+            totalTips > 0
+                ? (
+                    cashTakeHome /
+                    totalTips
+                ) * 100
+                : 0;
+
+
+        // =========================
         // CASH ROUNDING
         // =========================
 
@@ -129,28 +164,47 @@ export function exportPayrollSummaryCSV(
 
             `"${employee.name}"`,
 
-            // Sales — cents
+
+            // =========================
+            // SALES
+            // Cents -> Dollars
+            // =========================
 
             (
-                (employee.card_sales || 0)
+                (employee.total_sales || 0)
                 / 100
             ).toFixed(2),
 
 
-            // Card Take Home — cents
+            // =========================
+            // TOTAL TIPS
+            // Card + Cash
+            // Cents -> Dollars
+            // =========================
 
             (
-                cardTakeHome / 100
+                totalTips / 100
             ).toFixed(2),
 
 
-            // Cash Take Home —
-            // nearest whole dollar
+            // =========================
+            // CARD TAKE HOME
+            // Dollar Amount + Percentage
+            // =========================
 
-            roundedCashTakeHome.toString()
+            `"${(
+                cardTakeHome / 100
+            ).toFixed(2)} (${cardPercentage.toFixed(2)}%)"`,
+
+
+            // =========================
+            // CASH TAKE HOME
+            // Rounded Dollar Amount + Percentage
+            // =========================
+
+            `"${roundedCashTakeHome.toString()} (${cashPercentage.toFixed(2)}%)"`
 
         ]);
-
 
     }
 
@@ -168,6 +222,10 @@ export function exportPayrollSummaryCSV(
         .join("\n");
 
 
+    // =========================
+    // CREATE BLOB
+    // =========================
+
     const blob =
         new Blob(
             [csv],
@@ -179,7 +237,7 @@ export function exportPayrollSummaryCSV(
 
 
     // =========================
-    // DOWNLOAD
+    // CREATE DOWNLOAD URL
     // =========================
 
     const url =
@@ -187,6 +245,10 @@ export function exportPayrollSummaryCSV(
             blob
         );
 
+
+    // =========================
+    // CREATE DOWNLOAD LINK
+    // =========================
 
     const link =
         document.createElement(
@@ -198,9 +260,17 @@ export function exportPayrollSummaryCSV(
         url;
 
 
+    // =========================
+    // FILE NAME
+    // =========================
+
     link.download =
         `HotTips Summary Results - ${history.start_date}_to_${history.end_date} - ${dateTime}.csv`;
 
+
+    // =========================
+    // DOWNLOAD
+    // =========================
 
     document.body.appendChild(
         link
@@ -215,9 +285,12 @@ export function exportPayrollSummaryCSV(
     );
 
 
+    // =========================
+    // CLEAN UP
+    // =========================
+
     URL.revokeObjectURL(
         url
     );
-
 
 }
