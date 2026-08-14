@@ -1150,7 +1150,6 @@ function exportPoints(
     const now =
         new Date();
 
-
     const date =
         `${String(
             now.getMonth() + 1
@@ -1163,12 +1162,26 @@ function exportPoints(
         `${now.getFullYear()}`;
 
 
+    const time =
+        `${String(
+            now.getHours()
+        ).padStart(2, "0")}-` +
+
+        `${String(
+            now.getMinutes()
+        ).padStart(2, "0")}-` +
+
+        `${String(
+            now.getSeconds()
+        ).padStart(2, "0")}`;
+
+
     link.href =
         url;
 
 
     link.download =
-        `HotTips Employee Points - ${date}.json`;
+        `HotTips Employee Points - ${date} - ${time}.json`;
 
 
     document.body.appendChild(
