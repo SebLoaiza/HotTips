@@ -1567,7 +1567,7 @@ function downloadCashDrops(
         new Date();
 
     const time = 
-        now.toTimeString().slice(0, 8).replace(/:/g, '-');
+        now.toTimeString().slice(0, 8).replace(/:/g, '_');
 
 
     const date =

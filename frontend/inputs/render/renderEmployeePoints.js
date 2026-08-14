@@ -1165,11 +1165,11 @@ function exportPoints(
     const time =
         `${String(
             now.getHours()
-        ).padStart(2, "0")}-` +
+        ).padStart(2, "0")}_` +
 
         `${String(
             now.getMinutes()
-        ).padStart(2, "0")}-` +
+        ).padStart(2, "0")}_` +
 
         `${String(
             now.getSeconds()
