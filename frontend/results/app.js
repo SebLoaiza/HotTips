@@ -1,4 +1,9 @@
 import {
+    HotTipsStorage
+} from "../storage/storage.js";
+
+
+import {
     ResultsSession
 } from "./model/resultsSession.js";
 
@@ -64,21 +69,119 @@ import {
 
 
 // =================================
+// STATE
+// =================================
+
+let tipDistribution = [];
+
+let resultsSession = null;
+
+
+// =================================
 // LOAD CURRENT HISTORY
 // =================================
 
-let tipDistribution =
-    JSON.parse(
-        sessionStorage.getItem(
-            "tipDistribution"
-        )
-    ) || [];
+async function loadTipDistribution() {
+
+    try {
+
+        const savedTipDistribution =
+            await HotTipsStorage.getItem(
+                "tipDistribution"
+            );
 
 
-const resultsSession =
-    new ResultsSession(
-        tipDistribution
-    );
+        tipDistribution =
+            Array.isArray(
+                savedTipDistribution
+            )
+                ? savedTipDistribution
+                : [];
+
+
+        console.log(
+            "=============================="
+        );
+
+
+        console.log(
+            "TIP DISTRIBUTION LOADED"
+        );
+
+
+        console.log(
+            "=============================="
+        );
+
+
+        console.log(
+            tipDistribution
+        );
+
+
+        console.log(
+            "RAW TIP DISTRIBUTION JSON:"
+        );
+
+
+        console.log(
+            JSON.stringify(
+                tipDistribution,
+                null,
+                2
+            )
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error loading tip distribution:",
+            error
+        );
+
+
+        tipDistribution = [];
+
+    }
+
+
+    if (
+        tipDistribution.length === 0
+    ) {
+
+        alert(
+            "No tip distribution data found."
+        );
+
+
+        window.location.href =
+            "../start/start.html";
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+// =================================
+// CREATE RESULTS SESSION
+// =================================
+
+function createResultsSession() {
+
+    resultsSession =
+        new ResultsSession(
+            tipDistribution
+        );
+
+}
 
 
 // =================================
@@ -373,14 +476,25 @@ function showAnalyticsView() {
 
 function renderResults() {
 
+    if (!resultsSession) {
+        return;
+    }
+
+
     currentView = "results";
 
 
     showResultsView();
 
 
-    resultsContainer.innerHTML =
-        "";
+    if (
+        resultsContainer
+    ) {
+
+        resultsContainer.innerHTML =
+            "";
+
+    }
 
 
     if (
@@ -403,8 +517,14 @@ function renderResults() {
     }
 
 
-    printContainer.innerHTML =
-        "";
+    if (
+        printContainer
+    ) {
+
+        printContainer.innerHTML =
+            "";
+
+    }
 
 
     const filtered =
@@ -417,39 +537,57 @@ function renderResults() {
         );
 
 
-    // Employee results table
+    // =================================
+    // EMPLOYEE RESULTS TABLE
+    // =================================
 
-    resultsContainer.appendChild(
+    if (
+        resultsContainer
+    ) {
 
-        renderResultsTable(
-            employees,
-            openEmployee
-        )
+        resultsContainer.appendChild(
 
-    );
+            renderResultsTable(
+                employees,
+                openEmployee
+            )
 
-
-    // Special orders
-
-    resultsContainer.appendChild(
-
-        renderSpecialOrders(
-            filtered
-        )
-
-    );
+        );
 
 
-    // Print summary
+        // =================================
+        // SPECIAL ORDERS
+        // =================================
 
-    printContainer.appendChild(
+        resultsContainer.appendChild(
 
-        renderPrintSummary(
-            employees,
-            filtered
-        )
+            renderSpecialOrders(
+                filtered
+            )
 
-    );
+        );
+
+    }
+
+
+    // =================================
+    // PRINT SUMMARY
+    // =================================
+
+    if (
+        printContainer
+    ) {
+
+        printContainer.appendChild(
+
+            renderPrintSummary(
+                employees,
+                filtered
+            )
+
+        );
+
+    }
 
 
     updateViewButtons();
@@ -463,18 +601,35 @@ function renderResults() {
 
 function renderStatsPage() {
 
+    if (!resultsSession) {
+        return;
+    }
+
+
     currentView = "stats";
 
 
     showStatsView();
 
 
-    resultsContainer.innerHTML =
-        "";
+    if (
+        resultsContainer
+    ) {
+
+        resultsContainer.innerHTML =
+            "";
+
+    }
 
 
-    printContainer.innerHTML =
-        "";
+    if (
+        printContainer
+    ) {
+
+        printContainer.innerHTML =
+            "";
+
+    }
 
 
     if (
@@ -528,18 +683,35 @@ function renderStatsPage() {
 
 function renderAnalyticsPage() {
 
+    if (!resultsSession) {
+        return;
+    }
+
+
     currentView = "analytics";
 
 
     showAnalyticsView();
 
 
-    resultsContainer.innerHTML =
-        "";
+    if (
+        resultsContainer
+    ) {
+
+        resultsContainer.innerHTML =
+            "";
+
+    }
 
 
-    printContainer.innerHTML =
-        "";
+    if (
+        printContainer
+    ) {
+
+        printContainer.innerHTML =
+            "";
+
+    }
 
 
     if (
@@ -635,9 +807,21 @@ function updateViewButtons() {
 // DATE SELECTOR
 // =================================
 
-if (
-    dateContainer
-) {
+function initializeDateSelector() {
+
+    if (
+        !dateContainer ||
+        !resultsSession
+    ) {
+
+        return;
+
+    }
+
+
+    dateContainer.innerHTML =
+        "";
+
 
     dateContainer.appendChild(
 
@@ -738,6 +922,11 @@ if (
     exportCSVButton.onclick =
         () => {
 
+            if (!resultsSession) {
+                return;
+            }
+
+
             exportTipDistributionCSV(
 
                 resultsSession
@@ -781,7 +970,13 @@ if (
     loadButton.onclick =
         () => {
 
-            historyInput.click();
+            if (
+                historyInput
+            ) {
+
+                historyInput.click();
+
+            }
 
         };
 
@@ -817,11 +1012,17 @@ if (
 
 
                 const existing =
-                    JSON.parse(
-                        sessionStorage.getItem(
-                            "tipDistribution"
-                        )
-                    ) || [];
+                    await HotTipsStorage.getItem(
+                        "tipDistribution"
+                    );
+
+
+                const existingDistribution =
+                    Array.isArray(
+                        existing
+                    )
+                        ? existing
+                        : [];
 
 
                 const incoming =
@@ -834,7 +1035,7 @@ if (
 
                 const existingKeys =
                     new Set(
-                        existing.map(
+                        existingDistribution.map(
                             block =>
                                 `${block.date}|${block.meal}`
                         )
@@ -859,16 +1060,14 @@ if (
                 ) {
 
                     const merged = [
-                        ...existing,
+                        ...existingDistribution,
                         ...incoming
                     ];
 
 
-                    sessionStorage.setItem(
+                    await HotTipsStorage.setItem(
                         "tipDistribution",
-                        JSON.stringify(
-                            merged
-                        )
+                        merged
                     );
 
 
@@ -943,16 +1142,14 @@ if (
 
 
                     const merged = [
-                        ...existing,
+                        ...existingDistribution,
                         ...newOnly
                     ];
 
 
-                    sessionStorage.setItem(
+                    await HotTipsStorage.setItem(
                         "tipDistribution",
-                        JSON.stringify(
-                            merged
-                        )
+                        merged
                     );
 
 
@@ -989,7 +1186,7 @@ if (
 
 
                 const existingWithoutConflicts =
-                    existing.filter(
+                    existingDistribution.filter(
                         block =>
                             !conflictKeys.has(
                                 `${block.date}|${block.meal}`
@@ -1003,11 +1200,9 @@ if (
                 ];
 
 
-                sessionStorage.setItem(
+                await HotTipsStorage.setItem(
                     "tipDistribution",
-                    JSON.stringify(
-                        merged
-                    )
+                    merged
                 );
 
 
@@ -1075,6 +1270,11 @@ document
         "click",
         () => {
 
+            if (!resultsSession) {
+                return;
+            }
+
+
             const employees =
                 compileResults(
                     resultsSession
@@ -1116,37 +1316,80 @@ if (
 
 
 // =================================
-// START
+// INITIALIZE
 // =================================
 
-renderResults();
+(async () => {
+
+    /*
+        IMPORTANT:
+
+        IndexedDB is asynchronous.
+
+        We MUST wait for the saved
+        tipDistribution before creating
+        ResultsSession.
+    */
+
+    const hasData =
+        await loadTipDistribution();
 
 
-// =================================
-// DEBUG
-// =================================
+    if (!hasData) {
 
-window.RESULTS_SESSION =
-    resultsSession;
+        return;
 
-
-window.TIP_DISTRIBUTION =
-    tipDistribution;
+    }
 
 
-window.RENDER_RESULTS =
-    renderResults;
+    // ---------------------------------------------
+    // Create results session
+    // ---------------------------------------------
+
+    createResultsSession();
 
 
-window.RENDER_STATS =
-    renderStatsPage;
+    // ---------------------------------------------
+    // Create date selector
+    // ---------------------------------------------
+
+    initializeDateSelector();
 
 
-window.RENDER_ANALYTICS =
-    renderAnalyticsPage;
+    // ---------------------------------------------
+    // Initial render
+    // ---------------------------------------------
+
+    renderResults();
 
 
-console.log(
-    "TIP DISTRIBUTION",
-    tipDistribution
-);
+    // ---------------------------------------------
+    // DEBUG
+    // ---------------------------------------------
+
+    window.RESULTS_SESSION =
+        resultsSession;
+
+
+    window.TIP_DISTRIBUTION =
+        tipDistribution;
+
+
+    window.RENDER_RESULTS =
+        renderResults;
+
+
+    window.RENDER_STATS =
+        renderStatsPage;
+
+
+    window.RENDER_ANALYTICS =
+        renderAnalyticsPage;
+
+
+    console.log(
+        "TIP DISTRIBUTION",
+        tipDistribution
+    );
+
+})();

@@ -1,82 +1,128 @@
+import { HotTipsStorage }
+    from "../storage/storage.js";
+
+
 import { createTipDistribution }
-from "./models/tipDistribution.js";
+    from "./models/tipDistribution.js";
 
 
 import { renderDistribution }
-from "./render/renderDistribution.js";
+    from "./render/renderDistribution.js";
 
 
 import { rebuildDistributionPools }
-from "./logic/rebuildDistributionPools.js";
+    from "./logic/rebuildDistributionPools.js";
 
 
 import { calculateRoleRatios }
-from "./logic/calculateRoleRatios.js";
+    from "./logic/calculateRoleRatios.js";
 
 
 import { distributeTips }
-from "./logic/distributeTips.js";
+    from "./logic/distributeTips.js";
 
 
 import { distributePools }
-from "./logic/distributePools.js";
+    from "./logic/distributePools.js";
+
+
+// =================================================
+// STATE
+// =================================================
+
+let mealBlocks = [];
+
+let tipDistribution = [];
 
 
 // =================================================
 // LOAD DATA
 // =================================================
 
-const mealBlocks =
-    JSON.parse(
-        sessionStorage.getItem("mealBlocks")
-    ) || [];
+async function loadMealBlocks() {
+
+    try {
+
+        const savedMealBlocks =
+            await HotTipsStorage.getItem(
+                "mealBlocks"
+            );
 
 
-console.log(
-    "=============================="
-);
+        mealBlocks =
+            Array.isArray(
+                savedMealBlocks
+            )
+                ? savedMealBlocks
+                : [];
 
 
-console.log(
-    "MEAL BLOCKS IMPORTED FROM INPUTS"
-);
+        console.log(
+            "=============================="
+        );
 
 
-console.log(
-    "=============================="
-);
+        console.log(
+            "MEAL BLOCKS IMPORTED FROM INPUTS"
+        );
 
 
-console.log(
-    mealBlocks
-);
+        console.log(
+            "=============================="
+        );
 
 
-console.log(
-    "RAW MEAL BLOCK JSON:"
-);
+        console.log(
+            mealBlocks
+        );
 
 
-console.log(
-    JSON.stringify(
-        mealBlocks,
-        null,
-        2
-    )
-);
+        console.log(
+            "RAW MEAL BLOCK JSON:"
+        );
 
 
-if (
-    mealBlocks.length === 0
-) {
+        console.log(
+            JSON.stringify(
+                mealBlocks,
+                null,
+                2
+            )
+        );
 
-    alert(
-        "No data found."
-    );
+
+    } catch (error) {
+
+        console.error(
+            "Error loading mealBlocks:",
+            error
+        );
 
 
-    window.location.href =
-        "../start/start.html";
+        mealBlocks = [];
+
+    }
+
+
+    if (
+        mealBlocks.length === 0
+    ) {
+
+        alert(
+            "No data found."
+        );
+
+
+        window.location.href =
+            "../start/start.html";
+
+
+        return false;
+
+    }
+
+
+    return true;
 
 }
 
@@ -85,10 +131,14 @@ if (
 // CREATE DISTRIBUTION
 // =================================================
 
-const tipDistribution =
-    createTipDistribution(
-        mealBlocks
-    );
+function createDistribution() {
+
+    tipDistribution =
+        createTipDistribution(
+            mealBlocks
+        );
+
+}
 
 
 // =================================================
@@ -143,23 +193,17 @@ function recalculateDistribution() {
 
 
 // =================================================
-// UPDATE TOTALS
-// =================================================
-
-// =================================================
-// UPDATE DISTRIBUTION TOTALS
-// =================================================
-
-// =================================================
 // UPDATE DISTRIBUTION TOTALS
 // =================================================
 
 function updateDistributionTotals() {
 
     let originalCashTips = 0;
+
     let originalCardTips = 0;
 
     let totalCashDistributed = 0;
+
     let totalCardDistributed = 0;
 
 
@@ -316,6 +360,7 @@ function updateDistributionTotals() {
 
 }
 
+
 // =================================================
 // MONEY
 // =================================================
@@ -336,14 +381,29 @@ function money(
 // SAVE RESULTS
 // =================================================
 
-function saveTipDistribution() {
+async function saveTipDistribution() {
 
-    sessionStorage.setItem(
-        "tipDistribution",
-        JSON.stringify(
+    try {
+
+        await HotTipsStorage.setItem(
+            "tipDistribution",
             tipDistribution
-        )
-    );
+        );
+
+
+        console.log(
+            "Tip distribution saved."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error saving tip distribution:",
+            error
+        );
+
+    }
 
 }
 
@@ -389,7 +449,7 @@ function refreshUI() {
 
 document.addEventListener(
     "change",
-    (event) => {
+    async (event) => {
 
         if (
             !event.target.classList.contains(
@@ -516,6 +576,13 @@ document.addEventListener(
 
 
         // -----------------------------------------
+        // SAVE UPDATED DISTRIBUTION
+        // -----------------------------------------
+
+        await saveTipDistribution();
+
+
+        // -----------------------------------------
         // REFRESH EVERYTHING
         // -----------------------------------------
 
@@ -562,7 +629,7 @@ document
 // NAVIGATION
 // =================================================
 
-function goToResults() {
+async function goToResults() {
 
     // -----------------------------------------
     // Make absolutely sure final values are
@@ -572,8 +639,16 @@ function goToResults() {
     recalculateDistribution();
 
 
-    saveTipDistribution();
+    // -----------------------------------------
+    // Wait for IndexedDB save to complete
+    // -----------------------------------------
 
+    await saveTipDistribution();
+
+
+    // -----------------------------------------
+    // Navigate
+    // -----------------------------------------
 
     window.location.href =
         "../results/results.html";
@@ -648,7 +723,43 @@ document
 
 
 // =================================================
-// START
+// INITIALIZE PAGE
 // =================================================
 
-refreshUI();
+(async () => {
+
+    /*
+        IMPORTANT:
+
+        Wait for IndexedDB before creating
+        the distribution.
+
+        This prevents the distribution from
+        being created from an empty array.
+    */
+
+    const hasData =
+        await loadMealBlocks();
+
+
+    if (!hasData) {
+
+        return;
+
+    }
+
+
+    // ---------------------------------------------
+    // Create distribution from loaded data
+    // ---------------------------------------------
+
+    createDistribution();
+
+
+    // ---------------------------------------------
+    // Initial render
+    // ---------------------------------------------
+
+    refreshUI();
+
+})();

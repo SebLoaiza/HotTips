@@ -1,18 +1,41 @@
-import { readCsv } from "./parsing/csv.js";
+import { HotTipsStorage }
+    from "../storage/storage.js";
 
-import { createMealBlocks } from "./models/mealBlock.js";
-import { createMealParticipations } from "./models/mealParticipation.js";
-import { createOrders } from "./models/order.js";
-import { createPayments } from "./models/payment.js";
+import { readCsv }
+    from "./parsing/csv.js";
 
-import { assignMealParticipations } from "./logic/assignMealParticipations.js";
-import { assignOrdersToEmployees } from "./logic/assignOrdersToEmployees.js";
-import { assignOrders } from "./logic/assignOrders.js";
-import { enrichOrdersWithPayments } from "./logic/enrichOrdersWithPayments.js";
-import { calculateParticipationTotals } from "./logic/calculateParticipationTotals.js";
+import { createMealBlocks }
+    from "./models/mealBlock.js";
 
-import { renderTipTables } from "./render/tipTables.js";
-import { renderCashCollectedTables } from "./render/cashCollectedTables.js";
+import { createMealParticipations }
+    from "./models/mealParticipation.js";
+
+import { createOrders }
+    from "./models/order.js";
+
+import { createPayments }
+    from "./models/payment.js";
+
+import { assignMealParticipations }
+    from "./logic/assignMealParticipations.js";
+
+import { assignOrdersToEmployees }
+    from "./logic/assignOrdersToEmployees.js";
+
+import { assignOrders }
+    from "./logic/assignOrders.js";
+
+import { enrichOrdersWithPayments }
+    from "./logic/enrichOrdersWithPayments.js";
+
+import { calculateParticipationTotals }
+    from "./logic/calculateParticipationTotals.js";
+
+import { renderTipTables }
+    from "./render/tipTables.js";
+
+import { renderCashCollectedTables }
+    from "./render/cashCollectedTables.js";
 
 
 // =================================================
@@ -20,8 +43,11 @@ import { renderCashCollectedTables } from "./render/cashCollectedTables.js";
 // =================================================
 
 let currentMealBlocks = [];
+
 let currentMealParticipations = [];
+
 let currentOrders = [];
+
 let currentPayments = [];
 
 
@@ -65,7 +91,9 @@ const paymentCard =
 // =================================================
 
 if (nextButton) {
+
     nextButton.disabled = true;
+
 }
 
 
@@ -76,27 +104,36 @@ if (nextButton) {
 function hasShiftData() {
 
     return (
-        Array.isArray(currentMealBlocks) &&
+        Array.isArray(
+            currentMealBlocks
+        ) &&
         currentMealBlocks.length > 0
     );
+
 }
 
 
 function hasOrderData() {
 
     return (
-        Array.isArray(currentOrders) &&
+        Array.isArray(
+            currentOrders
+        ) &&
         currentOrders.length > 0
     );
+
 }
 
 
 function hasPaymentData() {
 
     return (
-        Array.isArray(currentPayments) &&
+        Array.isArray(
+            currentPayments
+        ) &&
         currentPayments.length > 0
     );
+
 }
 
 
@@ -111,6 +148,7 @@ function hasShiftFile() {
         shiftInput.files &&
         shiftInput.files.length > 0
     );
+
 }
 
 
@@ -121,6 +159,7 @@ function hasOrderFile() {
         orderInput.files &&
         orderInput.files.length > 0
     );
+
 }
 
 
@@ -131,6 +170,7 @@ function hasPaymentFile() {
         paymentInput.files &&
         paymentInput.files.length > 0
     );
+
 }
 
 
@@ -147,9 +187,13 @@ if (shiftInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
+
 
             try {
 
@@ -158,11 +202,15 @@ if (shiftInput) {
 
 
                 currentMealBlocks =
-                    createMealBlocks(rows);
+                    createMealBlocks(
+                        rows
+                    );
 
 
                 currentMealParticipations =
-                    createMealParticipations(rows);
+                    createMealParticipations(
+                        rows
+                    );
 
 
                 shiftCard?.classList.add(
@@ -170,7 +218,7 @@ if (shiftInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
             } catch (error) {
@@ -180,9 +228,11 @@ if (shiftInput) {
                     error
                 );
 
+
                 shiftCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -207,9 +257,13 @@ if (orderInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
+
 
             try {
 
@@ -218,7 +272,9 @@ if (orderInput) {
 
 
                 currentOrders =
-                    createOrders(rows);
+                    createOrders(
+                        rows
+                    );
 
 
                 orderCard?.classList.add(
@@ -226,7 +282,7 @@ if (orderInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
             } catch (error) {
@@ -236,9 +292,11 @@ if (orderInput) {
                     error
                 );
 
+
                 orderCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -263,9 +321,13 @@ if (paymentInput) {
             const file =
                 event.target.files[0];
 
+
             if (!file) {
+
                 return;
+
             }
+
 
             try {
 
@@ -274,7 +336,9 @@ if (paymentInput) {
 
 
                 currentPayments =
-                    createPayments(rows);
+                    createPayments(
+                        rows
+                    );
 
 
                 paymentCard?.classList.add(
@@ -282,7 +346,7 @@ if (paymentInput) {
                 );
 
 
-                rebuildMealBlocks();
+                await rebuildMealBlocks();
 
 
             } catch (error) {
@@ -292,9 +356,11 @@ if (paymentInput) {
                     error
                 );
 
+
                 paymentCard?.classList.remove(
                     "completed"
                 );
+
 
                 updateContinueButton();
 
@@ -310,12 +376,13 @@ if (paymentInput) {
 // REBUILD MEAL BLOCKS
 // =================================================
 
-function rebuildMealBlocks() {
+async function rebuildMealBlocks() {
 
     /*
         Only perform the logic that is possible
         with the data currently available.
     */
+
 
     if (
         currentMealBlocks.length > 0 &&
@@ -372,15 +439,24 @@ function rebuildMealBlocks() {
     }
 
 
-    // Save the current state
-    saveState();
+    // -------------------------------------------------
+    // Save current state
+    // -------------------------------------------------
+
+    await saveState();
 
 
+    // -------------------------------------------------
     // Re-render everything
+    // -------------------------------------------------
+
     refreshUI();
 
 
+    // -------------------------------------------------
     // Re-check Continue
+    // -------------------------------------------------
+
     updateContinueButton();
 
 }
@@ -394,11 +470,14 @@ function refreshUI() {
 
     renderOverallTotals();
 
+
     renderOverallCashSales();
+
 
     renderTipTables(
         currentMealBlocks
     );
+
 
     renderCashCollectedTables(
         currentMealBlocks
@@ -411,38 +490,47 @@ function refreshUI() {
 // SAVE STATE
 // =================================================
 
-function saveState() {
+async function saveState() {
 
-    sessionStorage.setItem(
-        "mealBlocks",
-        JSON.stringify(
+    try {
+
+        await HotTipsStorage.setItem(
+            "mealBlocks",
             currentMealBlocks
-        )
-    );
+        );
 
 
-    sessionStorage.setItem(
-        "mealParticipations",
-        JSON.stringify(
+        await HotTipsStorage.setItem(
+            "mealParticipations",
             currentMealParticipations
-        )
-    );
+        );
 
 
-    sessionStorage.setItem(
-        "orders",
-        JSON.stringify(
+        await HotTipsStorage.setItem(
+            "orders",
             currentOrders
-        )
-    );
+        );
 
 
-    sessionStorage.setItem(
-        "payments",
-        JSON.stringify(
+        await HotTipsStorage.setItem(
+            "payments",
             currentPayments
-        )
-    );
+        );
+
+
+        console.log(
+            "HotTips state saved."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error saving HotTips state:",
+            error
+        );
+
+    }
 
 }
 
@@ -451,57 +539,91 @@ function saveState() {
 // LOAD STATE
 // =================================================
 
-function loadState() {
-
-    const savedBlocks =
-        sessionStorage.getItem(
-            "mealBlocks"
-        );
-
-    const savedParticipations =
-        sessionStorage.getItem(
-            "mealParticipations"
-        );
-
-    const savedOrders =
-        sessionStorage.getItem(
-            "orders"
-        );
-
-    const savedPayments =
-        sessionStorage.getItem(
-            "payments"
-        );
-
-
-    // ---------------------------------------------
-    // LOAD EACH DATASET
-    // ---------------------------------------------
+async function loadState() {
 
     try {
 
-        currentMealBlocks =
-            JSON.parse(
-                savedBlocks || "[]"
+        const savedBlocks =
+            await HotTipsStorage.getItem(
+                "mealBlocks"
             );
+
+
+        const savedParticipations =
+            await HotTipsStorage.getItem(
+                "mealParticipations"
+            );
+
+
+        const savedOrders =
+            await HotTipsStorage.getItem(
+                "orders"
+            );
+
+
+        const savedPayments =
+            await HotTipsStorage.getItem(
+                "payments"
+            );
+
+
+        // ---------------------------------------------
+        // LOAD EACH DATASET
+        // ---------------------------------------------
+
+        currentMealBlocks =
+            Array.isArray(
+                savedBlocks
+            )
+                ? savedBlocks
+                : [];
 
 
         currentMealParticipations =
-            JSON.parse(
-                savedParticipations || "[]"
-            );
+            Array.isArray(
+                savedParticipations
+            )
+                ? savedParticipations
+                : [];
 
 
         currentOrders =
-            JSON.parse(
-                savedOrders || "[]"
-            );
+            Array.isArray(
+                savedOrders
+            )
+                ? savedOrders
+                : [];
 
 
         currentPayments =
-            JSON.parse(
-                savedPayments || "[]"
-            );
+            Array.isArray(
+                savedPayments
+            )
+                ? savedPayments
+                : [];
+
+
+        console.log(
+            "HotTips state loaded."
+        );
+
+
+        console.log(
+            {
+                mealBlocks:
+                    currentMealBlocks.length,
+
+                mealParticipations:
+                    currentMealParticipations.length,
+
+                orders:
+                    currentOrders.length,
+
+                payments:
+                    currentPayments.length
+            }
+        );
+
 
     } catch (error) {
 
@@ -560,7 +682,7 @@ function updateCardStatus() {
 
         1. Its file is currently selected
         OR
-        2. Its data was loaded from sessionStorage
+        2. Its data was loaded from IndexedDB
     */
 
 
@@ -606,7 +728,9 @@ function updateCardStatus() {
 function updateContinueButton() {
 
     if (!nextButton) {
+
         return;
+
     }
 
 
@@ -754,34 +878,42 @@ if (debugButton) {
 
 if (nextButton) {
 
-    nextButton.onclick = () => {
+    nextButton.onclick =
+        async () => {
 
-        /*
-            Run the check one last time before
-            navigating.
-        */
+            /*
+                Run the check one last time before
+                navigating.
+            */
 
-        updateContinueButton();
-
-
-        if (nextButton.disabled) {
-
-            console.warn(
-                "Cannot continue. Required data is missing."
-            );
-
-            return;
-
-        }
+            updateContinueButton();
 
 
-        saveState();
+            if (nextButton.disabled) {
+
+                console.warn(
+                    "Cannot continue. Required data is missing."
+                );
+
+                return;
+
+            }
 
 
-        window.location.href =
-            "../inputs/inputs.html";
+            /*
+                IMPORTANT:
 
-    };
+                Wait for IndexedDB to finish writing
+                before navigating to the next page.
+            */
+
+            await saveState();
+
+
+            window.location.href =
+                "../inputs/inputs.html";
+
+        };
 
 }
 
@@ -792,59 +924,97 @@ if (nextButton) {
 
 if (resetButton) {
 
-    resetButton.onclick = () => {
+    resetButton.onclick =
+        async () => {
 
-        const confirmed =
-            confirm(
-                "Reset the current process?\n\nAll imported files and calculations will be removed."
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
+            const confirmed =
+                confirm(
+                    "Reset the current process?\n\nAll imported files and calculations will be removed."
+                );
 
 
-        sessionStorage.clear();
+            if (!confirmed) {
+
+                return;
+
+            }
 
 
-        currentMealBlocks = [];
+            /*
+                Clear our IndexedDB storage instead
+                of sessionStorage.
+            */
 
-        currentMealParticipations = [];
+            try {
 
-        currentOrders = [];
-
-        currentPayments = [];
-
-
-        /*
-            Clear the actual file inputs too.
-        */
-
-        if (shiftInput) {
-            shiftInput.value = "";
-        }
+                await HotTipsStorage.clear();
 
 
-        if (orderInput) {
-            orderInput.value = "";
-        }
+            } catch (error) {
+
+                console.error(
+                    "Error clearing HotTips storage:",
+                    error
+                );
+
+            }
 
 
-        if (paymentInput) {
-            paymentInput.value = "";
-        }
+            // -----------------------------------------
+            // Clear memory
+            // -----------------------------------------
+
+            currentMealBlocks = [];
+
+            currentMealParticipations = [];
+
+            currentOrders = [];
+
+            currentPayments = [];
 
 
-        updateCardStatus();
+            // -----------------------------------------
+            // Clear file inputs
+            // -----------------------------------------
 
-        updateContinueButton();
+            if (shiftInput) {
+
+                shiftInput.value = "";
+
+            }
 
 
-        window.location.href =
-            "../index.html";
+            if (orderInput) {
 
-    };
+                orderInput.value = "";
+
+            }
+
+
+            if (paymentInput) {
+
+                paymentInput.value = "";
+
+            }
+
+
+            // -----------------------------------------
+            // Update UI
+            // -----------------------------------------
+
+            updateCardStatus();
+
+            updateContinueButton();
+
+
+            // -----------------------------------------
+            // Return home
+            // -----------------------------------------
+
+            window.location.href =
+                "../index.html";
+
+        };
 
 }
 
@@ -857,9 +1027,14 @@ document
     .getElementById("backButton")
     ?.addEventListener(
         "click",
-        () => {
+        async () => {
 
-            saveState();
+            /*
+                Save everything before leaving
+                this page.
+            */
+
+            await saveState();
 
 
             window.location.href =
@@ -902,7 +1077,9 @@ function renderOverallTotals() {
 
 
     if (!output) {
+
         return;
+
     }
 
 
@@ -968,7 +1145,9 @@ function renderOverallCashSales() {
 
 
     if (!output) {
+
         return;
+
     }
 
 
@@ -1022,31 +1201,35 @@ function renderOverallCashSales() {
 
 
 // =================================================
-// LOAD SAVED STATE
+// INITIALIZE PAGE
 // =================================================
 
-loadState();
+(async () => {
+
+    /*
+        IMPORTANT:
+
+        We MUST wait for IndexedDB to finish loading
+        before rendering anything.
+
+        This prevents the page from rendering empty
+        tables before the saved data has arrived.
+    */
+
+    await loadState();
 
 
-// =================================================
-// RENDER SAVED TABLES
-// =================================================
+    // ---------------------------------------------
+    // Render saved data
+    // ---------------------------------------------
 
-/*
-    IMPORTANT:
-
-    Always refresh the UI after loading.
-
-    This is what makes the previously generated
-    tables appear again even though the file inputs
-    themselves are empty.
-*/
-
-refreshUI();
+    refreshUI();
 
 
-// =================================================
-// FINAL CONTINUE CHECK
-// =================================================
+    // ---------------------------------------------
+    // Final button check
+    // ---------------------------------------------
 
-updateContinueButton();
+    updateContinueButton();
+
+})();
