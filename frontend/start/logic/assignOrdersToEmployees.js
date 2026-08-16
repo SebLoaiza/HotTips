@@ -59,21 +59,35 @@ export function assignOrdersToEmployees(mealBlocks) {
 
 
                 /*
-                    Online orders are not assigned
-                    to an employee.
+                    Online orders do not belong to an employee.
 
-                    Instead, their sales are stored
-                    directly on the meal block.
+                    Only the TIP + GRATUITY should enter
+                    the distribution system.
 
                     Example:
 
-                    block.online_total = 125.50
+                    Sales       = $125.50
+                    Tip         = $20.00
+                    Gratuity    = $5.00
+
+                    online_total = $25.00
                 */
 
-                block.online_total +=
+                const tip =
                     Number(
-                        order.amount || 0
+                        order.tip ?? 0
                     );
+
+
+                const gratuity =
+                    Number(
+                        order.gratuity ?? 0
+                    );
+
+
+                block.online_total +=
+                    tip +
+                    gratuity;
 
 
                 continue;

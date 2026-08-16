@@ -1204,115 +1204,75 @@ function createSummaryItem(
 
 // =========================================================
 // GET TOTAL CARD TIPS
+//
+// IMPORTANT:
+//
+// This is the TOTAL CARD TIP MONEY after the card fee.
+//
+// It includes:
+//
+//     1. Card money sent into pools
+//     2. Card money kept by employees
+//
+// Example:
+//
+// Card after fee = $100
+//
+// $30 -> BOH
+// $10 -> Busser
+// $5  -> Host
+// $55 -> Server keeps
+//
+// Header:
+//
+// $30 + $10 + $5 + $55 = $100
+//
 // =========================================================
 
 function getTotalCardTips(
     block
 ) {
 
-    const roleCardValues = [
+    // =====================================================
+    // CARD MONEY SENT INTO POOLS
+    // =====================================================
 
-        block.servers_card ?? 0,
-
-        block.busser_card ?? 0,
-
-        block.host_card ?? 0,
-
-        block.boh_card ?? 0
-
-    ];
-
-
-    const hasRoleCard =
-        roleCardValues.some(
-            value =>
-                Number(value) !== 0
+    const pooledCard =
+        toNumber(
+            block.servers_card
+        )
+        +
+        toNumber(
+            block.busser_card
+        )
+        +
+        toNumber(
+            block.host_card
+        )
+        +
+        toNumber(
+            block.boh_card
         );
 
 
-    if (
-        hasRoleCard
-    ) {
+    // =====================================================
+    // CARD MONEY KEPT BY EMPLOYEES
+    // =====================================================
 
-        return roleCardValues.reduce(
-            (
-                total,
-                value
-            ) => {
-
-                return total +
-                    (Number(value) || 0);
-
-            },
-            0
-        );
-
-    }
-
-
-    return (
-        block.tipOwners ?? []
-    ).reduce(
+    const keptCard =
         (
-            total,
-            employee
-        ) => {
-
-            return total +
-                Number(
-                    employee.card_after_fee ??
-                    employee.card_tips ??
-                    0
-                );
-
-        },
-        0
-    );
-
-}
-
-
-// =========================================================
-// GET TOTAL CASH TIPS
-// =========================================================
-
-function getTotalCashTips(
-    block
-) {
-
-    const roleCashValues = [
-
-        block.servers_cash ?? 0,
-
-        block.busser_cash ?? 0,
-
-        block.host_cash ?? 0,
-
-        block.boh_cash ?? 0
-
-    ];
-
-
-    const hasRoleCash =
-        roleCashValues.some(
-            value =>
-                Number(value) !== 0
-        );
-
-
-    if (
-        hasRoleCash
-    ) {
-
-        return roleCashValues.reduce(
+            block.tipOwners ?? []
+        ).reduce(
             (
                 total,
-                value
+                employee
             ) => {
 
                 return total +
                     Math.max(
-                        Number(value) || 0,
+                        toNumber(
+                            employee.card_kept
+                        ),
                         0
                     );
 
@@ -1320,33 +1280,104 @@ function getTotalCashTips(
             0
         );
 
-    }
 
+    // =====================================================
+    // TOTAL CARD
+    // =====================================================
 
     return (
-        block.tipOwners ?? []
-    ).reduce(
+        pooledCard +
+        keptCard
+    );
+
+}
+
+
+// =========================================================
+// GET TOTAL CASH TIPS
+//
+// IMPORTANT:
+//
+// This is the TOTAL CASH TIP MONEY.
+//
+// It includes:
+//
+//     1. Cash money sent into pools
+//     2. Cash money kept by employees
+//
+// =========================================================
+
+function getTotalCashTips(
+    block
+) {
+
+    // =====================================================
+    // CASH MONEY SENT INTO POOLS
+    // =====================================================
+
+    const pooledCash =
+        Math.max(
+            toNumber(
+                block.servers_cash
+            ),
+            0
+        )
+        +
+        Math.max(
+            toNumber(
+                block.busser_cash
+            ),
+            0
+        )
+        +
+        Math.max(
+            toNumber(
+                block.host_cash
+            ),
+            0
+        )
+        +
+        Math.max(
+            toNumber(
+                block.boh_cash
+            ),
+            0
+        );
+
+
+    // =====================================================
+    // CASH MONEY KEPT BY EMPLOYEES
+    // =====================================================
+
+    const keptCash =
         (
-            total,
-            employee
-        ) => {
+            block.tipOwners ?? []
+        ).reduce(
+            (
+                total,
+                employee
+            ) => {
 
-            const cash =
-                Number(
-                    employee.cash_remaining ??
-                    employee.cash_tips ??
-                    0
-                );
+                return total +
+                    Math.max(
+                        toNumber(
+                            employee.cash_kept
+                        ),
+                        0
+                    );
+
+            },
+            0
+        );
 
 
-            return total +
-                Math.max(
-                    cash,
-                    0
-                );
+    // =====================================================
+    // TOTAL CASH
+    // =====================================================
 
-        },
-        0
+    return (
+        pooledCash +
+        keptCash
     );
 
 }
@@ -1355,36 +1386,12 @@ function getTotalCashTips(
 // =========================================================
 // GET POOL AMOUNT
 //
-// IMPORTANT:
-//
 // Pool amount is:
 //
 //     POOL RECEIVED
 //     +
 //     EMPLOYEES IN THAT ROLE'S KEPT TIPS
 //
-// Example:
-//
-// Server pool received = $400
-//
-// John:
-//     card kept = $40
-//     cash kept = $20
-//
-// Jane:
-//     card kept = $30
-//     cash kept = $10
-//
-// Server total:
-//
-//     $400
-//     + $40
-//     + $20
-//     + $30
-//     + $10
-//     = $500
-//
-// The bar represents $500.
 // =========================================================
 
 function getPoolAmount(
@@ -1491,27 +1498,12 @@ function getPoolDistributedAmount(
 // =========================================================
 // GET POOL KEPT AMOUNT
 //
-// THIS IS THE IMPORTANT PART.
-//
-// We do NOT use:
-//
-//     server_card_contribution
-//
-// because that represents money contributed toward
-// the server pool, not necessarily money the server
-// personally kept.
-//
-// Instead we look at the actual employees belonging
-// to the role and add:
+// We use the actual money kept by employees:
 //
 //     card_kept
 //     +
 //     cash_kept
 //
-// for those employees.
-//
-// This means the server bar includes actual server
-// kept money.
 // =========================================================
 
 function getPoolKeptAmount(
@@ -1605,23 +1597,6 @@ function getPoolKeptAmount(
 
 // =========================================================
 // POOL MONEY DISTRIBUTION PERCENTAGE
-//
-// Percentage uses:
-//
-//     distributed + kept
-//
-// for every role.
-//
-// Example:
-//
-// Servers = $600
-// Bussers = $200
-// Hosts   = $100
-// BOH     = $100
-//
-// Total = $1,000
-//
-// Servers = 60%
 // =========================================================
 
 function calculatePoolMoneyPercentage(

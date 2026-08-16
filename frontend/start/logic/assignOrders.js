@@ -79,16 +79,7 @@ export function assignOrders(mealBlocks, orders) {
 
 
                 // Track online tips separately
-                if (
-                    order.source === "Online" ||
-                    order.server === "DEFAULT ONLINE ORDERING"
-                ) {
 
-                    block.online_total +=
-                        order.tip +
-                        order.gratuity;
-
-                }
 
 
                 matches++;
