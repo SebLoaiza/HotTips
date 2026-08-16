@@ -23,30 +23,77 @@
 <body>
 
 
+<!-- =================================================
+     STICKY HEADER
+================================================== -->
+
 <header class="app-header">
 
-    <img
-        src="logo.png"
-        class="logo"
-        alt="HotTips"
-    >
+
+    <div class="header-brand">
+
+        <img
+            src="logo.png"
+            class="logo"
+            alt="HotTips"
+        >
 
 
-    <div class="header-text">
+        <div class="header-text">
 
-        <h1>
-            HotTips
-        </h1>
+            <h1>
+                HotTips
+            </h1>
 
-        <p>
-            Toast Inputs
-        </p>
+            <p>
+                Toast Inputs
+            </p>
+
+        </div>
 
     </div>
+
+
+
+    <!-- =================================================
+         TOP NAVIGATION
+    ================================================== -->
+
+    <nav class="top-navigation">
+
+
+        <button
+            id="backButton"
+            class="nav-button back-button"
+        >
+
+            ← Back
+
+        </button>
+
+
+
+        <button
+            id="nextPage"
+            class="nav-button continue-button"
+            disabled
+        >
+
+            Continue →
+
+        </button>
+
+
+    </nav>
+
 
 </header>
 
 
+
+<!-- =================================================
+     MAIN
+================================================== -->
 
 <main>
 
@@ -58,148 +105,177 @@
     <section class="panel process-panel">
 
 
-        <h2>
-            Toast Inputs
-        </h2>
+        <div class="section-heading">
 
 
-        <p class="page-description">
+            <div>
 
-            Upload your shift, order, and payment CSV files
-            to automatically calculate employee tips,
-            cash payments, and daily tip distribution.
-
-        </p>
+                <h2>
+                    Toast Inputs
+                </h2>
 
 
+                <p class="page-description">
+
+                    Upload your shift, order, and payment CSV
+                    files to automatically calculate employee
+                    tips, cash payments, and daily tip
+                    distribution.
+
+                </p>
+
+            </div>
+
+
+
+            <button
+                id="resetProcess"
+                class="danger-button reset-button"
+            >
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             INPUT CARDS
+        ================================================== -->
 
         <div class="process-flow">
 
 
-            <!-- SHIFT -->
+            <!-- =================================================
+                 SHIFT
+            ================================================== -->
 
             <div
                 class="upload-card process-step"
                 id="shiftCard"
             >
 
-                <label for="shiftCsv">
-
-                    TimeEntries CSV
-
-                </label>
+                <div class="upload-card-content">
 
 
-                <input
-                    id="shiftCsv"
-                    type="file"
-                    accept=".csv"
-                >
+                    <label for="shiftCsv">
+
+                        TimeEntries CSV
+
+                    </label>
+
+
+                    <p class="upload-description">
+
+                        Employee shifts, roles, and hours
+                        from Toast.
+
+                    </p>
+
+
+                    <div class="file-input-wrapper">
+
+                        <input
+                            id="shiftCsv"
+                            type="file"
+                            accept=".csv"
+                        >
+
+                    </div>
+
+
+                </div>
 
             </div>
 
 
 
-            <div class="flow-arrow">
-                →
-            </div>
-
-
-
-            <!-- ORDERS -->
+            <!-- =================================================
+                 ORDERS
+            ================================================== -->
 
             <div
                 class="upload-card process-step"
                 id="orderCard"
             >
 
-                <label for="orderCsv">
-
-                    OrderDetails CSV
-
-                </label>
+                <div class="upload-card-content">
 
 
-                <input
-                    id="orderCsv"
-                    type="file"
-                    accept=".csv"
-                >
+                    <label for="orderCsv">
+
+                        OrderDetails CSV
+
+                    </label>
+
+
+                    <p class="upload-description">
+
+                        Orders, tips, gratuity, and sales
+                        information from Toast.
+
+                    </p>
+
+
+                    <div class="file-input-wrapper">
+
+                        <input
+                            id="orderCsv"
+                            type="file"
+                            accept=".csv"
+                        >
+
+                    </div>
+
+
+                </div>
 
             </div>
 
 
 
-            <div class="flow-arrow">
-                →
-            </div>
-
-
-
-            <!-- PAYMENTS -->
+            <!-- =================================================
+                 PAYMENTS
+            ================================================== -->
 
             <div
                 class="upload-card process-step"
                 id="paymentCard"
             >
 
-                <label for="paymentCsv">
-
-                    PaymentDetails CSV
-
-                </label>
+                <div class="upload-card-content">
 
 
-                <input
-                    id="paymentCsv"
-                    type="file"
-                    accept=".csv"
-                >
+                    <label for="paymentCsv">
 
-            </div>
+                        PaymentDetails CSV
+
+                    </label>
 
 
+                    <p class="upload-description">
 
-            <div class="flow-arrow">
-                →
-            </div>
+                        Payment methods and cash/card
+                        transaction information.
 
-
-
-            <!-- BUTTONS -->
-
-            <div class="continue-step">
+                    </p>
 
 
-                <button
-                    id="backButton"
-                    class="back-button"
-                >
+                    <div class="file-input-wrapper">
 
-                    ← Back
+                        <input
+                            id="paymentCsv"
+                            type="file"
+                            accept=".csv"
+                        >
 
-                </button>
-
-
-                <button
-                    id="nextPage"
-                    disabled
-                >
-
-                    Continue →
-
-                </button>
+                    </div>
 
 
-                <button
-                    id="resetProcess"
-                    class="danger-button reset-button"
-                >
-
-                    Reset
-
-                </button>
-
+                </div>
 
             </div>
 
@@ -349,6 +425,10 @@
 
 
 
+<!-- =================================================
+     FOOTER
+================================================== -->
+
 <footer>
 
     HotTips • Toast Inputs
@@ -357,10 +437,19 @@
 
 
 
+<!-- =================================================
+     PAPAPARSE
+================================================== -->
+
 <script
     src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
 ></script>
 
+
+
+<!-- =================================================
+     APPLICATION
+================================================== -->
 
 <script
     type="module"

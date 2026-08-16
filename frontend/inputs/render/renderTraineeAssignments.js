@@ -55,28 +55,6 @@ export function renderTraineeAssignments(
 
 
     /* =========================
-       GET DATES
-    ========================= */
-
-    const dates = [
-        ...new Set(
-            mealBlocks.map(
-                block =>
-                    block.day_key ||
-                    block.date
-            )
-        )
-    ];
-
-
-    dates.sort(
-        (a, b) =>
-            new Date(a) -
-            new Date(b)
-    );
-
-
-    /* =========================
        CREATE ONE TABLE PER
        TRAINEE
     ========================= */
@@ -86,10 +64,32 @@ export function renderTraineeAssignments(
         traineeMap.values()
     ) {
 
+        const traineeBlocks =
+            mealBlocks.filter(
+                block =>
+                    block.employees.some(
+                        employee =>
+                            employee.employee_id ===
+                            trainee.employee_id
+                    )
+            );
+
+
+        /*
+            If the trainee has no
+            meal blocks, don't render
+            an empty table.
+        */
+
+        if (!traineeBlocks.length) {
+            continue;
+        }
+
+
         output.appendChild(
             createTraineeTable(
                 trainee,
-                dates,
+                traineeBlocks,
                 mealBlocks,
                 refreshUI
             )
@@ -106,7 +106,7 @@ export function renderTraineeAssignments(
 
 function createTraineeTable(
     trainee,
-    dates,
+    traineeBlocks,
     mealBlocks,
     refreshUI
 ) {
@@ -133,11 +133,13 @@ function createTraineeTable(
         <span>${trainee.role || ""}</span>
     `;
 
-    section.appendChild(title);
+    section.appendChild(
+        title
+    );
 
 
     /* =========================
-       SET ALL NO TRAINER BUTTON
+       SET ALL NO TRAINER
     ========================= */
 
     const noTrainerButton =
@@ -157,7 +159,7 @@ function createTraineeTable(
         "click",
         () => {
 
-            for (const block of mealBlocks) {
+            for (const block of traineeBlocks) {
 
                 const traineeInBlock =
                     block.employees.find(
@@ -193,6 +195,97 @@ function createTraineeTable(
 
     section.appendChild(
         noTrainerButton
+    );
+
+
+    /* =========================
+       GET ONLY DATES WHERE
+       THIS TRAINEE WORKED
+    ========================= */
+
+    const dates = [
+        ...new Set(
+            traineeBlocks.map(
+                block =>
+                    block.day_key ||
+                    block.date
+            )
+        )
+    ];
+
+
+    dates.sort(
+        (a, b) =>
+            compareDates(a, b)
+    );
+
+
+    /* =========================
+       GET ONLY MEALS WHERE
+       THIS TRAINEE WORKED
+    ========================= */
+
+    const mealsByDate =
+        new Map();
+
+
+    for (const block of traineeBlocks) {
+
+        const date =
+            block.day_key ||
+            block.date;
+
+        if (!mealsByDate.has(date)) {
+
+            mealsByDate.set(
+                date,
+                new Set()
+            );
+
+        }
+
+        mealsByDate
+            .get(date)
+            .add(block.meal);
+
+    }
+
+
+    /*
+        Keep the normal meal order,
+        but only include meals that
+        actually exist for this trainee.
+    */
+
+    const mealOrder = [
+        "Breakfast",
+        "Lunch",
+        "Dinner"
+    ];
+
+
+    const meals = [
+        ...new Set(
+            traineeBlocks.map(
+                block =>
+                    block.meal
+            )
+        )
+    ].sort(
+        (a, b) => {
+
+            const aIndex =
+                mealOrder.indexOf(a);
+
+            const bIndex =
+                mealOrder.indexOf(b);
+
+            return (
+                (aIndex === -1 ? 999 : aIndex) -
+                (bIndex === -1 ? 999 : bIndex)
+            );
+
+        }
     );
 
 
@@ -267,20 +360,15 @@ function createTraineeTable(
         document.createElement("tbody");
 
 
-    const meals = [
-        "Breakfast",
-        "Lunch",
-        "Dinner"
-    ];
-
-
     for (const meal of meals) {
 
         const row =
             document.createElement("tr");
 
 
-        /* Meal name */
+        /* =========================
+           MEAL NAME
+        ========================= */
 
         const mealCell =
             document.createElement("td");
@@ -296,9 +384,44 @@ function createTraineeTable(
         );
 
 
-        /* Date cells */
+        /* =========================
+           DATE CELLS
+        ========================= */
 
         for (const date of dates) {
+
+            /*
+                Only render an active
+                assignment cell if this
+                trainee actually worked
+                this meal on this date.
+            */
+
+            const worked =
+                mealsByDate
+                    .get(date)
+                    ?.has(meal);
+
+
+            if (!worked) {
+
+                const cell =
+                    document.createElement("td");
+
+                cell.className =
+                    "trainee-assignment-cell no-meal";
+
+                cell.textContent =
+                    "—";
+
+                row.appendChild(
+                    cell
+                );
+
+                continue;
+
+            }
+
 
             const cell =
                 createAssignmentCell(
@@ -372,7 +495,7 @@ function createAssignmentCell(
 
 
     /*
-        No meal block for this date.
+        No meal block.
     */
 
     if (!block) {
@@ -449,7 +572,9 @@ function createAssignmentCell(
         "assignment-select";
 
 
-    /* Empty option */
+    /* =========================
+       EMPTY OPTION
+    ========================= */
 
     const blank =
         document.createElement("option");
@@ -465,7 +590,9 @@ function createAssignmentCell(
     );
 
 
-    /* No trainer */
+    /* =========================
+       NO TRAINER
+    ========================= */
 
     const noTrainer =
         document.createElement("option");
@@ -481,7 +608,9 @@ function createAssignmentCell(
     );
 
 
-    /* Trainers */
+    /* =========================
+       TRAINERS
+    ========================= */
 
     for (const trainer of trainers) {
 
@@ -533,6 +662,10 @@ function createAssignmentCell(
         "change",
         () => {
 
+            /* =====================
+               NO TRAINER
+            ===================== */
+
             if (
                 select.value ===
                 "__NO_TRAINER__"
@@ -556,6 +689,10 @@ function createAssignmentCell(
             }
 
 
+            /* =====================
+               FIND TRAINER
+            ===================== */
+
             const trainer =
                 trainers.find(
                     employee =>
@@ -563,6 +700,10 @@ function createAssignmentCell(
                         select.value
                 );
 
+
+            /* =====================
+               TRAINER SELECTED
+            ===================== */
 
             if (trainer) {
 
@@ -578,6 +719,10 @@ function createAssignmentCell(
                     trainer.name;
 
             }
+
+            /* =====================
+               EMPTY SELECTION
+            ===================== */
 
             else {
 
@@ -611,18 +756,60 @@ function createAssignmentCell(
 
 
 /* =========================
-   DATE
+   FORMAT DATE
 ========================= */
 
 function formatDate(date) {
 
-    if (!date) return "";
+    if (!date) {
+        return "";
+    }
+
 
     const value =
         String(date).trim();
 
+
+    /* =========================
+       YYYY-MM-DD
+    ========================= */
+
+    const match =
+        value.match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if (match) {
+
+        const year =
+            match[1];
+
+        const month =
+            match[2];
+
+        const day =
+            match[3];
+
+
+        return (
+            month +
+            "/" +
+            day +
+            "/" +
+            year
+        );
+
+    }
+
+
+    /* =========================
+       FALLBACK
+    ========================= */
+
     const parsed =
         new Date(value);
+
 
     if (
         Number.isNaN(
@@ -634,6 +821,7 @@ function formatDate(date) {
 
     }
 
+
     return (
         String(
             parsed.getMonth() + 1
@@ -644,6 +832,59 @@ function formatDate(date) {
         ).padStart(2, "0") +
         "/" +
         parsed.getFullYear()
+    );
+
+}
+
+
+/* =========================
+   COMPARE DATES
+========================= */
+
+function compareDates(
+    a,
+    b
+) {
+
+    const aValue =
+        String(a || "").trim();
+
+    const bValue =
+        String(b || "").trim();
+
+
+    /* =========================
+       YYYY-MM-DD
+    ========================= */
+
+    if (
+        /^\d{4}-\d{2}-\d{2}$/.test(aValue) &&
+        /^\d{4}-\d{2}-\d{2}$/.test(bValue)
+    ) {
+
+        return (
+            aValue.localeCompare(
+                bValue
+            )
+        );
+
+    }
+
+
+    /* =========================
+       FALLBACK
+    ========================= */
+
+    const aDate =
+        new Date(aValue);
+
+    const bDate =
+        new Date(bValue);
+
+
+    return (
+        aDate.getTime() -
+        bDate.getTime()
     );
 
 }

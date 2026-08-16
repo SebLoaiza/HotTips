@@ -29,6 +29,13 @@ export function assignOrdersToEmployees(mealBlocks) {
 
 
         // =================================================
+        // RESET ONLINE TOTAL
+        // =================================================
+
+        block.online_total = 0;
+
+
+        // =================================================
         // MATCH EACH ORDER TO ITS SERVER
         // =================================================
 
@@ -40,9 +47,8 @@ export function assignOrdersToEmployees(mealBlocks) {
 
 
             // =================================================
-            // SKIP ONLINE ORDERS
+            // ONLINE ORDERS
             // =================================================
-
 
             if (
                 order.source === "Online" ||
@@ -50,6 +56,25 @@ export function assignOrdersToEmployees(mealBlocks) {
             ) {
 
                 skippedOnlineOrders++;
+
+
+                /*
+                    Online orders are not assigned
+                    to an employee.
+
+                    Instead, their sales are stored
+                    directly on the meal block.
+
+                    Example:
+
+                    block.online_total = 125.50
+                */
+
+                block.online_total +=
+                    Number(
+                        order.amount || 0
+                    );
+
 
                 continue;
 
@@ -83,7 +108,9 @@ export function assignOrdersToEmployees(mealBlocks) {
                 if (
                     employeeName !== server
                 ) {
+
                     continue;
+
                 }
 
 
@@ -93,12 +120,18 @@ export function assignOrdersToEmployees(mealBlocks) {
 
 
                 employee.order_sales +=
-                    order.amount;
+                    Number(
+                        order.amount || 0
+                    );
 
 
                 employee.card_tips +=
-                    order.tip +
-                    order.gratuity;
+                    Number(
+                        order.tip || 0
+                    ) +
+                    Number(
+                        order.gratuity || 0
+                    );
 
 
                 found = true;
@@ -224,6 +257,31 @@ export function assignOrdersToEmployees(mealBlocks) {
 
 
     // =================================================
+    // ONLINE TOTAL SUMMARY
+    // =================================================
+
+
+    const totalOnlineSales =
+        mealBlocks.reduce(
+            (
+                total,
+                block
+            ) =>
+                total +
+                Number(
+                    block.online_total || 0
+                ),
+            0
+        );
+
+
+    console.log(
+        "Online sales:",
+        totalOnlineSales
+    );
+
+
+    // =================================================
     // FINAL RESULT
     // =================================================
 
@@ -259,7 +317,9 @@ function normalizeName(name) {
 
 
     if (!name) {
+
         return "";
+
     }
 
 

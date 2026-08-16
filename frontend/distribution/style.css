@@ -3,6 +3,10 @@
 }
 
 
+/* =========================================================
+   ROOT
+========================================================= */
+
 :root {
 
     --background: #0b1220;
@@ -23,12 +27,14 @@
     --yellow: #F9F363;
     --cyan: #8be7ff;
 
+    --danger: #ff5c5c;
+
 }
 
 
-/* =========================
+/* =========================================================
    BODY
-========================= */
+========================================================= */
 
 body {
 
@@ -46,7 +52,8 @@ body {
         Arial,
         sans-serif;
 
-    color: var(--text);
+    color:
+        var(--text);
 
     background:
 
@@ -71,13 +78,62 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
+
+/* =========================================================
+   STICKY HEADER
+========================================================= */
 
 .app-header {
 
-    height: 88px;
+    position:
+        sticky;
+
+    top:
+        0;
+
+    z-index:
+        1000;
+
+    min-height:
+        88px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        24px;
+
+    padding:
+        12px 36px;
+
+    background:
+        rgba(11, 18, 32, .96);
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+/* =========================================================
+   HEADER BRAND
+========================================================= */
+
+.header-brand {
 
     display: flex;
 
@@ -85,73 +141,280 @@ body {
 
     gap: 16px;
 
-    padding: 0 36px;
-
-    background:
-        rgba(11, 18, 32, .9);
-
-    border-bottom:
-        1px solid
-        var(--border);
+    min-width: 0;
 
 }
 
 
 .logo {
 
-    width: 75px;
+    width:
+        65px;
 
-    height: 75px;
+    height:
+        65px;
 
-    object-fit: contain;
+    object-fit:
+        contain;
+
+    flex-shrink:
+        0;
+
+}
+
+
+.logo-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    padding:
+        0;
+
+    margin:
+        0;
+
+    width:
+        auto;
+
+    height:
+        auto;
+
+    cursor:
+        pointer;
+
+}
+
+
+.logo-button:hover {
+
+    background:
+        transparent;
+
+    opacity:
+        .85;
+
+}
+
+
+.logo-button:focus-visible {
+
+    outline:
+        2px solid
+        var(--cyan);
+
+    outline-offset:
+        4px;
+
+    border-radius:
+        6px;
+
+}
+
+
+.logo-button .logo {
+
+    display:
+        block;
+
+}
+
+
+.header-text {
+
+    min-width:
+        0;
 
 }
 
 
 .header-text h1 {
 
-    margin: 0;
+    margin:
+        0;
 
-    font-size: 24px;
+    font-size:
+        24px;
+
+    line-height:
+        1.2;
 
 }
 
 
 .header-text p {
 
-    margin: 5px 0 0;
+    margin:
+        5px 0 0;
 
-    color: var(--muted);
+    color:
+        var(--muted);
 
-}
-
-
-/* =========================
-   MAIN
-========================= */
-
-main {
-
-    flex: 1;
-
-    padding: 70px 90px;
+    font-size:
+        14px;
 
 }
 
 
-.panel {
+/* =========================================================
+   TOP NAVIGATION
+========================================================= */
 
-    background: var(--surface);
+.top-navigation {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    flex-shrink:
+        0;
+
+}
+
+
+.nav-button {
+
+    width:
+        150px;
+
+    height:
+        44px;
+
+    padding:
+        0 20px;
 
     border:
         1px solid
         var(--border);
 
-    padding: 32px;
+    border-radius:
+        6px;
 
-    margin-bottom: 40px;
+    background:
+        var(--surface);
 
-    border-radius: 10px;
+    color:
+        var(--text);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        transform .15s ease;
+
+}
+
+
+.nav-button:hover {
+
+    background:
+        var(--surface-hover);
+
+    border-color:
+        var(--border-light);
+
+}
+
+
+.nav-button:active {
+
+    transform:
+        translateY(1px);
+
+}
+
+
+.back-button:hover {
+
+    border-color:
+        var(--cyan);
+
+}
+
+
+.continue-button {
+
+    background:
+        var(--pink);
+
+    border-color:
+        var(--pink);
+
+}
+
+
+.continue-button:hover {
+
+    background:
+        var(--pink-hover);
+
+    border-color:
+        var(--pink-hover);
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+
+    flex:
+        1;
+
+    padding:
+        35px 70px;
+
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel {
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    padding:
+        30px;
+
+    margin-bottom:
+        35px;
+
+    border-radius:
+        10px;
 
 }
 
@@ -161,111 +424,50 @@ main {
     margin:
         0 0 15px;
 
-    font-size: 32px;
+    font-size:
+        32px;
 
 }
 
 
 .page-description {
 
-    max-width: 650px;
+    max-width:
+        650px;
 
-    margin-bottom: 35px;
+    margin:
+        0 0 30px;
 
-    color: var(--muted);
+    color:
+        var(--muted);
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    line-height: 1.6;
-
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.sticky-nav {
-
-    position: sticky;
-
-    top: 0;
-
-    z-index: 1000;
-
-    background:
-        rgba(11, 18, 32, .98);
-
-    backdrop-filter:
-        blur(8px);
-
-    border-bottom:
-        1px solid
-        var(--border);
+    line-height:
+        1.6;
 
 }
 
 
-.process-flow {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-
-    gap: 0;
-
-}
-
-
-.continue-step,
-.upload-card {
-
-    padding:
-        12px 26px;
-
-    border-right:
-        1px solid
-        var(--border);
-
-}
-
-
-.continue-step:last-child,
-.upload-card:last-child {
-
-    border-right: none;
-
-}
-
-
-.continue-step:hover,
-.upload-card:hover {
-
-    background:
-        rgba(233, 66, 163, .04);
-
-}
-
-
-/* =========================
+/* =========================================================
    BUTTONS
-========================= */
+========================================================= */
 
 button {
 
-    width: 100%;
+    width:
+        100%;
 
-    height: 44px;
-
-    border-radius: 6px;
+    height:
+        44px;
 
     border:
         1px solid
         var(--border);
+
+    border-radius:
+        6px;
 
     background:
         var(--surface);
@@ -273,9 +475,11 @@ button {
     color:
         var(--text);
 
-    font-weight: 600;
+    font-weight:
+        600;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
 }
 
@@ -284,6 +488,17 @@ button:hover {
 
     background:
         var(--surface-hover);
+
+}
+
+
+button:disabled {
+
+    opacity:
+        .5;
+
+    cursor:
+        not-allowed;
 
 }
 
@@ -309,38 +524,31 @@ button:hover {
 }
 
 
-.navigation-panel {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 20px;
-
-}
-
-
-/* =========================
+/* =========================================================
    DAY TABS
-========================= */
+========================================================= */
 
 .day-tabs {
 
-    display: flex;
+    display:
+        flex;
 
-    gap: 12px;
+    gap:
+        12px;
 
-    flex-wrap: wrap;
+    flex-wrap:
+        wrap;
 
-    margin-bottom: 30px;
+    margin-bottom:
+        30px;
 
 }
 
 
 .day-tabs button {
 
-    width: auto;
+    width:
+        auto;
 
     padding:
         12px 22px;
@@ -367,138 +575,827 @@ button:hover {
 }
 
 
-/* =========================
+/* =========================================================
    MEAL BLOCK
-========================= */
+========================================================= */
 
 .meal-block {
 
-    margin-bottom: 35px;
+    margin-bottom:
+        30px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, .18);
+
+}
+
+
+/* =========================================================
+   MEAL BLOCK HEADER
+========================================================= */
+
+.meal-block-header {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    width:
+        100%;
 
     padding:
-        0 25px 25px;
+        22px 64px 0 26px;
+
+    background:
+        var(--surface);
+
+    cursor:
+        pointer;
+
+    user-select:
+        none;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease;
+
+}
+
+
+.meal-block-header:hover {
 
     background:
         var(--surface-hover);
 
-    border-left:
-        4px solid
+}
+
+
+.meal-block-header:focus-visible {
+
+    outline:
+        2px solid
+        var(--cyan);
+
+    outline-offset:
+        -2px;
+
+}
+
+
+/* =========================================================
+   HIDE OLD JAVASCRIPT ARROW
+========================================================= */
+
+.meal-block-collapse-indicator {
+
+    display:
+        none !important;
+
+}
+
+
+/* =========================================================
+   MEAL BLOCK CHEVRON
+========================================================= */
+
+.meal-block-header::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        32px;
+
+    right:
+        26px;
+
+    width:
+        10px;
+
+    height:
+        10px;
+
+    border-right:
+        2px solid
+        var(--muted);
+
+    border-bottom:
+        2px solid
+        var(--muted);
+
+    transform:
+        rotate(45deg);
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+}
+
+
+.meal-block-header:hover::after {
+
+    border-color:
+        var(--text);
+
+}
+
+
+.meal-block-header:not(.collapsed)::after {
+
+    transform:
+        rotate(225deg);
+
+    border-color:
         var(--cyan);
 
 }
 
 
-.meal-block h2 {
+/* =========================================================
+   EXPAND / COLLAPSE HINT
+========================================================= */
 
-    position: sticky;
+.meal-block-header::before {
 
-    top: 65px;
+    content:
+        "CLICK TO COLLAPSE";
 
-    z-index: 900;
+    position:
+        absolute;
 
-    margin:
-        0 -25px 25px;
+    right:
+        46px;
 
-    padding:
-        18px 25px;
-
-    background:
-        var(--surface-hover);
+    top:
+        49px;
 
     color:
-        var(--yellow);
+        var(--muted);
 
-    font-size: 24px;
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .08em;
+
+    opacity:
+        0;
+
+    transition:
+        opacity .15s ease;
+
+}
+
+
+.meal-block-header.collapsed::before {
+
+    content:
+        "CLICK TO EXPAND";
+
+}
+
+
+.meal-block-header:hover::before {
+
+    opacity:
+        .7;
+
+}
+
+
+/* =========================================================
+   COLLAPSED HEADER
+========================================================= */
+
+.meal-block-header.collapsed {
 
     border-bottom:
         1px solid
         var(--border);
 
-    box-shadow:
-        0 8px 15px
-        rgba(0, 0, 0, .25);
+}
+
+
+/* =========================================================
+   MEAL BLOCK TITLE
+========================================================= */
+
+.meal-block-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    width:
+        100%;
+
+    padding-bottom:
+        18px;
 
 }
 
 
-.meal-block:first-child h2 {
+.meal-block-title-left {
 
-    margin-top: 0;
+    display:
+        flex;
 
-}
+    align-items:
+        center;
 
-
-/* =========================
-   MONEY SUMMARY
-========================= */
-
-.money-summary {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(180px, 1fr)
-        );
-
-    gap: 20px;
-
-    margin-bottom: 25px;
+    gap:
+        14px;
 
 }
 
 
-.money-card {
-
-    background:
-        var(--surface);
-
-    border:
-        1px solid
-        var(--border);
-
-    padding: 20px;
-
-    border-radius: 10px;
-
-}
-
-
-.money-card h3 {
-
-    margin:
-        0 0 10px;
+.meal-block-name {
 
     color:
         var(--yellow);
 
-    font-size: 15px;
+    font-size:
+        23px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .02em;
+
+    text-transform:
+        uppercase;
 
 }
 
 
-.money-card p {
+.meal-block-time {
 
-    margin: 0;
+    color:
+        var(--muted);
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   MEAL MONEY SUMMARY
+========================================================= */
+
+.meal-block-summary {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    width:
+        100%;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+
+.summary-item {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+
+    padding:
+        16px 18px;
+
+    background:
+        var(--surface);
+
+    border-right:
+        1px solid
+        var(--border);
+
+}
+
+
+.summary-item:last-child {
+
+    border-right:
+        none;
+
+}
+
+
+.summary-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .08em;
+
+}
+
+
+.summary-value {
 
     color:
         var(--text);
 
-    font-size: 24px;
+    font-size:
+        22px;
 
-    font-weight: 700;
+    font-weight:
+        800;
 
 }
 
 
-/* =========================
-   EMPLOYEE TABLES
-========================= */
+.summary-item.total {
+
+    background:
+        rgba(
+            233,
+            66,
+            163,
+            .05
+        );
+
+}
+
+
+.summary-item.total .summary-value {
+
+    color:
+        var(--pink);
+
+}
+
+
+/* =========================================================
+   MEAL CONTENT
+========================================================= */
+
+.meal-block-content {
+
+    overflow:
+        hidden;
+
+    max-height:
+        20000px;
+
+    opacity:
+        1;
+
+    transition:
+        max-height .3s ease,
+        opacity .2s ease;
+
+}
+
+
+.meal-block-content.collapsed {
+
+    max-height:
+        0;
+
+    opacity:
+        0;
+
+}
+
+
+/* =========================================================
+   DISTRIBUTION SECTION
+========================================================= */
+
+.meal-distribution {
+
+    width:
+        100%;
+
+    padding:
+        24px 26px 0;
+
+}
+
+
+.section-label {
+
+    margin-bottom:
+        12px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .1em;
+
+}
+
+
+/* =========================================================
+   DISTRIBUTION POOL
+========================================================= */
+
+.distribution-pool {
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+
+.distribution-pool:last-of-type {
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+/* =========================================================
+   DISTRIBUTION POOL HEADER
+========================================================= */
+
+.distribution-pool-header {
+
+    width:
+        100%;
+
+    height:
+        auto;
+
+    min-height:
+        52px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        150px
+        minmax(120px, 1fr)
+        110px
+        25px;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    padding:
+        12px 4px;
+
+    border:
+        none;
+
+    border-radius:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        var(--text);
+
+    cursor:
+        pointer;
+
+    text-align:
+        left;
+
+}
+
+
+.distribution-pool-header:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .025
+        );
+
+}
+
+
+/* =========================================================
+   POOL NAME
+========================================================= */
+
+.pool-name {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.pool-name::after {
+
+    content:
+        attr(data-headcount);
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        500;
+
+}
+
+
+/* =========================================================
+   POOL BAR
+========================================================= */
+
+.pool-bar-container {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    height:
+        9px;
+
+    overflow:
+        hidden;
+
+    background:
+        var(--background-light);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        999px;
+
+}
+
+
+.pool-bar {
+
+    display:
+        block;
+
+    height:
+        100%;
+
+    min-width:
+        0;
+
+    background:
+        var(--cyan);
+
+    border-radius:
+        999px;
+
+    opacity:
+        .8;
+
+    transition:
+        width .25s ease;
+
+}
+
+
+/* =========================================================
+   POOL AMOUNT
+========================================================= */
+
+.pool-amount {
+
+    text-align:
+        right;
+
+    color:
+        var(--text);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   POOL ARROW
+========================================================= */
+
+.pool-arrow {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0;
+
+    transition:
+        transform .2s ease,
+        color .2s ease;
+
+}
+
+
+.pool-arrow::before {
+
+    content:
+        "";
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    border-right:
+        2px solid
+        currentColor;
+
+    border-bottom:
+        2px solid
+        currentColor;
+
+    transform:
+        rotate(-45deg);
+
+    transition:
+        transform .2s ease;
+
+}
+
+
+.distribution-pool.expanded .pool-arrow {
+
+    color:
+        var(--cyan);
+
+}
+
+
+.distribution-pool.expanded .pool-arrow::before {
+
+    transform:
+        rotate(45deg);
+
+}
+
+
+/* =========================================================
+   DISTRIBUTION POOL CONTENT
+========================================================= */
+
+.distribution-pool-content {
+
+    display:
+        none;
+
+    padding:
+        0 0 16px;
+
+}
+
+
+.distribution-pool.expanded
+.distribution-pool-content {
+
+    display:
+        block;
+
+}
+
+
+/* =========================================================
+   EMPLOYEE TABLE INSIDE POOLS
+========================================================= */
+
+.distribution-pool-content .employee-table {
+
+    margin-top:
+        8px;
+
+    border-radius:
+        8px;
+
+}
+
+
+/* =========================================================
+   EMPLOYEE TABLE
+========================================================= */
 
 .employee-table {
 
-    overflow-x: auto;
+    overflow-x:
+        auto;
 
     background:
         var(--surface);
@@ -507,26 +1404,43 @@ button:hover {
         1px solid
         var(--border);
 
-    border-radius: 10px;
+    border-radius:
+        9px;
 
 }
 
 
 .employee-table h3 {
 
-    margin: 20px;
+    margin:
+        0;
+
+    padding:
+        15px 18px;
 
     color:
         var(--cyan);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    border-bottom:
+        1px solid
+        var(--border);
 
 }
 
 
 .employee-table table {
 
-    width: 100%;
+    width:
+        100%;
 
-    min-width: 700px;
+    min-width:
+        700px;
 
     border-collapse:
         collapse;
@@ -542,6 +1456,12 @@ button:hover {
     color:
         var(--yellow);
 
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
 }
 
 
@@ -550,17 +1470,26 @@ button:hover {
     background:
         var(--surface);
 
+    color:
+        var(--text);
+
+    font-size:
+        13px;
+
 }
 
 
 .employee-table th,
 .employee-table td {
 
-    padding: 15px;
+    padding:
+        13px 15px;
 
-    text-align: left;
+    text-align:
+        left;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 
     border-bottom:
         1px solid
@@ -569,23 +1498,546 @@ button:hover {
 }
 
 
-.employee-table tr:hover td {
+.employee-table tbody tr:last-child td {
 
-    background:
-        rgba(233, 66, 163, .05);
+    border-bottom:
+        none;
 
 }
 
 
-/* =========================
+.employee-table tr:hover td {
+
+    background:
+        rgba(
+            233,
+            66,
+            163,
+            .05
+        );
+
+}
+
+
+/* =========================================================
+   TIP PERCENTAGES
+========================================================= */
+
+.tip-percentage {
+
+    margin-left:
+        4px;
+
+    color:
+        var(--pink);
+
+    font-size:
+        .75em;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.employee-table td:nth-child(4) .tip-percentage,
+.employee-table td:nth-child(5) .tip-percentage {
+
+    color:
+        var(--pink);
+
+}
+
+
+/* =========================================================
+   TIP OWNER SECTION
+========================================================= */
+
+.tip-owner-section {
+
+    margin:
+        24px 26px 0;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+
+/* =========================================================
+   TIP OWNER HEADER
+========================================================= */
+
+.tip-owner-header {
+
+    width:
+        100%;
+
+    height:
+        auto;
+
+    min-height:
+        54px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        14px 4px;
+
+    border:
+        none;
+
+    border-radius:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        var(--text);
+
+    cursor:
+        pointer;
+
+    text-align:
+        left;
+
+}
+
+
+.tip-owner-header:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .025
+        );
+
+}
+
+
+.tip-owner-header > span:first-child {
+
+    color:
+        var(--muted);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .08em;
+
+}
+
+
+.tip-owner-header .pool-arrow {
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+}
+
+
+/* =========================================================
+   TIP OWNER CONTENT
+========================================================= */
+
+.tip-owner-content {
+
+    display:
+        none;
+
+    padding:
+        0 0 20px;
+
+}
+
+
+.tip-owner-section.expanded
+.tip-owner-content {
+
+    display:
+        block;
+
+}
+
+
+.tip-owner-section.expanded
+.tip-owner-header
+.pool-arrow {
+
+    color:
+        var(--cyan);
+
+}
+
+
+/* =========================================================
+   EMPLOYEE COUNTS
+========================================================= */
+
+.meal-employee-counts {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px 22px;
+
+    margin:
+        0 26px;
+
+    padding:
+        18px 4px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+    color:
+        var(--muted);
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+}
+
+
+.meal-employee-counts span {
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   TIP POINT INPUT
+========================================================= */
+
+.tip-point-input {
+
+    width:
+        70px;
+
+    padding:
+        8px 9px;
+
+    background:
+        #f4f7ff;
+
+    color:
+        #111827;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        6px;
+
+    font-weight:
+        600;
+
+}
+
+
+.tip-point-input:focus {
+
+    outline:
+        none;
+
+    border-color:
+        var(--cyan);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            139,
+            231,
+            255,
+            .12
+        );
+
+}
+
+
+/* =========================================================
+   NEGATIVE CASH
+========================================================= */
+
+.negative-cash {
+
+    color:
+        var(--danger) !important;
+
+    background:
+        rgba(
+            255,
+            92,
+            92,
+            .12
+        ) !important;
+
+    font-weight:
+        800;
+
+}
+
+
+/* =========================================================
+   DISTRIBUTION TOTALS
+========================================================= */
+
+.distribution-totals {
+
+    width:
+        100%;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        14px;
+
+    margin:
+        20px 0 28px;
+
+}
+
+
+.distribution-total-card {
+
+    padding:
+        15px 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface),
+            var(--background-light)
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        9px;
+
+}
+
+
+.distribution-total-label {
+
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .06em;
+
+}
+
+
+.distribution-total-value {
+
+    display:
+        block;
+
+    color:
+        var(--text);
+
+    font-size:
+        23px;
+
+    font-weight:
+        800;
+
+}
+
+
+#originalCashTips,
+#originalCardTips {
+
+    color:
+        var(--yellow);
+
+    font-weight:
+        800;
+
+    white-space:
+        nowrap;
+
+}
+
+
+#totalCashDistributed,
+#totalCardDistributed {
+
+    color:
+        var(--cyan);
+
+}
+
+
+/* =========================================================
+   OLD MONEY SUMMARY SUPPORT
+========================================================= */
+
+.money-summary {
+
+    width:
+        100%;
+
+    margin:
+        0 0 25px;
+
+    padding:
+        15px 0;
+
+    background:
+        var(--surface);
+
+    border-top:
+        1px solid
+        var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.money-summary table {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+.money-summary th {
+
+    padding:
+        11px 18px;
+
+    background:
+        var(--surface-hover);
+
+    color:
+        var(--yellow);
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.money-summary td {
+
+    padding:
+        11px 18px;
+
+    color:
+        var(--text);
+
+    text-align:
+        center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+.money-summary td:first-child {
+
+    text-align:
+        left;
+
+    color:
+        var(--cyan);
+
+    font-weight:
+        700;
+
+}
+
+
+.money-summary tr:last-child td {
+
+    border-bottom:
+        none;
+
+}
+
+
+/* =========================================================
    POOL SUMMARY
-========================= */
+========================================================= */
 
 .pool-summary {
 
-    margin-top: 30px;
+    margin-top:
+        30px;
 
-    padding: 24px;
+    padding:
+        24px;
 
     background:
         var(--surface);
@@ -594,7 +2046,8 @@ button:hover {
         1px solid
         var(--border);
 
-    border-radius: 10px;
+    border-radius:
+        10px;
 
 }
 
@@ -607,20 +2060,16 @@ button:hover {
     color:
         var(--cyan);
 
-    font-size: 20px;
-
-    font-weight: 700;
+    font-size:
+        20px;
 
 }
 
 
-/* =========================
-   POOL SUMMARY GRID
-========================= */
-
 .pool-summary-grid {
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         repeat(
@@ -628,18 +2077,16 @@ button:hover {
             minmax(180px, 1fr)
         );
 
-    gap: 16px;
+    gap:
+        16px;
 
 }
 
 
-/* =========================
-   POOL CARDS
-========================= */
-
 .pool-card {
 
-    padding: 18px;
+    padding:
+        18px;
 
     background:
         var(--surface-hover);
@@ -648,41 +2095,28 @@ button:hover {
         1px solid
         var(--border);
 
-    border-radius: 8px;
-
-    transition:
-        background .15s ease,
-        border-color .15s ease;
-
-}
-
-
-.pool-card:hover {
-
-    background:
-        #202d47;
-
-    border-color:
-        var(--border-light);
+    border-radius:
+        8px;
 
 }
 
 
 .pool-card-label {
 
-    margin-bottom: 8px;
+    margin-bottom:
+        8px;
 
     color:
         var(--muted);
 
-    font-size: 13px;
+    font-size:
+        13px;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
     text-transform:
         uppercase;
-
-    letter-spacing: .05em;
 
 }
 
@@ -692,73 +2126,23 @@ button:hover {
     color:
         var(--text);
 
-    font-size: 24px;
+    font-size:
+        24px;
 
-    font-weight: 700;
-
-}
-
-
-/* =========================
-   CARD POOL
-========================= */
-
-.pool-card.card-pool {
-
-    border-left:
-        3px solid
-        var(--cyan);
+    font-weight:
+        700;
 
 }
 
 
-/* =========================
-   CASH POOL
-========================= */
-
-.pool-card.cash-pool {
-
-    border-left:
-        3px solid
-        var(--yellow);
-
-}
-
-
-/* =========================
-   TOTAL POOL
-========================= */
-
-.pool-card.total {
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--surface-hover),
-            var(--surface)
-        );
-
-    border-color:
-        var(--pink);
-
-}
-
-
-.pool-card.total .pool-card-value {
-
-    color:
-        var(--pink);
-
-}
-
-
-/* =========================
+/* =========================================================
    POOL TABLES
-========================= */
+========================================================= */
 
 .pool-summary table {
 
-    width: 100%;
+    width:
+        100%;
 
     border-collapse:
         collapse;
@@ -779,8 +2163,6 @@ button:hover {
 
     text-align:
         left;
-
-    font-size: 14px;
 
     border-bottom:
         1px solid
@@ -807,82 +2189,25 @@ button:hover {
 }
 
 
-.pool-summary tr:hover td {
-
-    background:
-        rgba(233, 66, 163, .04);
-
-}
-
-
-/* =========================
-   POOL SECTION TITLES
-========================= */
-
-.pool-section-title {
-
-    margin:
-        28px 0 12px;
-
-    color:
-        var(--cyan);
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-}
-
-
-/* =========================
-   INPUTS
-========================= */
-
-.tip-point-input {
-
-    width: 70px;
-
-    padding: 8px;
-
-    background:
-        #f4f7ff;
-
-    color:
-        #111827;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 6px;
-
-}
-
-
-.tip-point-input:focus {
-
-    outline: none;
-
-    border-color:
-        var(--cyan);
-
-}
-
-
-/* =========================
+/* =========================================================
    DEBUG
-========================= */
+========================================================= */
 
 .debug-panel button {
 
-    margin-bottom: 20px;
+    margin-bottom:
+        20px;
 
 }
 
 
 pre {
 
-    padding: 20px;
+    margin:
+        0;
+
+    padding:
+        20px;
 
     background:
         var(--background);
@@ -891,7 +2216,8 @@ pre {
         1px solid
         var(--border);
 
-    overflow: auto;
+    overflow:
+        auto;
 
     color:
         var(--text);
@@ -899,17 +2225,38 @@ pre {
 }
 
 
-/* =========================
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
+
+.navigation-panel {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        20px;
+
+}
+
+
+/* =========================================================
    FOOTER
-========================= */
+========================================================= */
 
 footer {
 
-    height: 48px;
+    min-height:
+        48px;
 
-    display: flex;
+    display:
+        flex;
 
-    align-items: center;
+    align-items:
+        center;
 
     padding:
         0 36px;
@@ -917,7 +2264,8 @@ footer {
     color:
         var(--muted);
 
-    font-size: 13px;
+    font-size:
+        13px;
 
     border-top:
         1px solid
@@ -926,78 +2274,296 @@ footer {
 }
 
 
-/* =========================
-   NEGATIVE CASH WARNING
-========================= */
+/* =========================================================
+   MOBILE — 900PX
+========================================================= */
 
-.negative-cash {
-
-    color:
-        #ff5c5c;
-
-    background:
-        rgba(
-            255,
-            92,
-            92,
-            .12
-        ) !important;
-
-    font-weight: 700;
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width: 900px) {
-
-    main {
-
-        padding:
-            40px 25px;
-
-    }
-
+@media (max-width: 900px) {
 
     .app-header {
 
         padding:
-            0 20px;
+            12px 20px;
 
     }
 
 
-    .logo {
+    .top-navigation {
 
-        width: 60px;
-
-        height: 60px;
-
-    }
-
-
-    .process-flow {
-
-        grid-template-columns:
-            1fr;
+        gap:
+            8px;
 
     }
 
 
-    .navigation-panel {
+    .nav-button {
 
-        grid-template-columns:
-            1fr;
+        width:
+            130px;
+
+    }
+
+
+    main {
+
+        padding:
+            30px 25px;
 
     }
 
 
     .panel {
 
-        padding: 22px;
+        padding:
+            22px;
+
+    }
+
+
+    .distribution-totals {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .meal-block-title {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            6px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE — 700PX
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .app-header {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            12px;
+
+        padding:
+            14px 16px;
+
+    }
+
+
+    .header-brand {
+
+        width:
+            100%;
+
+    }
+
+
+    .top-navigation {
+
+        width:
+            100%;
+
+    }
+
+
+    .nav-button {
+
+        flex:
+            1;
+
+        width:
+            auto;
+
+    }
+
+
+    main {
+
+        padding:
+            25px 12px;
+
+    }
+
+
+    .meal-block {
+
+        border-radius:
+            8px;
+
+    }
+
+
+    .meal-block-header {
+
+        padding:
+            18px 50px 0 16px;
+
+    }
+
+
+    .meal-block-header::after {
+
+        top:
+            28px;
+
+        right:
+            19px;
+
+    }
+
+
+    .meal-block-header::before {
+
+        right:
+            38px;
+
+        top:
+            45px;
+
+    }
+
+
+    .meal-block-name {
+
+        font-size:
+            20px;
+
+    }
+
+
+    .meal-block-summary {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .summary-item {
+
+        border-right:
+            none;
+
+        border-bottom:
+            1px solid
+            var(--border);
+
+    }
+
+
+    .summary-item:last-child {
+
+        border-bottom:
+            none;
+
+    }
+
+
+    .meal-distribution {
+
+        padding:
+            20px 16px 0;
+
+    }
+
+
+    .distribution-pool-header {
+
+        grid-template-columns:
+            105px
+            minmax(50px, 1fr)
+            80px
+            20px;
+
+        gap:
+            8px;
+
+    }
+
+
+    .pool-name {
+
+        font-size:
+            12px;
+
+    }
+
+
+    .pool-amount {
+
+        font-size:
+            12px;
+
+    }
+
+
+    .meal-employee-counts {
+
+        margin:
+            0 16px;
+
+        gap:
+            8px 14px;
+
+    }
+
+
+    .tip-owner-section {
+
+        margin:
+            20px 16px 0;
+
+    }
+
+
+    .employee-table {
+
+        overflow-x:
+            auto;
+
+    }
+
+
+    .employee-table table {
+
+        min-width:
+            700px;
+
+    }
+
+
+    .distribution-pool-content {
+
+        overflow-x:
+            auto;
+
+    }
+
+
+    .distribution-totals {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            10px;
 
     }
 
@@ -1009,10 +2575,57 @@ footer {
 
     }
 
+
+    .navigation-panel {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
 }
 
 
-@media(max-width: 600px) {
+/* =========================================================
+   MOBILE — 600PX
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .app-header {
+
+        min-height:
+            auto;
+
+    }
+
+
+    .logo {
+
+        width:
+            50px;
+
+        height:
+            50px;
+
+    }
+
+
+    .header-text h1 {
+
+        font-size:
+            20px;
+
+    }
+
+
+    .header-text p {
+
+        font-size:
+            12px;
+
+    }
+
 
     .pool-summary-grid {
 
@@ -1021,351 +2634,31 @@ footer {
 
     }
 
-}
 
-/* =========================
-   POOL SUMMARY
-========================= */
+    .distribution-pool-header {
 
-.money-summary {
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-
-    margin: 0 auto 30px;
-
-    padding: 18px 0;
-
-    background: var(--surface);
-
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-}
-
-.money-summary table {
-    width: auto;
-    min-width: 520px;
-    max-width: 650px;
-
-    border-collapse: collapse;
-
-    background: transparent;
-}
-
-.money-summary th {
-    padding: 12px 28px;
-
-    background: var(--surface-hover);
-
-    color: var(--yellow);
-
-    font-size: 14px;
-    font-weight: 700;
-
-    text-align: center;
-
-    border-bottom:
-        1px solid
-        var(--border);
-}
-
-.money-summary td {
-    padding: 11px 28px;
-
-    color: var(--text);
-
-    text-align: center;
-
-    border-bottom:
-        1px solid
-        var(--border);
-}
-
-.money-summary td:first-child {
-    text-align: left;
-
-    font-weight: 600;
-
-    color: var(--cyan);
-}
-
-.money-summary tr:last-child td {
-    border-bottom: none;
-}
-
-.money-summary tbody tr:hover td {
-    background:
-        rgba(233, 66, 163, 0.05);
-}
-
-.money-summary td:nth-child(2),
-.money-summary td:nth-child(3) {
-    font-weight: 600;
-}
-
-
-/* =========================
-   MEAL BLOCK COLLAPSE
-========================= */
-
-.meal-block-header {
-    cursor: pointer;
-    user-select: none;
-}
-
-.meal-block-header:hover {
-    opacity: 0.8;
-}
-
-.meal-block-arrow {
-    display: inline-block;
-    margin-right: 8px;
-    transition: transform 0.2s ease;
-}
-
-.meal-block-header.collapsed .meal-block-arrow {
-    transform: rotate(-90deg);
-}
-
-.meal-block-content {
-    overflow: hidden;
-    max-height: 10000px;
-    opacity: 1;
-    transition:
-        max-height 0.3s ease,
-        opacity 0.2s ease;
-}
-
-.meal-block-content.collapsed {
-    max-height: 0;
-    opacity: 0;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-    .money-summary {
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-
-    .money-summary table {
-        min-width: 450px;
-    }
-
-    .money-summary th,
-    .money-summary td {
-        padding: 10px 18px;
-    }
-}
-
-.tip-percentage {
-    font-size: 0.7em;
-    white-space: nowrap;
-}
-
-
-.employee-table td:nth-child(4) .tip-percentage,
-.employee-table td:nth-child(5) .tip-percentage {
-    color: #E942A3;
-}
-/* =========================================================
-   DISTRIBUTION TOTALS
-========================================================= */
-
-.distribution-totals {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 14px;
-
-    margin:
-        20px 0 28px;
-}
-
-
-/* =========================================================
-   TOTAL CARD
-========================================================= */
-
-.distribution-total-card {
-    padding:
-        15px 18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--surface),
-            var(--background-light)
-        );
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        9px;
-
-    box-shadow:
-        0 3px 10px
-        rgba(0, 0, 0, .18);
-
-    transition:
-        transform .2s ease,
-        border-color .2s ease;
-}
-
-
-.distribution-total-card:hover {
-    transform:
-        translateY(-1px);
-
-    border-color:
-        var(--border-light);
-}
-
-
-/* =========================================================
-   TOTAL LABEL
-========================================================= */
-
-.distribution-total-label {
-    display: block;
-
-    margin-bottom:
-        6px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    text-transform:
-        uppercase;
-
-    letter-spacing:
-        .06em;
-}
-
-
-/* =========================================================
-   TOTAL VALUE
-========================================================= */
-
-.distribution-total-value {
-    display: block;
-
-    color:
-        var(--text);
-
-    font-size:
-        23px;
-
-    line-height:
-        1.1;
-
-    font-weight:
-        800;
-}
-
-
-/* =========================================================
-   ORIGINAL TOTALS
-========================================================= */
-
-#originalCashTips,
-#originalCardTips {
-    color:
-        var(--yellow);
-        font-weight: 800;
-        white-space: nowrap;
-}
-
-
-/* =========================================================
-   DISTRIBUTED TOTALS
-========================================================= */
-
-#totalCashDistributed,
-#totalCardDistributed {
-    color:
-        var(--cyan);
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 900px) {
-
-    .distribution-totals {
         grid-template-columns:
-            repeat(2, 1fr);
-    }
+            95px
+            minmax(40px, 1fr)
+            75px
+            18px;
 
-}
-
-
-@media (max-width: 600px) {
-
-    .distribution-totals {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            10px;
     }
 
 
-    .distribution-total-card {
-        padding:
-            13px 16px;
+    .pool-bar-container {
+
+        height:
+            7px;
+
     }
 
 
-    .distribution-total-value {
+    .pool-amount {
+
         font-size:
-            21px;
+            11px;
+
     }
 
-}
-
-
-.logo-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.logo-button:hover {
-    opacity: 0.85;
-}
-
-.logo-button:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 4px;
-    border-radius: 6px;
-}
-
-.logo-button .logo {
-    display: block;
 }

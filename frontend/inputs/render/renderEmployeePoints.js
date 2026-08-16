@@ -12,25 +12,14 @@ export function renderEmployeePoints(
 
     output.innerHTML = "";
 
+
     /* =================================================
        SORT STATE
     ================================================= */
 
     if (!renderEmployeePoints.sortState) {
 
-        renderEmployeePoints.sortState = {
-
-            frontOfHouse: {
-                column: "role",
-                direction: "asc"
-            },
-
-            backOfHouse: {
-                column: "role",
-                direction: "asc"
-            }
-
-        };
+        renderEmployeePoints.sortState = {};
 
     }
 
@@ -39,67 +28,233 @@ export function renderEmployeePoints(
 
 
     /* =================================================
-       ROLE CLASSIFICATION
+       ACTIVE POOL STATE
     ================================================= */
 
-    function isFrontOfHouse(role) {
+    if (!renderEmployeePoints.activePool) {
 
-        const normalizedRole =
-            String(role || "")
-                .toLowerCase()
-                .trim()
-                .replace(/[_-]+/g, " ")
-                .replace(/\s+/g, " ");
+        renderEmployeePoints.activePool =
+            "Server";
 
-        const baseRole =
-            normalizedRole
-                .replace(/\bbreakfast\b/g, "")
-                .replace(/\s+/g, " ")
-                .trim();
+    }
 
-        return (
-            baseRole === "server" ||
-            baseRole === "busser" ||
-            baseRole === "runner" ||
-            baseRole === "busser / runner" ||
-            baseRole === "busser/runner" ||
-            baseRole === "host"
-        );
+    let activePool =
+        renderEmployeePoints.activePool;
+
+
+    /* =================================================
+       NORMALIZE ROLE
+    ================================================= */
+
+    function normalizeRole(role) {
+
+        return String(
+            role || ""
+        )
+            .toLowerCase()
+            .trim()
+            .replace(/[_-]+/g, " ")
+            .replace(/\s+/g, " ");
 
     }
 
 
     /* =================================================
-       COLLECT EMPLOYEES
+       GET POINT GROUP
     ================================================= */
 
-    const employees =
+    function getPointGroup(role) {
+
+        const normalized =
+            normalizeRole(role);
+
+
+        /* =================================================
+           SERVERS
+        ================================================= */
+
+        if (
+            normalized === "server" ||
+            normalized === "breakfast server"
+        ) {
+
+            return "Server";
+
+        }
+
+
+        /* =================================================
+           HOSTS
+        ================================================= */
+
+        if (
+            normalized === "host" ||
+            normalized === "breakfast host"
+        ) {
+
+            return "Host";
+
+        }
+
+
+        /* =================================================
+           BUSSERS / RUNNERS
+        ================================================= */
+
+        if (
+            normalized === "busser" ||
+            normalized === "runner" ||
+            normalized === "busser / runner" ||
+            normalized === "busser/runner" ||
+            normalized === "breakfast busser" ||
+            normalized === "breakfast runner" ||
+            normalized === "breakfast busser / runner" ||
+            normalized === "breakfast busser/runner"
+        ) {
+
+            return "Busser";
+
+        }
+
+
+        /* =================================================
+           BOH
+        ================================================= */
+
+        if (
+            normalized === "boh" ||
+            normalized === "boh trainee" ||
+            normalized.startsWith("boh ") ||
+            normalized === "line cook" ||
+            normalized === "breakfast line cook" ||
+            normalized === "prep cook/dishwasher" ||
+            normalized === "prep cook / dishwasher" ||
+            normalized.includes("line cook") ||
+            normalized.includes("prep cook") ||
+            normalized.includes("dishwasher")
+        ) {
+
+            return "BOH";
+
+        }
+
+
+        /* =================================================
+           EVERYTHING ELSE
+        ================================================= */
+
+        return "Other";
+
+    }
+
+
+    /* =================================================
+       COLLECT EMPLOYEES BY POINT GROUP
+    ================================================= */
+
+    const roleGroups =
         new Map();
 
-    for (const block of mealBlocks) {
 
-        for (const employee of block.employees) {
+    const groupOrder = [
 
-            const role =
-                employee.distribution_role ||
-                employee.role ||
-                "Other";
+        "Server",
+
+        "Host",
+
+        "Busser",
+
+        "BOH",
+
+        "Other"
+
+    ];
+
+
+    for (
+        const group
+        of groupOrder
+    ) {
+
+        roleGroups.set(
+            group,
+            new Map()
+        );
+
+    }
+
+
+    for (
+        const block
+        of mealBlocks
+    ) {
+
+        if (
+            !Array.isArray(
+                block.employees
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        for (
+            const employee
+            of block.employees
+        ) {
+
+            const originalRole =
+                String(
+                    employee.distribution_role ||
+                    employee.role ||
+                    "Other"
+                ).trim() || "Other";
+
+
+            const pointGroup =
+                getPointGroup(
+                    originalRole
+                );
+
+
+            const employeeId =
+                String(
+                    employee.employee_id ?? ""
+                );
+
 
             /*
-                Employee + role is the unique key.
-
-                This is important because one employee
-                can have multiple roles.
+                Employee + POINT GROUP
+                is the unique points record.
             */
 
             const key =
-                `${employee.employee_id}__${role}`;
+                `${employeeId}__${pointGroup}`;
 
-            if (!employees.has(key)) {
 
-                employees.set(
+            const group =
+                roleGroups.get(
+                    pointGroup
+                );
+
+
+            if (
+                !group.has(key)
+            ) {
+
+                group.set(
                     key,
-                    employee
+                    {
+                        ...employee,
+
+                        point_group:
+                            pointGroup,
+
+                        display_role:
+                            originalRole
+                    }
                 );
 
             }
@@ -107,149 +262,6 @@ export function renderEmployeePoints(
         }
 
     }
-
-
-    /* =================================================
-       SPLIT FOH / BOH
-    ================================================= */
-
-    const frontOfHouse = [];
-    const backOfHouse = [];
-
-    for (const employee of employees.values()) {
-
-        const role =
-            employee.distribution_role ||
-            employee.role ||
-            "Other";
-
-        if (isFrontOfHouse(role)) {
-
-            frontOfHouse.push(
-                employee
-            );
-
-        } else {
-
-            backOfHouse.push(
-                employee
-            );
-
-        }
-
-    }
-
-
-    /* =================================================
-       SORT EMPLOYEES
-    ================================================= */
-
-    function sortEmployees(
-        list,
-        tableSortState
-    ) {
-
-        list.sort(
-            (a, b) => {
-
-                let comparison = 0;
-
-                /* ROLE */
-
-                if (
-                    tableSortState.column ===
-                    "role"
-                ) {
-
-                    const roleA =
-                        String(
-                            a.distribution_role ||
-                            a.role ||
-                            "Other"
-                        ).toLowerCase();
-
-                    const roleB =
-                        String(
-                            b.distribution_role ||
-                            b.role ||
-                            "Other"
-                        ).toLowerCase();
-
-                    comparison =
-                        roleA.localeCompare(
-                            roleB
-                        );
-
-                }
-
-                /* NAME */
-
-                else if (
-                    tableSortState.column ===
-                    "name"
-                ) {
-
-                    const nameA =
-                        String(
-                            a.name || ""
-                        );
-
-                    const nameB =
-                        String(
-                            b.name || ""
-                        );
-
-                    comparison =
-                        nameA.localeCompare(
-                            nameB
-                        );
-
-                }
-
-                /* POINT */
-
-                else if (
-                    tableSortState.column ===
-                    "point"
-                ) {
-
-                    const pointA =
-                        Number(
-                            a.tip_points ?? 1
-                        );
-
-                    const pointB =
-                        Number(
-                            b.tip_points ?? 1
-                        );
-
-                    comparison =
-                        pointA - pointB;
-
-                }
-
-                return (
-                    tableSortState.direction ===
-                    "asc"
-                        ? comparison
-                        : -comparison
-                );
-
-            }
-        );
-
-    }
-
-
-    sortEmployees(
-        frontOfHouse,
-        sortState.frontOfHouse
-    );
-
-    sortEmployees(
-        backOfHouse,
-        sortState.backOfHouse
-    );
 
 
     /* =================================================
@@ -283,6 +295,7 @@ export function renderEmployeePoints(
     exportButton.textContent =
         "Save Tip Points";
 
+
     exportButton.addEventListener(
         "click",
         () => {
@@ -313,6 +326,7 @@ export function renderEmployeePoints(
     loadButton.textContent =
         "Load Pre-Saved Points";
 
+
     /* =================================================
        HIDDEN FILE INPUT
     ================================================= */
@@ -328,8 +342,8 @@ export function renderEmployeePoints(
     fileInput.accept =
         ".json,application/json";
 
-    fileInput.style.display =
-        "none";
+    fileInput.className =
+        "employee-points-file-input";
 
 
     loadButton.addEventListener(
@@ -351,6 +365,7 @@ export function renderEmployeePoints(
 
             if (!file) return;
 
+
             try {
 
                 await loadPoints(
@@ -358,10 +373,12 @@ export function renderEmployeePoints(
                     mealBlocks
                 );
 
+
                 renderEmployeePoints(
                     mealBlocks,
                     refreshUI
                 );
+
 
                 if (refreshUI) {
 
@@ -377,11 +394,13 @@ export function renderEmployeePoints(
                     error
                 );
 
+
                 alert(
                     "Could not load the employee points file."
                 );
 
             }
+
 
             fileInput.value = "";
 
@@ -402,27 +421,64 @@ export function renderEmployeePoints(
     );
 
 
-    /*
-        IMPORTANT:
-
-        The controls are added BEFORE
-        either table so they appear
-        at the top.
-    */
-
     output.appendChild(
         controls
     );
 
 
     /* =================================================
-       CREATE EMPLOYEE TABLE
+       POOL TABS
     ================================================= */
 
-    function createEmployeeTable(
-        employeeList,
-        title,
-        tableSortState
+    const tabsWrapper =
+        document.createElement(
+            "div"
+        );
+
+    tabsWrapper.className =
+        "employee-points-tabs";
+
+
+    const tableWrapper =
+        document.createElement(
+            "div"
+        );
+
+    tableWrapper.className =
+        "employee-points-table-wrapper";
+
+
+    /* =================================================
+       POOL TAB LABELS
+    ================================================= */
+
+    const tabLabels = {
+
+        "Server":
+            "Servers",
+
+        "Host":
+            "Hosts",
+
+        "Busser":
+            "Bussers / Runners",
+
+        "BOH":
+            "BOH",
+
+        "Other":
+            "Other"
+
+    };
+
+
+    /* =================================================
+       CREATE ROLE TABLE
+    ================================================= */
+
+    function createRoleTable(
+        role,
+        employeeList
     ) {
 
         const group =
@@ -435,7 +491,136 @@ export function renderEmployeePoints(
 
 
         /* =================================================
-           TITLE
+           SORT STATE
+        ================================================= */
+
+        if (
+            !sortState[role]
+        ) {
+
+            sortState[role] = {
+
+                column:
+                    "name",
+
+                direction:
+                    "asc"
+
+            };
+
+        }
+
+
+        const tableSortState =
+            sortState[role];
+
+
+        /* =================================================
+           SORT EMPLOYEES
+        ================================================= */
+
+        employeeList.sort(
+            (a, b) => {
+
+                let comparison =
+                    0;
+
+
+                /* NAME */
+
+                if (
+                    tableSortState.column ===
+                    "name"
+                ) {
+
+                    const nameA =
+                        formatEmployeeName(
+                            a.name
+                        ).toLowerCase();
+
+
+                    const nameB =
+                        formatEmployeeName(
+                            b.name
+                        ).toLowerCase();
+
+
+                    comparison =
+                        nameA.localeCompare(
+                            nameB
+                        );
+
+                }
+
+
+                /* ROLE */
+
+                else if (
+                    tableSortState.column ===
+                    "role"
+                ) {
+
+                    const roleA =
+                        formatActualRoleName(
+                            a.display_role
+                        ).toLowerCase();
+
+
+                    const roleB =
+                        formatActualRoleName(
+                            b.display_role
+                        ).toLowerCase();
+
+
+                    comparison =
+                        roleA.localeCompare(
+                            roleB
+                        );
+
+                }
+
+
+                /* POINTS */
+
+                else if (
+                    tableSortState.column ===
+                    "point"
+                ) {
+
+                    const pointA =
+                        Number(
+                            a.tip_points ?? 1
+                        );
+
+
+                    const pointB =
+                        Number(
+                            b.tip_points ?? 1
+                        );
+
+
+                    comparison =
+                        pointA -
+                        pointB;
+
+                }
+
+
+                return (
+                    tableSortState.direction ===
+                    "asc"
+
+                        ? comparison
+
+                        : -comparison
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           ROLE TITLE
         ================================================= */
 
         const groupTitle =
@@ -447,7 +632,10 @@ export function renderEmployeePoints(
             "employee-points-group-title";
 
         groupTitle.textContent =
-            title;
+            formatRoleName(
+                role
+            );
+
 
         group.appendChild(
             groupTitle
@@ -476,75 +664,113 @@ export function renderEmployeePoints(
                 "thead"
             );
 
+
         const headerRow =
             document.createElement(
                 "tr"
             );
 
+
         const headers = [
 
             {
-                label: "Role",
-                column: "role"
+                label:
+                    "Employee Name",
+
+                column:
+                    "name"
+
             },
 
             {
-                label: "Employee Name",
-                column: "name"
+                label:
+                    "Role",
+
+                column:
+                    "role"
+
             },
 
             {
-                label: "Tip Points",
-                column: "point"
+                label:
+                    "Tip Points",
+
+                column:
+                    "point"
+
             }
 
         ];
 
 
-        for (const header of headers) {
+        for (
+            const header
+            of headers
+        ) {
 
             const th =
                 document.createElement(
                     "th"
                 );
 
+
             th.className =
                 "sortable-header";
 
-            th.textContent =
+
+            /* LABEL */
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+            label.className =
+                "employee-points-sort-label";
+
+            label.textContent =
                 header.label;
 
 
-            /*
-                Show sort arrow.
-            */
+            /* SORT INDICATOR */
+
+            const indicator =
+                document.createElement(
+                    "span"
+                );
+
+            indicator.className =
+                "employee-points-sort-indicator";
+
 
             if (
                 tableSortState.column ===
                 header.column
             ) {
 
-                th.classList.add(
+                indicator.textContent =
                     tableSortState.direction ===
-                        "asc"
-                        ? "sort-ascending"
-                        : "sort-descending"
-                );
+                    "asc"
 
-                th.textContent =
-                    `${header.label} ${
-                        tableSortState.direction ===
-                        "asc"
-                            ? "▲"
-                            : "▼"
-                    }`;
+                        ? "▲"
+
+                        : "▼";
 
             }
 
 
-            /*
-                Sorting.
-            */
+            th.appendChild(
+                label
+            );
+
+            th.appendChild(
+                indicator
+            );
+
+
+            /* =================================================
+               SORT CLICK
+            ================================================= */
 
             th.addEventListener(
                 "click",
@@ -558,10 +784,14 @@ export function renderEmployeePoints(
                         tableSortState.direction =
                             tableSortState.direction ===
                             "asc"
+
                                 ? "desc"
+
                                 : "asc";
 
-                    } else {
+                    }
+
+                    else {
 
                         tableSortState.column =
                             header.column;
@@ -570,6 +800,12 @@ export function renderEmployeePoints(
                             "asc";
 
                     }
+
+
+                    /*
+                        Re-render the SAME
+                        currently selected pool.
+                    */
 
                     renderEmployeePoints(
                         mealBlocks,
@@ -611,40 +847,27 @@ export function renderEmployeePoints(
             of employeeList
         ) {
 
-            const role =
-                employee.distribution_role ||
-                employee.role ||
-                "Other";
-
-
             const row =
                 document.createElement(
                     "tr"
                 );
 
+
             row.className =
                 "employee-points-row";
 
 
-            /* ROLE */
-
-            const roleCell =
-                document.createElement(
-                    "td"
-                );
-
-            roleCell.textContent =
-                formatRoleName(
-                    role
-                );
-
-
-            /* NAME */
+            /* =================================================
+               NAME
+            ================================================= */
 
             const nameCell =
                 document.createElement(
                     "td"
                 );
+
+            nameCell.className =
+                "employee-points-name";
 
             nameCell.textContent =
                 formatEmployeeName(
@@ -652,12 +875,37 @@ export function renderEmployeePoints(
                 );
 
 
-            /* POINT */
+            /* =================================================
+               ROLE
+            ================================================= */
+
+            const roleCell =
+                document.createElement(
+                    "td"
+                );
+
+            roleCell.className =
+                "employee-points-role";
+
+
+            roleCell.textContent =
+                formatActualRoleName(
+                    employee.display_role
+                );
+
+
+            /* =================================================
+               POINTS
+            ================================================= */
 
             const pointCell =
                 document.createElement(
                     "td"
                 );
+
+            pointCell.className =
+                "employee-points-value";
+
 
             const input =
                 document.createElement(
@@ -679,11 +927,21 @@ export function renderEmployeePoints(
             input.value =
                 employee.tip_points ?? 1;
 
+
+            /*
+                dataset.employeeId identifies
+                the employee.
+
+                dataset.role identifies the
+                grouped point pool.
+            */
+
             input.dataset.employeeId =
                 employee.employee_id;
 
             input.dataset.role =
                 role;
+
 
             pointCell.appendChild(
                 input
@@ -691,16 +949,17 @@ export function renderEmployeePoints(
 
 
             row.appendChild(
-                roleCell
+                nameCell
             );
 
             row.appendChild(
-                nameCell
+                roleCell
             );
 
             row.appendChild(
                 pointCell
             );
+
 
             tbody.appendChild(
                 row
@@ -713,6 +972,7 @@ export function renderEmployeePoints(
             tbody
         );
 
+
         group.appendChild(
             table
         );
@@ -724,41 +984,175 @@ export function renderEmployeePoints(
 
 
     /* =================================================
-       TABLES WRAPPER
+       LOAD SELECTED POOL
     ================================================= */
 
-    const tablesWrapper =
-        document.createElement(
-            "div"
+    function loadPool(
+        role
+    ) {
+
+        activePool =
+            role;
+
+        renderEmployeePoints.activePool =
+            role;
+
+
+        tableWrapper.innerHTML =
+            "";
+
+
+        const employeeMap =
+            roleGroups.get(
+                role
+            );
+
+
+        if (
+            !employeeMap ||
+            employeeMap.size === 0
+        ) {
+
+            const emptyMessage =
+                document.createElement(
+                    "div"
+                );
+
+            emptyMessage.className =
+                "employee-points-empty";
+
+            emptyMessage.textContent =
+                `No employees in ${tabLabels[role] || role}.`;
+
+
+            tableWrapper.appendChild(
+                emptyMessage
+            );
+
+
+            return;
+
+        }
+
+
+        const employeeList =
+            Array.from(
+                employeeMap.values()
+            );
+
+
+        tableWrapper.appendChild(
+            createRoleTable(
+                role,
+                employeeList
+            )
         );
 
-    tablesWrapper.className =
-        "employee-points-tables";
+
+        attachPointInputEvents();
+
+    }
 
 
-    /*
-        Tables remain stacked vertically.
-    */
+    /* =================================================
+       CREATE TABS
+    ================================================= */
 
-    tablesWrapper.appendChild(
-        createEmployeeTable(
-            frontOfHouse,
-            "Front of House",
-            sortState.frontOfHouse
-        )
-    );
+    for (
+        const role
+        of groupOrder
+    ) {
 
-    tablesWrapper.appendChild(
-        createEmployeeTable(
-            backOfHouse,
-            "Back of House",
-            sortState.backOfHouse
-        )
-    );
+        const tab =
+            document.createElement(
+                "button"
+            );
+
+        tab.type =
+            "button";
+
+        tab.className =
+            "employee-points-tab";
+
+        tab.dataset.role =
+            role;
+
+        tab.textContent =
+            tabLabels[role];
+
+
+        if (
+            role === activePool
+        ) {
+
+            tab.classList.add(
+                "active"
+            );
+
+        }
+
+
+        tab.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    renderEmployeePoints.activePool ===
+                    role
+                ) {
+
+                    return;
+
+                }
+
+
+                renderEmployeePoints.activePool =
+                    role;
+
+
+                const allTabs =
+                    tabsWrapper.querySelectorAll(
+                        ".employee-points-tab"
+                    );
+
+
+                allTabs.forEach(
+                    otherTab => {
+
+                        otherTab.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                tab.classList.add(
+                    "active"
+                );
+
+
+                loadPool(
+                    role
+                );
+
+            }
+        );
+
+
+        tabsWrapper.appendChild(
+            tab
+        );
+
+    }
 
 
     output.appendChild(
-        tablesWrapper
+        tabsWrapper
+    );
+
+    output.appendChild(
+        tableWrapper
     );
 
 
@@ -769,7 +1163,7 @@ export function renderEmployeePoints(
     const getPointInputs = () => {
 
         return Array.from(
-            output.querySelectorAll(
+            tableWrapper.querySelectorAll(
                 ".points-input"
             )
         );
@@ -781,13 +1175,22 @@ export function renderEmployeePoints(
        SAVE POINT
     ================================================= */
 
-    function savePoint(input) {
+    function savePoint(
+        input
+    ) {
 
         const employeeId =
-            input.dataset.employeeId;
+            String(
+                input.dataset.employeeId
+            );
+
 
         const role =
-            input.dataset.role;
+            String(
+                input.dataset.role ||
+                "Other"
+            );
+
 
         let value =
             Number(
@@ -810,8 +1213,10 @@ export function renderEmployeePoints(
 
 
         /*
-            Update every occurrence
-            of this employee + role.
+            Update EVERY occurrence
+            of this employee that
+            belongs to the same
+            point group.
         */
 
         for (
@@ -819,31 +1224,55 @@ export function renderEmployeePoints(
             of mealBlocks
         ) {
 
+            if (
+                !Array.isArray(
+                    block.employees
+                )
+            ) {
+
+                continue;
+
+            }
+
+
             for (
                 const employee
                 of block.employees
             ) {
 
-                const employeeRole =
-                    employee.distribution_role ||
-                    employee.role ||
-                    "Other";
+                const currentId =
+                    String(
+                        employee.employee_id
+                    );
 
 
                 if (
+                    currentId !==
+                    employeeId
+                ) {
 
+                    continue;
+
+                }
+
+
+                const currentOriginalRole =
                     String(
-                        employee.employee_id
-                    ) ===
-                    String(
-                        employeeId
-                    )
+                        employee.distribution_role ||
+                        employee.role ||
+                        "Other"
+                    );
 
-                    &&
 
-                    employeeRole ===
+                const currentPointGroup =
+                    getPointGroup(
+                        currentOriginalRole
+                    );
+
+
+                if (
+                    currentPointGroup ===
                     role
-
                 ) {
 
                     employee.tip_points =
@@ -859,94 +1288,33 @@ export function renderEmployeePoints(
 
 
     /* =================================================
-       CHANGE EVENTS
+       ATTACH POINT INPUT EVENTS
     ================================================= */
 
-    getPointInputs().forEach(
-        input => {
+    function attachPointInputEvents() {
 
-            input.addEventListener(
-                "change",
-                () => {
-
-                    savePoint(
-                        input
-                    );
-
-                    if (refreshUI) {
-
-                        refreshUI();
-
-                    }
-
-                }
-            );
-
-        }
-    );
+        const inputs =
+            getPointInputs();
 
 
-    /* =================================================
-       KEYBOARD NAVIGATION
-    ================================================= */
+        inputs.forEach(
+            (
+                input,
+                index
+            ) => {
 
-    getPointInputs().forEach(
-        input => {
+                /* =================================================
+                   CHANGE
+                ================================================= */
 
-            input.addEventListener(
-                "keydown",
-                event => {
+                input.addEventListener(
+                    "change",
+                    () => {
 
-                    if (
-                        event.key !==
-                        "Enter"
-                    ) {
-
-                        return;
-
-                    }
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-
-                    savePoint(
-                        input
-                    );
-
-
-                    const inputs =
-                        getPointInputs();
-
-
-                    const currentIndex =
-                        inputs.indexOf(
+                        savePoint(
                             input
                         );
 
-
-                    /*
-                        Enter = down
-
-                        Shift + Enter = up
-                    */
-
-                    const direction =
-                        event.shiftKey
-                            ? -1
-                            : 1;
-
-
-                    const nextIndex =
-                        currentIndex +
-                        direction;
-
-
-                    if (
-                        nextIndex < 0 ||
-                        nextIndex >=
-                        inputs.length
-                    ) {
 
                         if (refreshUI) {
 
@@ -954,78 +1322,206 @@ export function renderEmployeePoints(
 
                         }
 
-                        return;
-
                     }
+                );
 
 
-                    const nextInput =
-                        inputs[
-                            nextIndex
-                        ];
+                /* =================================================
+                   KEYDOWN
+                ================================================= */
 
+                input.addEventListener(
+                    "keydown",
+                    event => {
 
-                    const nextEmployeeId =
-                        nextInput.dataset
-                            .employeeId;
+                        /*
+                            ONLY handle ENTER.
 
+                            Tab continues to behave
+                            normally.
+                        */
 
-                    const nextRole =
-                        nextInput.dataset
-                            .role;
+                        if (
+                            event.key !==
+                            "Enter"
+                        ) {
 
-
-                    if (refreshUI) {
-
-                        refreshUI();
-
-                    }
-
-
-                    requestAnimationFrame(
-                        () => {
-
-                            const newInputs =
-                                getPointInputs();
-
-
-                            const newInput =
-                                newInputs.find(
-                                    candidate =>
-
-                                        String(
-                                            candidate
-                                                .dataset
-                                                .employeeId
-                                        ) ===
-                                        String(
-                                            nextEmployeeId
-                                        )
-
-                                        &&
-
-                                        candidate
-                                            .dataset
-                                            .role ===
-                                        nextRole
-                                );
-
-
-                            if (newInput) {
-
-                                newInput.focus();
-
-                                newInput.select();
-
-                            }
+                            return;
 
                         }
-                    );
 
-                }
+
+                        /*
+                            Prevent Enter from:
+
+                            - submitting a form
+                            - clicking a button
+                            - inserting anything
+                            - triggering other
+                              keyboard handlers
+                        */
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+
+                        /*
+                            Save the value before
+                            moving to the next employee.
+                        */
+
+                        savePoint(
+                            input
+                        );
+
+
+                        /*
+                            Re-read the inputs from
+                            the CURRENT table.
+
+                            We intentionally DO NOT
+                            call refreshUI() here.
+
+                            refreshUI() can rebuild
+                            the table and destroy
+                            the input we are navigating
+                            from.
+                        */
+
+                        const currentInputs =
+                            getPointInputs();
+
+
+                        const currentIndex =
+                            currentInputs.indexOf(
+                                input
+                            );
+
+
+                        /*
+                            Enter = move DOWN
+
+                            Shift + Enter = move UP
+                        */
+
+                        const direction =
+                            event.shiftKey
+                                ? -1
+                                : 1;
+
+
+                        const nextIndex =
+                            currentIndex +
+                            direction;
+
+
+                        /*
+                            Stop at the top/bottom.
+                        */
+
+                        if (
+                            nextIndex < 0 ||
+                            nextIndex >=
+                            currentInputs.length
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const nextInput =
+                            currentInputs[
+                                nextIndex
+                            ];
+
+
+                        /*
+                            Move focus directly
+                            to the next Tip Points
+                            input.
+                        */
+
+                        nextInput.focus();
+
+
+                        /*
+                            Select the entire
+                            number so the user can
+                            immediately type the
+                            replacement value.
+                        */
+
+                        nextInput.select();
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       LOAD INITIAL POOL
+    ================================================= */
+
+    if (
+        !roleGroups.get(
+            activePool
+        )?.size
+    ) {
+
+        const firstAvailable =
+            groupOrder.find(
+                role =>
+                    roleGroups.get(
+                        role
+                    )?.size > 0
             );
 
+
+        if (firstAvailable) {
+
+            activePool =
+                firstAvailable;
+
+            renderEmployeePoints.activePool =
+                firstAvailable;
+
         }
+
+    }
+
+
+    /* =================================================
+       UPDATE ACTIVE TAB
+    ================================================= */
+
+    tabsWrapper
+        .querySelectorAll(
+            ".employee-points-tab"
+        )
+        .forEach(
+            tab => {
+
+                tab.classList.toggle(
+                    "active",
+                    tab.dataset.role ===
+                    activePool
+                );
+
+            }
+        );
+
+
+    /* =================================================
+       LOAD INITIAL POOL
+    ================================================= */
+
+    loadPool(
+        activePool
     );
 
 }
@@ -1048,15 +1544,34 @@ function exportPoints(
         of mealBlocks
     ) {
 
+        if (
+            !Array.isArray(
+                block.employees
+            )
+        ) {
+
+            continue;
+
+        }
+
+
         for (
             const employee
             of block.employees
         ) {
 
+            const originalRole =
+                String(
+                    employee.distribution_role ||
+                    employee.role ||
+                    "Other"
+                ).trim() || "Other";
+
+
             const role =
-                employee.distribution_role ||
-                employee.role ||
-                "Other";
+                getExportPointGroup(
+                    originalRole
+                );
 
 
             const employeeId =
@@ -1104,7 +1619,7 @@ function exportPoints(
     const data = {
 
         hotTipsPointsVersion:
-            1,
+            2,
 
         exportedAt:
             new Date().toISOString(),
@@ -1192,6 +1707,118 @@ function exportPoints(
 
 
 /* =================================================
+   EXPORT ROLE GROUP HELPER
+================================================= */
+
+function getExportPointGroup(
+    role
+) {
+
+    const normalized =
+        normalizeExportRole(
+            role
+        );
+
+
+    /* =================================================
+       SERVER
+    ================================================= */
+
+    if (
+        normalized === "server" ||
+        normalized === "breakfast server"
+    ) {
+
+        return "Server";
+
+    }
+
+
+    /* =================================================
+       HOST
+    ================================================= */
+
+    if (
+        normalized === "host" ||
+        normalized === "breakfast host"
+    ) {
+
+        return "Host";
+
+    }
+
+
+    /* =================================================
+       BUSSER / RUNNER
+    ================================================= */
+
+    if (
+        normalized === "busser" ||
+        normalized === "runner" ||
+        normalized === "busser / runner" ||
+        normalized === "busser/runner" ||
+        normalized === "breakfast busser" ||
+        normalized === "breakfast runner" ||
+        normalized === "breakfast busser / runner" ||
+        normalized === "breakfast busser/runner"
+    ) {
+
+        return "Busser";
+
+    }
+
+
+    /* =================================================
+       BOH
+    ================================================= */
+
+    if (
+        normalized === "boh" ||
+        normalized === "boh trainee" ||
+        normalized.startsWith("boh ") ||
+        normalized === "line cook" ||
+        normalized === "breakfast line cook" ||
+        normalized === "prep cook/dishwasher" ||
+        normalized === "prep cook / dishwasher" ||
+        normalized.includes("line cook") ||
+        normalized.includes("prep cook") ||
+        normalized.includes("dishwasher")
+    ) {
+
+        return "BOH";
+
+    }
+
+
+    /* =================================================
+       EVERYTHING ELSE
+    ================================================= */
+
+    return "Other";
+
+}
+
+
+/* =================================================
+   NORMALIZE EXPORT ROLE
+================================================= */
+
+function normalizeExportRole(
+    role
+) {
+
+    return String(
+        role || ""
+    )
+        .toLowerCase()
+        .trim()
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ");
+
+}
+
+
+/* =================================================
    LOAD POINTS
 ================================================= */
 
@@ -1221,10 +1848,6 @@ function loadPoints(
                             );
 
 
-                        /*
-                            Validate the file.
-                        */
-
                         if (
                             !data ||
                             !Array.isArray(
@@ -1239,10 +1862,6 @@ function loadPoints(
                         }
 
 
-                        /*
-                            Apply saved points.
-                        */
-
                         for (
                             const savedEmployee
                             of data.employees
@@ -1254,10 +1873,15 @@ function loadPoints(
                                 );
 
 
+                            /*
+                                Convert saved role
+                                into the current
+                                point group.
+                            */
+
                             const savedRole =
-                                String(
-                                    savedEmployee.role ||
-                                    "Other"
+                                getExportPointGroup(
+                                    savedEmployee.role
                                 );
 
 
@@ -1279,15 +1903,25 @@ function loadPoints(
                             }
 
 
-                            /*
-                                Find matching
-                                employee + role.
-                            */
+                            /* =================================================
+                               APPLY TO ALL MATCHING EMPLOYEES
+                            ================================================= */
 
                             for (
                                 const block
                                 of mealBlocks
                             ) {
+
+                                if (
+                                    !Array.isArray(
+                                        block.employees
+                                    )
+                                ) {
+
+                                    continue;
+
+                                }
+
 
                                 for (
                                     const employee
@@ -1300,6 +1934,16 @@ function loadPoints(
                                         );
 
 
+                                    if (
+                                        employeeId !==
+                                        savedId
+                                    ) {
+
+                                        continue;
+
+                                    }
+
+
                                     const employeeRole =
                                         String(
                                             employee.distribution_role ||
@@ -1308,29 +1952,25 @@ function loadPoints(
                                         );
 
 
+                                    const employeePointGroup =
+                                        getExportPointGroup(
+                                            employeeRole
+                                        );
+
+
                                     /*
-                                        BOTH employee ID
-                                        AND role must match.
+                                        Match BOTH:
 
-                                        This allows:
+                                        Employee ID
 
-                                        John Smith
-                                        Server = 1.0
+                                        AND
 
-                                        John Smith
-                                        Host = 0.5
+                                        Point Group
                                     */
 
                                     if (
-
-                                        employeeId ===
-                                        savedId
-
-                                        &&
-
-                                        employeeRole ===
+                                        employeePointGroup ===
                                         savedRole
-
                                     ) {
 
                                         employee.tip_points =
@@ -1499,19 +2139,16 @@ function formatRoleName(
     const names = {
 
         "server":
-            "Server",
+            "Servers",
+
+        "host":
+            "Hosts",
+
+        "busser":
+            "Bussers / Runners",
 
         "boh":
             "BOH",
-
-        "busser/runner":
-            "Busser / Runner",
-
-        "busser / runner":
-            "Busser / Runner",
-
-        "host":
-            "Host",
 
         "other":
             "Other"
@@ -1519,13 +2156,125 @@ function formatRoleName(
     };
 
 
+    const normalized =
+        String(
+            role || "Other"
+        )
+            .trim()
+            .toLowerCase();
+
+
     return (
         names[
-            String(
-                role
-            ).toLowerCase()
+            normalized
         ] ||
-        role
+        String(
+            role || "Other"
+        ).trim()
+    );
+
+}
+
+
+/* =================================================
+   ACTUAL ROLE DISPLAY
+================================================= */
+
+function formatActualRoleName(
+    role
+) {
+
+    const raw =
+        String(
+            role || "Other"
+        ).trim();
+
+
+    const normalized =
+        raw
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+
+
+    const names = {
+
+        "server":
+            "Server",
+
+        "breakfast server":
+            "Server",
+
+
+        "host":
+            "Host",
+
+        "breakfast host":
+            "Host",
+
+
+        "busser":
+            "Busser",
+
+        "runner":
+            "Runner",
+
+        "busser / runner":
+            "Busser / Runner",
+
+        "busser/runner":
+            "Busser / Runner",
+
+        "breakfast busser":
+            "Busser",
+
+        "breakfast runner":
+            "Runner",
+
+        "breakfast busser / runner":
+            "Busser / Runner",
+
+        "breakfast busser/runner":
+            "Busser / Runner",
+
+
+        "boh":
+            "BOH",
+
+        "boh trainee":
+            "BOH - Trainee",
+
+
+        "line cook":
+            "Line Cook",
+
+        "breakfast line cook":
+            "Line Cook",
+
+
+        "prep cook/dishwasher":
+            "Prep Cook/Dishwasher",
+
+        "prep cook / dishwasher":
+            "Prep Cook / Dishwasher",
+
+
+        "foh trainee":
+            "FOH - Trainee",
+
+        "it consultant":
+            "IT Consultant",
+
+        "owner":
+            "Owner"
+
+    };
+
+
+    return (
+        names[
+            normalized
+        ] ||
+        raw
     );
 
 }

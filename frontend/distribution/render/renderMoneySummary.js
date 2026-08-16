@@ -7,122 +7,91 @@ export function renderMoneySummary(block) {
         document.createElement("div");
 
     wrapper.className =
-        "money-summary";
+        "meal-money-summary";
 
+
+    // =================================================
+    // TOTAL CARD
+    // =================================================
+
+    const cardTotal =
+        block.employees.reduce(
+            (total, employee) =>
+                total +
+                (employee.card_tips ?? 0),
+            0
+        );
+
+
+    // =================================================
+    // TOTAL CASH
+    // =================================================
+
+    const cashTotal =
+        block.employees.reduce(
+            (total, employee) =>
+                total +
+                (employee.cash_tips ?? 0),
+            0
+        );
+
+
+    // =================================================
+    // TOTAL
+    // =================================================
+
+    const total =
+        cardTotal +
+        cashTotal;
+
+
+    // =================================================
+    // RENDER
+    // =================================================
 
     wrapper.innerHTML = `
 
-        <table>
+        <div class="money-summary-values">
 
-            <thead>
+            <div class="money-summary-item">
 
-                <tr>
+                <span class="money-summary-label">
+                    Card
+                </span>
 
-                    <th>Pool</th>
-                    <th>Cash</th>
-                    <th>Card</th>
+                <span class="money-summary-value">
+                    ${formatMoney(cardTotal)}
+                </span>
 
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                <!-- SERVERS -->
-
-                <tr>
-
-                    <td>
-                        Servers
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            block.servers_cash ?? 0
-                        )}
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            block.servers_card ?? 0
-                        )}
-                    </td>
-
-                </tr>
+            </div>
 
 
-                <!-- BUSSERS -->
+            <div class="money-summary-item">
 
-                <tr>
+                <span class="money-summary-label">
+                    Cash
+                </span>
 
-                    <td>
-                        Bussers
-                    </td>
+                <span class="money-summary-value">
+                    ${formatMoney(cashTotal)}
+                </span>
 
-                    <td>
-                        ${formatMoney(
-                            block.busser_cash ?? 0
-                        )}
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            block.busser_card ?? 0
-                        )}
-                    </td>
-
-                </tr>
+            </div>
 
 
-                <!-- HOSTS -->
+            <div class="money-summary-item">
 
-                <tr>
+                <span class="money-summary-label">
+                    Total
+                </span>
 
-                    <td>
-                        Hosts
-                    </td>
+                <span class="money-summary-value">
+                    ${formatMoney(total)}
+                </span>
 
-                    <td>
-                        ${formatMoney(
-                            block.host_cash ?? 0
-                        )}
-                    </td>
+            </div>
 
-                    <td>
-                        ${formatMoney(
-                            block.host_card ?? 0
-                        )}
-                    </td>
-
-                </tr>
-
-
-                <!-- BOH -->
-
-                <tr>
-
-                    <td>
-                        BOH
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            block.boh_cash ?? 0
-                        )}
-                    </td>
-
-                    <td>
-                        ${formatMoney(
-                            block.boh_card ?? 0
-                        )}
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
+        </div>
 
     `;
 

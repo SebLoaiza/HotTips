@@ -12,7 +12,7 @@ function getBusserTipRatio(
 
 
     return (
-        0.12 *   busserRatio
+        0.12 * busserRatio
     );
 
 }
@@ -56,74 +56,100 @@ function distributeEmployeeTip(
 ) {
 
 
-    const originalCard = employee.card_tips ?? 0;
+    const originalCard =
+        Number(
+            employee.card_tips ?? 0
+        );
 
 
-    const cash = employee.cash_tips ?? 0;
-
-
-
-    // =====================
-    // Card Processing Fee
-    // =====================
-
-    const card = Math.floor(originalCard * 0.97);
-
-
-    employee.card_after_fee = card;
+    const cash =
+        Number(
+            employee.cash_tips ?? 0
+        );
 
 
 
     // =====================
-    // Ratios
+    // CARD PROCESSING FEE
+    // =====================
+    //
+    // 3% processing fee
+    //
+    // Example:
+    //
+    // $100.00
+    // × .97
+    // = $97.00
+    //
+    // The fee is applied BEFORE
+    // the card tips are distributed.
+    //
+
+    const card =
+        Math.floor(
+            originalCard * 0.97 * 100
+        ) / 100;
+
+
+    employee.card_after_fee =
+        card;
+
+
+
+    // =====================
+    // RATIOS
     // =====================
 
-    const bohRatio =0.30;
+    const bohRatio =
+        0.30;
 
-    const busserRatio =getBusserTipRatio(mealBlock);
 
-    const hostRatio =getHostTipRatio(mealBlock);
+    const busserRatio =
+        getBusserTipRatio(
+            mealBlock
+        );
+
+
+    const hostRatio =
+        getHostTipRatio(
+            mealBlock
+        );
 
 
 
     // =====================
     // CARD DISTRIBUTION
     // =====================
-    // The `rules` object determines w  hich pools this employee
-    // contributes to based on their distribution role.
-    //
-    // Example:
-    // Server:
-    // {
-    //     boh: true,
-    //     busser: true,
-    //     host: true
-    // }
-    //
-    // Host:
-    // {
-    //     boh: true,
-    //     busser: true,
-    //     host: false
-    // }
-    //
-    // If a rule is true, that percentage is deducted from the
-    // employee's card tips and added to that role's pool.
-    // If false, nothing is contributed to that pool.
 
-    const bohCard = rules.boh ? Math.floor(card * bohRatio) : 0;
+    const bohCard =
+        rules.boh
+            ? Math.floor(
+                card * bohRatio
+            )
+            : 0;
 
 
+    let busserCard =
+        rules.busser
+            ? Math.floor(
+                card * busserRatio
+            )
+            : 0;
 
-    let busserCard = rules.busser ? Math.floor(card * busserRatio) : 0;
+
+    let hostCard =
+        rules.host
+            ? Math.floor(
+                card * hostRatio
+            )
+            : 0;
 
 
-
-    let hostCard =  rules.host ? Math.floor(card * hostRatio) : 0;
-
-
-
-    let keptCard = card - bohCard - busserCard - hostCard;
+    let keptCard =
+        card
+        - bohCard
+        - busserCard
+        - hostCard;
 
 
 
@@ -131,45 +157,81 @@ function distributeEmployeeTip(
     // CASH DISTRIBUTION
     // =====================
 
-
     const bohCash =
-        rules.boh ? Math.floor(cash * bohRatio) : 0;
+        rules.boh
+            ? Math.floor(
+                cash * bohRatio
+            )
+            : 0;
+
+
+    let busserCash =
+        rules.busser
+            ? Math.floor(
+                cash * busserRatio
+            )
+            : 0;
+
+
+    let hostCash =
+        rules.host
+            ? Math.floor(
+                cash * hostRatio
+            )
+            : 0;
+
+
+    let keptCash =
+        cash
+        - bohCash
+        - busserCash
+        - hostCash;
 
 
 
-    let busserCash = rules.busser ? Math.floor(cash * busserRatio) : 0;
+    // =====================
+    // HOST KEEPS REMAINDER
+    // =====================
 
+    if (
+        employee.distribution_role === "host"
+    ) {
 
+        hostCard =
+            keptCard;
 
-    let hostCash = rules.host ? Math.floor(cash * hostRatio) : 0;
+        hostCash =
+            keptCash;
 
+        keptCard =
+            0;
 
-
-    let keptCash =cash - bohCash -  busserCash - hostCash;
-
-
-
-
-
-
-    if (employee.distribution_role === "host") {
-
-        hostCard = keptCard;
-        hostCash = keptCash;
-
-        keptCard = 0;
-        keptCash = 0;
+        keptCash =
+            0;
 
     }
 
 
-        if (employee.distribution_role === "busser/runner") {
 
-        busserCard = keptCard;
-        busserCash = keptCash;
+    // =====================
+    // BUSSER KEEPS REMAINDER
+    // =====================
 
-        keptCard = 0;
-        keptCash = 0;
+    if (
+        employee.distribution_role === "busser/runner"
+    ) {
+
+        busserCard =
+            keptCard;
+
+        busserCash =
+            keptCash;
+
+        keptCard =
+            0;
+
+        keptCash =
+            0;
 
     }
 
@@ -179,14 +241,12 @@ function distributeEmployeeTip(
     // SAVE EMPLOYEE RESULTS
     // =====================
 
-
     employee.card_kept =
         keptCard;
 
 
     employee.cash_kept =
         keptCash;
-
 
 
     employee.boh_card_contribution =
@@ -199,7 +259,6 @@ function distributeEmployeeTip(
 
     employee.host_card_contribution =
         hostCard;
-
 
 
     employee.boh_cash_contribution =
@@ -216,9 +275,8 @@ function distributeEmployeeTip(
 
 
     // =====================
-    // ADD ONLY TIP OUTS
+    // ADD TIP OUTS TO POOLS
     // =====================
-
 
     mealBlock.boh_card +=
         bohCard;
@@ -232,7 +290,6 @@ function distributeEmployeeTip(
         hostCard;
 
 
-
     mealBlock.boh_cash +=
         bohCash;
 
@@ -244,6 +301,278 @@ function distributeEmployeeTip(
     mealBlock.host_cash +=
         hostCash;
 
+}
+
+
+
+// =========================
+// ONLINE TIP DISTRIBUTION
+// =========================
+//
+// Online tips:
+//
+// 1. Take online_total
+// 2. Apply 3% card fee
+// 3. Find active pools
+// 4. Split equally
+// 5. Add directly to pools
+//
+// Online tips DO NOT use:
+//
+//     busser_ratio
+//     host_ratio
+//     bohRatio
+//
+// They are split equally between:
+//
+//     Servers
+//     BOH
+//     Bussers
+//     Hosts
+//
+// The actual employee distribution happens later
+// inside distributePools().
+//
+// =========================
+
+
+function distributeOnlineTips(
+    mealBlock
+) {
+
+
+    const originalOnlineTotal =
+        Number(
+            mealBlock.online_total ?? 0
+        );
+
+
+    if (
+        originalOnlineTotal <= 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    // =====================
+    // 3% CARD FEE
+    // =====================
+
+    const onlineAfterFee =
+        Math.floor(
+            originalOnlineTotal
+            * 0.97
+            * 100
+        ) / 100;
+
+
+
+    if (
+        onlineAfterFee <= 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    // =====================
+    // ACTIVE POOLS
+    // =====================
+
+    const pools = [
+
+        {
+            employees:
+                mealBlock.servers,
+
+            property:
+                "servers_card"
+
+        },
+
+        {
+            employees:
+                mealBlock.boh,
+
+            property:
+                "boh_card"
+
+        },
+
+        {
+            employees:
+                mealBlock.bussers,
+
+            property:
+                "busser_card"
+
+        },
+
+        {
+            employees:
+                mealBlock.hosts,
+
+            property:
+                "host_card"
+
+        }
+
+    ];
+
+
+
+    const activePools =
+        pools.filter(
+            pool =>
+                Array.isArray(
+                    pool.employees
+                )
+                &&
+                pool.employees.length > 0
+        );
+
+
+
+    if (
+        activePools.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    // =====================
+    // EQUAL SPLIT
+    // =====================
+
+    const split =
+        Math.floor(
+            (
+                onlineAfterFee
+                * 100
+            )
+            /
+            activePools.length
+        ) / 100;
+
+
+
+    let distributed =
+        0;
+
+
+
+    // =====================
+    // ADD TO EACH POOL
+    // =====================
+
+    for (
+        const pool
+        of activePools
+    ) {
+
+        mealBlock[
+            pool.property
+        ] =
+            (
+                mealBlock[
+                    pool.property
+                ] ?? 0
+            )
+            +
+            split;
+
+
+        distributed +=
+            split;
+
+    }
+
+
+
+    // =====================
+    // REMAINDER
+    // =====================
+    //
+    // Any leftover cents go to BOH.
+    //
+
+    const remainder =
+        Math.round(
+            (
+                onlineAfterFee
+                - distributed
+            )
+            * 100
+        ) / 100;
+
+
+
+    if (
+        remainder > 0
+    ) {
+
+        mealBlock.boh_card +=
+            remainder;
+
+    }
+
+
+
+    // =====================
+    // SAVE ONLINE TOTALS
+    // =====================
+
+    mealBlock.online_after_fee =
+        onlineAfterFee;
+
+
+    mealBlock.online_distributed =
+        onlineAfterFee;
+
+
+
+    console.log(
+        "ONLINE TIP DISTRIBUTION",
+        {
+
+            original:
+                originalOnlineTotal,
+
+            after_fee:
+                onlineAfterFee,
+
+            active_pools:
+                activePools.map(
+                    pool =>
+                        pool.property
+                ),
+
+            split,
+
+            remainder,
+
+            servers_card:
+                mealBlock.servers_card,
+
+            boh_card:
+                mealBlock.boh_card,
+
+            busser_card:
+                mealBlock.busser_card,
+
+            host_card:
+                mealBlock.host_card
+
+        }
+    );
 
 }
 
@@ -260,39 +589,55 @@ export function distributeTips(
 
 
     // =====================
-    // Reset Pools
+    // RESET ALL POOLS
     // =====================
 
-    mealBlock.boh_card = 0;
-
-    mealBlock.busser_card = 0;
-
-    mealBlock.host_card = 0;
+    mealBlock.servers_card =
+        0;
 
 
+    mealBlock.servers_cash =
+        0;
 
-    mealBlock.boh_cash = 0;
 
-    mealBlock.busser_cash = 0;
+    mealBlock.boh_card =
+        0;
 
-    mealBlock.host_cash = 0;
+
+    mealBlock.boh_cash =
+        0;
+
+
+    mealBlock.busser_card =
+        0;
+
+
+    mealBlock.busser_cash =
+        0;
+
+
+    mealBlock.host_card =
+        0;
+
+
+    mealBlock.host_cash =
+        0;
 
 
 
     // =====================
-    // Process Tip Owners
+    // PROCESS TIP OWNERS
     // =====================
-
 
     for (
-        const employee of mealBlock.tipOwners
+        const employee
+        of mealBlock.tipOwners
     ) {
 
 
-        switch(
+        switch (
             employee.distribution_role
         ) {
-
 
 
             // =================
@@ -386,14 +731,37 @@ export function distributeTips(
 
         }
 
-
     }
 
 
 
+    // =========================
+    // ONLINE TIPS
+    // =========================
+    //
+    // Add online tips AFTER
+    // normal tip-outs are built.
+    //
+    // These go directly into
+    // the role pools.
+    //
+
+    distributeOnlineTips(
+        mealBlock
+    );
+
+
+
+    // =========================
+    // FINAL DEBUG
+    // =========================
+
     console.log(
         "FINAL TIP POOLS",
         {
+
+            servers_card:
+                mealBlock.servers_card,
 
             boh_card:
                 mealBlock.boh_card,
@@ -416,6 +784,5 @@ export function distributeTips(
 
         }
     );
-
 
 }

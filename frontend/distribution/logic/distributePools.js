@@ -4,26 +4,36 @@ export function distributePools(
 
 
     // =========================
-    // Reset Everyone
+    // RESET EVERYONE
     // =========================
 
-    for (const employee of mealBlock.employees) {
+    for (
+        const employee
+        of mealBlock.employees
+    ) {
 
-        employee.pool_card_received = 0;
-        employee.pool_cash_received = 0;
+        employee.pool_card_received =
+            0;
+
+        employee.pool_cash_received =
+            0;
 
     }
 
 
 
     // =========================
-    // Add Online Tips
-    // Split Across Active Pools
-    // Remainder -> BOH
+    // SERVER POOL
     // =========================
+    //
+    // This pool is populated by
+    // online tips in distributeTips().
+    //
 
-    distributeOnlineTotal(
-        mealBlock
+    distributePool(
+        mealBlock.servers,
+        mealBlock.servers_card,
+        mealBlock.servers_cash
     );
 
 
@@ -63,151 +73,43 @@ export function distributePools(
     );
 
 
-}
 
+    // =========================
+    // DEBUG
+    // =========================
 
-
-
-
-function distributeOnlineTotal(
-    mealBlock
-) {
-
-
-    const onlineTotal =
-        mealBlock.online_total ?? 0;
-
-
-
-    if (
-        onlineTotal <= 0
-    ) {
-
-        return;
-
-    }
-
-
-
-    const pools = [
-
+    console.log(
+        "FINAL EMPLOYEE POOL DISTRIBUTION",
         {
-            key: "servers",
 
-            employees:
-                mealBlock.servers
+            meal:
+                mealBlock.meal,
 
-        },
+            date:
+                mealBlock.date,
 
+            servers_card:
+                mealBlock.servers_card,
 
-        {
-            key: "boh",
+            boh_card:
+                mealBlock.boh_card,
 
-            employees:
-                mealBlock.boh
+            busser_card:
+                mealBlock.busser_card,
 
-        },
-
-
-        {
-            key: "busser",
-
-            employees:
-                mealBlock.bussers
-
-        },
-
-
-        {
-            key: "host",
-
-            employees:
-                mealBlock.hosts
+            host_card:
+                mealBlock.host_card
 
         }
-
-    ];
-
-
-
-    // Only pools that actually exist receive online tips
-
-    const activePools =
-        pools.filter(
-            pool =>
-                pool.employees &&
-                pool.employees.length > 0
-        );
-
-
-
-    if (
-        activePools.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-
-    const split =
-        Math.floor(
-            onlineTotal /
-            activePools.length
-        );
-
-
-
-    let distributed = 0;
-
-
-
-    for (
-        const pool of activePools
-    ) {
-
-
-        mealBlock[
-            `${pool.key}_card`
-        ] =
-            (
-                mealBlock[
-                    `${pool.key}_card`
-                ] ?? 0
-            )
-            +
-            split;
-
-
-
-        distributed += split;
-
-    }
-
-
-
-    // Give leftover cents to BOH
-
-    const remainder =
-        onlineTotal -
-        distributed;
-
-
-
-    mealBlock.boh_card =
-        (
-            mealBlock.boh_card ?? 0
-        )
-        +
-        remainder;
-
+    );
 
 }
 
 
 
-
+// =====================================================
+// DISTRIBUTE ONE POOL
+// =====================================================
 
 
 function distributePool(
@@ -228,12 +130,38 @@ function distributePool(
 
 
 
+    cardAmount =
+        Number(
+            cardAmount ?? 0
+        );
+
+
+    cashAmount =
+        Number(
+            cashAmount ?? 0
+        );
+
+
+
+    if (
+        cardAmount <= 0
+        &&
+        cashAmount <= 0
+    ) {
+
+        return;
+
+    }
+
+
+
     // =========================
-    // Find Eligible Employees
+    // ELIGIBLE EMPLOYEES
     // =========================
     //
     // Must:
-    // - Work at least 90 mins
+    //
+    // - Work at least 90 minutes
     // - Have points above 0
     //
 
@@ -241,14 +169,16 @@ function distributePool(
         employees.filter(
             employee => {
 
-
                 const worked =
-                    employee.worked_minutes ?? 0;
+                    Number(
+                        employee.worked_minutes ?? 0
+                    );
 
 
                 const points =
-                    employee.tip_points ?? 1;
-
+                    Number(
+                        employee.tip_points ?? 1
+                    );
 
 
                 return (
@@ -273,26 +203,36 @@ function distributePool(
 
 
     // =========================
-    // Calculate Total Weight
+    // TOTAL WEIGHT
     // =========================
 
     const totalWeight =
         eligibleEmployees.reduce(
-            (sum, employee) => {
+            (
+                sum,
+                employee
+            ) => {
 
-
-                const weight =
-                    (
+                const worked =
+                    Number(
                         employee.worked_minutes ?? 0
-                    )
-                    *
-                    (
+                    );
+
+
+                const points =
+                    Number(
                         employee.tip_points ?? 1
                     );
 
 
-                return sum + weight;
-
+                return (
+                    sum
+                    +
+                    (
+                        worked *
+                        points
+                    )
+                );
 
             },
             0
@@ -311,12 +251,15 @@ function distributePool(
 
 
     // =========================
-    // Weighted Distribution
+    // DISTRIBUTE POOL
     // =========================
 
-    let cardDistributed = 0;
+    let cardDistributed =
+        0;
 
-    let cashDistributed = 0;
+
+    let cashDistributed =
+        0;
 
 
 
@@ -331,17 +274,27 @@ function distributePool(
             eligibleEmployees[i];
 
 
-
-        const weight =
-            (
+        const worked =
+            Number(
                 employee.worked_minutes ?? 0
-            )
-            *
-            (
+            );
+
+
+        const points =
+            Number(
                 employee.tip_points ?? 1
             );
 
 
+        const weight =
+            worked *
+            points;
+
+
+
+        // =========================
+        // CALCULATE CARD SHARE
+        // =========================
 
         let cardShare =
             Math.floor(
@@ -353,6 +306,10 @@ function distributePool(
             );
 
 
+
+        // =========================
+        // CALCULATE CASH SHARE
+        // =========================
 
         let cashShare =
             Math.floor(
@@ -366,12 +323,12 @@ function distributePool(
 
 
         // =========================
-        // Give Remainder
-        // Last Eligible Employee
+        // LAST EMPLOYEE GETS REMAINDER
         // =========================
 
         if (
-            i === eligibleEmployees.length - 1
+            i ===
+            eligibleEmployees.length - 1
         ) {
 
             cardShare =
@@ -386,6 +343,10 @@ function distributePool(
         }
 
 
+
+        // =========================
+        // SAVE
+        // =========================
 
         employee.pool_card_received +=
             cardShare;
@@ -403,8 +364,6 @@ function distributePool(
         cashDistributed +=
             cashShare;
 
-
     }
-
 
 }

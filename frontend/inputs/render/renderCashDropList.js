@@ -23,12 +23,56 @@ export function renderCashDropList(
         controlsOutput.innerHTML = "";
     }
 
-    const rows = [];
+
+    // =================================================
+    // INITIALIZE SORT STATE
+    // =================================================
+
+    if (!renderCashDropList.sortState) {
+
+        renderCashDropList.sortState = {
+
+            column: "date",
+
+            direction: "asc"
+
+        };
+
+    }
+
+
+    // =================================================
+    // INITIALIZE SECTION STATE
+    // =================================================
+    //
+    // This survives renderCashDropList() calls.
+    //
+    // That means:
+    //
+    // - sorting does not reopen sections
+    // - refreshUI does not reopen sections
+    // - saving/loading does not reopen sections
+    //
+    // =================================================
+
+    if (!renderCashDropList.sectionState) {
+
+        renderCashDropList.sectionState = {
+
+            cashSales: true,
+
+            allEmployees: false
+
+        };
+
+    }
 
 
     // =================================================
     // BUILD ROW LIST
     // =================================================
+
+    const rows = [];
 
     for (const block of mealBlocks) {
 
@@ -63,7 +107,7 @@ export function renderCashDropList(
 
 
     // =================================================
-    // DOWNLOAD BUTTON
+    // SAVE BUTTON
     // =================================================
 
     const downloadButton =
@@ -80,7 +124,6 @@ export function renderCashDropList(
     downloadButton.textContent =
         "Save Cash Drops";
 
-
     downloadButton.addEventListener(
         "click",
         () => {
@@ -94,7 +137,7 @@ export function renderCashDropList(
 
 
     // =================================================
-    // UPLOAD BUTTON
+    // LOAD BUTTON
     // =================================================
 
     const uploadButton =
@@ -130,11 +173,12 @@ export function renderCashDropList(
     fileInput.className =
         "cash-drop-file-input";
 
-    fileInput.style.display =
-        "none";
+    fileInput.hidden =
+        true;
+
 
     // =================================================
-    // UPLOAD CLICK
+    // LOAD BUTTON CLICK
     // =================================================
 
     uploadButton.addEventListener(
@@ -177,9 +221,7 @@ export function renderCashDropList(
 
 
                 if (refreshUI) {
-
                     refreshUI();
-
                 }
 
 
@@ -226,11 +268,6 @@ export function renderCashDropList(
     );
 
 
-    // =================================================
-    // IMPORTANT:
-    // Put controls ABOVE the totals.
-    // =================================================
-
     if (controlsOutput) {
 
         controlsOutput.appendChild(
@@ -241,11 +278,11 @@ export function renderCashDropList(
 
 
     // =================================================
-    // CREATE TABLE
+    // CREATE SECTIONS
     // =================================================
 
     output.appendChild(
-        createTable(
+        createCashDropSections(
             rows,
             mealBlocks,
             refreshUI
@@ -277,18 +314,351 @@ function isBOH(role) {
 
 
 // =================================================
-// SORT STATE
+// CREATE CASH DROP SECTIONS
 // =================================================
 
-if (!renderCashDropList.sortState) {
+function createCashDropSections(
+    rows,
+    mealBlocks,
+    refreshUI
+) {
 
-    renderCashDropList.sortState = {
+    const container =
+        document.createElement(
+            "div"
+        );
 
-        column: "date",
+    container.className =
+        "cash-drop-sections";
 
-        direction: "asc"
 
-    };
+    // =================================================
+    // FIND EMPLOYEES WITH CASH SALES
+    // =================================================
+
+    const salesRows =
+        rows.filter(
+            row =>
+                (
+                    Number(
+                        row.employee.cash_sales
+                    ) || 0
+                ) > 0
+        );
+
+
+    // =================================================
+    // CASH SALES SECTION
+    // =================================================
+
+    const salesSection =
+        createCollapsibleSection(
+            "Cash Sales",
+            salesRows,
+            mealBlocks,
+            refreshUI,
+            renderCashDropList.sectionState.cashSales,
+            "cashSales",
+            "cash-drop-sales-section"
+        );
+
+
+    container.appendChild(
+        salesSection
+    );
+
+
+    // =================================================
+    // ALL EMPLOYEES SECTION
+    // =================================================
+
+    const allSection =
+        createCollapsibleSection(
+            "All Employees",
+            rows,
+            mealBlocks,
+            refreshUI,
+            renderCashDropList.sectionState.allEmployees,
+            "allEmployees",
+            "cash-drop-all-section"
+        );
+
+
+    container.appendChild(
+        allSection
+    );
+
+
+    return container;
+
+}
+
+
+// =================================================
+// CREATE COLLAPSIBLE SECTION
+// =================================================
+
+function createCollapsibleSection(
+    title,
+    rows,
+    mealBlocks,
+    refreshUI,
+    expanded,
+    stateKey,
+    className
+) {
+
+    const section =
+        document.createElement(
+            "section"
+        );
+
+    section.className =
+        `cash-drop-collapsible-section ${className}`;
+
+
+    // =================================================
+    // HEADER
+    // =================================================
+
+    const header =
+        document.createElement(
+            "button"
+        );
+
+    header.type =
+        "button";
+
+    header.className =
+        "cash-drop-section-header";
+
+    header.setAttribute(
+        "aria-expanded",
+        expanded
+            ? "true"
+            : "false"
+    );
+
+
+    // =================================================
+    // LEFT SIDE
+    // =================================================
+
+    const titleContainer =
+        document.createElement(
+            "div"
+        );
+
+    titleContainer.className =
+        "cash-drop-section-title";
+
+
+    const titleText =
+        document.createElement(
+            "span"
+        );
+
+    titleText.className =
+        "cash-drop-section-title-text";
+
+    titleText.textContent =
+        title;
+
+
+    const count =
+        document.createElement(
+            "span"
+        );
+
+    count.className =
+        "cash-drop-section-count";
+
+    count.textContent =
+        rows.length;
+
+
+    titleContainer.appendChild(
+        titleText
+    );
+
+    titleContainer.appendChild(
+        count
+    );
+
+
+    // =================================================
+    // RIGHT SIDE
+    // =================================================
+
+    const arrow =
+        document.createElement(
+            "span"
+        );
+
+    arrow.className =
+        "cash-drop-section-arrow";
+
+    arrow.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    // =================================================
+    // UPDATE HEADER VISUAL
+    // =================================================
+
+    function updateHeader() {
+
+        const isOpen =
+            renderCashDropList.sectionState[
+                stateKey
+            ];
+
+
+        header.setAttribute(
+            "aria-expanded",
+            isOpen
+                ? "true"
+                : "false"
+        );
+
+        section.classList.toggle(
+            "is-collapsed",
+            !isOpen
+        );
+
+    }
+
+
+    header.appendChild(
+        titleContainer
+    );
+
+    header.appendChild(
+        arrow
+    );
+
+
+    // =================================================
+    // CONTENT
+    // =================================================
+
+    const content =
+        document.createElement(
+            "div"
+        );
+
+    content.className =
+        "cash-drop-section-content";
+
+
+    // =================================================
+    // INITIAL STATE
+    // =================================================
+
+    if (!expanded) {
+
+        content.hidden =
+            true;
+
+    }
+
+
+    // =================================================
+    // TABLE
+    // =================================================
+
+    if (rows.length > 0) {
+
+        content.appendChild(
+            createTable(
+                rows,
+                mealBlocks,
+                refreshUI
+            )
+        );
+
+    }
+    else {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "cash-drop-empty";
+
+        empty.textContent =
+            "No employees in this section.";
+
+        content.appendChild(
+            empty
+        );
+
+    }
+
+
+    // =================================================
+    // TOGGLE
+    // =================================================
+
+    header.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            const currentState =
+                renderCashDropList.sectionState[
+                    stateKey
+                ];
+
+
+            renderCashDropList.sectionState[
+                stateKey
+            ] =
+                !currentState;
+
+
+            const isOpen =
+                renderCashDropList.sectionState[
+                    stateKey
+                ];
+
+
+            content.hidden =
+                !isOpen;
+
+
+            updateHeader();
+
+        }
+    );
+
+
+    // =================================================
+    // ADD ELEMENTS
+    // =================================================
+
+    section.appendChild(
+        header
+    );
+
+    section.appendChild(
+        content
+    );
+
+
+    // Set initial arrow
+    updateHeader();
+
+
+    return section;
 
 }
 
@@ -328,15 +698,20 @@ function createTable(
 
 
     // =================================================
-    // SORT ROWS
+    // SORT STATE
     // =================================================
 
     const sortState =
         renderCashDropList.sortState;
 
+
     const sortedRows =
         [...rows];
 
+
+    // =================================================
+    // SORT ROWS
+    // =================================================
 
     sortedRows.sort(
         (a, b) => {
@@ -350,19 +725,20 @@ function createTable(
             ) {
 
                 const dateA =
-                    new Date(
-                        a.block.day_key ||
-                        a.block.date
+                    getBlockDateValue(
+                        a.block
                     );
 
                 const dateB =
-                    new Date(
-                        b.block.day_key ||
-                        b.block.date
+                    getBlockDateValue(
+                        b.block
                     );
 
+
                 comparison =
-                    dateA - dateB;
+                    dateA.localeCompare(
+                        dateB
+                    );
 
 
                 if (comparison === 0) {
@@ -414,6 +790,20 @@ function createTable(
                             b.block.meal
                         ] ?? 99
                     );
+
+
+                if (comparison === 0) {
+
+                    comparison =
+                        getBlockDateValue(
+                            a.block
+                        ).localeCompare(
+                            getBlockDateValue(
+                                b.block
+                            )
+                        );
+
+                }
 
             }
 
@@ -569,32 +959,58 @@ function createTable(
             "sortable-header";
 
 
+        const label =
+            document.createElement(
+                "span"
+            );
+
+        label.className =
+            "cash-drop-sort-label";
+
+        label.textContent =
+            header.label;
+
+
+        const indicator =
+            document.createElement(
+                "span"
+            );
+
+        indicator.className =
+            "cash-drop-sort-indicator";
+
+
         if (
             sortState.column ===
             header.column
         ) {
 
-            th.textContent =
-                `${header.label} ${
-                    sortState.direction ===
-                    "asc"
-                        ? "▲"
-                        : "▼"
-                }`;
+            indicator.textContent =
+                sortState.direction ===
+                "asc"
+                    ? "▲"
+                    : "▼";
 
         }
 
-        else {
 
-            th.textContent =
-                header.label;
+        th.appendChild(
+            label
+        );
 
-        }
+        th.appendChild(
+            indicator
+        );
 
 
         th.addEventListener(
             "click",
-            () => {
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
 
                 if (
                     sortState.column ===
@@ -696,7 +1112,7 @@ function createTable(
 
 
     // =================================================
-    // UPDATE TIP TOTALS
+    // UPDATE TOTALS
     // =================================================
 
     updateTipTotals(
@@ -782,6 +1198,76 @@ function createTable(
 
 
 // =================================================
+// GET BLOCK DATE VALUE
+// =================================================
+
+function getBlockDateValue(
+    block
+) {
+
+    if (block.day_key) {
+
+        return String(
+            block.day_key
+        ).trim();
+
+    }
+
+
+    if (block.date) {
+
+        const value =
+            String(
+                block.date
+            ).trim();
+
+
+        const isoMatch =
+            value.match(
+                /^(\d{4})-(\d{2})-(\d{2})$/
+            );
+
+
+        if (isoMatch) {
+
+            return value;
+
+        }
+
+
+        const usMatch =
+            value.match(
+                /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+            );
+
+
+        if (usMatch) {
+
+            return (
+                usMatch[3] +
+                "-" +
+                usMatch[1].padStart(
+                    2,
+                    "0"
+                ) +
+                "-" +
+                usMatch[2].padStart(
+                    2,
+                    "0"
+                )
+            );
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+// =================================================
 // UPDATE TIP TOTALS
 // =================================================
 
@@ -829,6 +1315,7 @@ function updateTipTotals(
             "totalCashDrop"
         );
 
+
     if (cashDropElement) {
 
         cashDropElement.textContent =
@@ -843,6 +1330,7 @@ function updateTipTotals(
         document.getElementById(
             "totalCashSales"
         );
+
 
     if (cashSalesElement) {
 
@@ -859,6 +1347,7 @@ function updateTipTotals(
             "totalCashTips"
         );
 
+
     if (cashTipsElement) {
 
         cashTipsElement.textContent =
@@ -868,6 +1357,10 @@ function updateTipTotals(
 
     }
 
+
+    // =================================================
+    // CREDIT CARD TIPS
+    // =================================================
 
     let totalCreditCardTips = 0;
 
@@ -1027,14 +1520,23 @@ function createRow(
         "cash-drop-table-row";
 
 
+    // =================================================
+    // DATE
+    // =================================================
+
     addCell(
         row,
         "cash-drop-date",
         formatDate(
-            block.date
+            block.date ||
+            block.day_key
         )
     );
 
+
+    // =================================================
+    // MEAL
+    // =================================================
 
     addCell(
         row,
@@ -1043,12 +1545,20 @@ function createRow(
     );
 
 
+    // =================================================
+    // EMPLOYEE
+    // =================================================
+
     addCell(
         row,
         "cash-drop-employee",
         employee.name
     );
 
+
+    // =================================================
+    // ROLE
+    // =================================================
 
     addCell(
         row,
@@ -1131,7 +1641,7 @@ function createRow(
 
 
     // =================================================
-    // SELECT ALL
+    // FOCUS
     // =================================================
 
     input.addEventListener(
@@ -1275,9 +1785,7 @@ function createRow(
             ) {
 
                 if (refreshUI) {
-
                     refreshUI();
-
                 }
 
                 return;
@@ -1286,9 +1794,7 @@ function createRow(
 
 
             if (refreshUI) {
-
                 refreshUI();
-
             }
 
 
@@ -1831,36 +2337,76 @@ function getBlockDay(
         block.date
     ) {
 
-        const date =
-            new Date(
+        const value =
+            String(
                 block.date
+            ).trim();
+
+
+        const isoMatch =
+            value.match(
+                /^(\d{4})-(\d{2})-(\d{2})$/
+            );
+
+
+        if (isoMatch) {
+
+            return value;
+
+        }
+
+
+        const usMatch =
+            value.match(
+                /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+            );
+
+
+        if (usMatch) {
+
+            return (
+                usMatch[3] +
+                "-" +
+                usMatch[1].padStart(
+                    2,
+                    "0"
+                ) +
+                "-" +
+                usMatch[2].padStart(
+                    2,
+                    "0"
+                )
+            );
+
+        }
+
+
+        const parsed =
+            new Date(
+                value
             );
 
 
         if (
             !Number.isNaN(
-                date.getTime()
+                parsed.getTime()
             )
         ) {
 
             return (
                 String(
-                    date.getFullYear()
+                    parsed.getFullYear()
                 ) +
-
                 "-" +
-
                 String(
-                    date.getMonth() + 1
+                    parsed.getMonth() + 1
                 ).padStart(
                     2,
                     "0"
                 ) +
-
                 "-" +
-
                 String(
-                    date.getDate()
+                    parsed.getDate()
                 ).padStart(
                     2,
                     "0"
@@ -1886,9 +2432,7 @@ function formatDate(
 ) {
 
     if (!date) {
-
         return "";
-
     }
 
 
@@ -1898,40 +2442,45 @@ function formatDate(
         ).trim();
 
 
-    const match =
+    const isoMatch =
+        value.match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+
+    if (isoMatch) {
+
+        return (
+            isoMatch[2] +
+            "/" +
+            isoMatch[3] +
+            "/" +
+            isoMatch[1]
+        );
+
+    }
+
+
+    const usMatch =
         value.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
 
 
-    if (match) {
+    if (usMatch) {
 
         return (
-
-            match[1].padStart(
+            usMatch[1].padStart(
                 2,
                 "0"
-            )
-
-            +
-
-            "/"
-
-            +
-
-            match[2].padStart(
+            ) +
+            "/" +
+            usMatch[2].padStart(
                 2,
                 "0"
-            )
-
-            +
-
-            "/"
-
-            +
-
-            match[3]
-
+            ) +
+            "/" +
+            usMatch[3]
         );
 
     }
@@ -1939,7 +2488,7 @@ function formatDate(
 
     const parsed =
         new Date(
-            date
+            value
         );
 
 
@@ -1955,35 +2504,21 @@ function formatDate(
 
 
     return (
-
         String(
             parsed.getMonth() + 1
         ).padStart(
             2,
             "0"
-        )
-
-        +
-
-        "/"
-
-        +
-
+        ) +
+        "/" +
         String(
             parsed.getDate()
         ).padStart(
             2,
             "0"
-        )
-
-        +
-
-        "/"
-
-        +
-
+        ) +
+        "/" +
         parsed.getFullYear()
-
     );
 
 }

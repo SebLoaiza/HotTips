@@ -116,6 +116,10 @@ async function loadState() {
 // VALIDATION
 // =================================================
 
+// =================================================
+// VALIDATION
+// =================================================
+
 function validateInputs() {
 
     let valid = true;
@@ -125,6 +129,17 @@ function validateInputs() {
         const block
         of currentMealBlocks
     ) {
+
+        if (
+            !Array.isArray(
+                block.employees
+            )
+        ) {
+
+            continue;
+
+        }
+
 
         for (
             const employee
@@ -162,7 +177,16 @@ function validateInputs() {
 
                 valid = false;
 
+                break;
+
             }
+
+        }
+
+
+        if (!valid) {
+
+            break;
 
         }
 
@@ -180,10 +204,85 @@ function validateInputs() {
             valid
         );
 
+
+        // -----------------------------------------
+        // HOVER / TOOLTIP MESSAGE
+        // -----------------------------------------
+
+        if (!valid) {
+
+            continueButton.title =
+                "Please fill in all trainers before continuing.";
+
+            continueButton.setAttribute(
+                "aria-label",
+                "Please fill in all trainers before continuing."
+            );
+
+        }
+        else {
+
+            continueButton.removeAttribute(
+                "title"
+            );
+
+            continueButton.removeAttribute(
+                "aria-label"
+            );
+
+        }
+
+    }
+
+
+    // ---------------------------------------------
+    // TOP CONTINUE BUTTON
+    // ---------------------------------------------
+
+    const topContinueButton =
+        document.getElementById(
+            "topContinueButton"
+        );
+
+
+    if (topContinueButton) {
+
+        topContinueButton.disabled =
+            !valid;
+
+
+        topContinueButton.classList.toggle(
+            "ready",
+            valid
+        );
+
+
+        if (!valid) {
+
+            topContinueButton.title =
+                "Please fill in all trainers before continuing.";
+
+            topContinueButton.setAttribute(
+                "aria-label",
+                "Please fill in all trainers before continuing."
+            );
+
+        }
+        else {
+
+            topContinueButton.removeAttribute(
+                "title"
+            );
+
+            topContinueButton.removeAttribute(
+                "aria-label"
+            );
+
+        }
+
     }
 
 }
-
 
 // =================================================
 // REFRESH UI

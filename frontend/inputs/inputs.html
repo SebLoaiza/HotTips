@@ -21,21 +21,35 @@
 
 </head>
 
+
 <body>
 
+
+<!-- =========================================================
+     STICKY APP HEADER
+========================================================= -->
+
 <header class="app-header">
+
+
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
 
     <a
         href="../start/start.html"
         class="logo-button"
         aria-label="Go to HotTips start page"
     >
+
         <img
             src="logo.png"
             class="logo"
             alt="HotTips"
         >
+
     </a>
+
 
     <div class="header-text">
 
@@ -44,81 +58,132 @@
         </h1>
 
         <p>
-            Tip Distribution Workflow
+            Tip Distribution
         </p>
 
     </div>
 
+
+    <!-- =====================================================
+         DISTRIBUTION NAVIGATION
+    ====================================================== -->
+
+    <nav class="distribution-navigation">
+
+
+        <!-- =================================================
+             BACK
+        ================================================== -->
+
+        <button
+            id="backButton"
+            class="nav-button back-button"
+            type="button"
+        >
+
+            ← Back
+
+        </button>
+
+
+
+        <!-- =================================================
+             TABS
+        ================================================== -->
+
+        <div class="steps">
+
+
+            <!-- CASH DROP -->
+
+            <button
+                class="step active"
+                data-tab="inputTab"
+                type="button"
+            >
+
+                1. Cash Drop
+
+            </button>
+
+
+
+            <!-- TIP POINTS -->
+
+            <button
+                class="step"
+                data-tab="pointsTab"
+                type="button"
+            >
+
+                2. Tip Points
+
+            </button>
+
+
+
+            <!-- TRAINEES -->
+
+            <button
+                class="step"
+                data-tab="employeeTab"
+                type="button"
+            >
+
+                3. Trainees
+
+            </button>
+
+
+
+            <!-- SUMMARY -->
+
+            <button
+                class="step"
+                data-tab="summaryTab"
+                type="button"
+            >
+
+                4. Summary
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             CONTINUE
+        ================================================== -->
+
+        <button
+            id="continueButton"
+            class="nav-button continue-button"
+            type="button"
+        >
+
+            Continue →
+
+        </button>
+
+
+    </nav>
+
+
 </header>
 
 
-<main>
 
 <!-- =========================================================
-     PROCESS NAVIGATION
+     MAIN
 ========================================================= -->
 
-<section class="panel workflow">
-
-    <button
-        id="backButton"
-        class="nav-button"
-        type="button"
-    >
-        ← Back
-    </button>
-
-
-    <div class="steps">
-
-        <button
-            class="step active"
-            data-tab="inputTab"
-            type="button"
-        >
-            1. Cash Drop Entry
-        </button>
-
-        <button
-            class="step"
-            data-tab="employeeTab"
-            type="button"
-        >
-            2. Trainee Assignments
-        </button>
-
-        <button
-            class="step"
-            data-tab="pointsTab"
-            type="button"
-        >
-            3. Employee Tip Points
-        </button>
-
-        <button
-            class="step"
-            data-tab="summaryTab"
-            type="button"
-        >
-            4. Summary
-        </button>
-
-    </div>
-
-
-    <button
-        id="continueButton"
-        class="nav-button"
-        type="button"
-    >
-        Continue →
-    </button>
-
-</section>
+<main>
 
 
 <!-- =========================================================
-     INPUTS — TAB 1
+     CASH DROP ENTRY — TAB 1
 ========================================================= -->
 
 <section
@@ -126,20 +191,26 @@
     class="tab-page active"
 >
 
+
     <section class="panel">
+
 
         <h2>
             Cash Drop Entry
         </h2>
 
+
         <p class="page-description">
+
             Enter the amount of cash each employee turned in.
+
         </p>
+
 
 
         <!-- =================================================
              CASH DROP ACTION BUTTONS
-        ================================================= -->
+        ================================================== -->
 
         <div
             id="cashDropControls"
@@ -148,9 +219,10 @@
         </div>
 
 
+
         <!-- =================================================
              TIP TOTALS
-        ================================================= -->
+        ================================================== -->
 
         <div class="tip-totals">
 
@@ -159,23 +231,30 @@
 
             <div class="tip-total-card credit-card-tips">
 
+
                 <span class="tip-total-label">
                     Total Credit Card Tips
                 </span>
+
 
                 <strong
                     id="totalCreditCardTips"
                     class="tip-total-value"
                 >
+
                     $0.00
+
                 </strong>
 
+
             </div>
+
 
 
             <!-- CASH TIP CALCULATION -->
 
             <div class="tip-total-card cash-tips-card">
+
 
                 <span class="tip-total-label">
                     Cash Tip Calculation
@@ -193,6 +272,7 @@
                             Total Cash Drop
                         </span>
 
+
                         <strong id="totalCashDrop">
                             $0.00
                         </strong>
@@ -200,11 +280,13 @@
                     </div>
 
 
+
                     <!-- MINUS -->
 
                     <span class="cash-tip-operator">
                         −
                     </span>
+
 
 
                     <!-- TOTAL CASH SALES -->
@@ -215,11 +297,13 @@
                             Total Cash Payments
                         </span>
 
+
                         <strong id="totalCashSales">
                             $0.00
                         </strong>
 
                     </div>
+
 
 
                     <!-- EQUALS -->
@@ -229,13 +313,17 @@
                     </span>
 
 
+
                     <!-- TOTAL CASH TIPS -->
 
-                    <div class="cash-tip-number cash-tip-result">
+                    <div
+                        class="cash-tip-number cash-tip-result"
+                    >
 
                         <span class="cash-tip-subtitle">
                             Total Cash Tips
                         </span>
+
 
                         <strong id="totalCashTips">
                             $0.00
@@ -246,15 +334,17 @@
 
                 </div>
 
+
             </div>
 
 
         </div>
 
 
+
         <!-- =================================================
              CASH DROP TABLES
-        ================================================= -->
+        ================================================== -->
 
         <div
             id="cashDropTables"
@@ -263,33 +353,13 @@
 
     </section>
 
-</section>
-
-
-<!-- =========================================================
-     EMPLOYEE CONFIG — TAB 2
-========================================================= -->
-
-<section
-    id="employeeTab"
-    class="tab-page"
->
-
-    <section class="config-section trainee-config">
-
-        <h2>
-            Trainee Assignments
-        </h2>
-
-        <div id="traineeAssignments"></div>
-
-    </section>
 
 </section>
 
 
+
 <!-- =========================================================
-     DEFAULT TIP POINTS — TAB 3
+     EMPLOYEE TIP POINTS — TAB 2
 ========================================================= -->
 
 <section
@@ -297,17 +367,55 @@
     class="tab-page"
 >
 
+
     <section class="config-section points-config">
+
 
         <h2>
             Default Tip Points
         </h2>
 
-        <div id="employeePoints"></div>
+
+        <div
+            id="employeePoints"
+        ></div>
+
 
     </section>
 
+
 </section>
+
+
+
+<!-- =========================================================
+     TRAINEE ASSIGNMENTS — TAB 3
+========================================================= -->
+
+<section
+    id="employeeTab"
+    class="tab-page"
+>
+
+
+    <section class="config-section trainee-config">
+
+
+        <h2>
+            Trainee Assignments
+        </h2>
+
+
+        <div
+            id="traineeAssignments"
+        ></div>
+
+
+    </section>
+
+
+</section>
+
 
 
 <!-- =========================================================
@@ -319,21 +427,33 @@
     class="tab-page"
 >
 
+
     <section class="panel">
+
 
         <h2>
             Final Summary
         </h2>
 
-        <div id="cashTipSummary"></div>
+
+        <div
+            id="cashTipSummary"
+        ></div>
+
 
     </section>
+
 
 </section>
 
 
 </main>
 
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
 <script
     type="module"

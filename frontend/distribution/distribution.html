@@ -25,276 +25,287 @@
 <body>
 
 
+<!-- =================================================
+     HEADER
+================================================== -->
+
 <header class="app-header">
 
-    <a
-        href="../start/start.html"
-        class="logo-button"
-        aria-label="Go to HotTips start page"
-    >
-        <img
-            src="logo.png"
-            class="logo"
-            alt="HotTips"
+
+    <!-- =================================================
+         HEADER BRAND
+    ================================================== -->
+
+    <div class="header-brand">
+
+
+        <a
+            href="../start/start.html"
+            class="logo-button"
+            aria-label="Go to HotTips start page"
         >
-    </a>
 
-    <div class="header-text">
+            <img
+                src="logo.png"
+                class="logo"
+                alt="HotTips"
+            >
 
-        <h1>
-            HotTips
-        </h1>
+        </a>
 
-        <p>
-            Tip Distribution
-        </p>
+
+        <div class="header-text">
+
+            <h1>
+                HotTips
+            </h1>
+
+            <p>
+                Tip Distribution
+            </p>
+
+        </div>
+
 
     </div>
+
+
+
+    <!-- =================================================
+         TOP NAVIGATION
+    ================================================== -->
+
+    <nav class="top-navigation">
+
+
+        <button
+            id="topBackButton"
+            class="nav-button back-button"
+            type="button"
+        >
+
+            ← Back
+
+        </button>
+
+
+
+        <button
+            id="topContinueButton"
+            class="nav-button continue-button"
+            type="button"
+        >
+
+            Continue →
+
+        </button>
+
+
+    </nav>
+
 
 </header>
 
 
+
+<!-- =================================================
+     MAIN
+================================================== -->
+
 <main>
 
 
-<!-- =========================
-     TOP NAVIGATION
-========================= -->
+    <!-- =================================================
+         TIP DISTRIBUTION
+    ================================================== -->
 
-<section class="panel workflow-panel">
-
-    <h2>
-        Tip Distribution
-    </h2>
-
-    <p class="page-description">
-
-        Review each meal block, verify employee distributions,
-        and calculate final payouts.
-
-    </p>
-
-</section>
+    <section class="panel process-panel">
 
 
-<div class="sticky-nav">
+        <div class="section-heading">
 
-    <div class="process-flow">
 
-        <div class="continue-step">
+            <div>
 
-            <button
-                id="topBackButton"
-            >
-                ← Back
-            </button>
+                <h2>
+                    Tip Distribution
+                </h2>
+
+
+                <p class="page-description">
+
+                    Review each meal block, verify employee
+                    distributions, and calculate final payouts.
+
+                </p>
+
+            </div>
+
 
         </div>
 
 
-        <div class="upload-card">
+        <!-- =================================================
+             DISTRIBUTION TOTALS
+        ================================================== -->
 
-            <button
-                id="topContinueButton"
-            >
-                Continue →
-            </button>
+        <div class="distribution-totals">
+
+
+            <!-- =================================================
+                 CASH AVAILABLE
+            ================================================== -->
+
+            <div class="distribution-total-card">
+
+                <span class="distribution-total-label">
+
+                    Total Drop Minus Sales
+
+                </span>
+
+
+                <strong
+                    id="originalCashTips"
+                    class="distribution-total-value"
+                >
+
+                    $0.00
+
+                </strong>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CASH DISTRIBUTED
+            ================================================== -->
+
+            <div class="distribution-total-card">
+
+                <span class="distribution-total-label">
+
+                    Cash Tips Distributed
+
+                </span>
+
+
+                <strong
+                    id="totalCashDistributed"
+                    class="distribution-total-value"
+                >
+
+                    $0.00
+
+                </strong>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CARD TIPS
+            ================================================== -->
+
+            <div class="distribution-total-card">
+
+                <span class="distribution-total-label">
+
+                    Toast Credit Card Tips
+
+                </span>
+
+
+                <strong
+                    id="originalCardTips"
+                    class="distribution-total-value"
+                >
+
+                    $0.00
+
+                </strong>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CARD DISTRIBUTED
+            ================================================== -->
+
+            <div class="distribution-total-card">
+
+                <span class="distribution-total-label">
+
+                    Credit Card Tips Ex. Fees Distributed
+
+                </span>
+
+
+                <strong
+                    id="totalCardDistributed"
+                    class="distribution-total-value"
+                >
+
+                    $0.00
+
+                </strong>
+
+            </div>
+
 
         </div>
 
-    </div>
 
-</div>
-
-
-<!-- =========================
-     DISTRIBUTION
-========================= -->
-
-<section class="panel">
+    </section>
 
 
-    <h2>
-        7. Tip Distribution
-    </h2>
+
+    <!-- =================================================
+         DAY TABS / MEAL BLOCKS
+    ================================================== -->
+
+    <section class="panel distribution-panel">
 
 
-    <p class="page-description">
+        <!-- =================================================
+             DAY TABS
+        ================================================== -->
 
-        Review each meal block before calculating the final
-        employee payouts.
-
-    </p>
-
-
-    <!-- =========================
-         DISTRIBUTION TOTALS
-    ========================= -->
-
-<div class="distribution-totals">
-
-    <div class="distribution-total-card">
-
-        <span class="distribution-total-label">
-            Total Drop Minus Sales
-        </span>
-
-        <strong
-            id="originalCashTips"
-            class="distribution-total-value"
+        <div
+            id="dayTabs"
+            class="day-tabs"
         >
-            $0.00
-        </strong>
 
-    </div>
+            <!-- Day tabs render here -->
+
+        </div>
 
 
-    <div class="distribution-total-card">
 
-        <span class="distribution-total-label">
-            Cash Tips Distributed
-        </span>
+        <!-- =================================================
+             DISTRIBUTION TABLES
+        ================================================== -->
 
-        <strong
-            id="totalCashDistributed"
-            class="distribution-total-value"
+        <div
+            id="distributionTables"
         >
-            $0.00
-        </strong>
 
-    </div>
+            <!-- Meal blocks render here -->
 
-
-    <div class="distribution-total-card">
-
-        <span class="distribution-total-label">
-            Toast Credit Card Tips
-        </span>
-
-        <strong
-            id="originalCardTips"
-            class="distribution-total-value"
-        >
-            $0.00
-        </strong>
-
-    </div>
+        </div>
 
 
-    <div class="distribution-total-card">
-
-        <span class="distribution-total-label">
-            Credit Card Tips Ex. Fees Distributed
-        </span>
-
-        <strong
-            id="totalCardDistributed"
-            class="distribution-total-value"
-        >
-            $0.00
-        </strong>
-
-    </div>
-
-</div>
+    </section>
 
 
-<div
-    id="dayTabs"
-    class="day-tabs"
->
-</div>
 
 
-    <!-- =========================
-         DAY TABS
-    ========================= -->
 
-    <div
-        id="dayTabs"
-        class="day-tabs"
-    >
-
-    </div>
-
-
-    <!-- =========================
-         DISTRIBUTION TABLES
-    ========================= -->
-
-    <div
-        id="distributionTables"
-    >
-
-    </div>
-
-
-</section>
-
-
-<!-- =========================
-     DEBUG
-========================= -->
-
-<section
-    class="panel debug-panel"
->
-
-
-    <h2>
-        Distribution Object
-    </h2>
-
-
-    <button
-        id="debugObjects"
-    >
-
-        Show Distribution Object
-
-    </button>
-
-
-    <pre
-        id="debugOutput"
-    ></pre>
-
-
-</section>
-
-
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
-
-<section
-    class="panel navigation-panel"
->
-
-
-    <button
-        id="backButton"
-    >
-
-        ← Back
-
-    </button>
-
-
-    <button
-        id="continueButton"
-    >
-
-        Continue →
-
-    </button>
-
-
-</section>
-
-
-</main>
-
+<!-- =================================================
+     FOOTER
+================================================== -->
 
 <footer>
 
@@ -302,6 +313,11 @@
 
 </footer>
 
+
+
+<!-- =================================================
+     APPLICATION
+================================================== -->
 
 <script
     type="module"
