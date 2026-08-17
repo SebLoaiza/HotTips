@@ -76,7 +76,7 @@ export function renderEmployeeTable(
                     ?
                     `
 
-                    <th>Net Card Tips</th>
+                    <th>Net CC Tips</th>
 
                     <th>Cash Tips</th>
 
@@ -98,7 +98,7 @@ export function renderEmployeeTable(
 
                     <th>Tip Points</th>
 
-                    <th>Pool Card Received</th>
+                    <th>Pool CC Received</th>
 
                     <th>Pool Cash Received</th>
 
@@ -116,6 +116,25 @@ export function renderEmployeeTable(
 
     const body =
         document.createElement("tbody");
+
+
+    // =====================================================
+    // TIP OWNER TOTALS
+    // =====================================================
+
+    let totalCardTips = 0;
+
+    let totalCashTips = 0;
+
+    let totalServerTips = 0;
+
+    let totalBohTips = 0;
+
+    let totalBusserTips = 0;
+
+    let totalHostTips = 0;
+
+    let totalKept = 0;
 
 
     for (
@@ -302,25 +321,72 @@ export function renderEmployeeTable(
             // TOTAL KEPT
             // =================================================
 
-            const totalKept =
-                Number(
-                    employee.card_kept ?? 0
-                )
-                +
-                Number(
-                    employee.cash_kept ?? 0
-                );
+            const isServer =
+                employee.distribution_role === "server";
 
 
-            const totalKeptPercentage =
-                personTotalTips > 0
-                    ?
-                    (
-                        totalKept /
-                        personTotalTips
-                    ) * 100
-                    :
-                    0;
+            let employeeTotalKept = 0;
+
+            let totalKeptPercentage = 0;
+
+
+            if (
+                isServer
+            ) {
+
+                employeeTotalKept =
+                    Number(
+                        employee.card_kept ?? 0
+                    )
+                    +
+                    Number(
+                        employee.cash_kept ?? 0
+                    );
+
+
+                totalKeptPercentage =
+                    personTotalTips > 0
+                        ?
+                        (
+                            employeeTotalKept /
+                            personTotalTips
+                        ) * 100
+                        :
+                        0;
+
+
+                totalKept +=
+                    employeeTotalKept;
+
+            }
+
+
+            // =================================================
+            // ADD TO TOTALS
+            // =================================================
+
+            totalCardTips +=
+                cardTips;
+
+
+            totalCashTips +=
+                cashTips;
+
+
+            totalServerTips +=
+                serverTips;
+
+
+            totalBohTips +=
+                bohTips;
+
+
+            totalBusserTips +=
+                busserTips;
+
+
+            totalHostTips +=
+                hostTips;
 
 
             // =================================================
@@ -330,7 +396,7 @@ export function renderEmployeeTable(
             row.innerHTML = `
 
                 <td>
-                    ${employee.name}
+                    ${formatEmployeeName(employee.name)}
                 </td>
 
                 <td>
@@ -403,11 +469,19 @@ export function renderEmployeeTable(
 
                 <td>
 
-                    ${formatMoney(totalKept)}
+                    ${
+                        isServer
+                            ?
+                            `
+                            ${formatMoney(employeeTotalKept)}
 
-                    <span class="tip-percentage">
-                        (${totalKeptPercentage.toFixed(1)}%)
-                    </span>
+                            <span class="tip-percentage">
+                                (${totalKeptPercentage.toFixed(1)}%)
+                            </span>
+                            `
+                            :
+                            "N/A"
+                    }
 
                 </td>
 
@@ -448,7 +522,7 @@ export function renderEmployeeTable(
             row.innerHTML = `
 
                 <td>
-                    ${employee.name}
+                    ${formatEmployeeName(employee.name)}
                 </td>
 
                 <td>
@@ -517,6 +591,201 @@ export function renderEmployeeTable(
     }
 
 
+    // =====================================================
+    // TIP OWNER TOTAL ROW
+    // =====================================================
+
+    if (
+        isTipOwners
+    ) {
+
+        const totalRow =
+            document.createElement("tr");
+
+        totalRow.className =
+            "employee-table-total-row";
+
+
+        const totalCashForPercentage =
+            Math.max(
+                totalCashTips,
+                0
+            );
+
+
+        const totalTips =
+            totalCardTips +
+            totalCashForPercentage;
+
+
+        const totalCardPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalCardTips /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalCashPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalCashForPercentage /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalServerPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalServerTips /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalBohPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalBohTips /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalBusserPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalBusserTips /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalHostPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalHostTips /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        const totalKeptPercentage =
+            totalTips > 0
+                ?
+                (
+                    totalKept /
+                    totalTips
+                ) * 100
+                :
+                0;
+
+
+        totalRow.innerHTML = `
+
+            <td
+                colspan="3"
+                class="employee-table-total-label"
+            >
+                TOTAL
+            </td>
+
+            <td>
+
+                ${formatMoney(totalCardTips)}
+
+                <span class="tip-percentage">
+                    (${totalCardPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td
+                class="${totalCashTips < 0 ? "negative-cash" : ""}"
+            >
+
+                ${formatMoney(totalCashTips)}
+
+                <span class="tip-percentage">
+                    (${totalCashPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td>
+
+                ${formatMoney(totalServerTips)}
+
+                <span class="tip-percentage">
+                    (${totalServerPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td>
+
+                ${formatMoney(totalBohTips)}
+
+                <span class="tip-percentage">
+                    (${totalBohPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td>
+
+                ${formatMoney(totalBusserTips)}
+
+                <span class="tip-percentage">
+                    (${totalBusserPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td>
+
+                ${formatMoney(totalHostTips)}
+
+                <span class="tip-percentage">
+                    (${totalHostPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+            <td>
+
+                ${formatMoney(totalKept)}
+
+                <span class="tip-percentage">
+                    (${totalKeptPercentage.toFixed(1)}%)
+                </span>
+
+            </td>
+
+        `;
+
+
+        body.appendChild(
+            totalRow
+        );
+
+    }
+
+
     table.appendChild(
         body
     );
@@ -528,19 +797,6 @@ export function renderEmployeeTable(
 
     // =========================================================
     // TIP POINT INPUT LISTENERS
-    // =========================================================
-    //
-    // THIS WAS THE MISSING PIECE.
-    //
-    // When a tip point is manually edited:
-    //
-    // 1. Update employee.tip_points
-    // 2. Rebuild the distribution pools
-    // 3. Recalculate role ratios
-    // 4. Refresh the UI
-    //
-    // refreshUI is passed from renderMealBlock(), where it
-    // already preserves the expanded/collapsed state.
     // =========================================================
 
     const tipPointInputs =
@@ -581,19 +837,11 @@ export function renderEmployeeTable(
                 }
 
 
-                // =================================================
-                // READ VALUE
-                // =================================================
-
                 let value =
                     Number(
                         input.value
                     );
 
-
-                // =================================================
-                // PREVENT INVALID VALUES
-                // =================================================
 
                 if (
                     Number.isNaN(value)
@@ -613,38 +861,19 @@ export function renderEmployeeTable(
                 }
 
 
-                // =================================================
-                // UPDATE EMPLOYEE
-                // =================================================
-
                 employee.tip_points =
                     value;
 
-
-                // =================================================
-                // UPDATE DISTRIBUTION
-                // =================================================
 
                 rebuildDistributionPools(
                     mealBlock
                 );
 
 
-                // =================================================
-                // RECALCULATE ROLE RATIOS
-                // =================================================
-
                 calculateRoleRatios(
                     mealBlock
                 );
 
-
-                // =================================================
-                // REFRESH EVERYTHING
-                //
-                // renderMealBlock's refreshWithState()
-                // remembers the open sections first.
-                // =================================================
 
                 if (
                     typeof refreshUI === "function"
@@ -660,10 +889,78 @@ export function renderEmployeeTable(
     }
 
 
-    // =========================================================
-    // RETURN
-    // =========================================================
-
     return wrapper;
+
+}
+
+
+// =========================================================
+// FORMAT EMPLOYEE NAME
+// =========================================================
+
+function formatEmployeeName(
+    name
+) {
+
+    if (
+        !name
+    ) {
+
+        return "";
+
+    }
+
+
+    const text =
+        String(
+            name
+        ).trim();
+
+
+    if (
+        !text.includes(",")
+    ) {
+
+        return text;
+
+    }
+
+
+    const parts =
+        text.split(",");
+
+
+    const last =
+        parts[0]?.trim() ?? "";
+
+
+    const first =
+        parts
+            .slice(1)
+            .join(",")
+            .trim();
+
+
+    if (
+        !first
+    ) {
+
+        return last;
+
+    }
+
+
+    if (
+        !last
+    ) {
+
+        return first;
+
+    }
+
+
+    return (
+        `${first} ${last}`
+    );
 
 }

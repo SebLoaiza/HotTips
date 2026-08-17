@@ -44,16 +44,6 @@ export function renderCashDropList(
     // =================================================
     // INITIALIZE SECTION STATE
     // =================================================
-    //
-    // This survives renderCashDropList() calls.
-    //
-    // That means:
-    //
-    // - sorting does not reopen sections
-    // - refreshUI does not reopen sections
-    // - saving/loading does not reopen sections
-    //
-    // =================================================
 
     if (!renderCashDropList.sectionState) {
 
@@ -761,11 +751,11 @@ function createTable(
                 if (comparison === 0) {
 
                     comparison =
-                        String(
-                            a.employee.name || ""
+                        formatEmployeeName(
+                            a.employee.name
                         ).localeCompare(
-                            String(
-                                b.employee.name || ""
+                            formatEmployeeName(
+                                b.employee.name
                             )
                         );
 
@@ -814,11 +804,11 @@ function createTable(
             ) {
 
                 comparison =
-                    String(
-                        a.employee.name || ""
+                    formatEmployeeName(
+                        a.employee.name
                     ).localeCompare(
-                        String(
-                            b.employee.name || ""
+                        formatEmployeeName(
+                            b.employee.name
                         )
                     );
 
@@ -1552,7 +1542,9 @@ function createRow(
     addCell(
         row,
         "cash-drop-employee",
-        employee.name
+        formatEmployeeName(
+            employee.name
+        )
     );
 
 
@@ -2520,6 +2512,80 @@ function formatDate(
         "/" +
         parsed.getFullYear()
     );
+
+}
+
+
+// =================================================
+// FORMAT EMPLOYEE NAME
+// =================================================
+//
+// Converts:
+//
+//     "Loaiza, Sebastian"
+//         ->
+//     "Sebastian Loaiza"
+//
+// If the name is already in another format,
+// it is left unchanged.
+//
+// =================================================
+
+function formatEmployeeName(
+    name
+) {
+
+    const value =
+        String(
+            name || ""
+        ).trim();
+
+
+    if (!value) {
+        return "";
+    }
+
+
+    // Already "Last, First"
+    if (
+        value.includes(",")
+    ) {
+
+        const parts =
+            value
+                .split(",")
+                .map(
+                    part =>
+                        part.trim()
+                );
+
+
+        const lastName =
+            parts[0] || "";
+
+
+        const firstName =
+            parts
+                .slice(1)
+                .join(",")
+                .trim();
+
+
+        if (
+            firstName &&
+            lastName
+        ) {
+
+            return (
+                `${firstName} ${lastName}`
+            );
+
+        }
+
+    }
+
+
+    return value;
 
 }
 
