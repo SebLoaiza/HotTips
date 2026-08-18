@@ -80,13 +80,13 @@ export function renderEmployeeTable(
 
                     <th>Cash Tips</th>
 
-                    <th>Server Tips</th>
+                    <th>Server Split</th>
 
-                    <th>BOH Tips</th>
+                    <th>BOH Split</th>
 
-                    <th>Busser Tips</th>
+                    <th>Busser Split</th>
 
-                    <th>Host Tips</th>
+                    <th>Host Split</th>
 
                     <th>Total Kept</th>
 

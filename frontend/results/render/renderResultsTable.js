@@ -36,7 +36,7 @@ export function renderResultsTable(
                 </th>
 
                 <th data-sort="cash">
-                    Cash
+                    Cash Payout
                     <span
                         class="sortIndicator"
                         aria-hidden="true"
@@ -44,7 +44,7 @@ export function renderResultsTable(
                 </th>
 
                 <th data-sort="card">
-                    Card
+                    CC Payout
                     <span
                         class="sortIndicator"
                         aria-hidden="true"
@@ -52,7 +52,7 @@ export function renderResultsTable(
                 </th>
 
                 <th data-sort="total">
-                    Total
+                    Total Payout
                     <span
                         class="sortIndicator"
                         aria-hidden="true"
@@ -117,7 +117,7 @@ export function renderResultsTable(
 
 
     // =========================
-    // CASH
+    // CASH PAYOUT
     // KEPT + POOL
     // =========================
 
@@ -147,7 +147,7 @@ export function renderResultsTable(
 
 
     // =========================
-    // CARD
+    // CC PAYOUT
     // KEPT + POOL
     // =========================
 
@@ -171,8 +171,8 @@ export function renderResultsTable(
 
 
     // =========================
-    // TOTAL
-    // CASH + CARD
+    // TOTAL PAYOUT
+    // CASH + CC
     // =========================
 
     function totalAmount(
@@ -189,7 +189,7 @@ export function renderResultsTable(
 
 
     // =========================
-    // TIP PERCENTAGE
+    // PAYOUT PERCENTAGE
     // =========================
 
     function tipPercentage(
@@ -325,9 +325,6 @@ export function renderResultsTable(
 
     // =========================
     // LAST NAME
-    //
-    // Names are formatted:
-    // Last Name, First Name
     // =========================
 
     function lastName(
@@ -340,12 +337,6 @@ export function renderResultsTable(
             )
             .trim();
 
-
-        // -------------------------
-        // NORMAL FORMAT
-        //
-        // Last Name, First Name
-        // -------------------------
 
         if (
             name.includes(",")
@@ -360,10 +351,6 @@ export function renderResultsTable(
 
         }
 
-
-        // -------------------------
-        // FALLBACK
-        // -------------------------
 
         const parts =
             name.split(/\s+/);
@@ -385,9 +372,6 @@ export function renderResultsTable(
 
     // =========================
     // FIRST NAME
-    //
-    // Used as a tie breaker
-    // when last names match.
     // =========================
 
     function firstName(
@@ -400,12 +384,6 @@ export function renderResultsTable(
             )
             .trim();
 
-
-        // -------------------------
-        // NORMAL FORMAT
-        //
-        // Last Name, First Name
-        // -------------------------
 
         if (
             name.includes(",")
@@ -422,10 +400,6 @@ export function renderResultsTable(
 
         }
 
-
-        // -------------------------
-        // FALLBACK
-        // -------------------------
 
         const parts =
             name.split(/\s+/);
@@ -461,14 +435,8 @@ export function renderResultsTable(
             (a, b) => {
 
                 let A;
-
-
                 let B;
 
-
-                // -------------------------
-                // NAME
-                // -------------------------
 
                 if (
                     key === "name"
@@ -481,10 +449,6 @@ export function renderResultsTable(
                     const lastB =
                         lastName(b);
 
-
-                    // -------------------------
-                    // SORT BY LAST NAME
-                    // -------------------------
 
                     const lastResult =
                         lastA.localeCompare(
@@ -506,11 +470,6 @@ export function renderResultsTable(
 
                     }
 
-
-                    // -------------------------
-                    // SAME LAST NAME
-                    // SORT BY FIRST NAME
-                    // -------------------------
 
                     const firstA =
                         firstName(a);
@@ -541,11 +500,6 @@ export function renderResultsTable(
                     }
 
 
-                    // -------------------------
-                    // FINAL TIE BREAKER
-                    // FULL NAME
-                    // -------------------------
-
                     A =
                         String(
                             a.name ?? ""
@@ -562,10 +516,6 @@ export function renderResultsTable(
                 }
 
 
-                // -------------------------
-                // CASH
-                // -------------------------
-
                 else if (
                     key === "cash"
                 ) {
@@ -579,10 +529,6 @@ export function renderResultsTable(
 
                 }
 
-
-                // -------------------------
-                // CARD
-                // -------------------------
 
                 else if (
                     key === "card"
@@ -598,10 +544,6 @@ export function renderResultsTable(
                 }
 
 
-                // -------------------------
-                // TOTAL
-                // -------------------------
-
                 else if (
                     key === "total"
                 ) {
@@ -615,10 +557,6 @@ export function renderResultsTable(
 
                 }
 
-
-                // -------------------------
-                // STRING SORT
-                // -------------------------
 
                 if (
                     typeof A === "string"
@@ -634,10 +572,6 @@ export function renderResultsTable(
 
                 }
 
-
-                // -------------------------
-                // NUMBER SORT
-                // -------------------------
 
                 return (
                     currentSort.direction === "asc"
@@ -705,7 +639,7 @@ export function renderResultsTable(
 
 
             // =========================
-            // CASH / CARD PERCENTAGES
+            // PAYOUT PERCENTAGES
             // =========================
 
             const cashPercentage =
@@ -851,7 +785,7 @@ export function renderResultsTable(
                     <div class="resultsExpandedItem">
 
                         <span class="resultsExpandedLabel">
-                            Card Kept
+                            CC Kept
                         </span>
 
                         <span class="resultsExpandedValue">
@@ -866,7 +800,7 @@ export function renderResultsTable(
                     <div class="resultsExpandedItem">
 
                         <span class="resultsExpandedLabel">
-                            Card Pool
+                            CC Pool
                         </span>
 
                         <span class="resultsExpandedValue">
@@ -881,7 +815,7 @@ export function renderResultsTable(
                     <div class="resultsExpandedItem">
 
                         <span class="resultsExpandedLabel">
-                            Cash Total
+                            Cash Payout
                         </span>
 
                         <span class="resultsExpandedValue">
@@ -896,7 +830,7 @@ export function renderResultsTable(
                     <div class="resultsExpandedItem">
 
                         <span class="resultsExpandedLabel">
-                            Card Total
+                            CC Payout
                         </span>
 
                         <span class="resultsExpandedValue">
@@ -911,7 +845,7 @@ export function renderResultsTable(
                     <div class="resultsExpandedItem">
 
                         <span class="resultsExpandedLabel">
-                            Total Take Home
+                            Total Payout
                         </span>
 
                         <span class="resultsExpandedValue resultsExpandedTotal">
@@ -1001,10 +935,6 @@ export function renderResultsTable(
                 }
 
 
-                // =========================
-                // EXISTING CLICK HANDLER
-                // =========================
-
                 if (
                     clickHandler
                 ) {
@@ -1018,10 +948,6 @@ export function renderResultsTable(
 
             };
 
-
-            // =========================
-            // ADD ROWS
-            // =========================
 
             body.appendChild(
                 row
@@ -1091,9 +1017,6 @@ export function renderResultsTable(
                     );
 
 
-                    // Update the visible
-                    // sort arrow
-
                     updateSortIndicators();
 
                 };
@@ -1104,7 +1027,6 @@ export function renderResultsTable(
 
     // =========================
     // INITIAL SORT
-    // LAST NAME
     // =========================
 
     renderRows(
