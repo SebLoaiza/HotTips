@@ -333,7 +333,7 @@ function updateDistributionTotals() {
 
         originalCardElement.textContent =
             money(
-                originalCardTips
+                originalCardTips * 0.97
             );
 
     }

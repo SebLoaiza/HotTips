@@ -64,21 +64,34 @@ export function renderTraineeAssignments(
         traineeMap.values()
     ) {
 
+        /*
+            ONLY include meal blocks where
+            this employee was actually a
+            trainee.
+
+            This prevents normal Server,
+            Bartender, BOH, etc. shifts from
+            appearing in this table.
+        */
+
         const traineeBlocks =
             mealBlocks.filter(
                 block =>
                     block.employees.some(
                         employee =>
                             employee.employee_id ===
-                            trainee.employee_id
+                                trainee.employee_id &&
+                            String(
+                                employee.role || ""
+                            )
+                                .toLowerCase()
+                                .includes("trainee")
                     )
             );
 
 
         /*
-            If the trainee has no
-            meal blocks, don't render
-            an empty table.
+            Don't render an empty table.
         */
 
         if (!traineeBlocks.length) {
@@ -90,7 +103,6 @@ export function renderTraineeAssignments(
             createTraineeTable(
                 trainee,
                 traineeBlocks,
-                mealBlocks,
                 refreshUI
             )
         );
@@ -107,7 +119,6 @@ export function renderTraineeAssignments(
 function createTraineeTable(
     trainee,
     traineeBlocks,
-    mealBlocks,
     refreshUI
 ) {
 
@@ -165,7 +176,12 @@ function createTraineeTable(
                     block.employees.find(
                         employee =>
                             employee.employee_id ===
-                            trainee.employee_id
+                                trainee.employee_id &&
+                            String(
+                                employee.role || ""
+                            )
+                                .toLowerCase()
+                                .includes("trainee")
                     );
 
                 if (!traineeInBlock) {
@@ -201,6 +217,7 @@ function createTraineeTable(
     /* =========================
        GET ONLY DATES WHERE
        THIS TRAINEE WORKED
+       AS A TRAINEE
     ========================= */
 
     const dates = [
@@ -221,8 +238,7 @@ function createTraineeTable(
 
 
     /* =========================
-       GET ONLY MEALS WHERE
-       THIS TRAINEE WORKED
+       GET MEALS BY DATE
     ========================= */
 
     const mealsByDate =
@@ -251,11 +267,9 @@ function createTraineeTable(
     }
 
 
-    /*
-        Keep the normal meal order,
-        but only include meals that
-        actually exist for this trainee.
-    */
+    /* =========================
+       MEAL ORDER
+    ========================= */
 
     const mealOrder = [
         "Breakfast",
@@ -390,13 +404,6 @@ function createTraineeTable(
 
         for (const date of dates) {
 
-            /*
-                Only render an active
-                assignment cell if this
-                trainee actually worked
-                this meal on this date.
-            */
-
             const worked =
                 mealsByDate
                     .get(date)
@@ -428,7 +435,7 @@ function createTraineeTable(
                     trainee,
                     date,
                     meal,
-                    mealBlocks,
+                    traineeBlocks,
                     refreshUI
                 );
 
@@ -468,7 +475,7 @@ function createAssignmentCell(
     trainee,
     date,
     meal,
-    mealBlocks,
+    traineeBlocks,
     refreshUI
 ) {
 
@@ -483,8 +490,14 @@ function createAssignmentCell(
        FIND MEAL BLOCK
     ========================= */
 
+    /*
+        traineeBlocks is already filtered
+        to only contain blocks where this
+        employee is a trainee.
+    */
+
     const block =
-        mealBlocks.find(
+        traineeBlocks.find(
             block =>
                 (
                     block.day_key ||
@@ -493,10 +506,6 @@ function createAssignmentCell(
                 block.meal === meal
         );
 
-
-    /*
-        No meal block.
-    */
 
     if (!block) {
 
@@ -520,7 +529,12 @@ function createAssignmentCell(
         block.employees.find(
             employee =>
                 employee.employee_id ===
-                trainee.employee_id
+                    trainee.employee_id &&
+                String(
+                    employee.role || ""
+                )
+                    .toLowerCase()
+                    .includes("trainee")
         );
 
 

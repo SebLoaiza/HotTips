@@ -26,15 +26,21 @@ export function distributePools(
     // SERVER POOL
     // =========================
     //
-    // This pool is populated by
-    // online tips in distributeTips().
+    // Distribute server pool LAST
+    // so returned CASH from other
+    // pools can go to servers.
     //
 
-    distributePool(
-        mealBlock.servers,
-        mealBlock.servers_card,
-        mealBlock.servers_cash
-    );
+    let serverCard =
+        Number(
+            mealBlock.servers_card ?? 0
+        );
+
+
+    let serverCash =
+        Number(
+            mealBlock.servers_cash ?? 0
+        );
 
 
 
@@ -42,11 +48,18 @@ export function distributePools(
     // BOH POOL
     // =========================
 
-    distributePool(
-        mealBlock.boh,
-        mealBlock.boh_card,
-        mealBlock.boh_cash
-    );
+    const bohResult =
+        distributePool(
+            mealBlock.boh,
+            mealBlock.boh_card,
+            mealBlock.boh_cash
+        );
+
+
+    // ONLY CASH RETURNS TO SERVER
+
+    serverCash +=
+        bohResult.returnedCash;
 
 
 
@@ -54,11 +67,18 @@ export function distributePools(
     // BUSSER POOL
     // =========================
 
-    distributePool(
-        mealBlock.bussers,
-        mealBlock.busser_card,
-        mealBlock.busser_cash
-    );
+    const busserResult =
+        distributePool(
+            mealBlock.bussers,
+            mealBlock.busser_card,
+            mealBlock.busser_cash
+        );
+
+
+    // ONLY CASH RETURNS TO SERVER
+
+    serverCash +=
+        busserResult.returnedCash;
 
 
 
@@ -66,10 +86,40 @@ export function distributePools(
     // HOST POOL
     // =========================
 
+    const hostResult =
+        distributePool(
+            mealBlock.hosts,
+            mealBlock.host_card,
+            mealBlock.host_cash
+        );
+
+
+    // ONLY CASH RETURNS TO SERVER
+
+    serverCash +=
+        hostResult.returnedCash;
+
+
+
+    // =========================
+    // SERVER POOL
+    // =========================
+    //
+    // Server gets:
+    //
+    // original server cash
+    // +
+    // unclaimable BOH cash
+    // +
+    // unclaimable busser cash
+    // +
+    // unclaimable host cash
+    //
+
     distributePool(
-        mealBlock.hosts,
-        mealBlock.host_card,
-        mealBlock.host_cash
+        mealBlock.servers,
+        serverCard,
+        serverCash
     );
 
 
@@ -79,26 +129,30 @@ export function distributePools(
     // =========================
 
     console.log(
-        "FINAL EMPLOYEE POOL DISTRIBUTION",
+        "FINAL POOL DISTRIBUTION",
         {
 
-            meal:
-                mealBlock.meal,
+            serverCard,
 
-            date:
-                mealBlock.date,
+            serverCash,
 
-            servers_card:
-                mealBlock.servers_card,
-
-            boh_card:
+            bohCard:
                 mealBlock.boh_card,
 
-            busser_card:
+            bohCash:
+                mealBlock.boh_cash,
+
+            busserCard:
                 mealBlock.busser_card,
 
-            host_card:
-                mealBlock.host_card
+            busserCash:
+                mealBlock.busser_cash,
+
+            hostCard:
+                mealBlock.host_card,
+
+            hostCash:
+                mealBlock.host_cash
 
         }
     );
@@ -119,16 +173,9 @@ function distributePool(
 ) {
 
 
-    if (
-        !employees ||
-        employees.length === 0
-    ) {
-
-        return;
-
-    }
-
-
+    // =========================
+    // NORMALIZE
+    // =========================
 
     cardAmount =
         Number(
@@ -143,13 +190,48 @@ function distributePool(
 
 
 
+    // =========================
+    // NO EMPLOYEES
+    // =========================
+    //
+    // ONLY CASH is returned.
+    //
+    // Card stays in the pool.
+    //
+
+    if (
+        !employees
+        ||
+        employees.length === 0
+    ) {
+
+        return {
+
+            returnedCash:
+                cashAmount
+
+        };
+
+    }
+
+
+
+    // =========================
+    // NO MONEY
+    // =========================
+
     if (
         cardAmount <= 0
         &&
         cashAmount <= 0
     ) {
 
-        return;
+        return {
+
+            returnedCash:
+                0
+
+        };
 
     }
 
@@ -192,11 +274,25 @@ function distributePool(
 
 
 
+    // =========================
+    // NO VALID EMPLOYEE
+    // =========================
+    //
+    // Card stays here.
+    //
+    // Cash goes back to servers.
+    //
+
     if (
         eligibleEmployees.length === 0
     ) {
 
-        return;
+        return {
+
+            returnedCash:
+                cashAmount
+
+        };
 
     }
 
@@ -240,18 +336,27 @@ function distributePool(
 
 
 
+    // =========================
+    // INVALID WEIGHT
+    // =========================
+
     if (
         totalWeight <= 0
     ) {
 
-        return;
+        return {
+
+            returnedCash:
+                cashAmount
+
+        };
 
     }
 
 
 
     // =========================
-    // DISTRIBUTE POOL
+    // DISTRIBUTE
     // =========================
 
     let cardDistributed =
@@ -293,7 +398,7 @@ function distributePool(
 
 
         // =========================
-        // CALCULATE CARD SHARE
+        // CARD SHARE
         // =========================
 
         let cardShare =
@@ -308,7 +413,7 @@ function distributePool(
 
 
         // =========================
-        // CALCULATE CASH SHARE
+        // CASH SHARE
         // =========================
 
         let cashShare =
@@ -323,7 +428,7 @@ function distributePool(
 
 
         // =========================
-        // LAST EMPLOYEE GETS REMAINDER
+        // LAST EMPLOYEE
         // =========================
 
         if (
@@ -365,5 +470,18 @@ function distributePool(
             cashShare;
 
     }
+
+
+
+    // =========================
+    // NOTHING RETURNS
+    // =========================
+
+    return {
+
+        returnedCash:
+            0
+
+    };
 
 }

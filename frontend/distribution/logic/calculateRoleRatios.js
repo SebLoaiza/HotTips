@@ -54,19 +54,6 @@ export function calculateRoleRatios(
 
 
 
-    console.log(
-        "ROLE RATIOS",
-        {
-            meal:
-                mealBlock.meal,
-
-            host_ratio:
-                mealBlock.host_ratio,
-
-            busser_ratio:
-                mealBlock.busser_ratio
-        }
-    );
 
 }
 
